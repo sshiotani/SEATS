@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Public Education Online</h1>
+    <a href="http://www.schools.utah.gov/edonline/" class="lead">The Statewide Online Education Program (SOEP)</a>
+    <p class="text-info">Enabling students to earn high school graduation credit through the completion of publicly funded online courses.</p>
+    @if (!Request.IsAuthenticated) //User is not logged in.
+    {
+        <p>Register for an account</p>
+        <p><a href="/Account/Register" class="btn btn-primary btn-lg">Get Started &raquo;</a></p>
+        <p>Already have an account?</p>
+        <p><a href="/Account/Login" class="btn btn-primary btn-lg">Login &raquo;</a></p>
+    }
+    else
+    {
+        if (User.IsInRole("Admin"))
+        {
+            <p><a href="/Admin/" class="btn btn-primary btn-lg">Manage Site &raquo;</a></p>
+            <p><a href="/Account/" class="btn btn-primary btn-lg">Manage Users &raquo;</a></p>
+        }
+
+        <p><a href="/MainTables/Create" class="btn btn-primary btn-lg">Register for a course &raquo;</a></p>
+        <br />
+
+    }
+</div>
+
