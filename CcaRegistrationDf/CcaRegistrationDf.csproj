@@ -246,6 +246,18 @@
     <Compile Include="Migrations\201504101408236_creditchange.Designer.cs">
       <DependentUpon>201504101408236_creditchange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504141537424_providerCactusId.cs" />
+    <Compile Include="Migrations\201504141537424_providerCactusId.Designer.cs">
+      <DependentUpon>201504141537424_providerCactusId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504171253563_IsActive.cs" />
+    <Compile Include="Migrations\201504171253563_IsActive.Designer.cs">
+      <DependentUpon>201504171253563_IsActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504171307574_IsActive for Session.cs" />
+    <Compile Include="Migrations\201504171307574_IsActive for Session.Designer.cs">
+      <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Category.cs">
@@ -301,7 +313,9 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.old.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\register-now-button-blue.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.bootgrid.css" />
     <Content Include="Content\jquery.bootgrid.min.css" />
@@ -338,6 +352,52 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\color\default.css" />
+    <Content Include="Content\css\animate.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\img\bg1.jpg" />
+    <Content Include="Content\img\icons\button-icons.png" />
+    <Content Include="Content\img\icons\grid-menu-icons.png" />
+    <Content Include="Content\img\icons\menu-icons.png" />
+    <Content Include="Content\img\icons\menu-icons2.png" />
+    <Content Include="Content\img\icons\search.png" />
+    <Content Include="Content\img\icons\search2.png" />
+    <Content Include="Content\img\icons\service-icon-1.png" />
+    <Content Include="Content\img\icons\service-icon-2.png" />
+    <Content Include="Content\img\icons\service-icon-3.png" />
+    <Content Include="Content\img\icons\service-icon-4.png" />
+    <Content Include="Content\img\icons\social-icons2.png" />
+    <Content Include="Content\img\icons\weather-icons.png" />
+    <Content Include="Content\img\icons\weather-main.png" />
+    <Content Include="Content\img\loader.gif" />
+    <Content Include="Content\img\spinner.gif" />
+    <Content Include="Content\img\team\1.jpg" />
+    <Content Include="Content\img\team\2.jpg" />
+    <Content Include="Content\img\team\3.jpg" />
+    <Content Include="Content\img\team\4.jpg" />
+    <Content Include="Content\img\works\1.jpg" />
+    <Content Include="Content\img\works\2.jpg" />
+    <Content Include="Content\img\works\3.jpg" />
+    <Content Include="Content\img\works\4.jpg" />
+    <Content Include="Content\img\works\5.jpg" />
+    <Content Include="Content\img\works\6.jpg" />
+    <Content Include="Content\img\works\7.jpg" />
+    <Content Include="Content\img\works\8.jpg" />
+    <Content Include="Content\index.html" />
+    <Content Include="Scripts\js\bootstrap.js" />
+    <Content Include="Scripts\js\bootstrap.min.js" />
+    <Content Include="Scripts\js\custom.js" />
+    <Content Include="Scripts\js\jquery-1.10.2.js" />
+    <Content Include="Scripts\js\jquery.easing.min.js" />
+    <Content Include="Scripts\js\jquery.min.js" />
+    <Content Include="Scripts\js\jquery.scrollTo.js" />
+    <Content Include="Scripts\js\wow.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -367,6 +427,39 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Content\font-awesome\less\core.less" />
+    <Content Include="Content\font-awesome\less\fixed-width.less" />
+    <Content Include="Content\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\font-awesome\less\icons.less" />
+    <Content Include="Content\font-awesome\less\larger.less" />
+    <Content Include="Content\font-awesome\less\list.less" />
+    <Content Include="Content\font-awesome\less\mixins.less" />
+    <Content Include="Content\font-awesome\less\path.less" />
+    <Content Include="Content\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Content\font-awesome\less\spinning.less" />
+    <Content Include="Content\font-awesome\less\stacked.less" />
+    <Content Include="Content\font-awesome\less\variables.less" />
+    <Content Include="Content\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Content\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Content\font-awesome\scss\_core.scss" />
+    <Content Include="Content\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Content\font-awesome\scss\_icons.scss" />
+    <Content Include="Content\font-awesome\scss\_larger.scss" />
+    <Content Include="Content\font-awesome\scss\_list.scss" />
+    <Content Include="Content\font-awesome\scss\_mixins.scss" />
+    <Content Include="Content\font-awesome\scss\_path.scss" />
+    <Content Include="Content\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Content\font-awesome\scss\_spinning.scss" />
+    <Content Include="Content\font-awesome\scss\_stacked.scss" />
+    <Content Include="Content\font-awesome\scss\_variables.scss" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -399,10 +492,10 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\HomeLayout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Index_old.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -459,6 +552,8 @@
     <Content Include="Views\Account\UserRoles.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SelectRoleEditorViewModel.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -506,6 +601,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504101408236_creditchange.resx">
       <DependentUpon>201504101408236_creditchange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504141537424_providerCactusId.resx">
+      <DependentUpon>201504141537424_providerCactusId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504171253563_IsActive.resx">
+      <DependentUpon>201504171253563_IsActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504171307574_IsActive for Session.resx">
+      <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

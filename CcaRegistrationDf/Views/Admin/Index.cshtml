@@ -1,12 +1,90 @@
 ﻿@{
-    ViewBag.Title = "Administrator";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
 }
 
 <div class="jumbotron">
-    <h2>Administrator Page</h2>
+   
 
-    <p><a href="/Categories/" class="btn btn-primary btn-lg">Categories &raquo;</a></p>
+    @*<p><a href="/Categories/" class="btn btn-primary btn-lg">Categories &raquo;</a></p>
     <p><a href="/Courses/" class="btn btn-primary btn-lg">Courses &raquo;</a></p>
     <p><a href="/Sessions/" class="btn btn-primary btn-lg">Sessions &raquo;</a></p>
-    <p><a href="/OnlineProviders/" class="btn btn-primary btn-lg">Providers &raquo;</a></p>
+    <p><a href="/OnlineProviders/" class="btn btn-primary btn-lg">Providers &raquo;</a></p>*@
+    <div class="heading-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="wow bounceInDown" data-wow-delay="0.4s">
+                        <div class="section-heading">
+                            <h2>Administrator tools</h2>
+                            <i class="fa fa-2x fa-angle-down"></i>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+                <hr class="marginbot-50">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInLeft" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Categories/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Categories/"><h5>Categories</h5></a>
+                            <p>Edit course categories.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Courses/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Courses/"><h5>Courses</h5></a>
+                            <p>Edit courses.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Sessions/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Sessions/"><h5>Sessions</h5></a>
+                            <p>Activate or add sessions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/OnlineProviders/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/OnlineProviders/"><h5>Providers</h5></a>
+                            <p>Add or Edit Providers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

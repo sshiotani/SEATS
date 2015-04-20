@@ -293,15 +293,14 @@
         </div>
         <div class="form-group">
 
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.DropDownListFor(model => model.ExcessiveFEDReasonCode, Model.ExcessiveFEDReasonList, "Reason for excessive credit", new { @class = "form-control hide", id = "ExcessiveCreditReason" })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDReasonCode, "", new { @class = "text-danger" })
             </div>
-        </div>
-        <div class="form-group">
+        
 
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ExcessiveFEDExplanation, new { htmlAttributes = new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" } })
+            <div class="col-md-8">
+                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation,  new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation"  })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDExplanation, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -343,6 +342,10 @@
                     @Html.EditorFor(model => model.ProviderFax, new { htmlAttributes = new { @class = "form-control", title = "Provider Fax", placeholder = "Provider Fax" } })
                     @Html.ValidationMessageFor(model => model.ProviderFax, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.ProviderCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
+                    @Html.ValidationMessageFor(model => model.ProviderCactusID, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
 
@@ -380,6 +383,7 @@
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryval")
+
 
     <script>
 

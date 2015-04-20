@@ -20,6 +20,7 @@ namespace CcaRegistrationDf.Models
         public string Credit { get; set; }
         public string Code { get; set; }
         public int OnlineProviderID { get; set; }
+        public bool IsActive { get; set; }
         
     
         public virtual Category Category { get; set; }

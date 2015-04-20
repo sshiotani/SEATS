@@ -1,29 +1,176 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>Public Education Online</h1>
-    <a href="http://www.schools.utah.gov/edonline/" class="lead">The Statewide Online Education Program (SOEP)</a>
-    <p class="text-info">Enabling students to earn high school graduation credit through the completion of publicly funded online courses.</p>
-    @if (!Request.IsAuthenticated) //User is not logged in.
-    {
-        <p>Register for an account</p>
-        <p><a href="/Account/Register" class="btn btn-primary btn-lg">Get Started &raquo;</a></p>
-        <p>Already have an account?</p>
-        <p><a href="/Account/Login" class="btn btn-primary btn-lg">Login &raquo;</a></p>
-    }
-    else
-    {
-        if (User.IsInRole("Admin"))
+<!-- Section: about -->
+@if (!Request.IsAuthenticated) //User is not logged in.
+{
+    <div class="heading-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="wow bounceInDown" data-wow-delay="0.4s">
+                        <div class="section-heading">
+                            <h2>Get Started</h2>
+                            <i class="fa fa-2x fa-angle-down"></i>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+                <hr class="marginbot-50">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInLeft" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Account/Register/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Account/Register/"><h5>Register</h5></a>
+                            <p>If you are new to Utah Public Education Online and would like to register for a account.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Account/Login/" class="glyphicon glyphicon-log-in"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Account/Login/"><h5>Login</h5></a>
+                            <p>If you already have an existing account.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="#" class="glyphicon glyphicon-info-sign"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="#"><h5>Learn More</h5></a>
+                            <p>More information about the Utah Online Public Education Program.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="#" class="glyphicon glyphicon-phone-alt"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="#"><h5>Contact Us</h5></a>
+                            <p>Still have questions?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="heading-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="wow bounceInDown" data-wow-delay="0.4s">
+                        <div class="section-heading">
+                            <h2>Welcome!</h2>
+                            <i class="fa fa-2x fa-angle-down"></i>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+                <hr class="marginbot-50">
+            </div>
+        </div>
+
+        @if (User.IsInRole("Admin"))
         {
-            <p><a href="/Admin/" class="btn btn-primary btn-lg">Manage Site &raquo;</a></p>
-            <p><a href="/Account/" class="btn btn-primary btn-lg">Manage Users &raquo;</a></p>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Admin/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Admin/"><h5>Adminstrator Tools</h5></a>
+                            <p>Manage Courses, Categories, Providers, and Sessions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Account/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Account/"><h5>Manage Users</h5></a>
+                            <p>Add and edit user accounts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
+        else
+        {
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <a href="/Manage/" class="glyphicon glyphicon-pencil"></a>
+                        </div>
+                        <div class="service-desc">
+                            <a href="/Manage/"><h5>Manage My Account</h5></a>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-sm-3 col-md-3">
+            <div class="wow fadeInRight" data-wow-delay="0.2s">
+                <div class="service-box">
+                    <div class="service-icon">
+                        <a href="/Account/" class="glyphicon glyphicon-pencil"></a>
+                    </div>
+                    <div class="service-desc">
+                        <a href="/MainTables/Create"><h5>Course Registration</h5></a>
+                        <p>Registration form for online courses.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <p><a href="/MainTables/Create" class="btn btn-primary btn-lg">Register for a course &raquo;</a></p>
         <br />
+    </div>
+}
 
-    }
-</div>
-
+<!-- /Section: Services -->

@@ -17,6 +17,11 @@ namespace CcaRegistrationDf.Controllers
     {
 
         private ApplicationDbContext db = new ApplicationDbContext();
+        //TODO: Put these lookups in a table?
+        private readonly string[] CREDITOPTIONS = {"0.25","0.50","0.75","1.00"};
+        private readonly string[] FEDOPTIONS =  {
+        "Allowed by College and Career Ready Plan (SEOP or CCRP) providing for Early Graduation",
+        "Allowed by school district or charter school board policy (check with your school district office)" };
 
         // GET: MainTables
         public async Task<ActionResult> Index()
@@ -75,20 +80,21 @@ namespace CcaRegistrationDf.Controllers
 
         private List<SelectListItem> GetCourseCredit(string credits)
         {
-            var creditList = new List<SelectListItem>() 
-            {
-                
-                 new SelectListItem(){ Value="1",Text="0.25"}, 
-                 new SelectListItem(){ Value="2",Text="0.50"},
-                 new SelectListItem(){ Value="3",Text="0.75"},
-                 new SelectListItem(){ Value="4",Text="1.00"},
-            };
+           
+            SelectListItem listItem;
+            var creditList = new List<SelectListItem>();
+
             char[] creditArray = credits.ToCharArray();
 
-            for (int i = 0; i < 4; i++)
+            for (int j = 0 ; j < CREDITOPTIONS.Count() ; j++)
             {
-                if (creditArray[i] == '0')
-                    creditList[i].Disabled = true;
+                listItem = new SelectListItem();
+                listItem.Value = (j + 1).ToString();
+                listItem.Text = CREDITOPTIONS[j];
+                if (creditArray[j] == '0')
+                    listItem.Disabled = true;
+
+                creditList.Add(listItem);
             }
 
             return creditList;
@@ -103,12 +109,15 @@ namespace CcaRegistrationDf.Controllers
 
             foreach (var sessionName in sessionList)
             {
-                var sessionListItem = new SelectListItem();
+                if (sessionName.IsActive)
+                {
+                    var sessionListItem = new SelectListItem();
 
-                sessionListItem.Text = sessionName.Name;
-                sessionListItem.Value = sessionName.ID.ToString();
+                    sessionListItem.Text = sessionName.Name;
+                    sessionListItem.Value = sessionName.ID.ToString();
 
-                session.Add(sessionListItem);
+                    session.Add(sessionListItem);
+                }
             }
 
 
@@ -129,18 +138,18 @@ namespace CcaRegistrationDf.Controllers
 
             var courses = await db.Courses.ToListAsync();
 
+
             foreach (var courseName in courses)
             {
+                    if (courseName.Category.ID == categoryId && courseName.IsActive && courseName.OnlineProvider.IsActive)
+                    {
+                        var courseNameListItem = new SelectListItem();
 
-                if (courseName.Category.ID == categoryId)
-                {
-                    var courseNameListItem = new SelectListItem();
+                        courseNameListItem.Text = courseName.Name + " - " + courseName.OnlineProvider.Name;
+                        courseNameListItem.Value = courseName.ID.ToString();
 
-                    courseNameListItem.Text = courseName.Name + " - " + courseName.OnlineProvider.Name;
-                    courseNameListItem.Value = courseName.ID.ToString();
-
-                    courseNameList.Add(courseNameListItem);
-                }
+                        courseNameList.Add(courseNameListItem);
+                    }
             }
 
 
@@ -150,17 +159,20 @@ namespace CcaRegistrationDf.Controllers
         private async Task<List<SelectListItem>> GetCourseCategories()
         {
             var courseCategories = new List<SelectListItem>();
-
+            SelectListItem categoryListItem;
             var categoryList = await db.Categories.ToListAsync();
 
             foreach (var category in categoryList)
             {
-                var categoryListItem = new SelectListItem();
+                if (category.IsActive)
+                {
+                    categoryListItem = new SelectListItem();
 
-                categoryListItem.Text = category.Name;
-                categoryListItem.Value = category.ID.ToString();
+                    categoryListItem.Text = category.Name;
+                    categoryListItem.Value = category.ID.ToString();
 
-                courseCategories.Add(categoryListItem);
+                    courseCategories.Add(categoryListItem);
+                }
             }
 
 
@@ -169,7 +181,19 @@ namespace CcaRegistrationDf.Controllers
 
         private List<SelectListItem> GetFEDReasonList()
         {
-            return new List<SelectListItem>();
+            var fedList = new List<SelectListItem>();
+            SelectListItem fedListItem;
+
+            for (int i=1 ; i <= FEDOPTIONS.Count() ;  i++)
+            {
+                fedListItem = new SelectListItem();
+                fedListItem.Value = i.ToString();
+                fedListItem.Text = FEDOPTIONS[i-1];
+
+                fedList.Add(fedListItem);
+            }
+
+            return fedList;
         }
 
        
@@ -220,9 +244,6 @@ namespace CcaRegistrationDf.Controllers
 
             return locations;
         }
-
-
-
 
         // POST: MainTables/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

@@ -27,6 +27,11 @@
             <th data-column-id="Code">
                 @Html.DisplayNameFor(model => model.Code)
             </th>
+
+            <th data-column-id="Active" data-formatter="state">
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
                 @Html.DisplayName("Actions")
             </th>
@@ -54,11 +59,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Code)
                 </td>
+
+                <td>
+                    @if (item.IsActive == true)
+                    { <p>check</p> }
+                    
+                    else
+                    { <p>not</p> }
+
+                    @*@Html.DisplayFor(modelItem => item.IsActive)*@
+                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.ID)
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
+
                 </td>
             </tr>
         }
@@ -73,10 +87,17 @@
         $(function () {
             var grid = $("#grid-basic").bootgrid({
                 formatters: {
+                    "state": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.Active) == "check") checkBox = "checked=\"checked\"";
+                        
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+                        
+                    },
+                
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
                         return "<a href=\" /Courses/Edit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-pencil\"></span></button> " +
-                            "<a href=\" /Courses/Delete/" + id + "\"class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-trash\"></span></button>" +
                             "<a href=\" /Courses/Details/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-menu-hamburger\"></span></a>";
                     }
                 }
