@@ -8,7 +8,7 @@ namespace CcaRegistrationDf.Models
     public class MainFormViewModel
     {
 
-        public int SubmitterTypeId { get; set; }
+        public int SubmitterTypeID { get; set; }
         // Student info
         public string Role { get; set; }
 
@@ -69,14 +69,14 @@ namespace CcaRegistrationDf.Models
 
         // Course choice
         public List<SelectListItem> Semester { get; set; }
-        public int SemesterId { get; set; }
+        public int SemesterID { get; set; }
         public List<SelectListItem> CourseCategory { get; set; }
-        public int CourseCategoryId { get; set; }
+        public int CourseCategoryID { get; set; }
         public List<SelectListItem> CourseName { get; set; }
-        public int CourseNameId { get; set; }
-        public string CourseRecordID { get; set; }
-        public int CourseCreditID { get; set; }
+        public int CourseNameID { get; set; }
+        
         public List<SelectListItem> CourseCredit { get; set; }
+        public int CourseCreditID { get; set; }
         public int OnlineProviderID { get; set; }
 
         // Student Accomodations
@@ -96,7 +96,7 @@ namespace CcaRegistrationDf.Models
 
         // Credit Exceptions
 
-        public bool ExcessiveFEDFlag { get; set; }
+        public bool HasExcessiveFED { get; set; }
         [Display(Name = "Why student is exceeding allowable online credits.")]
         public string ExcessiveFEDExplanation { get; set; }
         public int ExcessiveFEDReasonCode { get; set; }

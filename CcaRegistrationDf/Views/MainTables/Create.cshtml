@@ -21,13 +21,13 @@
 
             <div class="col-md-8">
                 @Html.Label("Student", "Student or Parent/Guardian", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeId, 1, new { htmlAttributes = new { title = "Student/Parent" }, id="studentSubmitter" })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Student/Parent" }, id="studentSubmitter" })
                 @Html.Label("Counselor", "| Counselor", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeId, 2, new { htmlAttributes = new { title = "Counselor" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Counselor" } })
                 @Html.Label("Provider", "| Provider", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeId, 3, new { htmlAttributes = new {  title = "Provider" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 3, new { htmlAttributes = new {  title = "Provider" } })
 
-                @Html.ValidationMessageFor(model => model.SubmitterTypeId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.SubmitterTypeID, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -174,21 +174,21 @@
         <div class="form-group">
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.SemesterId, Model.Semester, "Session", new { @class = "form-control", id = "Session" })
+                @Html.DropDownListFor(model => model.SemesterID, Model.Semester, "Session", new { @class = "form-control", id = "Session" })
 
-                @Html.ValidationMessageFor(model => model.CourseCategoryId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCategoryId, Model.CourseCategory, "Course Categories", new { @class = "form-control", id = "Category" })
+                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "Course Categories", new { @class = "form-control", id = "Category" })
 
-                @Html.ValidationMessageFor(model => model.CourseCategoryId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseNameId, Model.CourseName, "Courses", new { @class = "form-control", id = "Course" })
+                @Html.DropDownListFor(model => model.CourseNameID, Model.CourseName, "Courses", new { @class = "form-control", id = "Course" })
 
-                @Html.ValidationMessageFor(model => model.CourseNameId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CourseNameID, "", new { @class = "text-danger" })
             </div>
 
 
@@ -284,22 +284,22 @@
             @Html.Label("Will the student be registered for more than full day credit equivalent?", new { @class = "col-md-6  control-radio" })
             <div class="col-md-6">
                 @Html.Label("Yes", "Yes", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.ExcessiveFEDFlag, true, new { htmlAttributes = new { title = "Yes. Excess Credit." }, id = "YesExcessCredit" })
+                @Html.RadioButtonFor(model => model.HasExcessiveFED, true, new { htmlAttributes = new { title = "Yes. Excess Credit." }, id = "YesExcessCredit" })
                 @Html.Label("No", "No", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.ExcessiveFEDFlag, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit" })
+                @Html.RadioButtonFor(model => model.HasExcessiveFED, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit" })
 
-                @Html.ValidationMessageFor(model => model.ExcessiveFEDFlag, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.HasExcessiveFED, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
 
-            <div class="col-md-4">
+            <div class="col-md-5">
                 @Html.DropDownListFor(model => model.ExcessiveFEDReasonCode, Model.ExcessiveFEDReasonList, "Reason for excessive credit", new { @class = "form-control hide", id = "ExcessiveCreditReason" })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDReasonCode, "", new { @class = "text-danger" })
             </div>
         
 
-            <div class="col-md-8">
+            <div class="col-md-7">
                 @Html.TextAreaFor(model => model.ExcessiveFEDExplanation,  new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation"  })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDExplanation, "", new { @class = "text-danger" })
             </div>
@@ -365,17 +365,18 @@
         *@
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default" />
+            <div class="col-md-4">
+                <p>@Html.CheckBox("termsCheck")* I have read the <a href="/Home/About/#terms" target="_blank">Terms and Conditions</a></p>
+            </div>
+            <div class=" col-md-8">
+                <input id="submit" type="submit" value="Submit" class="btn btn-default" disabled="disabled"/>
             </div>
         </div>
 
     </div>
 
 }
-<div id="dialog" title="Confirmation Required">
-    *7/8* only qualify to participate with:(a)SEOP or CCRP for early graduation, and(b) approval of high school which student intends to graduate from,  indicating that the high school will accept credit earned prior to the 9th grade for purposes of high school graduation.
-</div>
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
@@ -388,6 +389,25 @@
     <script>
 
         $(function () {
+
+            //Add/hide fields according to user type.
+
+            $("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
+                if ($(this).val() == 3) {
+                    $("#ProviderSection").removeClass('hide');
+                    $("#CouselorCactusID").addClass('hide');
+                }
+                else if ($(this).val() == 2) {
+                    $("#CouselorCactusID").removeClass('hide');
+                    $("#ProviderSection").addClass('hide');
+                } else if ($(this).val() == 1) {
+                    $("#ProviderSection").addClass('hide');
+                    $("#CouselorCactusID").addClass('hide');
+                }
+            });
+
+            $('input:radio:first').prop("checked", true).trigger("click");
+
 
             //Enrollment DropdownLists
             $('#EnrollmentLocation').change(function () {
@@ -524,30 +544,19 @@
                 }
             });
 
-            //Add/hide fields according to user type.
+            
 
-            $("#SubmitterTypeCheckBox input[name='SubmitterTypeId']").click(function () {
-                if ($(this).val() == 3) {
-                    $("#ProviderSection").removeClass('hide');
-                    $("#CouselorCactusID").addClass('hide');
-                }
-                else if ($(this).val() == 2) {
-                    $("#CouselorCactusID").removeClass('hide');
-                    $("#ProviderSection").addClass('hide');
-                } else if ($(this).val() == 1) {
-                    $("#ProviderSection").addClass('hide');
-                    $("#CouselorCactusID").addClass('hide');
-                }
-            });
-
-            $('input:radio:first').prop("checked", true).trigger("click");
+           
         });
+
+        // Excessive credit
 
         $(function () {
             // Show inputs for full day excessive credit if clicked yes.
 
             $("input[name$='ExcessiveFEDFlag']").click(function () {
                 if ($('#YesExcessCredit').is(':checked')) {
+                    alert('(1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.\n(2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.\n(3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.');
 
                     //TODO: Populate dropdown for reasons
 
@@ -578,5 +587,17 @@
             });
         });
 
+        // Terms and Conditions
+        $(function () {
+            $('#termsCheck').click(function () {
+                if ($(this).is(':checked')) {
+                    $('#submit').removeAttr('disabled');
+                } else {
+
+                    $('#submit').attr("disabled", "disabled");
+                }
+            });
+
+        });
     </script>
 }

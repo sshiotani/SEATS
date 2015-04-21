@@ -258,6 +258,18 @@
     <Compile Include="Migrations\201504171307574_IsActive for Session.Designer.cs">
       <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504211258318_SessonToCourse.cs" />
+    <Compile Include="Migrations\201504211258318_SessonToCourse.Designer.cs">
+      <DependentUpon>201504211258318_SessonToCourse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504211330204_SessionID.cs" />
+    <Compile Include="Migrations\201504211330204_SessionID.Designer.cs">
+      <DependentUpon>201504211330204_SessionID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504212055515_MaintableMapped.cs" />
+    <Compile Include="Migrations\201504212055515_MaintableMapped.Designer.cs">
+      <DependentUpon>201504212055515_MaintableMapped.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Category.cs">
@@ -610,6 +622,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504171307574_IsActive for Session.resx">
       <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504211258318_SessonToCourse.resx">
+      <DependentUpon>201504211258318_SessonToCourse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504211330204_SessionID.resx">
+      <DependentUpon>201504211330204_SessionID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504212055515_MaintableMapped.resx">
+      <DependentUpon>201504212055515_MaintableMapped.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

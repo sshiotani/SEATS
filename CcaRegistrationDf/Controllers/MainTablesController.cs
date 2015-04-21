@@ -141,7 +141,7 @@ namespace CcaRegistrationDf.Controllers
 
             foreach (var courseName in courses)
             {
-                    if (courseName.Category.ID == categoryId && courseName.IsActive && courseName.OnlineProvider.IsActive)
+                    if (courseName.Category.ID == categoryId && courseName.IsActive && courseName.OnlineProvider.IsActive && courseName.Session.IsActive)
                     {
                         var courseNameListItem = new SelectListItem();
 

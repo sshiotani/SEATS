@@ -15,7 +15,7 @@ namespace CcaRegistrationDf.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "SEOP FAQ";
 
             return View();
         }
