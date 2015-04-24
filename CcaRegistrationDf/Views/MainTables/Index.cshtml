@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>My Applications</h2>
+<h2>Applications</h2>
 
 <p>
     @Html.ActionLink("Register For New Online Course", "Create")
@@ -15,6 +15,14 @@
             @Html.DisplayNameFor(model => model.ApplicationSubmissionDate)
         </th>
        
+        <th>
+            @Html.DisplayNameFor(model => model.StudentLastName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.StudentFirstName)
+        </th>
+
         <th>
             @Html.DisplayNameFor(model => model.CompletionStatus)
         </th>
@@ -30,6 +38,14 @@
             @Html.DisplayFor(modelItem => item.ApplicationSubmissionDate)
         </td>
       
+        <th>
+            @Html.DisplayFor(modelItem => item.StudentLastName)
+        </th>
+
+        <th>
+            @Html.DisplayFor(modelItem => item.StudentFirstName)
+        </th>
+
         <td>
             @Html.DisplayFor(modelItem => item.CompletionStatus)
         </td>

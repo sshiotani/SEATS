@@ -57,11 +57,11 @@
         @* Dropdown for EnrollmentLocation Goes here *@
         <div class="form-group" id="EnrollmentInformation">
             <div class="col-md-3">
-                @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control", id="EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
+                @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control dropdown-wrapper", id="EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
                 @*@Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })*@
             </div>
             <div class="col-md-3">
-                @Html.DropDownListFor(model => model.SchoolOfRecord, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control", id="CurrentSchool", title = "School in charge of student records and graduation." })
+                @Html.DropDownListFor(model => model.SchoolOfRecord, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control dropdown-wrapper", id = "CurrentSchool", title = "School in charge of student records and graduation." })
                 @Html.ValidationMessageFor(model => model.SchoolOfRecord, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
@@ -101,17 +101,17 @@
         <hr />
         <div class="form-group">
             <div class="col-md-3">
-                @Html.EditorFor(model => model.GuardianFirstName, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian First Name (Given Name)", placeholder = "Guardian First Name" } })
+                @Html.EditorFor(model => model.GuardianFirstName, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian First Name (Given Name)", placeholder = "*Guardian First Name" } })
                 @Html.ValidationMessageFor(model => model.GuardianFirstName, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-3">
-                @Html.EditorFor(model => model.GuardianLastName, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian Last Name (Surname)", placeholder = "Guardian Last Name" } })
+                @Html.EditorFor(model => model.GuardianLastName, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian Last Name (Surname)", placeholder = "*Guardian Last Name" } })
                 @Html.ValidationMessageFor(model => model.GuardianLastName, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-3">
-                @Html.EditorFor(model => model.GuardianEmail, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian Email Address ", placeholder = "Guardian Email" } })
+                @Html.EditorFor(model => model.GuardianEmail, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian Email Address ", placeholder = "*Guardian Email" } })
                 @Html.ValidationMessageFor(model => model.GuardianEmail, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
@@ -174,19 +174,19 @@
         <div class="form-group">
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.SemesterID, Model.Semester, "Session", new { @class = "form-control", id = "Session" })
+                @Html.DropDownListFor(model => model.SemesterID, Model.Semester, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
 
                 @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "Course Categories", new { @class = "form-control", id = "Category" })
+                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
 
                 @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseNameID, Model.CourseName, "Courses", new { @class = "form-control", id = "Course" })
+                @Html.DropDownListFor(model => model.CourseNameID, Model.CourseName, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
 
                 @Html.ValidationMessageFor(model => model.CourseNameID, "", new { @class = "text-danger" })
             </div>
@@ -208,7 +208,7 @@
 
         <div class="form-group">
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide", id = "CreditOptions" })
+                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
 
                 @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
             </div>
@@ -286,7 +286,7 @@
                 @Html.Label("Yes", "Yes", new { @class = "control-radio" })
                 @Html.RadioButtonFor(model => model.HasExcessiveFED, true, new { htmlAttributes = new { title = "Yes. Excess Credit." }, id = "YesExcessCredit" })
                 @Html.Label("No", "No", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.HasExcessiveFED, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit" })
+                @Html.RadioButtonFor(model => model.HasExcessiveFED, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit"})
 
                 @Html.ValidationMessageFor(model => model.HasExcessiveFED, "", new { @class = "text-danger" })
             </div>
@@ -365,10 +365,10 @@
         *@
 
         <div class="form-group">
-            <div class="col-md-4">
-                <p>@Html.CheckBox("termsCheck")* I have read the <a href="/Home/About/#terms" target="_blank">Terms and Conditions</a></p>
-            </div>
-            <div class=" col-md-8">
+            
+            <div class=" col-md-12">
+                <p>@Html.CheckBox("the-terms",false) * I have read the <a href="/Home/About/#terms" target="_blank">Terms and Conditions</a></p>
+                
                 <input id="submit" type="submit" value="Submit" class="btn btn-default" disabled="disabled"/>
             </div>
         </div>
@@ -387,8 +387,33 @@
 
 
     <script>
-
+       
+      
         $(function () {
+
+            //Datepicker
+            // Make the default start date 15 years ago today for birthdays of secondary schoolers.
+            var start = new Date();
+            start.setFullYear(start.getFullYear() - 15);
+            $("#birthdatePicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                defaultDate: start
+            });
+
+            $("#graduationdatePicker").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+            // Terms and Conditions
+           
+            $("#the-terms").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#submit').removeAttr('disabled');
+                } else {
+                    $('#submit').attr("disabled", "disabled");
+                }
+            });
 
             //Add/hide fields according to user type.
 
@@ -447,7 +472,14 @@
                 var items = '<option value="">Select Course</option>';
                 $('#Course').html(items);
                 var category = $("#Category option:selected").val();
+                var categoryName = $("#Category option:selected").text();
+
                 if (category != "") {
+
+                    // Message for concurrent enrollment
+                    if (categoryName == "Concurrent Enrollment")
+                        alert("Courses offered under provider contract with an institution of higher education, which are not considered Concurrent Enrollment per 53A-15-101 and 53A-17a-120.5");
+
                     $.ajax({
                         type: "POST",
                         url: '@Url.Action("GetCourseNames", "MainTables")',
@@ -544,17 +576,10 @@
                 }
             });
 
-            
-
-           
-        });
-
-        // Excessive credit
-
-        $(function () {
+            // Excessive credit
             // Show inputs for full day excessive credit if clicked yes.
 
-            $("input[name$='ExcessiveFEDFlag']").click(function () {
+            $("#CreditRadio input[name$='HasExcessiveFED']").click(function () {
                 if ($('#YesExcessCredit').is(':checked')) {
                     alert('(1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.\n(2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.\n(3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.');
 
@@ -566,38 +591,8 @@
                     $("#ExcessiveCreditReason, #ExcessiveCreditExplanation").addClass('hide').prop('disabled', true).prop('required', false);
                 }
             });
-        });
 
-        //Datepicker
-
-        $(function () {
-
-            // Make the default start date 15 years ago today for birthdays of secondary schoolers.
-            var start = new Date();
-            start.setFullYear(start.getFullYear() - 15);
-            $("#birthdatePicker").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                defaultDate: start
-            });
-
-            $("#graduationdatePicker").datepicker({
-                changeMonth: true,
-                changeYear: true
-            });
-        });
-
-        // Terms and Conditions
-        $(function () {
-            $('#termsCheck').click(function () {
-                if ($(this).is(':checked')) {
-                    $('#submit').removeAttr('disabled');
-                } else {
-
-                    $('#submit').attr("disabled", "disabled");
-                }
-            });
-
+      
         });
     </script>
 }

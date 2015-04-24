@@ -8,7 +8,7 @@ body {
 	font-family: 'Lato',sans-serif;
 	font-weight: 300;
 	color: #000;
-    
+	
 	background-color: #fff;
    
    
@@ -87,6 +87,12 @@ a:focus {
 
 .nav.navbar-nav {
 	background-color: rgba(255,255,255,.4);
+	
+}
+
+.navbar .nav > li > a {	
+	color: #fff;
+	font-weight: bold;
 }
 
 .navbar-custom.top-nav-collapse .nav.navbar-nav {
@@ -97,13 +103,13 @@ a:focus {
 .navbar-custom ul.nav li a {
 	font-size: 12px;
 	letter-spacing: 1px;
-	color: #444;
+	color: #fff;
 	text-transform: uppercase;
 	font-weight: 700;
 }
 
 .navbar-custom.top-nav-collapse ul.nav li a {
-		-webkit-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
 	-moz-transition: all .2s ease-in-out;
 	transition: all .2s ease-in-out;
 	color: #fff;
@@ -131,7 +137,7 @@ a:focus {
 }
 
 .navbar-custom.top-nav-collapse ul.nav ul.dropdown-menu li a {
-	color: #666;
+	color: #fff;
 }
 
 .navbar-custom .nav li a {
@@ -479,12 +485,12 @@ form#contact-form .form-group label {
 form#contact-form input,form#contact-form select,form#contact-form textarea {
 	border-radius: 0;
 	border: 1px solid #eee;
-  -webkit-box-shadow: none;
+  /*-webkit-box-shadow: none;*/
 		  box-shadow:  none;
 }
 
 form#contact-form input:focus,form#contact-form select:focus,form#contact-form textarea:focus {
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+  /*-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);*/
 		  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
 }
 .input-group-addon {
@@ -605,6 +611,29 @@ Parallax
 --- Elements
 ============================ */
 
+.form-control::-moz-placeholder {
+  color: #000;
+  font-weight:bold;
+  opacity: .7;
+}
+.form-control:-ms-input-placeholder {
+	 font-weight:bold;
+  color: #000;
+  opacity: .7;
+}
+
+.form-control::-webkit-input-placeholder {
+	 font-weight:bold;
+  color: #000;
+  opacity: .7;
+}
+
+.dropdown-wrapper{
+     font-weight:bold;
+  color: #000;
+  opacity: .7;
+}
+
 .btn {
 	border-radius: 0;
 	text-transform: uppercase;
@@ -626,6 +655,7 @@ Parallax
 	font-size: 40px;
 	color: #fff;
 	background: 0 0;
+    background-color: #67b0d1;
 	-webkit-transition: background .3s ease-in-out;
 	-moz-transition: background .3s ease-in-out;
 	transition: background .3s ease-in-out;
