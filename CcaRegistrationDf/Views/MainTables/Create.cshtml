@@ -21,11 +21,11 @@
 
             <div class="col-md-8">
                 @Html.Label("Student", "Student or Parent/Guardian", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Student/Parent" }, id="studentSubmitter" })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Student/Parent" }, id = "studentSubmitter" })
                 @Html.Label("Counselor", "| Counselor", new { @class = "control-radio" })
                 @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Counselor" } })
                 @Html.Label("Provider", "| Provider", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 3, new { htmlAttributes = new {  title = "Provider" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 3, new { htmlAttributes = new { title = "Provider" } })
 
                 @Html.ValidationMessageFor(model => model.SubmitterTypeID, "", new { @class = "text-danger" })
             </div>
@@ -57,8 +57,8 @@
         @* Dropdown for EnrollmentLocation Goes here *@
         <div class="form-group" id="EnrollmentInformation">
             <div class="col-md-3">
-                @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control dropdown-wrapper", id="EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
-                @*@Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })*@
+                @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
                 @Html.DropDownListFor(model => model.SchoolOfRecord, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control dropdown-wrapper", id = "CurrentSchool", title = "School in charge of student records and graduation." })
@@ -69,7 +69,7 @@
                 @Html.ValidationMessageFor(model => model.GraduationDate, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.SSID, new { @class = "form-control", id ="ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
+                @Html.TextBoxFor(model => model.SSID, new { @class = "form-control", id = "ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
                 @Html.ValidationMessageFor(model => model.SSID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -115,7 +115,7 @@
                 @Html.ValidationMessageFor(model => model.GuardianEmail, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-                @Html.EditorFor(model => model.GuardianPhone1, new { htmlAttributes = new { @class = "form-control", title = "Parent/Guardian Contact Phone Number with Area code ", placeholder = "Guardian Phone" } })
+                @Html.EditorFor(model => model.GuardianPhone1, new { htmlAttributes = new { @class = "phone form-control", title = "Parent/Guardian Contact Phone Number with Area code ", placeholder = "Guardian Phone" } })
                 @Html.ValidationMessageFor(model => model.GuardianPhone1, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -130,7 +130,7 @@
         <div class="form-group" id="CouselorCactusID">
             @Html.LabelFor(model => model.CounselorCactusID, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.CounselorCactusID,  new { @class = "form-control", id="CounselorCactusId", title = "Acts as Counselor Signature",placeholder = "Counselor Cactus ID"  } )
+                @Html.TextBoxFor(model => model.CounselorCactusID, new { @class = "form-control", id = "CounselorCactusId", title = "Acts as Counselor Signature", placeholder = "Counselor Cactus ID" })
                 @Html.ValidationMessageFor(model => model.CounselorCactusID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -156,7 +156,7 @@
             </div>
 
             <div class="col-md-3">
-                @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "form-control", title = "Public and Charter School only", placeholder = "Counselor Phone" } })
+                @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "phone form-control", title = "Public and Charter School only", placeholder = "Counselor Phone" } })
                 @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -205,6 +205,8 @@
 
             </div>
         </div>
+
+        @Html.HiddenFor(x => x.OnlineProviderID, new { id="ProviderID"})
 
         <div class="form-group">
             <div class="col-md-4">
@@ -286,7 +288,7 @@
                 @Html.Label("Yes", "Yes", new { @class = "control-radio" })
                 @Html.RadioButtonFor(model => model.HasExcessiveFED, true, new { htmlAttributes = new { title = "Yes. Excess Credit." }, id = "YesExcessCredit" })
                 @Html.Label("No", "No", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.HasExcessiveFED, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit"})
+                @Html.RadioButtonFor(model => model.HasExcessiveFED, false, new { htmlAttributes = new { title = "No excess credit." }, id = "NoExcessCredit" })
 
                 @Html.ValidationMessageFor(model => model.HasExcessiveFED, "", new { @class = "text-danger" })
             </div>
@@ -294,13 +296,13 @@
         <div class="form-group">
 
             <div class="col-md-5">
-                @Html.DropDownListFor(model => model.ExcessiveFEDReasonCode, Model.ExcessiveFEDReasonList, "Reason for excessive credit", new { @class = "form-control hide", id = "ExcessiveCreditReason" })
+                @Html.DropDownListFor(model => model.ExcessiveFEDReasonCode, Model.ExcessiveFEDReasonList, "Reason for excessive credit", new { @class = "form-control hide", id = "ExcessiveCreditReason", required = false })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDReasonCode, "", new { @class = "text-danger" })
             </div>
-        
+
 
             <div class="col-md-7">
-                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation,  new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation"  })
+                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation, new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDExplanation, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -327,7 +329,7 @@
 
 
                 <div class="col-md-3">
-                    @Html.EditorFor(model => model.ProviderPhoneNumber, new { htmlAttributes = new { @class = "form-control", title = "Provider Contact Phone", placeholder = "Provider Phone" } })
+                    @Html.EditorFor(model => model.ProviderPhoneNumber, new { htmlAttributes = new { @class = "phone form-control", title = "Provider Contact Phone", placeholder = "Provider Phone" } })
                     @Html.ValidationMessageFor(model => model.ProviderPhoneNumber, "", new { @class = "text-danger" })
                 </div>
 
@@ -339,7 +341,7 @@
 
             <div class="form-group">
                 <div class="col-md-3">
-                    @Html.EditorFor(model => model.ProviderFax, new { htmlAttributes = new { @class = "form-control", title = "Provider Fax", placeholder = "Provider Fax" } })
+                    @Html.EditorFor(model => model.ProviderFax, new { htmlAttributes = new { @class = "phone form-control", title = "Provider Fax", placeholder = "Provider Fax" } })
                     @Html.ValidationMessageFor(model => model.ProviderFax, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
@@ -365,11 +367,11 @@
         *@
 
         <div class="form-group">
-            
+
             <div class=" col-md-12">
-                <p>@Html.CheckBox("the-terms",false) * I have read the <a href="/Home/About/#terms" target="_blank">Terms and Conditions</a></p>
-                
-                <input id="submit" type="submit" value="Submit" class="btn btn-default" disabled="disabled"/>
+                <p>@Html.CheckBox("the-terms", false) * I have read the <a href="/Home/About/#terms" target="_blank">Terms and Conditions</a></p>
+
+                <input id="submit" type="submit" value="Submit" class="btn btn-default" disabled="disabled" />
             </div>
         </div>
 
@@ -387,8 +389,8 @@
 
 
     <script>
-       
-      
+
+
         $(function () {
 
             //Datepicker
@@ -406,7 +408,7 @@
                 changeYear: true
             });
             // Terms and Conditions
-           
+
             $("#the-terms").click(function () {
                 if ($(this).is(':checked')) {
                     $('#submit').removeAttr('disabled');
@@ -436,23 +438,20 @@
 
             //Enrollment DropdownLists
             $('#EnrollmentLocation').change(function () {
-                
+
                 var lea = $("#EnrollmentLocation option:selected").text();
 
-                if (lea.toLowerCase().indexOf("home school") >= 0)
-                {
+                if (lea.toLowerCase().indexOf("home school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").attr('disabled', true);
                 }
-                else if (lea.toLowerCase().indexOf("private school") >= 0)
-                {
+                else if (lea.toLowerCase().indexOf("private school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").removeAttr('disabled');
                 }
-                else
-                {
+                else {
                     $("#ssid").prop('disabled', false).prop('required', true);
                     $("#CounselorSection :input").removeAttr('disabled');
                     $("#CurrentSchool").prop('disabled', false);
@@ -542,6 +541,8 @@
                             $("#Provider").removeClass('hide');
                             $('#Provider').html('PROVIDER:' + result.Name);
 
+                            $('#ProviderID').val(result.ID);
+
                             $("#Code").removeClass('hide');
                             $('#Code').html("CODE:" + result.Code);
                         },
@@ -592,7 +593,10 @@
                 }
             });
 
-      
+
+            $(".phone").mask("(999) 999-9999");
+
+
         });
     </script>
 }

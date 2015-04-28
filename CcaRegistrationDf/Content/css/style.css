@@ -9,7 +9,7 @@ body {
 	font-weight: 300;
 	color: #000;
 	
-	background-color: #fff;
+	/*background-color: #fff;*/
    
    
 }
@@ -287,6 +287,8 @@ hr {
 
 .bg-white {
 	background: #fff;
+    border-radius: 10px;
+    padding:10px;
 }
 
 .bg-gray {
@@ -314,11 +316,11 @@ hr {
 	width:100%;
 	position:relative;
 	
-	background: url(../img/bg6.jpg) no-repeat top center;
+	background: url(../img/bg6a.jpg) no-repeat top center;
 }
 
 #intro.intro {
-	padding:20% 0 0 0;
+	padding:10% 0 0 0;
 }
 
 .intro .slogan {
@@ -360,18 +362,18 @@ hr {
 }
 
 /* ===========================
---- Intro small
+--- Intro logged in
 ============================ */
 
 .intro-small {
 	width:100%;
 	position:relative;
 	
-	background: url(../img/bg2.jpg) no-repeat top center;
+	background: url(../img/bg6-sm.jpg) no-repeat top center;
 }
 
 #intro-small.intro {
-	padding:20% 0 0 0;
+	padding:30% 0 0 0;
 }
 
 .intro-small .slogan {
@@ -469,7 +471,19 @@ hr {
 	margin-bottom: 20px;
 }	
 
+.service-box{
+    padding-top:20px;
+    padding-left:10px;
+    padding-right:10px;
+    width: 210px;
+	height: 200px;
+    color:#fff;
+    font-weight: 600;
 
+    background: #575757;
+    
+    border-radius:25px;
+}
 
 /* ===========================
 --- Contact

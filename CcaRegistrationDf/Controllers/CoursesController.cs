@@ -82,6 +82,7 @@ namespace CcaRegistrationDf.Controllers
             }
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
             ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
+            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
             return View(course);
         }
 
@@ -90,7 +91,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,CategoryID,Name,Credit,Code,OnlineProviderID,IsActive")] Course course)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,CategoryID,Name,Credit,Code,OnlineProviderID,IsActive,SessionID")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -100,6 +101,7 @@ namespace CcaRegistrationDf.Controllers
             }
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
             ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
+            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
             return View(course);
         }
 

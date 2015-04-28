@@ -10,7 +10,7 @@ namespace CcaRegistrationDf.Models
 
         public int SubmitterTypeID { get; set; }
         // Student info
-        public string Role { get; set; }
+        // public string Role { get; set; }
 
         [Required]
         [Display(Name = "Birth Date")]
@@ -27,6 +27,8 @@ namespace CcaRegistrationDf.Models
         [Display(Name = "Student First Name")]
         public string StudentFirstName { get; set; }
 
+        
+        [Required]
         [Range(7, 12)]
         public int StudentGradeLevel { get; set; }
 
@@ -35,11 +37,20 @@ namespace CcaRegistrationDf.Models
         public string StudentLastName { get; set; }
 
         public Nullable<int> SSID { get; set; }
+
         public Nullable<DateTime> GraduationDate { get; set; }
 
+        [Display(Name="Enrolled School District")]
+        [Required]
         public int EnrollmentLocationID { get; set; }
-        public List<SelectListItem> EnrollmentLocation { get; set; }
+        public IEnumerable<SelectListItem> EnrollmentLocation
+        {
+            get;
+            set;
+        }
+
         public string SchoolOfRecord { get; set; }
+        public int EnrollmentLocationSchoolNamesID { get; set; }
         public List<SelectListItem> EnrollmentLocationSchoolNames { get; set; }
         public bool IsStudentSigned { get; set; }
 
@@ -56,7 +67,7 @@ namespace CcaRegistrationDf.Models
         public string GuardianLastName { get; set; }
         public string GuardianPhone1 { get; set; }
         public string GuardianPhone2 { get; set; }
-        public bool IsGuardianSigned { get; set; }
+        //public bool IsGuardianSigned { get; set; }
 
         //Counselor info
         [Display(Name = "Counselor Cactus ID")]
@@ -68,9 +79,9 @@ namespace CcaRegistrationDf.Models
         public bool IsCounselorSigned { get; set; }
 
         // Course choice
-        public List<SelectListItem> Semester { get; set; }
+        public IEnumerable<SelectListItem> Semester { get; set; }
         public int SemesterID { get; set; }
-        public List<SelectListItem> CourseCategory { get; set; }
+        public IEnumerable<SelectListItem> CourseCategory { get; set; }
         public int CourseCategoryID { get; set; }
         public List<SelectListItem> CourseName { get; set; }
         public int CourseNameID { get; set; }
@@ -99,7 +110,7 @@ namespace CcaRegistrationDf.Models
         public bool HasExcessiveFED { get; set; }
         [Display(Name = "Why student is exceeding allowable online credits.")]
         public string ExcessiveFEDExplanation { get; set; }
-        public int ExcessiveFEDReasonCode { get; set; }
+        public Nullable<int> ExcessiveFEDReasonCode { get; set; }
         public List<SelectListItem> ExcessiveFEDReasonList { get; set; }
 
         // Provider Section

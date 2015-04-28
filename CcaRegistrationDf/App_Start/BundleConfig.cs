@@ -11,6 +11,7 @@ namespace CcaRegistrationDf
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"
                         , "~/Scripts/jquery-ui-{version}.js"
+                        , "~/Scripts/jquery.maskedinput.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
