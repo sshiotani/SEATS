@@ -270,6 +270,7 @@ namespace CcaRegistrationDf.Controllers
                     Mapper.CreateMap<MainFormViewModel, MainTable>();
 
                     MainTable mainTable = Mapper.Map<MainFormViewModel, MainTable>(mainFormViewModel);
+
                     mainTable.ApplicationSubmissionDate = DateTime.Now;
 
                     db.MainTables.Add(mainTable);
@@ -288,9 +289,21 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            //In order to maintain selectList Values we must call the GetClientSelectLists setup method
+            
 
-            return View(await GetClientSelectLists(mainFormViewModel));
+            try
+            {
+                //In order to maintain selectList Values we must call the GetClientSelectLists setup method
+                mainFormViewModel = await GetClientSelectLists(mainFormViewModel);
+                return View(mainFormViewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+
+            
         }
 
         // GET: MainTables/Edit/5
@@ -314,6 +327,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "AgreementID,ApplicationSubmissionDate,AssessedProficiency,BudgetPrimaryProvider,Business_Administrator_Email,BusinessAdministratorFirstName,BusinessAdministratorLastName,BusinessAdministratorSignature,BusinessAdministratorTelephone,Comments,CompletionStatus,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,CourseBegin,CourseCompletionDate,CourseCreditID,CourseFee,CourseID,CourseRecord2ndSemesterID,CourseRecordID,CourseStartDate,CreditCompletedToDate,DateBusinessAdministratorSignature,DateConfirmationActiveParticipation,DateContinuationActiveParticipation,DateReportPassingGrade,EnrollmentLocationID,ExcessiveFEDExplanation,ExcessiveFEDReasonCode,GraduationDate,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone1,GuardianPhone2,IsBusinessAdministratorAcceptRejectEnrollment,IsCounselorSigned,IsCourseConsistentWithStudentSEOP,IsEarlyGraduate,IsEnrollmentNoticeSent,IsFeeWaived,IsGuardianSigned,IsIEP,IsPrimaryEnrollmentVerified,IsProviderAcceptsRejectsCourseRequest,IsProviderEnrollmentVerified,IsProviderSignature,IsQ1,IsQ2,IsQ3,IsQ4,IsRemediation,IsSection504,IsStudentSigned,NotificationDate,NovemberFY15Distr,NovemberFY15Offset,OnlineProviderID,ParentTelephone2,PricingTier,PrimaryLEAExplantionRejection,PrimaryLEAReasonRejectingCCA,PrimaryNotificationDate,PriorDisbursementProvider,ProviderEmail,ProviderExplanationRejection,ProviderFax,ProviderFirstName,ProviderLastName,ProviderPhoneNumber,ProviderReasonRejection,RecordNotes,RemediationPeriodBegins,SchoolOfRecord,SSID,StartDateSecondSemester,StudentDOB,StudentEmail,StudentFirstName,StudentGradeLevel,StudentLastName,SubmissionDate,SubmitterTypeID,TeacherCactusID,TotalDisbursementsProvider,TwentyDaysPastSemesterStartDate,Unallocated,UnallocatedReduction,WithdrawalDate,Grand_Total")] MainTable mainTable)
         {
             if (ModelState.IsValid)
@@ -344,6 +358,7 @@ namespace CcaRegistrationDf.Controllers
         // POST: MainTables/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             MainTable mainTable = await db.MainTables.FindAsync(id);

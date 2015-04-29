@@ -12,9 +12,16 @@ namespace CcaRegistrationDf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SchoolYearSession
+    public partial class AspNetRole
     {
-        public System.DateTime SchoolYear { get; set; }
-        public int SessionID { get; set; }
+        public AspNetRole()
+        {
+            this.AspNetUsers = new HashSet<AspNetUser>();
+        }
+    
+        public string Id { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }
 }

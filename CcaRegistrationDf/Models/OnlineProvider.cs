@@ -22,7 +22,6 @@ namespace CcaRegistrationDf.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string DistrictID { get; set; }
-        public bool IsActive { get; set; }
     
         public virtual ICollection<Course> Courses { get; set; }
     }
