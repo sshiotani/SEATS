@@ -52,9 +52,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Sessions.Add(session);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Sessions.Add(session);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
 
             return View(session);
@@ -84,9 +91,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(session).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(session).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             return View(session);
         }
@@ -106,24 +120,24 @@ namespace CcaRegistrationDf.Controllers
             return View(session);
         }
 
-        // POST: Sessions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Session session = await db.Sessions.FindAsync(id);
-            db.Sessions.Remove(session);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //// POST: Sessions/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Session session = await db.Sessions.FindAsync(id);
+        //    db.Sessions.Remove(session);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

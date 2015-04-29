@@ -52,9 +52,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.EnrollmentLocations.Add(enrollmentLocation);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.EnrollmentLocations.Add(enrollmentLocation);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
 
             return View(enrollmentLocation);
@@ -84,9 +91,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(enrollmentLocation).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(enrollmentLocation).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             return View(enrollmentLocation);
         }
@@ -106,24 +120,24 @@ namespace CcaRegistrationDf.Controllers
             return View(enrollmentLocation);
         }
 
-        // POST: EnrollmentLocations/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            EnrollmentLocation enrollmentLocation = await db.EnrollmentLocations.FindAsync(id);
-            db.EnrollmentLocations.Remove(enrollmentLocation);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //// POST: EnrollmentLocations/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    EnrollmentLocation enrollmentLocation = await db.EnrollmentLocations.FindAsync(id);
+        //    db.EnrollmentLocations.Remove(enrollmentLocation);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

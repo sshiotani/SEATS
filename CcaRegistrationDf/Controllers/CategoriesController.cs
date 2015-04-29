@@ -22,7 +22,7 @@ namespace CcaRegistrationDf.Controllers
             return View(await db.Categories.ToListAsync());
         }
 
-       
+
 
         // GET: Categories/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -31,7 +31,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             Category category = await db.Categories.FindAsync(id);
             if (category == null)
             {
@@ -55,28 +55,41 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Categories.Add(category);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+
             }
 
             return View(category);
         }
 
-       
+
         // GET: Categories/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+
             Category category = await db.Categories.FindAsync(id);
+
             if (category == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(category);
+
+
         }
 
         // POST: Categories/Edit/5
@@ -88,9 +101,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(category).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("",ex.Message);
+                }
             }
             return View(category);
         }
@@ -111,23 +131,23 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // POST: Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Category category = await db.Categories.FindAsync(id);
-            db.Categories.Remove(category);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Category category = await db.Categories.FindAsync(id);
+        //    db.Categories.Remove(category);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

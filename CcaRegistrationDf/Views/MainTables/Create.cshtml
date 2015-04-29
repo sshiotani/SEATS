@@ -36,43 +36,63 @@
         <h4>Student Information</h4>
         <hr />
         <div class="form-group">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.EditorFor(model => model.StudentFirstName, new { htmlAttributes = new { @class = "form-control", title = "First Name as it appears on Birth Certificate", placeholder = "*Student First Name" } })
                 @Html.ValidationMessageFor(model => model.StudentFirstName, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.EditorFor(model => model.StudentLastName, new { htmlAttributes = new { @class = "form-control", title = "Last Name as it appears on Birth Certificate", placeholder = "*Student Last Name" } })
                 @Html.ValidationMessageFor(model => model.StudentLastName, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.StudentDOB, new { @class = "form-control datepicker", id = "birthdatePicker", title = "Birthdate must be in mm/dd/yyyy format.", placeholder = "*Date of Birth (mm/dd/yyyy)" })
                 @Html.ValidationMessageFor(model => model.StudentDOB, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
-                @Html.EditorFor(model => model.StudentEmail, new { htmlAttributes = new { @class = "form-control", title = "Please provide Student Email ", placeholder = "Student Email" } })
-                @Html.ValidationMessageFor(model => model.StudentEmail, "", new { @class = "text-danger" })
-            </div>
+
         </div>
 
         @* Dropdown for EnrollmentLocation Goes here *@
         <div class="form-group" id="EnrollmentInformation">
-            <div class="col-md-3">
+
+            <div class="col-md-4">
                 @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
                 @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
-                @Html.DropDownListFor(model => model.SchoolOfRecord, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control dropdown-wrapper", id = "CurrentSchool", title = "School in charge of student records and graduation." })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.EnrollmentLocationSchoolNamesID, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control dropdown-wrapper", id = "CurrentSchool", title = "School in charge of student records and graduation." })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4 hide" id="HomeSchoolRelease">
+                @Html.LabelFor(model => model.HasHomeSchoolRelease)
+                <div class="col-md-1">
+                    @Html.CheckBoxFor(model => model.HasHomeSchoolRelease, new { @class = "checkbox-inline" })
+                    @Html.ValidationMessageFor(model => model.HasHomeSchoolRelease, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SchoolOfRecord, new { htmlAttributes = new { @class = "form-control hide", id = "CurrentPrivateSchool", title = "Private School Name.", placeholder = "*Private School Name" } })
                 @Html.ValidationMessageFor(model => model.SchoolOfRecord, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.GraduationDate, new { @class = "form-control datepicker", id = "graduationdatePicker", title = "Approximate Date is acceptable", placeholder = "*Graduation Date (Approximate)" })
                 @Html.ValidationMessageFor(model => model.GraduationDate, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.StudentEmail, new { htmlAttributes = new { @class = "form-control", title = "Please provide Student Email ", placeholder = "Student Email" } })
+                @Html.ValidationMessageFor(model => model.StudentEmail, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.SSID, new { @class = "form-control", id = "ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
                 @Html.ValidationMessageFor(model => model.SSID, "", new { @class = "text-danger" })
             </div>
+
         </div>
+
+
 
         <div class="form-group" id="GradeCheckBox">
             @Html.Label("*Grade Level During Online Class Participation:", new { @class = "col-md-5  control-radio" })
@@ -206,7 +226,7 @@
             </div>
         </div>
 
-        @Html.HiddenFor(x => x.OnlineProviderID, new { id="ProviderID"})
+        @Html.HiddenFor(x => x.OnlineProviderID, new { id = "ProviderID" })
 
         <div class="form-group">
             <div class="col-md-4">
@@ -345,8 +365,16 @@
                     @Html.ValidationMessageFor(model => model.ProviderFax, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.ProviderCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
-                    @Html.ValidationMessageFor(model => model.ProviderCactusID, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative First Name", placeholder = "Teacher First Name" } })
+                    @Html.ValidationMessageFor(model => model.ProviderFirstName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative Last Name", placeholder = "Teacher Last Name" } })
+                    @Html.ValidationMessageFor(model => model.ProviderLastName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
+                    @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
@@ -389,8 +417,6 @@
 
 
     <script>
-
-
         $(function () {
 
             //Datepicker
@@ -445,16 +471,22 @@
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").attr('disabled', true);
+                    $("#CurrentPrivateSchool").addClass('hide');
+                    $("#HomeSchoolRelease").removeClass('hide');
                 }
                 else if (lea.toLowerCase().indexOf("private school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").removeAttr('disabled');
+                    $("#CurrentPrivateSchool").removeClass('hide');
+                    $("#HomeSchoolRelease").addClass('hide');
                 }
                 else {
                     $("#ssid").prop('disabled', false).prop('required', true);
                     $("#CounselorSection :input").removeAttr('disabled');
                     $("#CurrentSchool").prop('disabled', false);
+                    $("#CurrentPrivateSchool").addClass('hide');
+                    $("#HomeSchoolRelease").addClass('hide');
                 }
             });
 
@@ -477,7 +509,19 @@
 
                     // Message for concurrent enrollment
                     if (categoryName == "Concurrent Enrollment")
-                        alert("Courses offered under provider contract with an institution of higher education, which are not considered Concurrent Enrollment per 53A-15-101 and 53A-17a-120.5");
+                        $('#dialog-ConcurrentEnrollment').dialog({
+                            width: 500,
+                            dialogClass: "no-close",
+                            buttons: [
+                              {
+                                  text: "OK",
+                                  click: function () {
+                                      $(this).dialog("close");
+                                  }
+                              }
+                            ]
+                        });
+                    //alert("Courses offered under provider contract with an institution of higher education, which are not considered Concurrent Enrollment per 53A-15-101 and 53A-17a-120.5");
 
                     $.ajax({
                         type: "POST",
@@ -573,7 +617,19 @@
 
             $("#GradeCheckBox input[name='StudentGradeLevel']").click(function () {
                 if ($(this).val() == 7 || $(this).val() == 8) {
-                    alert(' 7*/8* only qualify to participate with:(a)SEOP or CCRP for early graduation, and(b) approval of high school which student intends to graduate from,  indicating that the high school will accept credit earned prior to the 9th grade for purposes of high school graduation.');
+                    $('#dialog-GradeLevel').dialog({
+                        width: 500,
+                        dialogClass: "no-close",
+                        buttons: [
+                          {
+                              text: "OK",
+                              click: function () {
+                                  $(this).dialog("close");
+                              }
+                          }
+                        ]
+                    });
+                    //alert(' 7*/8* only qualify to participate with:(a)SEOP or CCRP for early graduation, and(b) approval of high school which student intends to graduate from,  indicating that the high school will accept credit earned prior to the 9th grade for purposes of high school graduation.');
                 }
             });
 
@@ -582,9 +638,21 @@
 
             $("#CreditRadio input[name$='HasExcessiveFED']").click(function () {
                 if ($('#YesExcessCredit').is(':checked')) {
-                    alert('(1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.\n(2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.\n(3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.');
+                    $('#dialog-ExcessiveFED').dialog({
+                        width: 500,
+                        dialogClass: "no-close",
+                        buttons: [
+                          {
+                              text: "OK",
+                              click: function () {
+                                  $(this).dialog("close");
+                              }
+                          }
+                        ]
+                    });
+                    // alert('(1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.\n(2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.\n(3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.');
 
-                    //TODO: Populate dropdown for reasons
+
 
                     $("#ExcessiveCreditReason, #ExcessiveCreditExplanation").removeClass('hide').prop('disabled', false).prop('required', true);
                 }
@@ -600,3 +668,21 @@
         });
     </script>
 }
+<div id="dialog-GradeLevel" title="Eligible Grade Level Alert" style="display:none;">
+    <p>7*/8* only qualify to participate with:(a)SEOP or CCRP for early graduation, and(b) approval of high school which student intends to graduate from,  indicating that the high school will accept credit earned prior to the 9th grade for purposes of high school graduation.</p>
+</div>
+<div id="dialog-ExcessiveFED" title="Excessive Credit Information" style="display:none;">
+    <p>
+        (1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.
+    </p>
+    <p>
+        (2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.
+    </p>
+    <p>
+        (3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.
+    </p>
+</div>
+
+<div id="dialog-ConcurrentEnrollment" title="Concurrent Enrollment Courses" style="display:none;">
+    <p>Courses offered under provider contract with an institution of higher education, which are not considered Concurrent Enrollment per 53A-15-101 and 53A-17a-120.5</p>
+</div>

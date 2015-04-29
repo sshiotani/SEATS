@@ -41,9 +41,18 @@ namespace CcaRegistrationDf.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
-            ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name");
-            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
+            try
+            {
+                ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
+                ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name");
+                ViewBag.SessionID = new SelectList(db.Sessions, "ID", "Name");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+
             return View();
         }
 
@@ -56,14 +65,29 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Courses.Add(course);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
 
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
-            ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
-            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
+            try
+            {
+                ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
+                ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
+                ViewBag.SessionID = new SelectList(db.Sessions, "ID", "Name");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
 
             return View(course);
         }
@@ -80,9 +104,18 @@ namespace CcaRegistrationDf.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
-            ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
-            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
+            try
+            {
+                ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
+                ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
+                ViewBag.SessionID = new SelectList(db.Sessions, "ID", "Name");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+
             return View(course);
         }
 
@@ -95,13 +128,32 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(course).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+
+                }
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
-            ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
-            ViewBag.Session = new SelectList(db.Sessions, "ID", "Name");
+
+
+            try
+            {
+                ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", course.CategoryID);
+                ViewBag.OnlineProviderID = new SelectList(db.OnlineProviders, "ID", "Name", course.OnlineProviderID);
+                ViewBag.SessionID = new SelectList(db.Sessions, "ID", "Name");
+            }
+            catch(Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+
             return View(course);
         }
 
@@ -120,24 +172,24 @@ namespace CcaRegistrationDf.Controllers
             return View(course);
         }
 
-        // POST: Courses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Course course = await db.Courses.FindAsync(id);
-            db.Courses.Remove(course);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //// POST: Courses/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Course course = await db.Courses.FindAsync(id);
+        //    db.Courses.Remove(course);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

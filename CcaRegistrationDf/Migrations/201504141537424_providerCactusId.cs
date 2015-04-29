@@ -7,14 +7,14 @@ namespace CcaRegistrationDf.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.MainTables", "ProviderCactusID", c => c.Int());
+            AddColumn("dbo.MainTables", "TeacherCactusID", c => c.Int());
             DropColumn("dbo.MainTables", "TeacherCactusID");
         }
         
         public override void Down()
         {
             AddColumn("dbo.MainTables", "TeacherCactusID", c => c.Int());
-            DropColumn("dbo.MainTables", "ProviderCactusID");
+            DropColumn("dbo.MainTables", "TeacherCactusID");
         }
     }
 }

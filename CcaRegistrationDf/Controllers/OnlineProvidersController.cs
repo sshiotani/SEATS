@@ -52,9 +52,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.OnlineProviders.Add(onlineProvider);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.OnlineProviders.Add(onlineProvider);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
 
             return View(onlineProvider);
@@ -84,9 +91,16 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(onlineProvider).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(onlineProvider).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             return View(onlineProvider);
         }
@@ -106,24 +120,24 @@ namespace CcaRegistrationDf.Controllers
             return View(onlineProvider);
         }
 
-        // POST: OnlineProviders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            OnlineProvider onlineProvider = await db.OnlineProviders.FindAsync(id);
-            db.OnlineProviders.Remove(onlineProvider);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //// POST: OnlineProviders/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    OnlineProvider onlineProvider = await db.OnlineProviders.FindAsync(id);
+        //    db.OnlineProviders.Remove(onlineProvider);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

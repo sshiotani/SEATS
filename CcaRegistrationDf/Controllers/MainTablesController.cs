@@ -48,35 +48,49 @@ namespace CcaRegistrationDf.Controllers
         public async Task<ActionResult> Create()
         {
             var model = new MainFormViewModel();
-            model = await GetClientSelectLists(model);
+            try
+            {
+                model = await GetClientSelectLists(model);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
 
             return View(model);
         }
 
         private async Task<MainFormViewModel> GetClientSelectLists(MainFormViewModel model)
         {
+            try
+            {
+                //Look up Lists of Leas
+                model.EnrollmentLocation = await GetEnrollmentLocations();
 
-            //Look up Lists of Leas
-            model.EnrollmentLocation = await GetEnrollmentLocations();
+                //Look up Lists of Schools
+                model.EnrollmentLocationSchoolNames = GetSchoolNames();
 
-            //Look up Lists of Schools
-            model.EnrollmentLocationSchoolNames = GetSchoolNames();
+                // List of Excessive credit reasons
+                model.ExcessiveFEDReasonList = GetFEDReasonList();
 
-            // List of Excessive credit reasons
-            model.ExcessiveFEDReasonList = GetFEDReasonList();
+                //Get Semesters
 
-            //Get Semesters
+                model.Semester = await GetSemesterList();
 
-            model.Semester = await GetSemesterList();
+                //Look up List of Courses
 
-            //Look up List of Courses
-
-            model.CourseCategory = await GetCourseCategories();
-            model.CourseName = GetCourseNames();
-            model.CourseCredit = GetCourseCredit();
+                model.CourseCategory = await GetCourseCategories();
+                model.CourseName = GetCourseNames();
+                model.CourseCredit = GetCourseCredit();
 
 
-            return model;
+                return model;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
 
@@ -90,19 +104,23 @@ namespace CcaRegistrationDf.Controllers
         {
 
             SelectListItem listItem;
+
             var creditList = new List<SelectListItem>();
 
-            char[] creditArray = credits.ToCharArray();
-
-            for (int j = 0; j < CREDITOPTIONS.Count(); j++)
+            if (credits != null)
             {
-                listItem = new SelectListItem();
-                listItem.Value = (j + 1).ToString();
-                listItem.Text = CREDITOPTIONS[j];
-                if (creditArray[j] == '0')
-                    listItem.Disabled = true;
+                char[] creditArray = credits.ToCharArray();
 
-                creditList.Add(listItem);
+                for (int j = 0; j < CREDITOPTIONS.Count(); j++)
+                {
+                    listItem = new SelectListItem();
+                    listItem.Value = (j + 1).ToString();
+                    listItem.Text = CREDITOPTIONS[j];
+                    if (creditArray[j] == '0')
+                        listItem.Disabled = true;
+
+                    creditList.Add(listItem);
+                }
             }
 
             return creditList;
@@ -110,15 +128,22 @@ namespace CcaRegistrationDf.Controllers
 
         private async Task<IEnumerable<SelectListItem>> GetSemesterList()
         {
-            var sessionList = await db.Sessions.ToListAsync();
-
-            var session= sessionList.Where(x => x.IsActive && x.Name != "All").Select(f => new SelectListItem
+            try
             {
-                Value = f.ID.ToString(),
-                Text = f.Name
-            });
+                var sessionList = await db.Sessions.ToListAsync();
 
-            return session;
+                var session = sessionList.Where(x => x.IsActive && x.Name != "All").Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
+
+                return session;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         private List<SelectListItem> GetCourseNames()
@@ -128,29 +153,46 @@ namespace CcaRegistrationDf.Controllers
 
         public async Task<JsonResult> GetCourseNames(int categoryId)
         {
-            var courses = await db.Courses.ToListAsync();
-
-            var courseNameList = courses.Where(x => x.Category.ID == categoryId && x.IsActive && x.OnlineProvider.IsActive && x.Session.IsActive).Select(f => new SelectListItem
+            try
             {
-                Value = f.ID.ToString(),
-                Text = f.Name + " - " + f.OnlineProvider.Name
-            });
+                IEnumerable<SelectListItem> courseNameList;
 
-            return Json(new SelectList(courseNameList, "Value", "Text"));
+                var courses = await db.Courses.ToListAsync();
+
+                courseNameList = courses.Where(x => x.Category.ID == categoryId && x.IsActive && x.OnlineProvider.IsActive && x.Session.IsActive).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name + " - " + f.OnlineProvider.Name
+                });
+
+                return Json(new SelectList(courseNameList, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing request.");
+            }
+
         }
 
         private async Task<IEnumerable<SelectListItem>> GetCourseCategories()
         {
-            var categoryList = await db.Categories.ToListAsync();
-
-            var courseCategories = categoryList.Where(x => x.IsActive).Select(f => new SelectListItem
+            try
             {
-                Value = f.ID.ToString(),
-                Text = f.Name
-            });
+                var categoryList = await db.Categories.ToListAsync();
+
+                var courseCategories = categoryList.Where(x => x.IsActive).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
 
 
-            return courseCategories;
+                return courseCategories;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         private List<SelectListItem> GetFEDReasonList()
@@ -172,18 +214,26 @@ namespace CcaRegistrationDf.Controllers
 
         public async Task<JsonResult> GetCourseInformation(int courseId)
         {
-            var courses = await db.Courses.ToListAsync();
-
-            var courseResult = courses.Where(x => x.ID == courseId).Select(f => new CourseResultModel()
+            try
             {
-                Code = f.Code,
-                Name = f.OnlineProvider.Name,
-                Credit = f.Credit
-            }).FirstOrDefault();
-            
-            courseResult.CreditChoices = GetCourseCredit(courseResult.Credit);
+                var courses = await db.Courses.ToListAsync();
 
-            return (Json(courseResult));
+                var courseResult = courses.Where(x => x.ID == courseId).Select(f => new CourseResultModel()
+                {
+                    Code = f.Code,
+                    Name = f.OnlineProvider.Name,
+                    Credit = f.Credit
+                }).FirstOrDefault();
+
+                courseResult.CreditChoices = GetCourseCredit(courseResult.Credit);
+
+                return (Json(courseResult));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing request.");
+
+            }
         }
 
         private List<SelectListItem> GetSchoolNames()
@@ -209,30 +259,38 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentDOB,StudentEmail,StudentFirstName,StudentGradeLevel,StudentLastName,SSID,GraduationDate, EnrollmentLocationID,,EnrollmentLocation, SchoolOfRecord, EnrollmentLocationSchoolNamesID,EnrollmentLocationSchoolNames,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone1,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SemesterID,Semester,CourseCategoryID,CourseCategory,CourseNameID,CourseName,CourseCreditID,CourseCredit,OnlineProviderID,IsCourseConsistentWithStudentSEOP,IsEarlyGraduate,IsFeeWaived,IsSection504,IsIEP, Comments,HasExcessiveFED, ExcessiveFEDExplanation,ExcessiveFEDReasonCode,ProviderCactusID,ProviderEmail,ProviderFax, ProviderFirstName,ProviderLastNameProviderPhoneNumber")] MainFormViewModel mainFormViewModel)
+        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentDOB,StudentEmail,StudentFirstName,StudentGradeLevel,StudentLastName,SSID,GraduationDate, EnrollmentLocationID, SchoolOfRecord, EnrollmentLocationSchoolNamesID,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone1,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SemesterID,CourseCategoryID,CourseNameID,CourseCreditID,OnlineProviderID,IsCourseConsistentWithStudentSEOP,IsEarlyGraduate,IsFeeWaived,IsSection504,IsIEP, Comments,HasExcessiveFED, ExcessiveFEDExplanation,ExcessiveFEDReasonCode,TeacherCactusID,ProviderEmail,ProviderFax, ProviderFirstName,ProviderLastNameProviderPhoneNumber,TeacherFirstName,TeacherLastName")] MainFormViewModel mainFormViewModel)
         {
 
 
             if (ModelState.IsValid)
             {
-                Mapper.CreateMap<MainFormViewModel, MainTable>();
+                try
+                {
+                    Mapper.CreateMap<MainFormViewModel, MainTable>();
 
-                MainTable mainTable = Mapper.Map<MainFormViewModel, MainTable>(mainFormViewModel);
-                mainTable.ApplicationSubmissionDate = DateTime.Now;
+                    MainTable mainTable = Mapper.Map<MainFormViewModel, MainTable>(mainFormViewModel);
+                    mainTable.ApplicationSubmissionDate = DateTime.Now;
 
-                db.MainTables.Add(mainTable);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                    db.MainTables.Add(mainTable);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                    return View("Error");
+                }
             }
 
 
             var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
             foreach (var error in errors)
-                ModelState.AddModelError("",error.Select(x => x.ErrorMessage).First());
-           
+                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
             //In order to maintain selectList Values we must call the GetClientSelectLists setup method
 
-            return View( await GetClientSelectLists(mainFormViewModel) );
+            return View(await GetClientSelectLists(mainFormViewModel));
         }
 
         // GET: MainTables/Edit/5

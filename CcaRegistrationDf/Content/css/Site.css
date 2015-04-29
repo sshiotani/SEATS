@@ -1,7 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    background: url(../img/bg5b.jpg) top center;
+    background: url(../img/bg5a.jpg) top center;
     background-attachment:fixed;
     
 }
@@ -13,7 +13,7 @@
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-top: 10%;
+    padding-top: 7%;
     padding-left: 15px;
     padding-right: 15px;
     /*background-color: #fff;*/

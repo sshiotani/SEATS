@@ -33,7 +33,7 @@ namespace CcaRegistrationDf.Models
         public bool IsIEP { get; set; }
         public bool IsPrimaryEnrollmentVerified { get; set; }
         public bool IsSection504 { get; set; }
-        public bool IsStudentSigned { get; set; }
+        public bool HasHomeSchoolRelease { get; set; }
         public string SchoolOfRecord { get; set; }
         public Nullable<int> SSID { get; set; }
         public Nullable<System.DateTime> StudentDOB { get; set; }
@@ -93,7 +93,9 @@ namespace CcaRegistrationDf.Models
         public string ProviderLastName { get; set; }
         public string ProviderPhoneNumber { get; set; }
         public string ProviderReasonRejection { get; set; }
-        public Nullable<int> ProviderCactusID { get; set; }
+        public string TeacherFirstName { get; set; }
+        public string TeacherLastName { get; set; }
+        public Nullable<int> TeacherCactusID { get; set; }
 
         // Credit
 

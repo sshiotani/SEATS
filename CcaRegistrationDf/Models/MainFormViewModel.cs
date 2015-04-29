@@ -50,9 +50,11 @@ namespace CcaRegistrationDf.Models
         }
 
         public string SchoolOfRecord { get; set; }
-        public int EnrollmentLocationSchoolNamesID { get; set; }
+        public Nullable<int> EnrollmentLocationSchoolNamesID { get; set; }
         public List<SelectListItem> EnrollmentLocationSchoolNames { get; set; }
-        public bool IsStudentSigned { get; set; }
+
+        [Display(Name = "Student has a home school release.")]
+        public bool HasHomeSchoolRelease { get; set; }
 
         // ParentInfo
         [Required]
@@ -116,7 +118,9 @@ namespace CcaRegistrationDf.Models
         // Provider Section
 
         [Display(Name = "Teacher Cactus ID")]
-        public Nullable<int> ProviderCactusID { get; set; }
+        public Nullable<int> TeacherCactusID { get; set; }
+        public string TeacherFirstName { get; set; }
+        public string TeacherLastName { get; set; }
         public string ProviderEmail { get; set; }
         public string ProviderFax { get; set; }
         public string ProviderFirstName { get; set; }
