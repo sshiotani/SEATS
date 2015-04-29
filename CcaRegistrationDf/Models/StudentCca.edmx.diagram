@@ -16,14 +16,6 @@
         <EntityTypeShape EntityType="SEATSModel.SubmitterType" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="SEATSModel.FK_Course_Category" ManuallyRouted="false" />
         <AssociationConnector Association="SEATSModel.OnlineProviderCourse" />
-        <EntityTypeShape EntityType="SEATSModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SEATSModel.AspNetRole" Width="1.5" PointX="7.75" PointY="12.5" />
-        <EntityTypeShape EntityType="SEATSModel.AspNetUserClaim" Width="1.5" PointX="12.25" PointY="11" />
-        <EntityTypeShape EntityType="SEATSModel.AspNetUserLogin" Width="1.5" PointX="12.25" PointY="13.75" />
-        <EntityTypeShape EntityType="SEATSModel.AspNetUser" Width="1.5" PointX="10" PointY="11.375" />
-        <AssociationConnector Association="SEATSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
-        <AssociationConnector Association="SEATSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
-        <AssociationConnector Association="SEATSModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
