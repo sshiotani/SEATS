@@ -16,6 +16,5 @@ namespace CcaRegistrationDf.Models
     {
         public System.DateTime SchoolYear { get; set; }
         public int SessionID { get; set; }
-        public bool IsActive { get; set; }
     }
 }
