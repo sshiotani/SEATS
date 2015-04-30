@@ -14,8 +14,8 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="Courses" Relationship="Self.FK_Course_Category" FromRole="Category" ToRole="Course" />
         </EntityType>
         <EntityType Name="Course">
@@ -23,134 +23,134 @@
             <PropertyRef Name="ID" />
             <PropertyRef Name="CategoryID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CategoryID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="CategoryID" Nullable="false" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Course_Category" FromRole="Course" ToRole="Category" />
-          <Property Name="Credit" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Credit" Precision="18" Scale="0" Type="Decimal" />
+          <Property Name="Code" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="OnlineProvider" Relationship="SEATSModel.OnlineProviderCourse" FromRole="Course" ToRole="OnlineProvider" />
-          <Property Name="OnlineProviderID" Type="Int32" Nullable="false" />
+          <Property Name="OnlineProviderID" Nullable="false" Type="Int32" />
         </EntityType>
         <EntityType Name="CourseCredit">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="EnrollmentLocation">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="MainTable">
           <Key>
             <PropertyRef Name="AgreementID" />
           </Key>
-          <Property Name="AgreementID" Type="Int32" Nullable="false" />
-          <Property Name="ApplicationSubmissionDate" Type="DateTime" Precision="0" />
-          <Property Name="AssessedProficiency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="BudgetPrimaryProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Business_Administrator_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BusinessAdministratorFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BusinessAdministratorLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BusinessAdministratorSignature" Type="Boolean" Nullable="false" />
-          <Property Name="BusinessAdministratorTelephone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CompletionStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AgreementID" Nullable="false" Type="Int32" />
+          <Property Name="ApplicationSubmissionDate" Precision="0" Type="DateTime" />
+          <Property Name="AssessedProficiency" MaxLength="20" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="BudgetPrimaryProvider" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="Business_Administrator_Email" MaxLength="30" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="BusinessAdministratorFirstName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="BusinessAdministratorLastName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="BusinessAdministratorSignature" Nullable="false" Type="Boolean" />
+          <Property Name="BusinessAdministratorTelephone" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Comments" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CompletionStatus" MaxLength="20" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="CounselorCactusID" Type="Int32" />
-          <Property Name="CounselorEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CounselorFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CounselorLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CounselorPhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CourseBegin" Type="DateTime" Precision="0" />
-          <Property Name="CourseCompletionDate" Type="DateTime" Precision="0" />
+          <Property Name="CounselorEmail" MaxLength="30" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="CounselorFirstName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CounselorLastName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CounselorPhoneNumber" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="CourseBegin" Precision="0" Type="DateTime" />
+          <Property Name="CourseCompletionDate" Precision="0" Type="DateTime" />
           <Property Name="CourseCreditID" Type="Int32" />
-          <Property Name="CourseFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CourseFee" Precision="19" Scale="4" Type="Decimal" />
           <Property Name="CourseID" Type="Int32" />
-          <Property Name="CourseRecord2ndSemesterID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CourseRecordID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CourseStartDate" Type="DateTime" Precision="0" />
-          <Property Name="CreditCompletedToDate" Type="Decimal" Precision="38" Scale="0" />
-          <Property Name="DateBusinessAdministratorSignature" Type="DateTime" Precision="0" />
-          <Property Name="DateConfirmationActiveParticipation" Type="DateTime" Precision="0" />
-          <Property Name="DateContinuationActiveParticipation" Type="DateTime" Precision="0" />
-          <Property Name="DateReportPassingGrade" Type="DateTime" Precision="0" />
+          <Property Name="CourseRecord2ndSemesterID" MaxLength="20" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CourseRecordID" MaxLength="20" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CourseStartDate" Precision="0" Type="DateTime" />
+          <Property Name="CreditCompletedToDate" Precision="38" Scale="0" Type="Decimal" />
+          <Property Name="DateBusinessAdministratorSignature" Precision="0" Type="DateTime" />
+          <Property Name="DateConfirmationActiveParticipation" Precision="0" Type="DateTime" />
+          <Property Name="DateContinuationActiveParticipation" Precision="0" Type="DateTime" />
+          <Property Name="DateReportPassingGrade" Precision="0" Type="DateTime" />
           <Property Name="EnrollmentLocationID" Type="Int32" />
-          <Property Name="ExcessiveFEDExplanation" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ExcessiveFEDExplanation" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="ExcessiveFEDReasonCode" Type="Int32" />
-          <Property Name="GraduationDate" Type="DateTime" Precision="0" />
-          <Property Name="GuardianEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="GuardianFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GuardianLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GuardianPhone1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="GuardianPhone2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="IsBusinessAdministratorAcceptRejectEnrollment" Type="Boolean" Nullable="false" />
-          <Property Name="IsCounselorSigned" Type="Boolean" Nullable="false" />
-          <Property Name="IsCourseConsistentWithStudentSEOP" Type="Boolean" Nullable="false" />
-          <Property Name="IsEarlyGraduate" Type="Boolean" Nullable="false" />
-          <Property Name="IsEnrollmentNoticeSent" Type="Boolean" Nullable="false" />
-          <Property Name="IsFeeWaived" Type="Boolean" Nullable="false" />
-          <Property Name="IsGuardianSigned" Type="Boolean" Nullable="false" />
-          <Property Name="IsIEP" Type="Boolean" Nullable="false" />
-          <Property Name="IsPrimaryEnrollmentVerified" Type="Boolean" Nullable="false" />
-          <Property Name="IsProviderAcceptsRejectsCourseRequest" Type="Boolean" Nullable="false" />
-          <Property Name="IsProviderEnrollmentVerified" Type="Boolean" Nullable="false" />
-          <Property Name="IsProviderSignature" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ1" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ2" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ3" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ4" Type="Boolean" Nullable="false" />
-          <Property Name="IsRemediation" Type="Boolean" Nullable="false" />
-          <Property Name="IsSection504" Type="Boolean" Nullable="false" />
-          <Property Name="IsStudentSigned" Type="Boolean" Nullable="false" />
-          <Property Name="NotificationDate" Type="DateTime" Precision="0" />
-          <Property Name="NovemberFY15Distr" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="NovemberFY15Offset" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="GraduationDate" Precision="0" Type="DateTime" />
+          <Property Name="GuardianEmail" MaxLength="30" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="GuardianFirstName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="GuardianLastName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="GuardianPhone1" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="GuardianPhone2" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="IsBusinessAdministratorAcceptRejectEnrollment" Nullable="false" Type="Boolean" />
+          <Property Name="IsCounselorSigned" Nullable="false" Type="Boolean" />
+          <Property Name="IsCourseConsistentWithStudentSEOP" Nullable="false" Type="Boolean" />
+          <Property Name="IsEarlyGraduate" Nullable="false" Type="Boolean" />
+          <Property Name="IsEnrollmentNoticeSent" Nullable="false" Type="Boolean" />
+          <Property Name="IsFeeWaived" Nullable="false" Type="Boolean" />
+          <Property Name="IsGuardianSigned" Nullable="false" Type="Boolean" />
+          <Property Name="IsIEP" Nullable="false" Type="Boolean" />
+          <Property Name="IsPrimaryEnrollmentVerified" Nullable="false" Type="Boolean" />
+          <Property Name="IsProviderAcceptsRejectsCourseRequest" Nullable="false" Type="Boolean" />
+          <Property Name="IsProviderEnrollmentVerified" Nullable="false" Type="Boolean" />
+          <Property Name="IsProviderSignature" Nullable="false" Type="Boolean" />
+          <Property Name="IsQ1" Nullable="false" Type="Boolean" />
+          <Property Name="IsQ2" Nullable="false" Type="Boolean" />
+          <Property Name="IsQ3" Nullable="false" Type="Boolean" />
+          <Property Name="IsQ4" Nullable="false" Type="Boolean" />
+          <Property Name="IsRemediation" Nullable="false" Type="Boolean" />
+          <Property Name="IsSection504" Nullable="false" Type="Boolean" />
+          <Property Name="IsStudentSigned" Nullable="false" Type="Boolean" />
+          <Property Name="NotificationDate" Precision="0" Type="DateTime" />
+          <Property Name="NovemberFY15Distr" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="NovemberFY15Offset" Precision="19" Scale="4" Type="Decimal" />
           <Property Name="OnlineProviderID" Type="Int32" />
-          <Property Name="ParentTelephone2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ParentTelephone2" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
           <Property Name="PricingTier" Type="Int32" />
-          <Property Name="PrimaryLEAExplantionRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="PrimaryLEAReasonRejectingCCA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="PrimaryNotificationDate" Type="DateTime" Precision="0" />
-          <Property Name="PriorDisbursementProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ProviderEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderExplanationRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderFax" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderPhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderReasonRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="RecordNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RemediationPeriodBegins" Type="DateTime" Precision="0" />
-          <Property Name="SchoolOfRecord" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PrimaryLEAExplantionRejection" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="PrimaryLEAReasonRejectingCCA" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="PrimaryNotificationDate" Precision="0" Type="DateTime" />
+          <Property Name="PriorDisbursementProvider" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="ProviderEmail" MaxLength="30" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="ProviderExplanationRejection" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="ProviderFax" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="ProviderFirstName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="ProviderLastName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="ProviderPhoneNumber" MaxLength="10" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="ProviderReasonRejection" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="RecordNotes" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="RemediationPeriodBegins" Precision="0" Type="DateTime" />
+          <Property Name="SchoolOfRecord" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="SSID" Type="Int32" />
-          <Property Name="StartDateSecondSemester" Type="DateTime" Precision="0" />
-          <Property Name="StudentDOB" Type="DateTime" Precision="0" />
-          <Property Name="StudentEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="StudentFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="StartDateSecondSemester" Precision="0" Type="DateTime" />
+          <Property Name="StudentDOB" Precision="0" Type="DateTime" />
+          <Property Name="StudentEmail" MaxLength="30" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="StudentFirstName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="StudentGradeLevel" Type="Int32" />
-          <Property Name="StudentLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="SubmissionDate" Type="DateTime" Precision="0" />
+          <Property Name="StudentLastName" MaxLength="100" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="SubmissionDate" Precision="0" Type="DateTime" />
           <Property Name="SubmitterTypeID" Type="Int32" />
           <Property Name="TeacherCactusID" Type="Int32" />
-          <Property Name="TotalDisbursementsProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TwentyDaysPastSemesterStartDate" Type="DateTime" Precision="0" />
-          <Property Name="Unallocated" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="UnallocatedReduction" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="WithdrawalDate" Type="DateTime" Precision="0" />
-          <Property Name="Grand_Total" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TotalDisbursementsProvider" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="TwentyDaysPastSemesterStartDate" Precision="0" Type="DateTime" />
+          <Property Name="Unallocated" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="UnallocatedReduction" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="WithdrawalDate" Precision="0" Type="DateTime" />
+          <Property Name="Grand_Total" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="OnlineProvider">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DistrictID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="DistrictID" MaxLength="5" FixedLength="false" Unicode="false" Type="String" />
           <NavigationProperty Name="Courses" Relationship="SEATSModel.OnlineProviderCourse" FromRole="OnlineProvider" ToRole="Course" />
         </EntityType>
         <EntityType Name="SchoolYearSession">
@@ -158,26 +158,26 @@
             <PropertyRef Name="SchoolYear" />
             <PropertyRef Name="SessionID" />
           </Key>
-          <Property Name="SchoolYear" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="SessionID" Type="Int32" Nullable="false" />
+          <Property Name="SchoolYear" Nullable="false" Precision="7" Type="DateTime" />
+          <Property Name="SessionID" Nullable="false" Type="Int32" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="SubmitterType">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <Association Name="FK_Course_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1" />
-          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <End Type="Self.Category" Multiplicity="1" Role="Category" />
+          <End Type="Self.Course" Multiplicity="*" Role="Course" />
           <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="ID" />
@@ -198,17 +198,17 @@
           <EntitySet Name="Sessions" EntityType="Self.Session" />
           <EntitySet Name="SubmitterTypes" EntityType="Self.SubmitterType" />
           <AssociationSet Name="FK_Course_Category" Association="Self.FK_Course_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Course" EntitySet="Courses" />
+            <End EntitySet="Categories" Role="Category" />
+            <End EntitySet="Courses" Role="Course" />
           </AssociationSet>
           <AssociationSet Name="OnlineProviderCourse" Association="SEATSModel.OnlineProviderCourse">
-            <End Role="OnlineProvider" EntitySet="OnlineProviders" />
-            <End Role="Course" EntitySet="Courses" />
+            <End EntitySet="OnlineProviders" Role="OnlineProvider" />
+            <End EntitySet="Courses" Role="Course" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="OnlineProviderCourse">
-          <End Type="SEATSModel.OnlineProvider" Role="OnlineProvider" Multiplicity="1" />
-          <End Type="SEATSModel.Course" Role="Course" Multiplicity="*" />
+          <End Type="SEATSModel.OnlineProvider" Multiplicity="1" Role="OnlineProvider" />
+          <End Type="SEATSModel.Course" Multiplicity="*" Role="Course" />
           <ReferentialConstraint>
             <Principal Role="OnlineProvider">
               <PropertyRef Name="ID" />
