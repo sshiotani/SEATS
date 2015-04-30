@@ -12,10 +12,11 @@ namespace CcaRegistrationDf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SchoolYearSession
+    public partial class C__MigrationHistory
     {
-        public System.DateTime SchoolYear { get; set; }
-        public int SessionID { get; set; }
-        public bool IsActive { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }

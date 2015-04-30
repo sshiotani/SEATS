@@ -5,17 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="85a59a99fcfd4093a6ff294ff1a605c5" Name="Diagram1" ZoomLevel="100">
-        <EntityTypeShape EntityType="SEATSModel.Category" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.Course" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.CourseCredit" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.EnrollmentLocation" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.MainTable" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.OnlineProvider" Width="1.5" PointX="5.875" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.SchoolYearSession" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.Session" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.SubmitterType" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
-        <AssociationConnector Association="SEATSModel.FK_Course_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="SEATSModel.OnlineProviderCourse" />
+        <EntityTypeShape EntityType="SEATSModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SEATSModel.AspNetRole" Width="1.5" PointX="7.75" PointY="12.5" />
+        <EntityTypeShape EntityType="SEATSModel.AspNetUserClaim" Width="1.5" PointX="12.25" PointY="11" />
+        <EntityTypeShape EntityType="SEATSModel.AspNetUserLogin" Width="1.5" PointX="12.25" PointY="13.75" />
+        <EntityTypeShape EntityType="SEATSModel.AspNetUser" Width="1.5" PointX="10" PointY="11.375" />
+        <EntityTypeShape EntityType="SEATSModel.Category" Width="1.5" PointX="9.75" PointY="1.625" />
+        <EntityTypeShape EntityType="SEATSModel.Course" Width="1.5" PointX="12" PointY="1" />
+        <EntityTypeShape EntityType="SEATSModel.EnrollmentLocation" Width="1.5" PointX="11.75" PointY="5.75" />
+        <EntityTypeShape EntityType="SEATSModel.MainTable" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="SEATSModel.OnlineProvider" Width="1.5" PointX="9.75" PointY="5.25" />
+        <EntityTypeShape EntityType="SEATSModel.Session" Width="1.5" PointX="9.75" PointY="8" />
+        <AssociationConnector Association="SEATSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SEATSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SEATSModel.FK_dbo_Courses_dbo_Categories_CategoryID" />
+        <AssociationConnector Association="SEATSModel.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" />
+        <AssociationConnector Association="SEATSModel.FK_dbo_Courses_dbo_Sessions_SessionID" />
+        <AssociationConnector Association="SEATSModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

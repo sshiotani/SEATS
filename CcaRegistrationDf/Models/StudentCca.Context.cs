@@ -25,14 +25,16 @@ namespace CcaRegistrationDf.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Course> Courses { get; set; }
-        public virtual DbSet<CourseCredit> CourseCredits { get; set; }
-        public virtual DbSet<EnrollmentLocation> EnrollmentLocations { get; set; }
-        public virtual DbSet<MainTable> MainTables { get; set; }
-        public virtual DbSet<OnlineProvider> OnlineProviders { get; set; }
-        public virtual DbSet<SchoolYearSession> SchoolYearSessions { get; set; }
-        public virtual DbSet<Session> Sessions { get; set; }
-        public virtual DbSet<SubmitterType> SubmitterTypes { get; set; }
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Category> Category1Set { get; set; }
+        public virtual DbSet<Course> Courses1 { get; set; }
+        public virtual DbSet<EnrollmentLocation> EnrollmentLocation1Set { get; set; }
+        public virtual DbSet<MainTable> MainTable1Set { get; set; }
+        public virtual DbSet<OnlineProvider> OnlineProvider1Set { get; set; }
+        public virtual DbSet<Session> Session1Set { get; set; }
     }
 }

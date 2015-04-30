@@ -12,9 +12,16 @@ namespace CcaRegistrationDf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SubmitterType
+    public partial class AspNetRole
     {
-        public int ID { get; set; }
+        public AspNetRole()
+        {
+            this.AspNetUsers = new HashSet<AspNetUser>();
+        }
+    
+        public string Id { get; set; }
         public string Name { get; set; }
+    
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }
 }

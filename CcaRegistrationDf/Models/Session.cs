@@ -14,8 +14,15 @@ namespace CcaRegistrationDf.Models
     
     public partial class Session
     {
+        public Session()
+        {
+            this.Courses = new HashSet<Course>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+    
+        public virtual ICollection<Course> Courses { get; set; }
     }
 }

@@ -4,90 +4,520 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SEATSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="SEATSModelStoreContainer" />
+    <Schema Namespace="SEATSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Credit" Type="nvarchar(max)" />
+          <Property Name="Code" Type="nvarchar(max)" />
+          <Property Name="OnlineProviderID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SessionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnrollmentLocations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="MainTables">
+          <Key>
+            <PropertyRef Name="AgreementID" />
+          </Key>
+          <Property Name="AgreementID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplicationSubmissionDate" Type="datetime" />
+          <Property Name="AssessedProficiency" Type="nvarchar(max)" />
+          <Property Name="BudgetPrimaryProvider" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Business_Administrator_Email" Type="nvarchar(max)" />
+          <Property Name="BusinessAdministratorFirstName" Type="nvarchar(max)" />
+          <Property Name="BusinessAdministratorLastName" Type="nvarchar(max)" />
+          <Property Name="BusinessAdministratorSignature" Type="bit" Nullable="false" />
+          <Property Name="BusinessAdministratorTelephone" Type="nvarchar(max)" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+          <Property Name="CompletionStatus" Type="nvarchar(max)" />
+          <Property Name="CounselorCactusID" Type="int" />
+          <Property Name="CounselorEmail" Type="nvarchar(max)" />
+          <Property Name="CounselorFirstName" Type="nvarchar(max)" />
+          <Property Name="CounselorLastName" Type="nvarchar(max)" />
+          <Property Name="CounselorPhoneNumber" Type="nvarchar(max)" />
+          <Property Name="CourseBegin" Type="datetime" />
+          <Property Name="CourseCompletionDate" Type="datetime" />
+          <Property Name="CourseCreditID" Type="int" />
+          <Property Name="CourseFee" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CourseStartDate" Type="datetime" />
+          <Property Name="CreditCompletedToDate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DateBusinessAdministratorSignature" Type="datetime" />
+          <Property Name="DateConfirmationActiveParticipation" Type="datetime" />
+          <Property Name="DateContinuationActiveParticipation" Type="datetime" />
+          <Property Name="DateReportPassingGrade" Type="datetime" />
+          <Property Name="EnrollmentLocationID" Type="int" />
+          <Property Name="ExcessiveFEDExplanation" Type="nvarchar(max)" />
+          <Property Name="ExcessiveFEDReasonCode" Type="int" />
+          <Property Name="GraduationDate" Type="datetime" />
+          <Property Name="GuardianEmail" Type="nvarchar(max)" />
+          <Property Name="GuardianFirstName" Type="nvarchar(max)" />
+          <Property Name="GuardianLastName" Type="nvarchar(max)" />
+          <Property Name="GuardianPhone1" Type="nvarchar(max)" />
+          <Property Name="GuardianPhone2" Type="nvarchar(max)" />
+          <Property Name="IsBusinessAdministratorAcceptRejectEnrollment" Type="bit" Nullable="false" />
+          <Property Name="IsCounselorSigned" Type="bit" Nullable="false" />
+          <Property Name="IsCourseConsistentWithStudentSEOP" Type="bit" Nullable="false" />
+          <Property Name="IsEarlyGraduate" Type="bit" Nullable="false" />
+          <Property Name="IsEnrollmentNoticeSent" Type="bit" Nullable="false" />
+          <Property Name="IsFeeWaived" Type="bit" Nullable="false" />
+          <Property Name="IsGuardianSigned" Type="bit" Nullable="false" />
+          <Property Name="IsIEP" Type="bit" Nullable="false" />
+          <Property Name="IsPrimaryEnrollmentVerified" Type="bit" Nullable="false" />
+          <Property Name="IsProviderAcceptsRejectsCourseRequest" Type="bit" Nullable="false" />
+          <Property Name="IsProviderEnrollmentVerified" Type="bit" Nullable="false" />
+          <Property Name="IsProviderSignature" Type="bit" Nullable="false" />
+          <Property Name="IsRemediation" Type="bit" Nullable="false" />
+          <Property Name="IsSection504" Type="bit" Nullable="false" />
+          <Property Name="NotificationDate" Type="datetime" />
+          <Property Name="NovemberFY15Distr" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NovemberFY15Offset" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OnlineProviderID" Type="int" />
+          <Property Name="PricingTier" Type="int" />
+          <Property Name="PrimaryLEAExplantionRejection" Type="nvarchar(max)" />
+          <Property Name="PrimaryLEAReasonRejectingCCA" Type="nvarchar(max)" />
+          <Property Name="PrimaryNotificationDate" Type="datetime" />
+          <Property Name="PriorDisbursementProvider" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ProviderEmail" Type="nvarchar(max)" />
+          <Property Name="ProviderExplanationRejection" Type="nvarchar(max)" />
+          <Property Name="ProviderFax" Type="nvarchar(max)" />
+          <Property Name="ProviderFirstName" Type="nvarchar(max)" />
+          <Property Name="ProviderLastName" Type="nvarchar(max)" />
+          <Property Name="ProviderPhoneNumber" Type="nvarchar(max)" />
+          <Property Name="ProviderReasonRejection" Type="nvarchar(max)" />
+          <Property Name="RecordNotes" Type="nvarchar(max)" />
+          <Property Name="RemediationPeriodBegins" Type="datetime" />
+          <Property Name="SchoolOfRecord" Type="nvarchar(max)" />
+          <Property Name="SSID" Type="int" />
+          <Property Name="StartDateSecondSemester" Type="datetime" />
+          <Property Name="StudentDOB" Type="datetime" />
+          <Property Name="StudentEmail" Type="nvarchar(max)" />
+          <Property Name="StudentFirstName" Type="nvarchar(max)" />
+          <Property Name="StudentGradeLevel" Type="int" />
+          <Property Name="StudentLastName" Type="nvarchar(max)" />
+          <Property Name="SubmitterTypeID" Type="int" />
+          <Property Name="TotalDisbursementsProvider" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TwentyDaysPastSemesterStartDate" Type="datetime" />
+          <Property Name="Unallocated" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UnallocatedReduction" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="WithdrawalDate" Type="datetime" />
+          <Property Name="Grand_Total" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HasExcessiveFED" Type="bit" Nullable="false" />
+          <Property Name="CourseCategoryID" Type="int" />
+          <Property Name="CourseNameID" Type="int" />
+          <Property Name="CourseName2ndSemesterID" Type="int" />
+          <Property Name="SemesterID" Type="int" Nullable="false" />
+          <Property Name="TeacherFirstName" Type="nvarchar(max)" />
+          <Property Name="TeacherLastName" Type="nvarchar(max)" />
+          <Property Name="TeacherCactusID" Type="int" />
+          <Property Name="HasHomeSchoolRelease" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OnlineProviders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="DistrictID" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sessions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Courses_dbo_Categories_CategoryID">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID">
+          <End Role="OnlineProviders" Type="Self.OnlineProviders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OnlineProviders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="OnlineProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Courses_dbo_Sessions_SessionID">
+          <End Role="Sessions" Type="Self.Sessions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sessions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="SessionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SEATSModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnrollmentLocations" EntityType="Self.EnrollmentLocations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainTables" EntityType="Self.MainTables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OnlineProviders" EntityType="Self.OnlineProviders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sessions" EntityType="Self.Sessions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_Categories_CategoryID" Association="Self.FK_dbo_Courses_dbo_Categories_CategoryID">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" Association="Self.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID">
+            <End Role="OnlineProviders" EntitySet="OnlineProviders" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_Sessions_SessionID" Association="Self.FK_dbo_Courses_dbo_Sessions_SessionID">
+            <End Role="Sessions" EntitySet="Sessions" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SEATSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SEATSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="SEATSModel.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="SEATSModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="SEATSModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="SEATSModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="SEATSModel.AspNetUser" />
+          <EntitySet Name="Category1Set" EntityType="SEATSModel.Category" />
+          <EntitySet Name="Courses1" EntityType="SEATSModel.Course" />
+          <EntitySet Name="EnrollmentLocation1Set" EntityType="SEATSModel.EnrollmentLocation" />
+          <EntitySet Name="MainTable1Set" EntityType="SEATSModel.MainTable" />
+          <EntitySet Name="OnlineProvider1Set" EntityType="SEATSModel.OnlineProvider" />
+          <EntitySet Name="Session1Set" EntityType="SEATSModel.Session" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="SEATSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="SEATSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_Categories_CategoryID" Association="SEATSModel.FK_dbo_Courses_dbo_Categories_CategoryID">
+            <End Role="Category1" EntitySet="Category1Set" />
+            <End Role="Cours" EntitySet="Courses1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" Association="SEATSModel.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID">
+            <End Role="OnlineProvider1" EntitySet="OnlineProvider1Set" />
+            <End Role="Cours" EntitySet="Courses1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Courses_dbo_Sessions_SessionID" Association="SEATSModel.FK_dbo_Courses_dbo_Sessions_SessionID">
+            <End Role="Session1" EntitySet="Session1Set" />
+            <End Role="Cours" EntitySet="Courses1" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="SEATSModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="SEATSModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="SEATSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="SEATSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="SEATSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="SEATSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="SEATSModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK_Course_Category" FromRole="Category" ToRole="Course" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="SEATSModel.FK_dbo_Courses_dbo_Categories_CategoryID" FromRole="Category1" ToRole="Cours" />
         </EntityType>
         <EntityType Name="Course">
           <Key>
             <PropertyRef Name="ID" />
-            <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CategoryID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_Course_Category" FromRole="Course" ToRole="Category" />
-          <Property Name="Credit" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OnlineProvider" Relationship="SEATSModel.OnlineProviderCourse" FromRole="Course" ToRole="OnlineProvider" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Credit" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OnlineProviderID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="CourseCredit">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SessionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="SEATSModel.FK_dbo_Courses_dbo_Categories_CategoryID" FromRole="Cours" ToRole="Category1" />
+          <NavigationProperty Name="OnlineProvider" Relationship="SEATSModel.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" FromRole="Cours" ToRole="OnlineProvider1" />
+          <NavigationProperty Name="Session" Relationship="SEATSModel.FK_dbo_Courses_dbo_Sessions_SessionID" FromRole="Cours" ToRole="Session1" />
         </EntityType>
         <EntityType Name="EnrollmentLocation">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MainTable">
           <Key>
             <PropertyRef Name="AgreementID" />
           </Key>
-          <Property Name="AgreementID" Type="Int32" Nullable="false" />
-          <Property Name="ApplicationSubmissionDate" Type="DateTime" Precision="0" />
-          <Property Name="AssessedProficiency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="BudgetPrimaryProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Business_Administrator_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="BusinessAdministratorFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BusinessAdministratorLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AgreementID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationSubmissionDate" Type="DateTime" Precision="3" />
+          <Property Name="AssessedProficiency" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BudgetPrimaryProvider" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Business_Administrator_Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BusinessAdministratorFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BusinessAdministratorLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BusinessAdministratorSignature" Type="Boolean" Nullable="false" />
-          <Property Name="BusinessAdministratorTelephone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CompletionStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BusinessAdministratorTelephone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CompletionStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounselorCactusID" Type="Int32" />
-          <Property Name="CounselorEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="CounselorFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CounselorLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CounselorPhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CourseBegin" Type="DateTime" Precision="0" />
-          <Property Name="CourseCompletionDate" Type="DateTime" Precision="0" />
+          <Property Name="CounselorEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CounselorFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CounselorLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CounselorPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CourseBegin" Type="DateTime" Precision="3" />
+          <Property Name="CourseCompletionDate" Type="DateTime" Precision="3" />
           <Property Name="CourseCreditID" Type="Int32" />
-          <Property Name="CourseFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CourseID" Type="Int32" />
-          <Property Name="CourseRecord2ndSemesterID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CourseRecordID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CourseStartDate" Type="DateTime" Precision="0" />
-          <Property Name="CreditCompletedToDate" Type="Decimal" Precision="38" Scale="0" />
-          <Property Name="DateBusinessAdministratorSignature" Type="DateTime" Precision="0" />
-          <Property Name="DateConfirmationActiveParticipation" Type="DateTime" Precision="0" />
-          <Property Name="DateContinuationActiveParticipation" Type="DateTime" Precision="0" />
-          <Property Name="DateReportPassingGrade" Type="DateTime" Precision="0" />
+          <Property Name="CourseFee" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CourseStartDate" Type="DateTime" Precision="3" />
+          <Property Name="CreditCompletedToDate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DateBusinessAdministratorSignature" Type="DateTime" Precision="3" />
+          <Property Name="DateConfirmationActiveParticipation" Type="DateTime" Precision="3" />
+          <Property Name="DateContinuationActiveParticipation" Type="DateTime" Precision="3" />
+          <Property Name="DateReportPassingGrade" Type="DateTime" Precision="3" />
           <Property Name="EnrollmentLocationID" Type="Int32" />
-          <Property Name="ExcessiveFEDExplanation" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ExcessiveFEDExplanation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ExcessiveFEDReasonCode" Type="Int32" />
-          <Property Name="GraduationDate" Type="DateTime" Precision="0" />
-          <Property Name="GuardianEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="GuardianFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GuardianLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GuardianPhone1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="GuardianPhone2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="GraduationDate" Type="DateTime" Precision="3" />
+          <Property Name="GuardianEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GuardianFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GuardianLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GuardianPhone1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GuardianPhone2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsBusinessAdministratorAcceptRejectEnrollment" Type="Boolean" Nullable="false" />
           <Property Name="IsCounselorSigned" Type="Boolean" Nullable="false" />
           <Property Name="IsCourseConsistentWithStudentSEOP" Type="Boolean" Nullable="false" />
@@ -100,123 +530,143 @@
           <Property Name="IsProviderAcceptsRejectsCourseRequest" Type="Boolean" Nullable="false" />
           <Property Name="IsProviderEnrollmentVerified" Type="Boolean" Nullable="false" />
           <Property Name="IsProviderSignature" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ1" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ2" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ3" Type="Boolean" Nullable="false" />
-          <Property Name="IsQ4" Type="Boolean" Nullable="false" />
           <Property Name="IsRemediation" Type="Boolean" Nullable="false" />
           <Property Name="IsSection504" Type="Boolean" Nullable="false" />
-          <Property Name="IsStudentSigned" Type="Boolean" Nullable="false" />
-          <Property Name="NotificationDate" Type="DateTime" Precision="0" />
-          <Property Name="NovemberFY15Distr" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="NovemberFY15Offset" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NotificationDate" Type="DateTime" Precision="3" />
+          <Property Name="NovemberFY15Distr" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NovemberFY15Offset" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="OnlineProviderID" Type="Int32" />
-          <Property Name="ParentTelephone2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="PricingTier" Type="Int32" />
-          <Property Name="PrimaryLEAExplantionRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="PrimaryLEAReasonRejectingCCA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="PrimaryNotificationDate" Type="DateTime" Precision="0" />
-          <Property Name="PriorDisbursementProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ProviderEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderExplanationRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderFax" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderPhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderReasonRejection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PrimaryLEAExplantionRejection" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PrimaryLEAReasonRejectingCCA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PrimaryNotificationDate" Type="DateTime" Precision="3" />
+          <Property Name="PriorDisbursementProvider" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ProviderEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderExplanationRejection" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderFax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderReasonRejection" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RecordNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RemediationPeriodBegins" Type="DateTime" Precision="0" />
-          <Property Name="SchoolOfRecord" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RemediationPeriodBegins" Type="DateTime" Precision="3" />
+          <Property Name="SchoolOfRecord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SSID" Type="Int32" />
-          <Property Name="StartDateSecondSemester" Type="DateTime" Precision="0" />
-          <Property Name="StudentDOB" Type="DateTime" Precision="0" />
-          <Property Name="StudentEmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="StudentFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="StartDateSecondSemester" Type="DateTime" Precision="3" />
+          <Property Name="StudentDOB" Type="DateTime" Precision="3" />
+          <Property Name="StudentEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StudentFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="StudentGradeLevel" Type="Int32" />
-          <Property Name="StudentLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="SubmissionDate" Type="DateTime" Precision="0" />
+          <Property Name="StudentLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SubmitterTypeID" Type="Int32" />
+          <Property Name="TotalDisbursementsProvider" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TwentyDaysPastSemesterStartDate" Type="DateTime" Precision="3" />
+          <Property Name="Unallocated" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UnallocatedReduction" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="WithdrawalDate" Type="DateTime" Precision="3" />
+          <Property Name="Grand_Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HasExcessiveFED" Type="Boolean" Nullable="false" />
+          <Property Name="CourseCategoryID" Type="Int32" />
+          <Property Name="CourseNameID" Type="Int32" />
+          <Property Name="CourseName2ndSemesterID" Type="Int32" />
+          <Property Name="SemesterID" Type="Int32" Nullable="false" />
+          <Property Name="TeacherFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TeacherLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TeacherCactusID" Type="Int32" />
-          <Property Name="TotalDisbursementsProvider" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="TwentyDaysPastSemesterStartDate" Type="DateTime" Precision="0" />
-          <Property Name="Unallocated" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="UnallocatedReduction" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="WithdrawalDate" Type="DateTime" Precision="0" />
-          <Property Name="Grand_Total" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="HasHomeSchoolRelease" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="OnlineProvider">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DistrictID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Courses" Relationship="SEATSModel.OnlineProviderCourse" FromRole="OnlineProvider" ToRole="Course" />
-        </EntityType>
-        <EntityType Name="SchoolYearSession">
-          <Key>
-            <PropertyRef Name="SchoolYear" />
-            <PropertyRef Name="SessionID" />
-          </Key>
-          <Property Name="SchoolYear" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="SessionID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="SEATSModel.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" FromRole="OnlineProvider1" ToRole="Cours" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="SEATSModel.FK_dbo_Courses_dbo_Sessions_SessionID" FromRole="Session1" ToRole="Cours" />
         </EntityType>
-        <EntityType Name="SubmitterType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_Course_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1" />
-          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="SEATSModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SEATSModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Category">
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="SEATSModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SEATSModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Courses_dbo_Categories_CategoryID">
+          <End Type="SEATSModel.Category" Role="Category1" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SEATSModel.Course" Role="Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category1">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Course">
+            <Dependent Role="Cours">
               <PropertyRef Name="CategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SEATSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="Courses" EntityType="Self.Course" />
-          <EntitySet Name="CourseCredits" EntityType="Self.CourseCredit" />
-          <EntitySet Name="EnrollmentLocations" EntityType="Self.EnrollmentLocation" />
-          <EntitySet Name="MainTables" EntityType="Self.MainTable" />
-          <EntitySet Name="OnlineProviders" EntityType="Self.OnlineProvider" />
-          <EntitySet Name="SchoolYearSessions" EntityType="Self.SchoolYearSession" />
-          <EntitySet Name="Sessions" EntityType="Self.Session" />
-          <EntitySet Name="SubmitterTypes" EntityType="Self.SubmitterType" />
-          <AssociationSet Name="FK_Course_Category" Association="Self.FK_Course_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Course" EntitySet="Courses" />
-          </AssociationSet>
-          <AssociationSet Name="OnlineProviderCourse" Association="SEATSModel.OnlineProviderCourse">
-            <End Role="OnlineProvider" EntitySet="OnlineProviders" />
-            <End Role="Course" EntitySet="Courses" />
-          </AssociationSet>
-        </EntityContainer>
-        <Association Name="OnlineProviderCourse">
-          <End Type="SEATSModel.OnlineProvider" Role="OnlineProvider" Multiplicity="1" />
-          <End Type="SEATSModel.Course" Role="Course" Multiplicity="*" />
+        <Association Name="FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID">
+          <End Type="SEATSModel.OnlineProvider" Role="OnlineProvider1" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SEATSModel.Course" Role="Cours" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="OnlineProvider">
+            <Principal Role="OnlineProvider1">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Course">
+            <Dependent Role="Cours">
               <PropertyRef Name="OnlineProviderID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Courses_dbo_Sessions_SessionID">
+          <End Type="SEATSModel.Session" Role="Session1" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SEATSModel.Course" Role="Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cours">
+              <PropertyRef Name="SessionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="SEATSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="SEATSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -224,7 +674,217 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="SEATSModelStoreContainer" CdmEntityContainer="SEATSEntities">
-    </EntityContainerMapping>
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="SEATSModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="SEATSModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="SEATSModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="SEATSModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="SEATSModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category1Set">
+            <EntityTypeMapping TypeName="SEATSModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses1">
+            <EntityTypeMapping TypeName="SEATSModel.Course">
+              <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OnlineProviderID" ColumnName="OnlineProviderID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnrollmentLocation1Set">
+            <EntityTypeMapping TypeName="SEATSModel.EnrollmentLocation">
+              <MappingFragment StoreEntitySet="EnrollmentLocations">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainTable1Set">
+            <EntityTypeMapping TypeName="SEATSModel.MainTable">
+              <MappingFragment StoreEntitySet="MainTables">
+                <ScalarProperty Name="HasHomeSchoolRelease" ColumnName="HasHomeSchoolRelease" />
+                <ScalarProperty Name="TeacherCactusID" ColumnName="TeacherCactusID" />
+                <ScalarProperty Name="TeacherLastName" ColumnName="TeacherLastName" />
+                <ScalarProperty Name="TeacherFirstName" ColumnName="TeacherFirstName" />
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="CourseName2ndSemesterID" ColumnName="CourseName2ndSemesterID" />
+                <ScalarProperty Name="CourseNameID" ColumnName="CourseNameID" />
+                <ScalarProperty Name="CourseCategoryID" ColumnName="CourseCategoryID" />
+                <ScalarProperty Name="HasExcessiveFED" ColumnName="HasExcessiveFED" />
+                <ScalarProperty Name="Grand_Total" ColumnName="Grand_Total" />
+                <ScalarProperty Name="WithdrawalDate" ColumnName="WithdrawalDate" />
+                <ScalarProperty Name="UnallocatedReduction" ColumnName="UnallocatedReduction" />
+                <ScalarProperty Name="Unallocated" ColumnName="Unallocated" />
+                <ScalarProperty Name="TwentyDaysPastSemesterStartDate" ColumnName="TwentyDaysPastSemesterStartDate" />
+                <ScalarProperty Name="TotalDisbursementsProvider" ColumnName="TotalDisbursementsProvider" />
+                <ScalarProperty Name="SubmitterTypeID" ColumnName="SubmitterTypeID" />
+                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+                <ScalarProperty Name="StudentGradeLevel" ColumnName="StudentGradeLevel" />
+                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+                <ScalarProperty Name="StudentEmail" ColumnName="StudentEmail" />
+                <ScalarProperty Name="StudentDOB" ColumnName="StudentDOB" />
+                <ScalarProperty Name="StartDateSecondSemester" ColumnName="StartDateSecondSemester" />
+                <ScalarProperty Name="SSID" ColumnName="SSID" />
+                <ScalarProperty Name="SchoolOfRecord" ColumnName="SchoolOfRecord" />
+                <ScalarProperty Name="RemediationPeriodBegins" ColumnName="RemediationPeriodBegins" />
+                <ScalarProperty Name="RecordNotes" ColumnName="RecordNotes" />
+                <ScalarProperty Name="ProviderReasonRejection" ColumnName="ProviderReasonRejection" />
+                <ScalarProperty Name="ProviderPhoneNumber" ColumnName="ProviderPhoneNumber" />
+                <ScalarProperty Name="ProviderLastName" ColumnName="ProviderLastName" />
+                <ScalarProperty Name="ProviderFirstName" ColumnName="ProviderFirstName" />
+                <ScalarProperty Name="ProviderFax" ColumnName="ProviderFax" />
+                <ScalarProperty Name="ProviderExplanationRejection" ColumnName="ProviderExplanationRejection" />
+                <ScalarProperty Name="ProviderEmail" ColumnName="ProviderEmail" />
+                <ScalarProperty Name="PriorDisbursementProvider" ColumnName="PriorDisbursementProvider" />
+                <ScalarProperty Name="PrimaryNotificationDate" ColumnName="PrimaryNotificationDate" />
+                <ScalarProperty Name="PrimaryLEAReasonRejectingCCA" ColumnName="PrimaryLEAReasonRejectingCCA" />
+                <ScalarProperty Name="PrimaryLEAExplantionRejection" ColumnName="PrimaryLEAExplantionRejection" />
+                <ScalarProperty Name="PricingTier" ColumnName="PricingTier" />
+                <ScalarProperty Name="OnlineProviderID" ColumnName="OnlineProviderID" />
+                <ScalarProperty Name="NovemberFY15Offset" ColumnName="NovemberFY15Offset" />
+                <ScalarProperty Name="NovemberFY15Distr" ColumnName="NovemberFY15Distr" />
+                <ScalarProperty Name="NotificationDate" ColumnName="NotificationDate" />
+                <ScalarProperty Name="IsSection504" ColumnName="IsSection504" />
+                <ScalarProperty Name="IsRemediation" ColumnName="IsRemediation" />
+                <ScalarProperty Name="IsProviderSignature" ColumnName="IsProviderSignature" />
+                <ScalarProperty Name="IsProviderEnrollmentVerified" ColumnName="IsProviderEnrollmentVerified" />
+                <ScalarProperty Name="IsProviderAcceptsRejectsCourseRequest" ColumnName="IsProviderAcceptsRejectsCourseRequest" />
+                <ScalarProperty Name="IsPrimaryEnrollmentVerified" ColumnName="IsPrimaryEnrollmentVerified" />
+                <ScalarProperty Name="IsIEP" ColumnName="IsIEP" />
+                <ScalarProperty Name="IsGuardianSigned" ColumnName="IsGuardianSigned" />
+                <ScalarProperty Name="IsFeeWaived" ColumnName="IsFeeWaived" />
+                <ScalarProperty Name="IsEnrollmentNoticeSent" ColumnName="IsEnrollmentNoticeSent" />
+                <ScalarProperty Name="IsEarlyGraduate" ColumnName="IsEarlyGraduate" />
+                <ScalarProperty Name="IsCourseConsistentWithStudentSEOP" ColumnName="IsCourseConsistentWithStudentSEOP" />
+                <ScalarProperty Name="IsCounselorSigned" ColumnName="IsCounselorSigned" />
+                <ScalarProperty Name="IsBusinessAdministratorAcceptRejectEnrollment" ColumnName="IsBusinessAdministratorAcceptRejectEnrollment" />
+                <ScalarProperty Name="GuardianPhone2" ColumnName="GuardianPhone2" />
+                <ScalarProperty Name="GuardianPhone1" ColumnName="GuardianPhone1" />
+                <ScalarProperty Name="GuardianLastName" ColumnName="GuardianLastName" />
+                <ScalarProperty Name="GuardianFirstName" ColumnName="GuardianFirstName" />
+                <ScalarProperty Name="GuardianEmail" ColumnName="GuardianEmail" />
+                <ScalarProperty Name="GraduationDate" ColumnName="GraduationDate" />
+                <ScalarProperty Name="ExcessiveFEDReasonCode" ColumnName="ExcessiveFEDReasonCode" />
+                <ScalarProperty Name="ExcessiveFEDExplanation" ColumnName="ExcessiveFEDExplanation" />
+                <ScalarProperty Name="EnrollmentLocationID" ColumnName="EnrollmentLocationID" />
+                <ScalarProperty Name="DateReportPassingGrade" ColumnName="DateReportPassingGrade" />
+                <ScalarProperty Name="DateContinuationActiveParticipation" ColumnName="DateContinuationActiveParticipation" />
+                <ScalarProperty Name="DateConfirmationActiveParticipation" ColumnName="DateConfirmationActiveParticipation" />
+                <ScalarProperty Name="DateBusinessAdministratorSignature" ColumnName="DateBusinessAdministratorSignature" />
+                <ScalarProperty Name="CreditCompletedToDate" ColumnName="CreditCompletedToDate" />
+                <ScalarProperty Name="CourseStartDate" ColumnName="CourseStartDate" />
+                <ScalarProperty Name="CourseFee" ColumnName="CourseFee" />
+                <ScalarProperty Name="CourseCreditID" ColumnName="CourseCreditID" />
+                <ScalarProperty Name="CourseCompletionDate" ColumnName="CourseCompletionDate" />
+                <ScalarProperty Name="CourseBegin" ColumnName="CourseBegin" />
+                <ScalarProperty Name="CounselorPhoneNumber" ColumnName="CounselorPhoneNumber" />
+                <ScalarProperty Name="CounselorLastName" ColumnName="CounselorLastName" />
+                <ScalarProperty Name="CounselorFirstName" ColumnName="CounselorFirstName" />
+                <ScalarProperty Name="CounselorEmail" ColumnName="CounselorEmail" />
+                <ScalarProperty Name="CounselorCactusID" ColumnName="CounselorCactusID" />
+                <ScalarProperty Name="CompletionStatus" ColumnName="CompletionStatus" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="BusinessAdministratorTelephone" ColumnName="BusinessAdministratorTelephone" />
+                <ScalarProperty Name="BusinessAdministratorSignature" ColumnName="BusinessAdministratorSignature" />
+                <ScalarProperty Name="BusinessAdministratorLastName" ColumnName="BusinessAdministratorLastName" />
+                <ScalarProperty Name="BusinessAdministratorFirstName" ColumnName="BusinessAdministratorFirstName" />
+                <ScalarProperty Name="Business_Administrator_Email" ColumnName="Business_Administrator_Email" />
+                <ScalarProperty Name="BudgetPrimaryProvider" ColumnName="BudgetPrimaryProvider" />
+                <ScalarProperty Name="AssessedProficiency" ColumnName="AssessedProficiency" />
+                <ScalarProperty Name="ApplicationSubmissionDate" ColumnName="ApplicationSubmissionDate" />
+                <ScalarProperty Name="AgreementID" ColumnName="AgreementID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OnlineProvider1Set">
+            <EntityTypeMapping TypeName="SEATSModel.OnlineProvider">
+              <MappingFragment StoreEntitySet="OnlineProviders">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Session1Set">
+            <EntityTypeMapping TypeName="SEATSModel.Session">
+              <MappingFragment StoreEntitySet="Sessions">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="SEATSModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
@@ -237,7 +897,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

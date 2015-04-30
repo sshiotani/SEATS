@@ -272,16 +272,28 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AspNetRole.cs">
+      <DependentUpon>StudentCca.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUser.cs">
+      <DependentUpon>StudentCca.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserClaim.cs">
+      <DependentUpon>StudentCca.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>StudentCca.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Course.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CourseCredit.cs">
+    <Compile Include="Models\CourseResultModel.cs" />
+    <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CourseResultModel.cs" />
     <Compile Include="Models\EnrollmentLocation.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
@@ -292,9 +304,6 @@
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OnlineProvider.cs">
-      <DependentUpon>StudentCca.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SchoolYearSession.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Session.cs">
@@ -314,9 +323,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StudentCca.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SubmitterType.cs">
-      <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
