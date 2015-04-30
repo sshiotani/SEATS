@@ -7,7 +7,7 @@ namespace CcaRegistrationDf.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Username")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
@@ -43,7 +43,7 @@ namespace CcaRegistrationDf.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Username")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
@@ -52,6 +52,7 @@ namespace CcaRegistrationDf.Models
         [Required]
         [Display(Name = "User Name")]
         public string Username { get; set; }
+
 
         [Required]
         [DataType(DataType.Password)]
@@ -89,7 +90,7 @@ namespace CcaRegistrationDf.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Username")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
@@ -110,7 +111,7 @@ namespace CcaRegistrationDf.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Username")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 

@@ -14,14 +14,17 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf
 {
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
-        }
-    }
+
+    // Relocated Email Service to Models to make a async method
+
+    //public class EmailService : IIdentityMessageService
+    //{
+    //    public Task SendAsync(IdentityMessage message)
+    //    {
+    //        // Plug in your email service here to send an email.
+    //        return Task.FromResult(0);
+    //    }
+    //}
 
     public class SmsService : IIdentityMessageService
     {

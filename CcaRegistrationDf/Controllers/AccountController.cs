@@ -207,22 +207,39 @@ namespace CcaRegistrationDf.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            var user = await UserManager.FindByNameAsync(model.Username);
+
+            if (user != null)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                if (!user.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Invalid login attempt. You must have a confirmed email account.");
                     return View(model);
+
+                }
+                else
+                {
+                    // This doen't count login failures towards lockout only two factor authentication
+                    // To enable password failures to trigger lockout, change to shouldLockout: true
+                    var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            return RedirectToLocal(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.RequiresVerification:
+                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl });
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+
+                    }
+                }
             }
+
+            return View(model);
         }
 
         //
@@ -298,7 +315,7 @@ namespace CcaRegistrationDf.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return View("DisplayEmail");
                 }
                 AddErrors(result);
             }
@@ -337,7 +354,7 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
