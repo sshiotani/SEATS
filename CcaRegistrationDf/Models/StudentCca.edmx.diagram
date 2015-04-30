@@ -5,16 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="85a59a99fcfd4093a6ff294ff1a605c5" Name="Diagram1" ZoomLevel="100">
-        <EntityTypeShape EntityType="SEATSModel.Category" PointX="0.75" PointY="24" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.Course" PointX="3" PointY="23.5" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.CourseCredit" PointX="5.375" PointY="3.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.EnrollmentLocation" PointX="5.375" PointY="0.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.MainTable" PointX="3.375" PointY="3.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.OnlineProvider" PointX="0.75" PointY="6.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.SchoolYearSession" PointX="0.75" PointY="0.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.Session" PointX="0.75" PointY="3.75" Width="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SEATSModel.SubmitterType" PointX="3.375" PointY="0.75" Width="1.5" IsExpanded="true" />
-        <AssociationConnector ManuallyRouted="false" Association="SEATSModel.FK_Course_Category" />
+        <EntityTypeShape EntityType="SEATSModel.Category" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.Course" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.CourseCredit" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.EnrollmentLocation" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.MainTable" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.OnlineProvider" Width="1.5" PointX="5.875" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.SchoolYearSession" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.Session" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEATSModel.SubmitterType" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <AssociationConnector Association="SEATSModel.FK_Course_Category" ManuallyRouted="false" />
         <AssociationConnector Association="SEATSModel.OnlineProviderCourse" />
       </Diagram>
     </edmx:Diagrams>
