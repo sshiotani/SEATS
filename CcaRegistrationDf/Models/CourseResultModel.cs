@@ -11,6 +11,7 @@ namespace CcaRegistrationDf.Models
         public string Name { get; set; }
         public string Credit { get; set; }
         public string Code { get; set; }
+        public int OnlineProviderID { get; set; }
 
         public List<SelectListItem> CreditChoices { get; set; }
 

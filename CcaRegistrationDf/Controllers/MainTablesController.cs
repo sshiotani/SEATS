@@ -222,7 +222,8 @@ namespace CcaRegistrationDf.Controllers
                 {
                     Code = f.Code,
                     Name = f.OnlineProvider.Name,
-                    Credit = f.Credit
+                    Credit = f.Credit,
+                    OnlineProviderID = f.OnlineProviderID
                 }).FirstOrDefault();
 
                 courseResult.CreditChoices = GetCourseCredit(courseResult.Credit);
@@ -272,7 +273,7 @@ namespace CcaRegistrationDf.Controllers
 
                     MainTable mainTable = Mapper.Map<MainFormViewModel, MainTable>(mainFormViewModel);
                     mainTable.ApplicationSubmissionDate = DateTime.Now;
-                    mainTable.AspNetUserId = User.Identity.GetUserId();
+                    mainTable.UserId = User.Identity.GetUserId();
 
                     db.MainTables.Add(mainTable);
                     await db.SaveChangesAsync();

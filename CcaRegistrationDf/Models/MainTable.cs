@@ -19,9 +19,10 @@ namespace CcaRegistrationDf.Models
         [Key]
         public int AgreementID { get; set; }
 
-        [ForeignKey("AspNetUser")]
-        public string AspNetUserId { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
+        
+        [ForeignKey("ApplicationUser")]
+        public string UserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
         
 
         public Nullable<System.DateTime> ApplicationSubmissionDate { get; set; }
