@@ -284,6 +284,7 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BackupModel\MainTable-backup.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
+using CcaRegistrationDf.Models;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CcaRegistrationDf.Models;
-using AutoMapper;
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -267,10 +267,12 @@ namespace CcaRegistrationDf.Controllers
             {
                 try
                 {
+
                     Mapper.CreateMap<MainFormViewModel, MainTable>();
 
                     MainTable mainTable = Mapper.Map<MainFormViewModel, MainTable>(mainFormViewModel);
                     mainTable.ApplicationSubmissionDate = DateTime.Now;
+                    mainTable.AspNetUserId = User.Identity.GetUserId();
 
                     db.MainTables.Add(mainTable);
                     await db.SaveChangesAsync();
