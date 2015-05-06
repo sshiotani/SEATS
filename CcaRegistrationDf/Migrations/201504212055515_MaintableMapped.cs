@@ -8,10 +8,10 @@ namespace CcaRegistrationDf.Migrations
         public override void Up()
         {
             AddColumn("dbo.MainTables", "HasExcessiveFED", c => c.Boolean(nullable: false));
-            AddColumn("dbo.MainTables", "CourseCategoryID", c => c.Int());
-            AddColumn("dbo.MainTables", "CourseNameID", c => c.Int());
-            AddColumn("dbo.MainTables", "CourseName2ndSemesterID", c => c.Int());
-            AddColumn("dbo.MainTables", "SemesterID", c => c.Int(nullable: false));
+            AddColumn("dbo.MainTables", "CategoryID", c => c.Int());
+            AddColumn("dbo.MainTables", "CourseID", c => c.Int());
+            AddColumn("dbo.MainTables", "Course2ndSemesterID", c => c.Int());
+            AddColumn("dbo.MainTables", "SessionID", c => c.Int(nullable: false));
             AlterColumn("dbo.MainTables", "Grand_Total", c => c.Decimal(precision: 18, scale: 2));
             DropColumn("dbo.MainTables", "CourseID");
             DropColumn("dbo.MainTables", "CourseRecord2ndSemesterID");
@@ -36,10 +36,10 @@ namespace CcaRegistrationDf.Migrations
             AddColumn("dbo.MainTables", "CourseRecord2ndSemesterID", c => c.String());
             AddColumn("dbo.MainTables", "CourseID", c => c.Int());
             AlterColumn("dbo.MainTables", "Grand_Total", c => c.String());
-            DropColumn("dbo.MainTables", "SemesterID");
-            DropColumn("dbo.MainTables", "CourseName2ndSemesterID");
-            DropColumn("dbo.MainTables", "CourseNameID");
-            DropColumn("dbo.MainTables", "CourseCategoryID");
+            DropColumn("dbo.MainTables", "SessionID");
+            DropColumn("dbo.MainTables", "Course2ndSemesterID");
+            DropColumn("dbo.MainTables", "CourseID");
+            DropColumn("dbo.MainTables", "CategoryID");
             DropColumn("dbo.MainTables", "HasExcessiveFED");
         }
     }

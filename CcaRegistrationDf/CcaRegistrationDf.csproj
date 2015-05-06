@@ -274,9 +274,42 @@
     <Compile Include="Migrations\201505041404045_UserId.Designer.cs">
       <DependentUpon>201505041404045_UserId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505041727572_name consistancy.cs" />
+    <Compile Include="Migrations\201505041727572_name consistancy.Designer.cs">
+      <DependentUpon>201505041727572_name consistancy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505052031570_cactus.cs" />
+    <Compile Include="Migrations\201505052031570_cactus.Designer.cs">
+      <DependentUpon>201505052031570_cactus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505061454467_district.cs" />
+    <Compile Include="Migrations\201505061454467_district.Designer.cs">
+      <DependentUpon>201505061454467_district.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BackupModel\MainTable-backup.cs" />
+    <Compile Include="Models\Cactus.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cactus.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cactus.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CactusInstitution.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CactusSchool.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
@@ -284,6 +317,7 @@
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CourseResultModel.cs" />
+    <Compile Include="Models\CourseStatusViewModel.cs" />
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
@@ -525,6 +559,23 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\css\bootstrap.css.map" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <EntityDeploy Include="Models\Cactus.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Cactus.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Cactus.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Cactus.edmx</DependentUpon>
+      <LastGenOutput>Cactus.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Cactus.edmx.diagram">
+      <DependentUpon>Cactus.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Cactus.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Cactus.edmx</DependentUpon>
+      <LastGenOutput>Cactus.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -688,6 +739,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505041404045_UserId.resx">
       <DependentUpon>201505041404045_UserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505041727572_name consistancy.resx">
+      <DependentUpon>201505041727572_name consistancy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505052031570_cactus.resx">
+      <DependentUpon>201505052031570_cactus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505061454467_district.resx">
+      <DependentUpon>201505061454467_district.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

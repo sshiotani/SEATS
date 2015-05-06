@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CcaRegistrationDf.Models.MainTable>
+﻿@model IEnumerable<CcaRegistrationDf.Models.CourseStatusViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -15,23 +15,26 @@
             @Html.DisplayNameFor(model => model.ApplicationSubmissionDate)
         </th>
        
-        <th>
-            @Html.DisplayNameFor(model => model.StudentLastName)
+        <th data-column-id="Session">
+            @Html.DisplayName("Session")
         </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.StudentFirstName)
+        <th data-column-id="Category">
+            @Html.DisplayName("Category")
         </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.CompletionStatus)
+        <th data-column-id="Provider">
+            @Html.DisplayName("Provider")
         </th>
-       
-      
+        <th data-column-id="Course Name">
+            @Html.DisplayName("Course Name")
+        </th>
+        <th data-column-id="Completion Status">
+            @Html.DisplayName("Completion Status")
+        </th>
 
         <th></th>
     </tr>
 
+    @* TODO: Create links that show details of each item from reference table *@
 @foreach (var item in Model) {
     <tr>
         <td>
@@ -39,17 +42,24 @@
         </td>
       
         <th>
-            @Html.DisplayFor(modelItem => item.StudentLastName)
+            @Html.DisplayFor(modelItem => item.Session.Name)
         </th>
 
         <th>
-            @Html.DisplayFor(modelItem => item.StudentFirstName)
+            @Html.DisplayFor(modelItem => item.Category.Name)
         </th>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.OnlineProvider.Name)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Course.Name)
+        </td>
 
         <td>
             @Html.DisplayFor(modelItem => item.CompletionStatus)
         </td>
-       
     </tr>
 }
 

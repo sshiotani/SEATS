@@ -68,15 +68,15 @@ namespace CcaRegistrationDf.Models
         public bool IsCounselorSigned { get; set; }
 
         //Course
-        public Nullable<int> CourseCategoryID { get; set; }
+        public Nullable<int> CategoryID { get; set; }
         public Nullable<decimal> CourseFee { get; set; }
-        public Nullable<int> CourseNameID { get; set; }
-        public Nullable<int> CourseCreditID { get; set; }
-        public Nullable<int> CourseName2ndSemesterID { get; set; }
+        public Nullable<int> CourseID { get; set; }
+        public Nullable<int> CreditID { get; set; }
+        public Nullable<int> Course2ndSemesterID { get; set; }
         public bool IsCourseConsistentWithStudentSEOP { get; set; }
         public Nullable<int> OnlineProviderID { get; set; }
         public Nullable<int> PricingTier { get; set; }
-        public int SemesterID { get; set; }
+        public int SessionID { get; set; }
         public Nullable<System.DateTime> StartDateSecondSemester { get; set; }
 
 

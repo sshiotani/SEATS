@@ -81,15 +81,15 @@ namespace CcaRegistrationDf.Models
         public bool IsCounselorSigned { get; set; }
 
         // Course choice
-        public IEnumerable<SelectListItem> Semester { get; set; }
-        public int SemesterID { get; set; }
-        public IEnumerable<SelectListItem> CourseCategory { get; set; }
-        public int CourseCategoryID { get; set; }
-        public List<SelectListItem> CourseName { get; set; }
-        public int CourseNameID { get; set; }
+        public IEnumerable<SelectListItem> Session { get; set; }
+        public int SessionID { get; set; }
+        public IEnumerable<SelectListItem> Category { get; set; }
+        public int CategoryID { get; set; }
+        public List<SelectListItem> Course { get; set; }
+        public int CourseID { get; set; }
         
-        public List<SelectListItem> CourseCredit { get; set; }
-        public int CourseCreditID { get; set; }
+        public List<SelectListItem> Credit { get; set; }
+        public int CreditID { get; set; }
         public int OnlineProviderID { get; set; }
 
         // Student Accomodations
@@ -127,5 +127,8 @@ namespace CcaRegistrationDf.Models
         public string ProviderLastName { get; set; }
         public string ProviderPhoneNumber { get; set; }
         public bool IsProviderSignature { get; set; }
+
+
+       
     }
 }

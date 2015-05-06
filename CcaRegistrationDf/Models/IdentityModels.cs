@@ -44,7 +44,9 @@ namespace CcaRegistrationDf.Models
 
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Sessions { get; set; }
 
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.EnrollmentLocation> EnrollmentLocations { get; set; }
+        //public System.Data.Entity.DbSet<CcaRegistrationDf.Models.EnrollmentLocation> EnrollmentLocations { get; set; }
+
+       //public System.Data.Entity.DbSet<CactusInstitution> EnrollmentLocations { get; set; }
     }
 
     public class IdentityManager

@@ -194,21 +194,21 @@
         <div class="form-group">
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.SemesterID, Model.Semester, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
+                @Html.DropDownListFor(model => model.SessionID, Model.Session, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
 
-                @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.SessionID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
+                @Html.DropDownListFor(model => model.CategoryID, Model.Category, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
 
-                @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseNameID, Model.CourseName, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.DropDownListFor(model => model.CourseID, Model.Course, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
 
-                @Html.ValidationMessageFor(model => model.CourseNameID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CourseID, "", new { @class = "text-danger" })
             </div>
 
 
@@ -230,9 +230,9 @@
 
         <div class="form-group">
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
+                @Html.DropDownListFor(model => model.CreditID, Model.Credit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
 
-                @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CreditID, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-4">
                 @Html.Label("Credit", new { @class = "alert alert-info hide", id = "Credit" })
@@ -418,7 +418,10 @@
 
     <script>
         $(function () {
+            // On reload Category dropdown needs to be reset.
 
+            $('#Category option:first').attr("selected", true);
+            
             //Datepicker
             // Make the default start date 15 years ago today for birthdays of secondary schoolers.
             var start = new Date();
@@ -487,6 +490,37 @@
                     $("#CurrentSchool").prop('disabled', false);
                     $("#CurrentPrivateSchool").addClass('hide');
                     $("#HomeSchoolRelease").addClass('hide');
+                }
+
+                $('#CurrentSchool').empty();
+                var items = '<option value="">Select School</option>';
+                $('#CurrentSchool').html(items);
+                var district = $("#EnrollmentLocation option:selected").val();
+                var districtName = $("#EnrollmentLocation option:selected").text();
+                if (district != "") {
+
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetSchoolNames", "MainTables")',
+                        data: { district: district },
+                        dataType: 'json',
+                        success: function (schoolList) {
+
+                            $.each(schoolList, function (i, school) {
+
+                                $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select Enrollment Location First</option>';
+                    $('#Course').html(items);
                 }
             });
 
