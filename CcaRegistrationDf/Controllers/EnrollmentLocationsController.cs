@@ -11,6 +11,8 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
+   // Enrollment locations are now pulled directly from Cactus Views.
+
     //[Authorize(Roles = "Admin")]
     //public class EnrollmentLocationsController : Controller
     //{

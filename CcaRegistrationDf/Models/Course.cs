@@ -22,6 +22,7 @@ namespace CcaRegistrationDf.Models
         public int OnlineProviderID { get; set; }
         public bool IsActive { get; set; }
         public int SessionID { get; set; }
+        public string Notes { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual OnlineProvider OnlineProvider { get; set; }

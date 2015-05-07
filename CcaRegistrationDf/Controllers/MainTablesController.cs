@@ -164,11 +164,11 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            //In order to maintain selectList Values we must call the GetClientSelectLists setup method
+            
 
             mainFormViewModel.CategoryID = 0;  // Reset choices so student has to choose and populate course choice.
 
-
+            //In order to maintain selectList Values we must call the GetClientSelectLists setup method
             return View(await GetClientSelectLists(mainFormViewModel));
         }
 
@@ -373,7 +373,8 @@ namespace CcaRegistrationDf.Controllers
                     Code = f.Code,
                     Name = f.OnlineProvider.Name,
                     Credit = f.Credit,
-                    OnlineProviderID = f.OnlineProviderID
+                    OnlineProviderID = f.OnlineProviderID,
+                    Notes = f.Notes
                 }).FirstOrDefault();
 
                 courseResult.CreditChoices = GetCourseCredit(courseResult.Credit);

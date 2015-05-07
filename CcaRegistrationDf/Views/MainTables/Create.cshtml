@@ -221,8 +221,16 @@
                 @Html.Label("Provider", new { @class = "alert alert-info hide", id = "Provider" })
                 @Html.Label("Course", new { @class = "alert alert-info hide", id = "CourseName" })
                 @Html.Label("Code", new { @class = "alert alert-info hide", id = "Code" })
+                @Html.Label("Credit", new { @class = "alert alert-info hide", id = "Credit" })
+               
 
+            </div>
+        </div>
 
+        <div class="form-group">
+
+            <div class="col-md-12">
+                @Html.Label("Note", new { @class = "alert alert-warning hide", id = "Note" })
             </div>
         </div>
 
@@ -234,10 +242,9 @@
 
                 @Html.ValidationMessageFor(model => model.CreditID, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-4">
-                @Html.Label("Credit", new { @class = "alert alert-info hide", id = "Credit" })
-            </div>
+          
         </div>
+        
 
         <br />
 
@@ -528,11 +535,8 @@
             //get course list on changing of category dropdown list
             $('#Category').change(function () {
                 $("#Course").empty();
-                $('#Provider').addClass('hide');
-                $('#Credit').addClass('hide');
-                $('#CreditOptions').addClass('hide');
-                $('#Code').addClass('hide');
-                $('#CourseName').addClass('hide');
+                $('#Provider,#Credit,#CreditOptions,#Code,#CourseName,#Note').addClass('hide');
+               
 
                 var items = '<option value="">Select Course</option>';
                 $('#Course').html(items);
@@ -584,10 +588,11 @@
             // Get course information from course selection (ie. Provider, credit available, code)
 
             $('#Course').change(function () {
-                $('#Provider').addClass('hide');
-                $('#Code').addClass('hide');
-                $('#CourseName').addClass('hide');
-                $('#Credit').addClass('hide');
+                $('#Provider,#Code,#Note,#CourseName,#Credit').addClass('hide');
+               // $('#Code').addClass('hide');
+               //  $('#Note').addClass('hide');
+               // $('#CourseName').addClass('hide');
+               // $('#Credit').addClass('hide');
 
                 $("#CreditOptions").empty();
                 var items = '<option value="">Select Credit</option>';
@@ -617,12 +622,17 @@
                             });
 
                             $("#Provider").removeClass('hide');
-                            $('#Provider').html('PROVIDER:' + result.Name);
+                            $('#Provider').html('PROVIDER: ' + result.Name);
 
                             $('#ProviderID').val(result.OnlineProviderID);
 
                             $("#Code").removeClass('hide');
-                            $('#Code').html("CODE:" + result.Code);
+                            $('#Code').html("CODE: " + result.Code);
+
+                            if (result.Notes != null) {
+                                $('#Note').removeClass('hide');
+                                $('#Note').html("NOTES: " + result.Notes);
+                            }
                         },
                         error: function (result) {
                             alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
