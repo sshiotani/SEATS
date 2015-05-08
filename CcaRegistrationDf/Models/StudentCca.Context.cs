@@ -28,9 +28,10 @@ namespace CcaRegistrationDf.Models
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Category> Category1Set { get; set; }
         public virtual DbSet<Course> Courses1 { get; set; }
-        public virtual DbSet<EnrollmentLocation> EnrollmentLocation1Set { get; set; }
         public virtual DbSet<MainTable> MainTable1Set { get; set; }
         public virtual DbSet<OnlineProvider> OnlineProvider1Set { get; set; }
         public virtual DbSet<Session> Session1Set { get; set; }
+        public virtual DbSet<CactusInstitution> CactusInstitutions { get; set; }
+        public virtual DbSet<CactusSchool> CactusSchools { get; set; }
     }
 }

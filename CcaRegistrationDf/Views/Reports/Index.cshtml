@@ -1,0 +1,123 @@
+﻿@model IEnumerable<CcaRegistrationDf.Models.ReportViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Report Monthly</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Student First Name
+        </th>
+        <th>
+            Student Last Name
+        </th>
+        <th>
+            SSID
+        </th>
+        <th>
+            Student DOB
+        </th>
+       
+        <th>
+            Credit
+        </th>
+       
+        <th>
+            Provider
+        </th>
+        
+        <th>
+           EnrollmentLocation
+        </th>
+        
+        <th>
+            Category
+        </th>
+      
+        <th>
+            Course
+        </th>
+        <th>
+            Budget Primary Provider
+        </th>
+        <th>
+            Prior Disbursement Provider
+        </th>
+        <th>
+            CurrentFYDistr
+        </th>
+        <th>
+            CurrentFYOffset
+        </th>
+        <th>
+            Total Disbursements Provider
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SSID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentDOB)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Credit)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.OnlineProvider)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.EnrollmentLocation)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Course)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BudgetPrimaryProvider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriorDisbursementProvider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentFYDistr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentFYOffset)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalDisbursementsProvider)
+        </td>
+       
+    </tr>
+}
+
+</table>
+<div style="padding:10px; border:1px solid black">
+    <div><a href="@Url.Action("Report",new {id= "PDF"})"> Get Report PDF</a></div>
+    <div><a href="@Url.Action("Report",new {id= "Excel"})"> Get Report Excel</a></div>
+    <div><a href="@Url.Action("Report",new {id= "Word"})"> Get Report Word</a></div>
+    <div><a href="@Url.Action("Report",new {id= "Image"})"> Get Report Image</a></div>
+</div>

@@ -1,15 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using CcaRegistrationDf.DAL;
+using System.Data.Entity;
+using System.Threading.Tasks;
+
 
 namespace CcaRegistrationDf.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                using(SoepContext db = new SoepContext())
+                {
+                    var setup = await db.Students.Where(m => m.UserId == userId).FirstOrDefaultAsync();
+                    if (setup == null) 
+                    {
+                        return RedirectToAction("Index", "Students");
+                    }
+                }
+            }
+
             return View();
         }
 

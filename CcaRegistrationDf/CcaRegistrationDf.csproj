@@ -198,100 +198,34 @@
     <Compile Include="Controllers\MainTablesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OnlineProvidersController.cs" />
+    <Compile Include="Controllers\ParentsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="DAL\SoepContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201503231752069_InitialCreate.cs" />
-    <Compile Include="Migrations\201503231752069_InitialCreate.Designer.cs">
-      <DependentUpon>201503231752069_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201505071832528_InitialCreate.cs" />
+    <Compile Include="Migrations\201505071832528_InitialCreate.Designer.cs">
+      <DependentUpon>201505071832528_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201503311940247_addKey.cs" />
-    <Compile Include="Migrations\201503311940247_addKey.Designer.cs">
-      <DependentUpon>201503311940247_addKey.cs</DependentUpon>
+    <Compile Include="Migrations\201505072126453_init.cs" />
+    <Compile Include="Migrations\201505072126453_init.Designer.cs">
+      <DependentUpon>201505072126453_init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201503312002273_addProviders.cs" />
-    <Compile Include="Migrations\201503312002273_addProviders.Designer.cs">
-      <DependentUpon>201503312002273_addProviders.cs</DependentUpon>
+    <Compile Include="Migrations\201505081421422_parent.cs" />
+    <Compile Include="Migrations\201505081421422_parent.Designer.cs">
+      <DependentUpon>201505081421422_parent.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201503312023237_UpdatedDbModel.cs" />
-    <Compile Include="Migrations\201503312023237_UpdatedDbModel.Designer.cs">
-      <DependentUpon>201503312023237_UpdatedDbModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504021932270_addSession.cs" />
-    <Compile Include="Migrations\201504021932270_addSession.Designer.cs">
-      <DependentUpon>201504021932270_addSession.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504061802048_AddEnrollmentLocations.cs" />
-    <Compile Include="Migrations\201504061802048_AddEnrollmentLocations.Designer.cs">
-      <DependentUpon>201504061802048_AddEnrollmentLocations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504061816453_UpdateEnrollentLocations.cs" />
-    <Compile Include="Migrations\201504061816453_UpdateEnrollentLocations.Designer.cs">
-      <DependentUpon>201504061816453_UpdateEnrollentLocations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504071623485_Roles.cs" />
-    <Compile Include="Migrations\201504071623485_Roles.Designer.cs">
-      <DependentUpon>201504071623485_Roles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504071633153_Init.cs" />
-    <Compile Include="Migrations\201504071633153_Init.Designer.cs">
-      <DependentUpon>201504071633153_Init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504101321384_creditoptions.cs" />
-    <Compile Include="Migrations\201504101321384_creditoptions.Designer.cs">
-      <DependentUpon>201504101321384_creditoptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504101408236_creditchange.cs" />
-    <Compile Include="Migrations\201504101408236_creditchange.Designer.cs">
-      <DependentUpon>201504101408236_creditchange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504141537424_providerCactusId.cs" />
-    <Compile Include="Migrations\201504141537424_providerCactusId.Designer.cs">
-      <DependentUpon>201504141537424_providerCactusId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504171253563_IsActive.cs" />
-    <Compile Include="Migrations\201504171253563_IsActive.Designer.cs">
-      <DependentUpon>201504171253563_IsActive.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504171307574_IsActive for Session.cs" />
-    <Compile Include="Migrations\201504171307574_IsActive for Session.Designer.cs">
-      <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504211258318_SessonToCourse.cs" />
-    <Compile Include="Migrations\201504211258318_SessonToCourse.Designer.cs">
-      <DependentUpon>201504211258318_SessonToCourse.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504211330204_SessionID.cs" />
-    <Compile Include="Migrations\201504211330204_SessionID.Designer.cs">
-      <DependentUpon>201504211330204_SessionID.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504212055515_MaintableMapped.cs" />
-    <Compile Include="Migrations\201504212055515_MaintableMapped.Designer.cs">
-      <DependentUpon>201504212055515_MaintableMapped.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505041404045_UserId.cs" />
-    <Compile Include="Migrations\201505041404045_UserId.Designer.cs">
-      <DependentUpon>201505041404045_UserId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505041727572_name consistancy.cs" />
-    <Compile Include="Migrations\201505041727572_name consistancy.Designer.cs">
-      <DependentUpon>201505041727572_name consistancy.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505052031570_cactus.cs" />
-    <Compile Include="Migrations\201505052031570_cactus.Designer.cs">
-      <DependentUpon>201505052031570_cactus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505061454467_district.cs" />
-    <Compile Include="Migrations\201505061454467_district.Designer.cs">
-      <DependentUpon>201505061454467_district.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505062142551_CourseNotes.cs" />
-    <Compile Include="Migrations\201505062142551_CourseNotes.Designer.cs">
-      <DependentUpon>201505062142551_CourseNotes.cs</DependentUpon>
+    <Compile Include="Migrations\201505081513177_move FED section.cs" />
+    <Compile Include="Migrations\201505081513177_move FED section.Designer.cs">
+      <DependentUpon>201505081513177_move FED section.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\StudentCcas\CCA.cs" />
+    <Compile Include="Models\StudentCcas\Counselor.cs" />
     <Compile Include="Models\BackupModel\MainTable-backup.cs" />
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
@@ -309,10 +243,10 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\CactusInstitution.cs">
-      <DependentUpon>Cactus.tt</DependentUpon>
+      <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CactusSchool.cs">
-      <DependentUpon>Cactus.tt</DependentUpon>
+      <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
@@ -320,27 +254,32 @@
     <Compile Include="Models\Course.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StudentCcas\CourseCategory.cs" />
     <Compile Include="Models\CourseResultModel.cs" />
     <Compile Include="Models\CourseStatusViewModel.cs" />
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailService.cs" />
-    <Compile Include="Models\EnrollmentLocation.cs">
-      <DependentUpon>StudentCca.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MainFormViewModel.cs" />
     <Compile Include="Models\MainTable.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\StudentCcas\CourseCredit.cs" />
+    <Compile Include="Models\StudentCcas\OnlineCourse.cs" />
     <Compile Include="Models\OnlineProvider.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StudentCcas\Parent.cs" />
+    <Compile Include="Models\StudentCcas\Primary.cs" />
+    <Compile Include="Models\StudentCcas\Provider.cs" />
+    <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="Models\Session.cs">
       <DependentUpon>StudentCca.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StudentCcas\Student.cs" />
     <Compile Include="Models\StudentCca.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -356,6 +295,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudentCca.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\StudentCcas\StudentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -676,9 +616,21 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Students\Create.cshtml" />
+    <Content Include="Views\Students\Delete.cshtml" />
+    <Content Include="Views\Students\Details.cshtml" />
+    <Content Include="Views\Students\Edit.cshtml" />
+    <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Parents\Create.cshtml" />
+    <Content Include="Views\Parents\Delete.cshtml" />
+    <Content Include="Views\Parents\Details.cshtml" />
+    <Content Include="Views\Parents\Edit.cshtml" />
+    <Content Include="Views\Parents\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Migrations-old\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Roles\" />
   </ItemGroup>
@@ -690,71 +642,17 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201503231752069_InitialCreate.resx">
-      <DependentUpon>201503231752069_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505071832528_InitialCreate.resx">
+      <DependentUpon>201505071832528_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201503311940247_addKey.resx">
-      <DependentUpon>201503311940247_addKey.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505072126453_init.resx">
+      <DependentUpon>201505072126453_init.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201503312002273_addProviders.resx">
-      <DependentUpon>201503312002273_addProviders.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505081421422_parent.resx">
+      <DependentUpon>201505081421422_parent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201503312023237_UpdatedDbModel.resx">
-      <DependentUpon>201503312023237_UpdatedDbModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504021932270_addSession.resx">
-      <DependentUpon>201504021932270_addSession.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504061802048_AddEnrollmentLocations.resx">
-      <DependentUpon>201504061802048_AddEnrollmentLocations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504061816453_UpdateEnrollentLocations.resx">
-      <DependentUpon>201504061816453_UpdateEnrollentLocations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504071623485_Roles.resx">
-      <DependentUpon>201504071623485_Roles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504071633153_Init.resx">
-      <DependentUpon>201504071633153_Init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504101321384_creditoptions.resx">
-      <DependentUpon>201504101321384_creditoptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504101408236_creditchange.resx">
-      <DependentUpon>201504101408236_creditchange.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504141537424_providerCactusId.resx">
-      <DependentUpon>201504141537424_providerCactusId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504171253563_IsActive.resx">
-      <DependentUpon>201504171253563_IsActive.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504171307574_IsActive for Session.resx">
-      <DependentUpon>201504171307574_IsActive for Session.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504211258318_SessonToCourse.resx">
-      <DependentUpon>201504211258318_SessonToCourse.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504211330204_SessionID.resx">
-      <DependentUpon>201504211330204_SessionID.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504212055515_MaintableMapped.resx">
-      <DependentUpon>201504212055515_MaintableMapped.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505041404045_UserId.resx">
-      <DependentUpon>201505041404045_UserId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505041727572_name consistancy.resx">
-      <DependentUpon>201505041727572_name consistancy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505052031570_cactus.resx">
-      <DependentUpon>201505052031570_cactus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505061454467_district.resx">
-      <DependentUpon>201505061454467_district.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505062142551_CourseNotes.resx">
-      <DependentUpon>201505062142551_CourseNotes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505081513177_move FED section.resx">
+      <DependentUpon>201505081513177_move FED section.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

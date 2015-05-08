@@ -35,13 +35,7 @@
           <Property Name="OnlineProviderID" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="SessionID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="EnrollmentLocations">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="MainTables">
           <Key>
@@ -65,7 +59,6 @@
           <Property Name="CounselorPhoneNumber" Type="nvarchar(max)" />
           <Property Name="CourseBegin" Type="datetime" />
           <Property Name="CourseCompletionDate" Type="datetime" />
-          <Property Name="CourseCreditID" Type="int" />
           <Property Name="CourseFee" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CourseStartDate" Type="datetime" />
           <Property Name="CreditCompletedToDate" Type="decimal" Precision="18" Scale="2" />
@@ -130,14 +123,16 @@
           <Property Name="WithdrawalDate" Type="datetime" />
           <Property Name="Grand_Total" Type="decimal" Precision="18" Scale="2" />
           <Property Name="HasExcessiveFED" Type="bit" Nullable="false" />
-          <Property Name="CourseCategoryID" Type="int" />
-          <Property Name="CourseNameID" Type="int" />
-          <Property Name="CourseName2ndSemesterID" Type="int" />
-          <Property Name="SemesterID" Type="int" Nullable="false" />
           <Property Name="TeacherFirstName" Type="nvarchar(max)" />
           <Property Name="TeacherLastName" Type="nvarchar(max)" />
           <Property Name="TeacherCactusID" Type="int" />
           <Property Name="HasHomeSchoolRelease" Type="bit" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="CourseID" Type="int" />
+          <Property Name="CreditID" Type="int" />
+          <Property Name="Course2ndSemesterID" Type="int" />
+          <Property Name="SessionID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="OnlineProviders">
           <Key>
@@ -155,6 +150,27 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'aspnet-CcaRegistrationDf-20150320080618.dbo.CactusInstitution' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CactusInstitution">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="Code" Type="char" MaxLength="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'aspnet-CcaRegistrationDf-20150320080618.dbo.CactusSchool' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CactusSchool">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="district" />
+          </Key>
+          <Property Name="id" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" />
+          <Property Name="district" Type="numeric" Precision="9" Scale="0" Nullable="false" />
         </EntityType>
         <Association Name="FK_dbo_Courses_dbo_Categories_CategoryID">
           <End Role="Categories" Type="Self.Categories" Multiplicity="1">
@@ -202,10 +218,23 @@
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EnrollmentLocations" EntityType="Self.EnrollmentLocations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainTables" EntityType="Self.MainTables" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OnlineProviders" EntityType="Self.OnlineProviders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sessions" EntityType="Self.Sessions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CactusInstitution" EntityType="Self.CactusInstitution" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CactusInstitution].[DistrictID] AS [DistrictID], 
+    [CactusInstitution].[Name] AS [Name], 
+    [CactusInstitution].[Code] AS [Code]
+    FROM [dbo].[CactusInstitution] AS [CactusInstitution]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="CactusSchool" EntityType="Self.CactusSchool" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CactusSchool].[id] AS [id], 
+    [CactusSchool].[name] AS [name], 
+    [CactusSchool].[district] AS [district]
+    FROM [dbo].[CactusSchool] AS [CactusSchool]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_dbo_Courses_dbo_Categories_CategoryID" Association="Self.FK_dbo_Courses_dbo_Categories_CategoryID">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Courses" EntitySet="Courses" />
@@ -227,7 +256,6 @@
           <EntitySet Name="C__MigrationHistory" EntityType="SEATSModel.C__MigrationHistory" />
           <EntitySet Name="Category1Set" EntityType="SEATSModel.Category" />
           <EntitySet Name="Courses1" EntityType="SEATSModel.Course" />
-          <EntitySet Name="EnrollmentLocation1Set" EntityType="SEATSModel.EnrollmentLocation" />
           <EntitySet Name="MainTable1Set" EntityType="SEATSModel.MainTable" />
           <EntitySet Name="OnlineProvider1Set" EntityType="SEATSModel.OnlineProvider" />
           <EntitySet Name="Session1Set" EntityType="SEATSModel.Session" />
@@ -243,6 +271,8 @@
             <End Role="Session1" EntitySet="Session1Set" />
             <End Role="Cours" EntitySet="Courses1" />
           </AssociationSet>
+          <EntitySet Name="CactusInstitutions" EntityType="SEATSModel.CactusInstitution" />
+          <EntitySet Name="CactusSchools" EntityType="SEATSModel.CactusSchool" />
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -278,13 +308,7 @@
           <NavigationProperty Name="Category" Relationship="SEATSModel.FK_dbo_Courses_dbo_Categories_CategoryID" FromRole="Cours" ToRole="Category1" />
           <NavigationProperty Name="OnlineProvider" Relationship="SEATSModel.FK_dbo_Courses_dbo_OnlineProviders_OnlineProviderID" FromRole="Cours" ToRole="OnlineProvider1" />
           <NavigationProperty Name="Session" Relationship="SEATSModel.FK_dbo_Courses_dbo_Sessions_SessionID" FromRole="Cours" ToRole="Session1" />
-        </EntityType>
-        <EntityType Name="EnrollmentLocation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MainTable">
           <Key>
@@ -381,6 +405,12 @@
           <Property Name="TeacherLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TeacherCactusID" Type="Int32" />
           <Property Name="HasHomeSchoolRelease" Type="Boolean" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="CourseID" Type="Int32" />
+          <Property Name="CreditID" Type="Int32" />
+          <Property Name="Course2ndSemesterID" Type="Int32" />
+          <Property Name="SessionID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="OnlineProvider">
           <Key>
@@ -443,6 +473,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CactusInstitution">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CactusSchool">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="district" />
+          </Key>
+          <Property Name="id" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="district" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -471,6 +518,7 @@
           <EntitySetMapping Name="Courses1">
             <EntityTypeMapping TypeName="SEATSModel.Course">
               <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="SessionID" ColumnName="SessionID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="OnlineProviderID" ColumnName="OnlineProviderID" />
@@ -482,25 +530,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EnrollmentLocation1Set">
-            <EntityTypeMapping TypeName="SEATSModel.EnrollmentLocation">
-              <MappingFragment StoreEntitySet="EnrollmentLocations">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MainTable1Set">
             <EntityTypeMapping TypeName="SEATSModel.MainTable">
               <MappingFragment StoreEntitySet="MainTables">
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="Course2ndSemesterID" ColumnName="Course2ndSemesterID" />
+                <ScalarProperty Name="CreditID" ColumnName="CreditID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="HasHomeSchoolRelease" ColumnName="HasHomeSchoolRelease" />
                 <ScalarProperty Name="TeacherCactusID" ColumnName="TeacherCactusID" />
                 <ScalarProperty Name="TeacherLastName" ColumnName="TeacherLastName" />
                 <ScalarProperty Name="TeacherFirstName" ColumnName="TeacherFirstName" />
-                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
-                <ScalarProperty Name="CourseName2ndSemesterID" ColumnName="CourseName2ndSemesterID" />
-                <ScalarProperty Name="CourseNameID" ColumnName="CourseNameID" />
-                <ScalarProperty Name="CourseCategoryID" ColumnName="CourseCategoryID" />
                 <ScalarProperty Name="HasExcessiveFED" ColumnName="HasExcessiveFED" />
                 <ScalarProperty Name="Grand_Total" ColumnName="Grand_Total" />
                 <ScalarProperty Name="WithdrawalDate" ColumnName="WithdrawalDate" />
@@ -565,7 +607,6 @@
                 <ScalarProperty Name="CreditCompletedToDate" ColumnName="CreditCompletedToDate" />
                 <ScalarProperty Name="CourseStartDate" ColumnName="CourseStartDate" />
                 <ScalarProperty Name="CourseFee" ColumnName="CourseFee" />
-                <ScalarProperty Name="CourseCreditID" ColumnName="CourseCreditID" />
                 <ScalarProperty Name="CourseCompletionDate" ColumnName="CourseCompletionDate" />
                 <ScalarProperty Name="CourseBegin" ColumnName="CourseBegin" />
                 <ScalarProperty Name="CounselorPhoneNumber" ColumnName="CounselorPhoneNumber" />
@@ -603,6 +644,24 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CactusInstitutions">
+            <EntityTypeMapping TypeName="SEATSModel.CactusInstitution">
+              <MappingFragment StoreEntitySet="CactusInstitution">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CactusSchools">
+            <EntityTypeMapping TypeName="SEATSModel.CactusSchool">
+              <MappingFragment StoreEntitySet="CactusSchool">
+                <ScalarProperty Name="district" ColumnName="district" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
