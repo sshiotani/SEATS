@@ -10,6 +10,7 @@ namespace CcaRegistrationDf.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            ContextKey = "CcaRegistrationDf.DAL.SoepContext";
         }
 
         protected override void Seed(CcaRegistrationDf.DAL.SoepContext context)

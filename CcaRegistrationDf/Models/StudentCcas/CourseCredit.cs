@@ -6,9 +6,7 @@ using System.Web;
 
 namespace CcaRegistrationDf.Models
 {
-   
-
-    public partial class CourseCredit
+    public class CourseCredit
     {
         
         public int ID { get; set; }

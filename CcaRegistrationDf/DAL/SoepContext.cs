@@ -31,7 +31,5 @@ namespace CcaRegistrationDf.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
     }
 }

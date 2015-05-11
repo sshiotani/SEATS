@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CcaRegistrationDf.Models
 {
-    public partial class Provider
+    public class Provider
     {
         
         public Provider()

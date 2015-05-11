@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using CcaRegistrationDf.DAL;
 using CcaRegistrationDf.Models;
 using Microsoft.AspNet.Identity;
-using System;
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -20,37 +19,29 @@ namespace CcaRegistrationDf.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return View(await db.Parents.ToListAsync());
+                var parents = await db.Parents.ToListAsync();
+                return View(parents);
             }
 
             // find Student info associated with user and check for existing parent association
-            try
+
+            var UserIdentity = User.Identity.GetUserId();
+
+            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+
+            if(student.ParentID != null)
             {
-                var UserIdentity = User.Identity.GetUserId();
-
-                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
-
-                if (student.ParentID != null)
+                var parent = await db.Parents.Where(u => u.ID == student.ParentID).FirstOrDefaultAsync();
+                if (parent != null)
                 {
-                    var parent = await db.Parents.Where(u => u.ID == student.ParentID).FirstOrDefaultAsync();
-                    if (parent != null)
-                    {
-                        return View(parent);
-                    }
-
+                    return View(parent);
                 }
-
-                //Otherwise create one
-                return RedirectToAction("Create");
+                
             }
-            catch (Exception ex)
-            {
-                ViewBag.Message = ex.Message;
-                return View("Error");
-            }
-            
 
-            
+            //Otherwise create one
+
+            return RedirectToAction("Create");
         }
 
         // GET: Parents/Details/5
@@ -81,46 +72,38 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ID,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone1,GuardianPhone2")] Parent parent)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                // Check email to see if parent already parentID
+
+                int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m=>m.ID).FirstOrDefaultAsync();
+
+               //If not add them
+                if(parentID == null)
                 {
-                    // Check email to see if parent already parentID
-
-                    int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync();
-
-                    //If not add them
-                    if (parentID == null)
-                    {
-                        db.Parents.Add(parent);
-                        parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync();
-                    }
-
-                    // Add parent Id to student
-                    var UserIdentity = User.Identity.GetUserId();
-                    var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
-
-                    // Find parent with
-                    student.ParentID = parentID;
-
-                    if (student.ParentID == null)
-                    {
-                        ViewBag.Message = "Unable to associate parent information with student.  Please contact help desk.";
-                        return View("Error");
-                    }
-
-                    await db.SaveChangesAsync();
-
-                    return RedirectToAction("Index", "Home");
+                    db.Parents.Add(parent);
+                    parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync();
                 }
 
-                return View(parent);
+                // Add parent Id to student
+                var UserIdentity = User.Identity.GetUserId();
+                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+
+                // Find parent with
+                student.ParentID = parentID;
+
+                if(student.ParentID == null)
+                {
+                    ViewBag.Message = "Unable to associate parent information with student.  Please contact help desk.";
+                    return View("Error");
+                }
+
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index","Home");
             }
-            catch (Exception ex)
-            {
-                ViewBag.Message = ex.Message;
-                return View("Error");
-            }
+
+            return View(parent);
         }
 
         // GET: Parents/Edit/5
@@ -155,7 +138,6 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Parents/Delete/5
-        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -173,7 +155,6 @@ namespace CcaRegistrationDf.Controllers
         // POST: Parents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Parent parent = await db.Parents.FindAsync(id);
