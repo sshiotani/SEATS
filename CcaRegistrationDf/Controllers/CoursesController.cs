@@ -61,7 +61,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,CategoryID,Name,Credit,Code,OnlineProviderID,IsActive,SessionID")] Course course)
+        public async Task<ActionResult> Create([Bind(Include = "ID,CategoryID,Name,Credit,Code,ProviderID,IsActive,SessionID")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -124,7 +124,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,CategoryID,Name,Credit,Code,OnlineProviderID,IsActive,SessionID")] Course course)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,CategoryID,Name,Credit,Code,ProviderID,IsActive,SessionID")] Course course)
         {
             if (ModelState.IsValid)
             {

@@ -10,18 +10,16 @@ namespace CcaRegistrationDf.Models
     {
         public int ID { get; set; }
         public Nullable<int> CounselorCactusID { get; set; }
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Counselor Email")]
+       
         public string CounselorEmail { get; set; }
 
-        [Required]
-        [Display(Name = "Counselor First Name")]
+        
         public string CounselorFirstName { get; set; }
 
-        [Required]
-        [Display(Name = "Student Last Name")]
+       
         public string CounselorLastName { get; set; }
+
+        public string School { get; set; }
 
         public string CounselorPhoneNumber { get; set; }
         
