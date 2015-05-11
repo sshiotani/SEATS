@@ -30,23 +30,8 @@ namespace CcaRegistrationDf.Models
         {
             return new ApplicationDbContext();
         }
-
        
 
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.MainTable> MainTables { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Category> Categories { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Course> Courses { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineProvider> OnlineProviders { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Sessions { get; set; }
-
-        //public System.Data.Entity.DbSet<CcaRegistrationDf.Models.EnrollmentLocation> EnrollmentLocations { get; set; }
-
-       //public System.Data.Entity.DbSet<CactusInstitution> EnrollmentLocations { get; set; }
     }
 
     public class IdentityManager

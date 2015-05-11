@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 
 using System.Net;
+using CcaRegistrationDf.DAL;
 
 
 
@@ -20,7 +21,8 @@ namespace CcaRegistrationDf.Controllers
 {
     public class ReportsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private SoepContext db = new SoepContext();
+
         // GET: Reports
         public async Task<ActionResult> Index()
         {
