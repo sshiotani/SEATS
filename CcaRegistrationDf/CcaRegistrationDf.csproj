@@ -253,6 +253,7 @@
     <Compile Include="Models\StudentCcas\Session.cs" />
     <Compile Include="Models\StudentCcas\Student.cs" />
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
+    <Compile Include="Models\StudentCcas\StudentViewModel.cs" />
     <Compile Include="Models\StudentStatusViewModel.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
