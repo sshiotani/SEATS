@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 
 
-namespace CcaRegistrationDf.Models.StudentCcas
+namespace CcaRegistrationDf.Models
 {
     public class StudentViewModel
     {

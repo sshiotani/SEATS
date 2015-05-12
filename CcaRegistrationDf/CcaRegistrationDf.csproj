@@ -202,15 +202,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505121323242_init-App.cs" />
-    <Compile Include="Migrations\201505121323242_init-App.Designer.cs">
-      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505121413009_remove-SOEPContext.cs" />
-    <Compile Include="Migrations\201505121413009_remove-SOEPContext.Designer.cs">
-      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CactusInstitution.cs">
       <DependentUpon>Cactus.tt</DependentUpon>
@@ -253,9 +244,8 @@
     <Compile Include="Models\StudentCcas\Session.cs" />
     <Compile Include="Models\StudentCcas\Student.cs" />
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
-    <Compile Include="Models\StudentCcas\StudentViewModel.cs" />
-    <Compile Include="Models\StudentStatusViewModel.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
+    <Compile Include="Models\StudentStatusViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -555,11 +545,14 @@
     <Content Include="Views\CCAs\Details.cshtml" />
     <Content Include="Views\CCAs\Edit.cshtml" />
     <Content Include="Views\CCAs\Index.cshtml" />
+    <Content Include="Views\MainTables\Create.cshtml" />
+    <Content Include="Views\MainTables\Delete.cshtml" />
+    <Content Include="Views\MainTables\Details.cshtml" />
+    <Content Include="Views\MainTables\Edit.cshtml" />
+    <Content Include="Views\MainTables\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Views\Roles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -567,14 +560,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505121323242_init-App.resx">
-      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505121413009_remove-SOEPContext.resx">
-      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

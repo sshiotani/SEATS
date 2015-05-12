@@ -11,6 +11,9 @@ namespace CcaRegistrationDf.Models
         
         public int ID { get; set; }
 
+        public DateTime ApplicationSubmissionDate { get; set; }
+
+        public string UserId { get; set; }
 
         //Student
         public int StudentID { get; set; }
@@ -19,6 +22,7 @@ namespace CcaRegistrationDf.Models
         public bool HasExcessiveFED { get; set; }
         public string ExcessiveFEDExplanation { get; set; }
         public Nullable<int> ExcessiveFEDReasonCode { get; set; }
+        public string Comments { get; set; }
 
         //Counselor section
         public int CounselorID { get; set; }
@@ -53,10 +57,12 @@ namespace CcaRegistrationDf.Models
         //Course
         public int CourseID { get; set; }
         public virtual OnlineCourse Course { get; set; }
-        //public Nullable<int> CourseCategoryID { get; set; }
+        public Nullable<int> CourseCategoryID { get; set; }
+
         //public Nullable<decimal> CourseFee { get; set; }
         //public Nullable<int> CourseNameID { get; set; }
         public Nullable<int> CourseCreditID { get; set; }
+        public CourseCredit CourseCredit { get; set; }
         public Nullable<int> CourseName2ndSemesterID { get; set; }
         public bool IsCourseConsistentWithStudentSEOP { get; set; }      
         //public Nullable<int> PricingTier { get; set; }

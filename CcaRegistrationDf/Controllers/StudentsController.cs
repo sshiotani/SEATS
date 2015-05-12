@@ -5,7 +5,6 @@ using System.Net;
 using System.Web.Mvc;
 using CcaRegistrationDf.DAL;
 using CcaRegistrationDf.Models;
-using CcaRegistrationDf.Models.StudentCcas;
 
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;

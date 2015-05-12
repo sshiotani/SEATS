@@ -66,8 +66,8 @@ namespace CcaRegistrationDf.Controllers
             try
             {
                 status.Session = await db.ClassSession.Where(m => m.ID == cca.SessionID).FirstAsync().ConfigureAwait(false);
-                status.OnlineProvider = await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync().ConfigureAwait(false);
-                status.Course = await db.Courses.Where(m => m.ID == cca.CourseID).FirstAsync().ConfigureAwait(false);
+                status.Provider= await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync().ConfigureAwait(false);
+                status.OnlineCourse = await db.Courses.Where(m => m.ID == cca.CourseID).FirstAsync().ConfigureAwait(false);
                 status.Category = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync().ConfigureAwait(false);
                 status.ApplicationSubmissionDate = (DateTime)cca.ApplicationSubmissionDate;
                 status.CompletionStatus = cca.CompletionStatus;
