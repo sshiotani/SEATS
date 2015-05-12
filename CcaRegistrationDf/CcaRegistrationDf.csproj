@@ -545,6 +545,11 @@
     <Content Include="Views\CCAs\Details.cshtml" />
     <Content Include="Views\CCAs\Edit.cshtml" />
     <Content Include="Views\CCAs\Index.cshtml" />
+    <Content Include="Views\MainTables\Create.cshtml" />
+    <Content Include="Views\MainTables\Delete.cshtml" />
+    <Content Include="Views\MainTables\Details.cshtml" />
+    <Content Include="Views\MainTables\Edit.cshtml" />
+    <Content Include="Views\MainTables\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
