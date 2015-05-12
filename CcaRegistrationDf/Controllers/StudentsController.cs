@@ -5,7 +5,6 @@ using System.Net;
 using System.Web.Mvc;
 using CcaRegistrationDf.DAL;
 using CcaRegistrationDf.Models;
-using CcaRegistrationDf.Models.StudentCcas;
 
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace CcaRegistrationDf.Controllers
         "Allowed by College and Career Ready Plan (SEOP or CCRP) providing for Early Graduation",
         "Allowed by school district or charter school board policy (check with your school district office)" };
 
-        private SoepContext db = new SoepContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Students
         public async Task<ActionResult> Index()

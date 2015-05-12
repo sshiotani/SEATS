@@ -36,5 +36,7 @@ namespace CcaRegistrationDf.Models
         public bool IsPrimaryEnrollmentVerified { get; set; }
         public bool IsSection504 { get; set; }
         public int StudentBudgetID { get; set; }
+
+        public virtual StudentBudget StudentBudget { get; set; }
     }
 }

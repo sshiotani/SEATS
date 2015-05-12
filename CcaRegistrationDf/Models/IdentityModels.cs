@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace CcaRegistrationDf.Models
 {
@@ -31,22 +32,18 @@ namespace CcaRegistrationDf.Models
             return new ApplicationDbContext();
         }
 
-       
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Student> Students { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Parent> Parents { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineCourse> Courses { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Provider> Providers { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Primary> Primaries { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Counselor> Counselors { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> ClassSession { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
 
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.MainTable> MainTables { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Category> Categories { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Course> Courses { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineProvider> OnlineProviders { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Sessions { get; set; }
-
-        //public System.Data.Entity.DbSet<CcaRegistrationDf.Models.EnrollmentLocation> EnrollmentLocations { get; set; }
-
-       //public System.Data.Entity.DbSet<CactusInstitution> EnrollmentLocations { get; set; }
+        
     }
 
     public class IdentityManager

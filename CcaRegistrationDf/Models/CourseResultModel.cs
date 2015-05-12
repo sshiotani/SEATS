@@ -14,7 +14,7 @@ namespace CcaRegistrationDf.Models
         public int OnlineProviderID { get; set; }
         public string Notes { get; set; }
 
-        public List<SelectListItem> CreditChoices { get; set; }
+        public IEnumerable<SelectListItem> CreditChoices { get; set; }
 
     }
 }

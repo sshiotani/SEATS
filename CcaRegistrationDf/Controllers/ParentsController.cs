@@ -12,7 +12,7 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class ParentsController : Controller
     {
-        private SoepContext db = new SoepContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Parents
         public async Task<ActionResult> Index()
