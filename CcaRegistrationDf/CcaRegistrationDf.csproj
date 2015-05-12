@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201505121323242_init-App.Designer.cs">
       <DependentUpon>201505121323242_init-App.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505121413009_remove-SOEPContext.cs" />
+    <Compile Include="Migrations\201505121413009_remove-SOEPContext.Designer.cs">
+      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CactusInstitution.cs">
@@ -566,6 +570,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201505121323242_init-App.resx">
       <DependentUpon>201505121323242_init-App.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121413009_remove-SOEPContext.resx">
+      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
