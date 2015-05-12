@@ -1,0 +1,72 @@
+﻿@model CcaRegistrationDf.Models.Counselor
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Counselor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CounselorCactusID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorCactusID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CounselorEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CounselorFirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorFirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CounselorLastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorLastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CounselorPhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorPhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SchoolID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SchoolID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

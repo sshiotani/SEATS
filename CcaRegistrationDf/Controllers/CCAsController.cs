@@ -65,7 +65,7 @@ namespace CcaRegistrationDf.Controllers
             var status = new StudentStatusViewModel();
             try
             {
-                status.Session = await db.ClassSession.Where(m => m.ID == cca.SessionID).FirstAsync().ConfigureAwait(false);
+                status.Session = await db.Session.Where(m => m.ID == cca.SessionID).FirstAsync().ConfigureAwait(false);
                 status.Provider= await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync().ConfigureAwait(false);
                 status.OnlineCourse = await db.Courses.Where(m => m.ID == cca.CourseID).FirstAsync().ConfigureAwait(false);
                 status.Category = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync().ConfigureAwait(false);
@@ -99,9 +99,17 @@ namespace CcaRegistrationDf.Controllers
         // GET: CCAs/Create
         public ActionResult Create()
         {
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail");
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name");
-            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID");
+            ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
+            var schoolID = db.Students.Where(m => m.UserId == User.Identity.GetUserId()).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
+            var counselors = db.Counselors.Where(m => m.SchoolID == schoolID).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.CounselorFirstName + " " + f.CounselorLastName
+                });
+
+            ViewBag.CounselorID = new SelectList(counselors,"ID","Name");
+            ViewBag.CourseID = new List<SelectListItem>();
+            ViewBag.CourseCreditID = new List<SelectListItem>();
    
             return View();
         }
@@ -118,6 +126,7 @@ namespace CcaRegistrationDf.Controllers
                 Mapper.CreateMap<CCAViewModel, CCA>();
 
                 CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
+
                 cca.ApplicationSubmissionDate = DateTime.Now;
                 cca.UserId = User.Identity.GetUserId();
 
@@ -130,10 +139,11 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", ccaVm.CounselorID);
+            ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
+
+            ViewBag.CounselorID = new List<SelectListItem>();
             ViewBag.CourseID = new List<SelectListItem>();
-            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
+            ViewBag.CourseCreditID = new List<SelectListItem>();
 
             return View(ccaVm);
      
@@ -269,7 +279,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", cca.CounselorID);
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cca.CourseID);
+            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cca.OnlineCourseID);
             ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cca.CourseCreditID);
             
             
@@ -277,6 +287,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs/Delete/5
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -292,6 +303,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // POST: CCAs/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

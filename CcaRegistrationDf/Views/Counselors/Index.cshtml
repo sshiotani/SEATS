@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CcaRegistrationDf.Models.Counselor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorCactusID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorPhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SchoolID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorCactusID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorPhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SchoolID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

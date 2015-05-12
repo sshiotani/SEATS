@@ -24,6 +24,8 @@ namespace CcaRegistrationDf.Models
         public string CounselorLastName { get; set; }
 
         public string CounselorPhoneNumber { get; set; }
+
+        public int SchoolID { get; set; }
         
     }
 }

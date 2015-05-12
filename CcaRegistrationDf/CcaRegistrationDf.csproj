@@ -192,16 +192,39 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CCAsController.cs" />
+    <Compile Include="Controllers\CounselorsController.cs" />
+    <Compile Include="Controllers\CourseCategoriesController.cs" />
     <Compile Include="Controllers\CourseCreditsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
+    <Compile Include="Controllers\PrimariesController.cs" />
+    <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SessionsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="DAL\SoepContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505121323242_init-App.cs" />
+    <Compile Include="Migrations\201505121323242_init-App.Designer.cs">
+      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121413009_remove-SOEPContext.cs" />
+    <Compile Include="Migrations\201505121413009_remove-SOEPContext.Designer.cs">
+      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121646362_addCCA.cs" />
+    <Compile Include="Migrations\201505121646362_addCCA.Designer.cs">
+      <DependentUpon>201505121646362_addCCA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121809563_addControllers.cs" />
+    <Compile Include="Migrations\201505121809563_addControllers.Designer.cs">
+      <DependentUpon>201505121809563_addControllers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CactusInstitution.cs">
       <DependentUpon>Cactus.tt</DependentUpon>
@@ -535,21 +558,33 @@
     <Content Include="Views\Parents\Edit.cshtml" />
     <Content Include="Views\Parents\Index.cshtml" />
     <Content Include="Views\Students\EditAdmin.cshtml" />
-    <Content Include="Views\CourseCredits\Create.cshtml" />
-    <Content Include="Views\CourseCredits\Delete.cshtml" />
-    <Content Include="Views\CourseCredits\Details.cshtml" />
-    <Content Include="Views\CourseCredits\Edit.cshtml" />
-    <Content Include="Views\CourseCredits\Index.cshtml" />
     <Content Include="Views\CCAs\Create.cshtml" />
-    <Content Include="Views\CCAs\Delete.cshtml" />
-    <Content Include="Views\CCAs\Details.cshtml" />
-    <Content Include="Views\CCAs\Edit.cshtml" />
     <Content Include="Views\CCAs\Index.cshtml" />
-    <Content Include="Views\MainTables\Create.cshtml" />
-    <Content Include="Views\MainTables\Delete.cshtml" />
-    <Content Include="Views\MainTables\Details.cshtml" />
-    <Content Include="Views\MainTables\Edit.cshtml" />
-    <Content Include="Views\MainTables\Index.cshtml" />
+    <Content Include="Views\CourseCategories\Create.cshtml" />
+    <Content Include="Views\CourseCategories\Delete.cshtml" />
+    <Content Include="Views\CourseCategories\Details.cshtml" />
+    <Content Include="Views\CourseCategories\Edit.cshtml" />
+    <Content Include="Views\CourseCategories\Index.cshtml" />
+    <Content Include="Views\Providers\Create.cshtml" />
+    <Content Include="Views\Providers\Delete.cshtml" />
+    <Content Include="Views\Providers\Details.cshtml" />
+    <Content Include="Views\Providers\Edit.cshtml" />
+    <Content Include="Views\Providers\Index.cshtml" />
+    <Content Include="Views\Counselors\Create.cshtml" />
+    <Content Include="Views\Counselors\Delete.cshtml" />
+    <Content Include="Views\Counselors\Details.cshtml" />
+    <Content Include="Views\Counselors\Edit.cshtml" />
+    <Content Include="Views\Counselors\Index.cshtml" />
+    <Content Include="Views\OnlineCourses\Create.cshtml" />
+    <Content Include="Views\OnlineCourses\Delete.cshtml" />
+    <Content Include="Views\OnlineCourses\Details.cshtml" />
+    <Content Include="Views\OnlineCourses\Edit.cshtml" />
+    <Content Include="Views\OnlineCourses\Index.cshtml" />
+    <Content Include="Views\Primaries\Create.cshtml" />
+    <Content Include="Views\Primaries\Delete.cshtml" />
+    <Content Include="Views\Primaries\Details.cshtml" />
+    <Content Include="Views\Primaries\Edit.cshtml" />
+    <Content Include="Views\Primaries\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -560,6 +595,20 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505121323242_init-App.resx">
+      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121413009_remove-SOEPContext.resx">
+      <DependentUpon>201505121413009_remove-SOEPContext.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121646362_addCCA.resx">
+      <DependentUpon>201505121646362_addCCA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121809563_addControllers.resx">
+      <DependentUpon>201505121809563_addControllers.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
