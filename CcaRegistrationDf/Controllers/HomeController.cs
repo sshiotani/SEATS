@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using CcaRegistrationDf.DAL;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using CcaRegistrationDf.Models;
 
 
 namespace CcaRegistrationDf.Controllers
@@ -15,7 +15,7 @@ namespace CcaRegistrationDf.Controllers
             if(User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                using(SoepContext db = new SoepContext())
+                using(ApplicationDbContext db = new ApplicationDbContext())
                 {
                     var setup = await db.Students.Where(m => m.UserId == userId).FirstOrDefaultAsync();
                     if (setup == null) 

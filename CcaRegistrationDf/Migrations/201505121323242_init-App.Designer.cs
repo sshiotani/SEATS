@@ -7,13 +7,13 @@ namespace CcaRegistrationDf.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class intial : IMigrationMetadata
+    public sealed partial class initApp : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(intial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initApp));
         
         string IMigrationMetadata.Id
         {
-            get { return "201505111813476_intial"; }
+            get { return "201505121323242_init-App"; }
         }
         
         string IMigrationMetadata.Source

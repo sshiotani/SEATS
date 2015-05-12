@@ -21,23 +21,23 @@ namespace CcaRegistrationDf.Controllers
 {
     public class ReportsController : Controller
     {
-        private SoepContext db = new SoepContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Reports
         public async Task<ActionResult> Index()
         {
-            var ccas = await db.MainTables.ToListAsync();
+            var ccas = await db.CCAs.ToListAsync();
 
-            Mapper.CreateMap<MainTable, ReportViewModel>();
+            Mapper.CreateMap<CCA, ReportViewModel>();
             List<ReportViewModel> reports = new List<ReportViewModel>();
             ReportViewModel report;
 
             foreach (var cca in ccas)
             {
                 
-                report =  Mapper.Map<MainTable, ReportViewModel>(cca);
-                report.Category = await db.Categories.Where(m => m.ID == cca.CourseCategoryID).Select(m => m.Name).FirstAsync();
-                report.Course = await db.Courses.Where(m => m.ID == cca.CourseNameID).Select(m => m.Name).FirstAsync();
+                report =  Mapper.Map<CCA, ReportViewModel>(cca);
+                report.Category = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).Select(m => m.Name).FirstAsync();
+                report.Course = await db.Courses.Where(m => m.ID == cca.CourseID).Select(m => m.Name).FirstAsync();
                 //report.OnlineProvider = await db.OnlineProviders.Where(m)
 
                 

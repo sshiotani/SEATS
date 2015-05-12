@@ -15,7 +15,7 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles="Admin")]
     public class CourseCreditsController : Controller
     {
-        private SoepContext db = new SoepContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: CourseCredits
         public async Task<ActionResult> Index()

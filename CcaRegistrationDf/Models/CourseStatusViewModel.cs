@@ -8,9 +8,9 @@ namespace CcaRegistrationDf.Models
         public DateTime ApplicationSubmissionDate { get; set; }
         public string CompletionStatus { get; set; }
 
-        public virtual Category Category { get; set; }
-        public virtual OnlineProvider OnlineProvider { get; set; }
+        public virtual CourseCategory Category { get; set; }
+        public virtual Provider Provider { get; set; }
         public virtual Session Session { get; set; }
-        public virtual Course Course { get; set; }
+        public virtual OnlineCourse OnlineCourse { get; set; }
     }
 }

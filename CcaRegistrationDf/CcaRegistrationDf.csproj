@@ -202,12 +202,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505111813476_intial.cs" />
-    <Compile Include="Migrations\201505111813476_intial.Designer.cs">
-      <DependentUpon>201505111813476_intial.cs</DependentUpon>
+    <Compile Include="Migrations\201505121323242_init-App.cs" />
+    <Compile Include="Migrations\201505121323242_init-App.Designer.cs">
+      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CactusInstitution.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CactusSchool.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
@@ -547,7 +553,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Migrations-old\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Roles\" />
   </ItemGroup>
@@ -559,8 +564,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505111813476_intial.resx">
-      <DependentUpon>201505111813476_intial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505121323242_init-App.resx">
+      <DependentUpon>201505121323242_init-App.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
