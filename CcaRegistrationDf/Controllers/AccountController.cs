@@ -214,6 +214,7 @@ namespace CcaRegistrationDf.Controllers
                 if (!user.EmailConfirmed)
                 {
                     ModelState.AddModelError("", "Invalid login attempt. You must have a confirmed email account.");
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return View(model);
 
                 }
@@ -314,7 +315,7 @@ namespace CcaRegistrationDf.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return View("DisplayEmail");
                 }
                 AddErrors(result);

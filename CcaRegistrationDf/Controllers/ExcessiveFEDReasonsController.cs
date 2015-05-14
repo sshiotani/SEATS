@@ -8,140 +8,111 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CcaRegistrationDf.Models;
-using AutoMapper;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize]
-    public class CounselorsController : Controller
+    [Authorize(Roles="Admin")]
+    public class ExcessiveFEDReasonsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Counselors
+        // GET: ExcessiveFEDReasons
         public async Task<ActionResult> Index()
         {
-            return View(await db.Counselors.ToListAsync());
+            return View(await db.ExcessiveFEDReasons.ToListAsync());
         }
 
-        // GET: Counselors/Details/5
+        // GET: ExcessiveFEDReasons/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
-            if (counselor == null)
+            ExcessiveFEDReason excessiveFEDReason = await db.ExcessiveFEDReasons.FindAsync(id);
+            if (excessiveFEDReason == null)
             {
                 return HttpNotFound();
             }
-            return View(counselor);
+            return View(excessiveFEDReason);
         }
 
-        // GET: Counselors/Details/5
-        public async Task<ActionResult> UpdateSchoolIds()
-        {
-            var toUpdate = await db.Counselors.Where(x => x.SchoolID == 0).ToListAsync();
-
-            using (CactusEntities cactus = new CactusEntities())
-            {
-                foreach (var counselor in toUpdate)
-                {
-                    var schoolId = cactus.CactusSchools.Where(x => x.name == counselor.School).Select(x => x.id).FirstOrDefault();
-
-                    counselor.SchoolID = Decimal.ToInt32(schoolId);
-                }
-            }
-
-          
-
-            await db.SaveChangesAsync();
-
-            return View();
-        }
-
-        // GET: Counselors/Create
+        // GET: ExcessiveFEDReasons/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Counselors/Create
+        // POST: ExcessiveFEDReasons/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID")] CounselorViewModel counselorVm)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Reason")] ExcessiveFEDReason excessiveFEDReason)
         {
             if (ModelState.IsValid)
             {
-                Mapper.CreateMap<CounselorViewModel, Counselor>();
-                Counselor counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
-                db.Counselors.Add(counselor);
+                db.ExcessiveFEDReasons.Add(excessiveFEDReason);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(counselorVm);
+            return View(excessiveFEDReason);
         }
 
-        // GET: Counselors/Edit/5
-        [Authorize(Roles = "Admin")]
+        // GET: ExcessiveFEDReasons/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
-            if (counselor == null)
+            ExcessiveFEDReason excessiveFEDReason = await db.ExcessiveFEDReasons.FindAsync(id);
+            if (excessiveFEDReason == null)
             {
                 return HttpNotFound();
             }
-            return View(counselor);
+            return View(excessiveFEDReason);
         }
 
-        // POST: Counselors/Edit/5
+        // POST: ExcessiveFEDReasons/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID")] Counselor counselor)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Reason")] ExcessiveFEDReason excessiveFEDReason)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(counselor).State = EntityState.Modified;
+                db.Entry(excessiveFEDReason).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(counselor);
+            return View(excessiveFEDReason);
         }
 
-        // GET: Counselors/Delete/5
-        [Authorize(Roles = "Admin")]
+        // GET: ExcessiveFEDReasons/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
-            if (counselor == null)
+            ExcessiveFEDReason excessiveFEDReason = await db.ExcessiveFEDReasons.FindAsync(id);
+            if (excessiveFEDReason == null)
             {
                 return HttpNotFound();
             }
-            return View(counselor);
+            return View(excessiveFEDReason);
         }
 
-        // POST: Counselors/Delete/5
+        // POST: ExcessiveFEDReasons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Counselor counselor = await db.Counselors.FindAsync(id);
-            db.Counselors.Remove(counselor);
+            ExcessiveFEDReason excessiveFEDReason = await db.ExcessiveFEDReasons.FindAsync(id);
+            db.ExcessiveFEDReasons.Remove(excessiveFEDReason);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

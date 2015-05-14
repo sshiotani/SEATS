@@ -47,6 +47,15 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+
+        $(".phone").mask("(999) 999-9999");
+
+    </script>
+}

@@ -29,7 +29,7 @@ namespace CcaRegistrationDf.Controllers
             List<CCA> ccas;
             if (User.IsInRole("Admin"))
             {
-                 ccas = await db.CCAs.Include(c => c.Counselor).Include(c => c.Course).Include(c => c.CourseCredit).Include(c => c.Primary).Include(c => c.Provider).Include(c => c.Student).ToListAsync();
+                ccas = await db.CCAs.Include(c => c.Counselor).Include(c => c.OnlineCourse).Include(c => c.CourseCredit).Include(c => c.Primary).Include(c => c.Provider).Include(c => c.Student).ToListAsync();
                 return View(ccas);
             }
             else
@@ -66,8 +66,8 @@ namespace CcaRegistrationDf.Controllers
             try
             {
                 status.Session = await db.Session.Where(m => m.ID == cca.SessionID).FirstAsync().ConfigureAwait(false);
-                status.Provider= await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync().ConfigureAwait(false);
-                status.OnlineCourse = await db.Courses.Where(m => m.ID == cca.CourseID).FirstAsync().ConfigureAwait(false);
+                status.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync().ConfigureAwait(false);
+                status.OnlineCourse = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).FirstAsync().ConfigureAwait(false);
                 status.Category = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync().ConfigureAwait(false);
                 status.ApplicationSubmissionDate = (DateTime)cca.ApplicationSubmissionDate;
                 status.CompletionStatus = cca.CompletionStatus;
@@ -99,19 +99,53 @@ namespace CcaRegistrationDf.Controllers
         // GET: CCAs/Create
         public ActionResult Create()
         {
-            ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
-            var schoolID = db.Students.Where(m => m.UserId == User.Identity.GetUserId()).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
-            var counselors = db.Counselors.Where(m => m.SchoolID == schoolID).Select(f => new SelectListItem
+            var model = new CCAViewModel();
+            var userId = User.Identity.GetUserId();
+            var lea = db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationID).FirstOrDefault();
+            model.EnrollmentLocationID = (int)lea;
+            model = GetSelectLists(model);
+
+            return View(model);
+        }
+
+        private CCAViewModel GetSelectLists(CCAViewModel model)
+        {
+            var lea = model.EnrollmentLocationID;
+            if (lea == 0 || lea == 1)
+            {
+                model.CounselorList = new List<SelectListItem>();
+            }
+            else
+            {
+                var user = User.Identity.GetUserId();
+                var schoolID = db.Students.Where(m => m.UserId == user).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
+
+                model.CounselorList = db.Counselors.Where(m => m.SchoolID == schoolID).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
                     Text = f.CounselorFirstName + " " + f.CounselorLastName
                 });
+            }
 
-            ViewBag.CounselorID = new SelectList(counselors,"ID","Name");
-            ViewBag.CourseID = new List<SelectListItem>();
-            ViewBag.CourseCreditID = new List<SelectListItem>();
-   
-            return View();
+            model.ExcessiveFEDReasonList = db.ExcessiveFEDReasons.Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.Reason
+            });
+
+            model.Session = db.Session.Where(x => x.Name != "All" && x.IsActive).Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.Name
+            });
+
+            model.CourseCategory = new List<SelectListItem>();
+
+            model.OnlineCourse = new List<SelectListItem>();
+
+            model.CourseCredit = new List<SelectListItem>();
+
+            return model;
         }
 
         // POST: CCAs/Create
@@ -119,7 +153,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonCode,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments,EnrollmentLocationID")] CCAViewModel ccaVm)
         {
             if (ModelState.IsValid)
             {
@@ -127,29 +161,88 @@ namespace CcaRegistrationDf.Controllers
 
                 CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
 
+                //If private school counselor is not found create a new one.
+                if (ccaVm.EnrollmentLocationID == 2)
+                {
+                    int? counselorId = await db.Counselors.Where(x => x.CounselorEmail == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync();
+
+                    
+                    if (counselorId == null)
+                    {
+                        var counselor = new Counselor()
+                        {
+                            CounselorEmail = ccaVm.CounselorEmail,
+                            CounselorFirstName = ccaVm.CounselorFirstName,
+                            CounselorLastName = ccaVm.CounselorLastName,
+                            CounselorPhoneNumber = ccaVm.CounselorPhoneNumber
+                        };
+
+                        db.Counselors.Add(counselor);
+
+                        cca.CounselorID = db.Counselors.Last().ID;
+                    }
+                }
+
                 cca.ApplicationSubmissionDate = DateTime.Now;
                 cca.UserId = User.Identity.GetUserId();
+                cca.StudentID = await db.Students.Where(x => x.UserId == cca.UserId).Select(x=> x.ID).FirstAsync();
+                
 
                 db.CCAs.Add(cca);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return View("Success");
             }
 
             var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
-
-            ViewBag.CounselorID = new List<SelectListItem>();
-            ViewBag.CourseID = new List<SelectListItem>();
-            ViewBag.CourseCreditID = new List<SelectListItem>();
+            ccaVm = GetSelectLists(ccaVm);
 
             return View(ccaVm);
-     
+
         }
 
-       
+        /// <summary>
+        /// Gets Categories from database using session.
+        /// Check courses that are associated with the session and only return categories
+        /// that have courses in that session.
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns>select list in json format</returns>
+        public async Task<JsonResult> GetCategories(int sessionId)
+        {
+            try
+            {
+                IEnumerable<int>  categorySelected;
+
+                var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
+
+                var selected = await db.Session.Where(x => x.ID == sessionId).Select(x => x.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                // If session is a summer session only show categories that have classes for summer
+                if (selected.ToLower().Contains("sum"))
+                {
+                    categorySelected = courses.Where(x => x.SessionID == sessionId).Select(x => x.CourseCategoryID).Distinct();
+                }
+                else // Show all non summer categories
+                {
+                  categorySelected = courses.Where(x => x.SessionID == sessionId || x.SessionID == 0).Select(x => x.CourseCategoryID).Distinct();
+                }
+
+                var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive ).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name
+                    }); 
+
+                return Json(new SelectList(categoryList, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing request.");
+            }
+
+        }
 
         /// <summary>
         /// Gets course name from database from choice from form using category id.  Course, provider,
@@ -157,19 +250,32 @@ namespace CcaRegistrationDf.Controllers
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns>select list in json format</returns>
-        public async Task<JsonResult> GetCourseNames(int categoryId)
+        public async Task<JsonResult> GetCourseNames(int categoryId, int sessionId)
         {
             try
             {
                 IEnumerable<SelectListItem> courseNameList;
 
-                var courses = await db.Courses.ToListAsync();
+                var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
 
-                courseNameList = courses.Where(x => x.CourseCategory.ID == categoryId && x.IsActive && x.Provider.IsActive && x.Session.IsActive).Select(f => new SelectListItem
+                var selected = await db.Session.Where(x => x.ID == sessionId).Select(x => x.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                if (selected.ToLower().Contains("sum")) // Get summer courses
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.Name + " - " + f.Provider.Name
-                });
+                    courseNameList = courses.Where(x => x.CourseCategory.ID == categoryId && x.IsActive && x.Provider.IsActive && x.Session.IsActive && x.SessionID == sessionId).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name + " - " + f.Provider.Name
+                    });
+                }
+                else // Get non summer courses
+                {
+                    courseNameList = courses.Where(x => x.CourseCategory.ID == categoryId && x.IsActive && x.Provider.IsActive && x.Session.IsActive && (x.SessionID == 0 || x.SessionID == sessionId) ).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name + " - " + f.Provider.Name
+                    });
+                }
 
                 return Json(new SelectList(courseNameList, "Value", "Text"));
             }
@@ -229,24 +335,29 @@ namespace CcaRegistrationDf.Controllers
                 Value = f.ID.ToString(),
                 Text = f.Value
             });
-      
+
+            var setList = creditList.ToList();
+
             if (credits != null)
             {
                 char[] creditArray = credits.ToCharArray();
 
-                for (int j = 0; j < creditOptions.Count() ; j++)
+                for (int j = 0; j < creditOptions.Count(); j++)
                 {
-                    var id = (j+1).ToString();
+
                     if (creditArray[j] == '0')
-                        creditList.Where(m => m.Value == id).Select(m => {m.Disabled = true; return m;});
-                        
+                        setList[j].Disabled = true;
                 }
-                    
             }
+
+            creditList = setList;
 
             return creditList;
         }
+
         // GET: CCAs/Edit/5
+    
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -259,9 +370,9 @@ namespace CcaRegistrationDf.Controllers
                 return HttpNotFound();
             }
             ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", cCA.CounselorID);
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.CourseID);
+            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
             ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
-      
+
             return View(cCA);
         }
 
@@ -270,24 +381,30 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonCode,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel cca)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
         {
+           
             if (ModelState.IsValid)
             {
+                Mapper.CreateMap<CCAViewModel, CCA>();
+
+                CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                 db.Entry(cca).State = EntityState.Modified;
+
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", cca.CounselorID);
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cca.OnlineCourseID);
-            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cca.CourseCreditID);
-            
-            
-            return View(cca);
+
+            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", ccaVm.CounselorID);
+            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
+            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
+
+            return View(ccaVm);
         }
 
         // GET: CCAs/Delete/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

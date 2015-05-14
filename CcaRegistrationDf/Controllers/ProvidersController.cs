@@ -11,6 +11,7 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProvidersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

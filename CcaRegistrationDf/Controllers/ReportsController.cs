@@ -19,6 +19,7 @@ using CcaRegistrationDf.DAL;
 
 namespace CcaRegistrationDf.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ReportsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -37,7 +38,7 @@ namespace CcaRegistrationDf.Controllers
                 
                 report =  Mapper.Map<CCA, ReportViewModel>(cca);
                 report.Category = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).Select(m => m.Name).FirstAsync();
-                report.Course = await db.Courses.Where(m => m.ID == cca.CourseID).Select(m => m.Name).FirstAsync();
+                report.Course = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstAsync();
                 //report.OnlineProvider = await db.OnlineProviders.Where(m)
 
                 

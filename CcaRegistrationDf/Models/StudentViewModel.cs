@@ -30,8 +30,12 @@ namespace CcaRegistrationDf.Models
         [Display(Name = "Student Last Name")]
         public string StudentLastName { get; set; }
 
+        [Display(Name = "Student Number")]
         public Nullable<int> SSID { get; set; }
 
+        [Required]
+        [Display(Name = "Graduation Date")]
+        [DataType(DataType.Date)]
         public Nullable<DateTime> GraduationDate { get; set; }
 
         [Display(Name = "Enrolled School District")]

@@ -12,7 +12,7 @@ namespace CcaRegistrationDf.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            if(User.Identity.IsAuthenticated)
+            if(User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
             {
                 var userId = User.Identity.GetUserId();
                 using(ApplicationDbContext db = new ApplicationDbContext())
@@ -37,7 +37,7 @@ namespace CcaRegistrationDf.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact Information";
 
             return View();
         }

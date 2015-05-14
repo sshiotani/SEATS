@@ -1,4 +1,4 @@
-﻿@model CcaRegistrationDf.Models.StudentCcas.StudentViewModel
+﻿@model CcaRegistrationDf.Models.StudentViewModel
 
 @{
     ViewBag.Title = "Account Setup";
@@ -16,6 +16,8 @@
 
         <h4>Student Information</h4>
         <hr />
+        <p class="text-info">Please enter student first and last name as it appears on their birth certificate.</p>
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <div class="col-md-4">
@@ -39,10 +41,17 @@
                 @Html.DropDownListFor(model => model.EnrollmentLocationID, Model.EnrollmentLocation, "*Enrolled District", new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation", title = "School District currently enrolled. (Primary)" })
                 @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
             </div>
+
+
+
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.EnrollmentLocationSchoolNamesID, Model.EnrollmentLocationSchoolNames, "Current School", new { @class = "form-control dropdown-wrapper", id = "CurrentSchool", title = "School in charge of student records and graduation." })
                 @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
             </div>
+
+            @Html.HiddenFor(x => x.EnrollmentLocationSchoolNamesID, new { id = "schoolId" })
+
+
             <div class="col-md-4 hide" id="HomeSchoolRelease">
                 @Html.LabelFor(model => model.HasHomeSchoolRelease)
                 <div class="col-md-1">
@@ -73,7 +82,7 @@
 
         </div>
 
-        <hr />
+        <br />
 
         <h4>Student Accomodations </h4>
         <hr />
@@ -131,7 +140,7 @@
 
         <br />
 
-      
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -166,29 +175,39 @@
                 changeMonth: true,
                 changeYear: true
             });
-             
+
 
             $('input:radio:first').prop("checked", true).trigger("click");
 
 
             //Enrollment DropdownLists
+            // If District is Home School the EnrollmentLocationSchoolID=-1
+            // If District is Private School the EnrollmentLocationSchoolID=0
             $('#EnrollmentLocation').change(function () {
 
-                var lea = $("#EnrollmentLocation option:selected").text();
+                $('#CurrentSchool').empty();
+                var items = '<option value="">Select School</option>';
+                $('#CurrentSchool').html(items);
 
-                if (lea.toLowerCase().indexOf("home school") >= 0) {
+               // var lea = $("#EnrollmentLocation option:selected").text();
+                var district = $("#EnrollmentLocation option:selected").val();
+                var districtName = $("#EnrollmentLocation option:selected").text();
+
+                if (districtName.toLowerCase().indexOf("home school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").attr('disabled', true);
                     $("#CurrentPrivateSchool").addClass('hide');
                     $("#HomeSchoolRelease").removeClass('hide');
+                    $('#SchoolId').val('-1');
                 }
-                else if (lea.toLowerCase().indexOf("private school") >= 0) {
+                else if (districtName.toLowerCase().indexOf("private school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true);
                     $("#CounselorSection :input").removeAttr('disabled');
                     $("#CurrentPrivateSchool").removeClass('hide');
                     $("#HomeSchoolRelease").addClass('hide');
+                    $('#SchoolId').val("0");
                 }
                 else {
                     $("#ssid").prop('disabled', false).prop('required', true);
@@ -196,39 +215,38 @@
                     $("#CurrentSchool").prop('disabled', false);
                     $("#CurrentPrivateSchool").addClass('hide');
                     $("#HomeSchoolRelease").addClass('hide');
-                }
-
-                $('#CurrentSchool').empty();
-                var items = '<option value="">Select School</option>';
-                $('#CurrentSchool').html(items);
-                var district = $("#EnrollmentLocation option:selected").val();
-                var districtName = $("#EnrollmentLocation option:selected").text();
-                if (district != "") {
 
 
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("GetSchoolNames", "Students")',
-                        data: { district: district },
-                        dataType: 'json',
-                        success: function (schoolList) {
 
-                            $.each(schoolList, function (i, school) {
+                   
+                    if (district != "") {
 
-                                $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
 
-                            });
-                        },
-                        error: function (result) {
-                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
-                        }
-                    });
-                }
-                else {
-                    var items = '<option value="">Select Enrollment Location First</option>';
-                    $('#Course').html(items);
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetSchoolNames", "Students")',
+                            data: { district: district },
+                            dataType: 'json',
+                            success: function (schoolList) {
+
+                                $.each(schoolList, function (i, school) {
+
+                                    $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
+
+                                });
+                            },
+                            error: function (result) {
+                                alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                            }
+                        });
+                    }
+                    else {
+                        var items = '<option value="">Select Enrollment Location First</option>';
+                        $('#Course').html(items);
+                    }
                 }
             });
+
 
             $(".phone").mask("(999) 999-9999");
 

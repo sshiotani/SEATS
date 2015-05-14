@@ -195,6 +195,7 @@
     <Compile Include="Controllers\CounselorsController.cs" />
     <Compile Include="Controllers\CourseCategoriesController.cs" />
     <Compile Include="Controllers\CourseCreditsController.cs" />
+    <Compile Include="Controllers\ExcessiveFEDReasonsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
@@ -224,6 +225,38 @@
     <Compile Include="Migrations\201505121809563_addControllers.Designer.cs">
       <DependentUpon>201505121809563_addControllers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505122100551_removeBudget.cs" />
+    <Compile Include="Migrations\201505122100551_removeBudget.Designer.cs">
+      <DependentUpon>201505122100551_removeBudget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131639225_exessiveFED.cs" />
+    <Compile Include="Migrations\201505131639225_exessiveFED.Designer.cs">
+      <DependentUpon>201505131639225_exessiveFED.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131719489_CCA.cs" />
+    <Compile Include="Migrations\201505131719489_CCA.Designer.cs">
+      <DependentUpon>201505131719489_CCA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131747505_CCA1.cs" />
+    <Compile Include="Migrations\201505131747505_CCA1.Designer.cs">
+      <DependentUpon>201505131747505_CCA1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505141409156_counselor.cs" />
+    <Compile Include="Migrations\201505141409156_counselor.Designer.cs">
+      <DependentUpon>201505141409156_counselor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505141539183_counselor1.cs" />
+    <Compile Include="Migrations\201505141539183_counselor1.Designer.cs">
+      <DependentUpon>201505141539183_counselor1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505141642246_CCA2.cs" />
+    <Compile Include="Migrations\201505141642246_CCA2.Designer.cs">
+      <DependentUpon>201505141642246_CCA2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505141657543_EnrollmentLocation.cs" />
+    <Compile Include="Migrations\201505141657543_EnrollmentLocation.Designer.cs">
+      <DependentUpon>201505141657543_EnrollmentLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CactusInstitution.cs">
@@ -232,6 +265,7 @@
     <Compile Include="Models\CactusSchool.cs">
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CounselorViewModel.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
@@ -259,6 +293,7 @@
     <Compile Include="Models\MainFormViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\StudentCcas\CourseCredit.cs" />
+    <Compile Include="Models\StudentCcas\ExcessiveFEDReason.cs" />
     <Compile Include="Models\StudentCcas\OnlineCourse.cs" />
     <Compile Include="Models\StudentCcas\Parent.cs" />
     <Compile Include="Models\StudentCcas\Primary.cs" />
@@ -585,6 +620,18 @@
     <Content Include="Views\Primaries\Details.cshtml" />
     <Content Include="Views\Primaries\Edit.cshtml" />
     <Content Include="Views\Primaries\Index.cshtml" />
+    <Content Include="Views\CourseCredits\Index.cshtml" />
+    <Content Include="Views\CourseCredits\Details.cshtml" />
+    <Content Include="Views\CourseCredits\Create.cshtml" />
+    <Content Include="Views\CourseCredits\Edit.cshtml" />
+    <Content Include="Views\CourseCredits\Delete.cshtml" />
+    <Content Include="Views\ExcessiveFEDReasons\Create.cshtml" />
+    <Content Include="Views\ExcessiveFEDReasons\Delete.cshtml" />
+    <Content Include="Views\ExcessiveFEDReasons\Details.cshtml" />
+    <Content Include="Views\ExcessiveFEDReasons\Edit.cshtml" />
+    <Content Include="Views\ExcessiveFEDReasons\Index.cshtml" />
+    <Content Include="Views\Counselors\UpdateSchoolIds.cshtml" />
+    <Content Include="Views\CCAs\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -608,6 +655,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505121809563_addControllers.resx">
       <DependentUpon>201505121809563_addControllers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505122100551_removeBudget.resx">
+      <DependentUpon>201505122100551_removeBudget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131639225_exessiveFED.resx">
+      <DependentUpon>201505131639225_exessiveFED.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131719489_CCA.resx">
+      <DependentUpon>201505131719489_CCA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131747505_CCA1.resx">
+      <DependentUpon>201505131747505_CCA1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505141409156_counselor.resx">
+      <DependentUpon>201505141409156_counselor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505141539183_counselor1.resx">
+      <DependentUpon>201505141539183_counselor1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505141642246_CCA2.resx">
+      <DependentUpon>201505141642246_CCA2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505141657543_EnrollmentLocation.resx">
+      <DependentUpon>201505141657543_EnrollmentLocation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

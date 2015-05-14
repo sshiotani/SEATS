@@ -43,6 +43,8 @@ namespace CcaRegistrationDf.Models
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
 
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
+
         
     }
 

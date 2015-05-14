@@ -21,7 +21,7 @@ namespace CcaRegistrationDf.Models
         public Nullable<int> StudentGradeLevel { get; set; }
         public bool HasExcessiveFED { get; set; }
         public string ExcessiveFEDExplanation { get; set; }
-        public Nullable<int> ExcessiveFEDReasonCode { get; set; }
+        public Nullable<int> ExcessiveFEDReasonID { get; set; }
         public string Comments { get; set; }
 
         //Counselor section
@@ -30,8 +30,11 @@ namespace CcaRegistrationDf.Models
         public bool IsCounselorSigned { get; set; }
 
         //Primary Section
-        public int PrimaryID { get; set; }
+        public Nullable<int> EnrollmentLocationID { get; set; }
+
+        public Nullable<int> PrimaryID { get; set; }
         public virtual Primary Primary { get; set; }
+        
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public string PrimaryLEAReasonRejectingCCA { get; set; }
@@ -39,6 +42,10 @@ namespace CcaRegistrationDf.Models
         //Provider Section
         public int ProviderID { get; set; }
         public virtual Provider Provider { get; set; }
+        [Display(Name = "Teacher Cactus ID")]
+        public Nullable<int> TeacherCactusID { get; set; }
+        public string TeacherFirstName { get; set; }
+        public string TeacherLastName { get; set; }
         public string CompletionStatus { get; set; }
         public Nullable<System.DateTime> CourseBegin { get; set; }
         public Nullable<System.DateTime> CourseStartDate { get; set; }
@@ -55,18 +62,19 @@ namespace CcaRegistrationDf.Models
         public string ProviderReasonRejection { get; set; }
 
         //Course
-        public int CourseID { get; set; }
-        public virtual OnlineCourse Course { get; set; }
-        public Nullable<int> CourseCategoryID { get; set; }
-
+        public int OnlineCourseID { get; set; }
+        public virtual OnlineCourse OnlineCourse { get; set; }
+        public int CourseCategoryID { get; set; }
+        public virtual CourseCategory CourseCategory { get; set; }
         //public Nullable<decimal> CourseFee { get; set; }
         //public Nullable<int> CourseNameID { get; set; }
-        public Nullable<int> CourseCreditID { get; set; }
+        public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
         public Nullable<int> CourseName2ndSemesterID { get; set; }
         public bool IsCourseConsistentWithStudentSEOP { get; set; }      
         //public Nullable<int> PricingTier { get; set; }
         public int SessionID { get; set; }
+        public Session Session { get; set; }
 
        
 
