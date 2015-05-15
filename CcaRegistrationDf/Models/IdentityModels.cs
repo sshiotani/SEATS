@@ -45,6 +45,8 @@ namespace CcaRegistrationDf.Models
 
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
 
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentBudget> StudentBudgets { get; set; }
+
         
     }
 

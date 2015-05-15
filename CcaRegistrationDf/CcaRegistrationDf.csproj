@@ -110,6 +110,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -202,10 +203,16 @@
     <Compile Include="Controllers\ParentsController.cs" />
     <Compile Include="Controllers\PrimariesController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
+    <Compile Include="Models\ReportContainer.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
+    <Compile Include="Controllers\StudentBudgetsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="DAL\SoepContext.cs" />
+    <Compile Include="Migrations\201505151427223_budget.cs" />
+    <Compile Include="Migrations\201505151427223_budget.Designer.cs">
+      <DependentUpon>201505151427223_budget.cs</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -304,14 +311,41 @@
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\StudentStatusViewModel.cs" />
+    <Compile Include="Monthly.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Monthly.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="MonthlyReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MonthlyReport.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Students.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Students.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618.mdf" />
+    <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618_log.ldf">
+      <DependentUpon>aspnet-CcaRegistrationDf-20150320080618.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\css\jquery-ui.css" />
     <Content Include="Content\css\jquery.bootgrid.css" />
     <Content Include="Content\css\jquery.bootgrid.min.css" />
     <Content Include="Content\css\Site.css" />
+    <Content Include="Content\images\excel-icon-sm.png" />
+    <Content Include="Content\images\img-icon-sm.png" />
+    <Content Include="Content\images\pdf-icon-sm.png" />
     <Content Include="Content\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_15_cd0a0a_40x100.png" />
@@ -354,6 +388,7 @@
     <Content Include="Content\images\ui-icons_f7a50d_256x240.png" />
     <Content Include="Content\images\ui-icons_fcd113_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\images\word-icon-sm.png" />
     <Content Include="Content\img\bg2.jpg" />
     <Content Include="Content\img\bg3-lg.jpg" />
     <Content Include="Content\img\bg3.jpg" />
@@ -510,6 +545,28 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
+    <Content Include="Monthly.xsc">
+      <DependentUpon>Monthly.xsd</DependentUpon>
+    </Content>
+    <None Include="Monthly.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Monthly.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Monthly.xss">
+      <DependentUpon>Monthly.xsd</DependentUpon>
+    </Content>
+    <Content Include="MonthlyReport.xsc">
+      <DependentUpon>MonthlyReport.xsd</DependentUpon>
+    </Content>
+    <None Include="MonthlyReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MonthlyReport.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="MonthlyReport.xss">
+      <DependentUpon>MonthlyReport.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -632,10 +689,35 @@
     <Content Include="Views\ExcessiveFEDReasons\Index.cshtml" />
     <Content Include="Views\Counselors\UpdateSchoolIds.cshtml" />
     <Content Include="Views\CCAs\Success.cshtml" />
+    <Content Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsc">
+      <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="Students.xsc">
+      <DependentUpon>Students.xsd</DependentUpon>
+    </Content>
+    <None Include="Students.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Students.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Students.xss">
+      <DependentUpon>Students.xsd</DependentUpon>
+    </Content>
+    <Content Include="Views\StudentBudgets\Create.cshtml" />
+    <Content Include="Views\StudentBudgets\Delete.cshtml" />
+    <Content Include="Views\StudentBudgets\Details.cshtml" />
+    <Content Include="Views\StudentBudgets\Edit.cshtml" />
+    <Content Include="Views\StudentBudgets\Index.cshtml" />
+    <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xss">
+      <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
+    </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
@@ -680,6 +762,10 @@
     <EmbeddedResource Include="Migrations\201505141657543_EnrollmentLocation.resx">
       <DependentUpon>201505141657543_EnrollmentLocation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505151427223_budget.resx">
+      <DependentUpon>201505151427223_budget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
