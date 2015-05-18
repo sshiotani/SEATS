@@ -31,7 +31,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: Reports
         public async Task<ActionResult> Index()
         {
-            List<ReportViewModel> reports =  await GetReport();
+            List<ReportViewModel> reports = await GetReport();
 
             return View(reports);
         }
@@ -39,23 +39,35 @@ namespace CcaRegistrationDf.Controllers
         private async Task<List<ReportViewModel>> GetReport()
         {
             var ccas = await db.CCAs.ToListAsync();
-
+            CactusEntities cactus = new CactusEntities();
             List<ReportViewModel> report = new List<ReportViewModel>();
 
-            foreach( var cca in ccas){
+            foreach (var cca in ccas)
+            {
 
                 ReportViewModel line = new ReportViewModel();
 
                 line.StudentFirstName = cca.Student.StudentFirstName;
                 line.StudentLastName = cca.Student.StudentLastName;
                 line.SSID = cca.Student.SSID.ToString();
-                line.CourseCredit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync();
+
+
+                line.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                if (cca.EnrollmentLocationID == 1)
+                    line.EnrollmentLocation = "HOME SCHOOL";
+                else if (cca.EnrollmentLocationID == 2)
+                    line.EnrollmentLocation = "PRIVATE SCHOOL";
+                else
+                    line.EnrollmentLocation = await cactus.CactusInstitutions.Where(m => m.DistrictID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                line.CourseCredit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync().ConfigureAwait(false);
                 line.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
                 line.PriorDisbursementProvider = cca.PriorDisbursementProvider;
                 line.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
 
                 int? studentBudgetId = await db.Students.Where(m => m.ID == cca.StudentID).Select(m => m.StudentBudgetID).FirstOrDefaultAsync();
-                if(studentBudgetId != null)
+                if (studentBudgetId != null)
                 {
                     var now = DateTime.Now;
                     var month = now.Month;
@@ -73,22 +85,22 @@ namespace CcaRegistrationDf.Controllers
                 line.OnlineCourse = cca.OnlineCourse.Name;
 
                 report.Add(line);
- 
+
             }
 
-               
 
-                //report.Credit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).FirstAsync();
 
-                //report.CourseCategory = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync();
-                //report.OnlineCourse = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).FirstAsync();
-                //report.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync();
+            //report.Credit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).FirstAsync();
 
-                //report.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
-                //report.PriorDisbursementProvider = cca.PriorDisbursementProvider;
-                //report.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
+            //report.Name = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync();
+            //report.Name = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).FirstAsync();
+            //report.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync();
 
-             
+            //report.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
+            //report.PriorDisbursementProvider = cca.PriorDisbursementProvider;
+            //report.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
+
+
 
             return report;
         }
@@ -96,8 +108,8 @@ namespace CcaRegistrationDf.Controllers
         private async Task<ReportContainer> MakeReport()
         {
             var ccas = await db.CCAs.ToListAsync();
-           CactusEntities cactus = new CactusEntities();
-                
+            CactusEntities cactus = new CactusEntities();
+
             ReportContainer report = new ReportContainer();
 
             foreach (var cca in ccas)
@@ -109,15 +121,20 @@ namespace CcaRegistrationDf.Controllers
                 report.StudentReport.Add(student);
 
                 var primary = new PrimaryReport();
-                primary.Name = await cactus.CactusInstitutions.Where(m => m.DistrictID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync();
+                if (cca.EnrollmentLocationID == 1)
+                    primary.Name = "HOME SCHOOL";
+                else if (cca.EnrollmentLocationID == 2)
+                    primary.Name = "PRIVATE SCHOOL";
+                else
+                    primary.Name = await cactus.CactusInstitutions.Where(m => m.DistrictID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.PrimaryReport.Add(primary);
 
                 var provider = new ProviderReport();
-                provider.Name = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync();
+                provider.Name = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.ProviderReport.Add(provider);
-                
+
                 var credit = new CreditReport();
-                credit.Value = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync();
+                credit.Value = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.CreditReport.Add(credit);
 
                 var budget = new BudgetReport();
@@ -128,31 +145,29 @@ namespace CcaRegistrationDf.Controllers
 
                 var studentBr = new StudentBudgetReport();
 
-                int? studentBudgetId = await db.Students.Where(m => m.ID == cca.StudentID).Select(m => m.StudentBudgetID).FirstOrDefaultAsync();
+                int? studentBudgetId = await db.Students.Where(m => m.ID == cca.StudentID).Select(m => m.StudentBudgetID).FirstOrDefaultAsync().ConfigureAwait(false);
                 if (studentBudgetId != null)
                 {
                     var now = DateTime.Now;
                     var month = now.Month;
                     var year = now.Year;
 
-                    var studentBudget = db.StudentBudgets.Where(m => m.ID == studentBudgetId && m.Month == month && m.Year == year).FirstOrDefault();
+                    var studentBudget = await db.StudentBudgets.Where(m => m.ID == studentBudgetId && m.Month == month && m.Year == year).FirstOrDefaultAsync().ConfigureAwait(false);
                     if (studentBudget != null)
                     {
                         studentBr.OffSet = studentBudget.OffSet;
                         studentBr.Distribution = studentBudget.Distribution;
                     }
-                    
+
                 }
                 report.StudentBudgetReport.Add(studentBr);
 
                 var category = new CategoryReport();
-                category.CourseCategory = cca.CourseCategory.Name;
+                category.Name = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.CategoryReport.Add(category);
 
                 var course = new CourseReport();
-                course.OnlineCourse = cca.OnlineCourse.Name;
-
-
+                course.Name = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.CourseReport.Add(course);
 
             }
@@ -175,7 +190,7 @@ namespace CcaRegistrationDf.Controllers
             }
 
             ReportContainer report = await MakeReport();
-            
+
             ReportDataSource rd1 = new ReportDataSource("StudentData", report.StudentReport);
             lr.DataSources.Add(rd1);
             ReportDataSource rd2 = new ReportDataSource("ReportMonthly", report.BudgetReport);

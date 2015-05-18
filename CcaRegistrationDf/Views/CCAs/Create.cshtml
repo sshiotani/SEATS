@@ -70,9 +70,9 @@
         <div class="form-group">
 
             <div class="col-md-5">
-                
+
                 @Html.DropDownListFor(model => model.ExcessiveFEDReasonID, Model.ExcessiveFEDReasonList, "Reason for excessive credit", new { @class = "form-control hide", id = "ExcessiveCreditReason", required = false })
-                
+
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDReasonID, "", new { @class = "text-danger" })
             </div>
 
@@ -90,9 +90,9 @@
         <hr />
         <p class="text-info">Please choose your school counselor.</p>
 
-        @* Drop Down List for counselor Goes here *@
+       
 
-        @Html.HiddenFor(x => x.EnrollmentLocationID, new {id="EnrollmentLocation" })
+        @Html.HiddenFor(x => x.EnrollmentLocationID, new {id="EnrollmentLocationId" })
 
         <div class="form-group hide" id="CounselorCactusID">
             @Html.LabelFor(model => model.CounselorCactusID, htmlAttributes: new { @class = "control-label col-md-3" })
@@ -101,43 +101,46 @@
                 @Html.ValidationMessageFor(model => model.CounselorCactusID, "", new { @class = "text-danger" })
             </div>
         </div>
-        
-            <div class="form-group hide" id="CounselorPrivate">
-
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.CounselorFirstName, new { htmlAttributes = new { @class = "form-control", title = "Public and Charter School only", placeholder = "Counselor First Name" } })
-                    @Html.ValidationMessageFor(model => model.CounselorFirstName, "", new { @class = "text-danger" })
-                </div>
 
 
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.CounselorLastName, new { htmlAttributes = new { @class = "form-control", title = "Public and Charter School only", placeholder = "Counselor Last Name" } })
-                    @Html.ValidationMessageFor(model => model.CounselorLastName, "", new { @class = "text-danger" })
-                </div>
 
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.CounselorEmail, new { htmlAttributes = new { @class = "form-control", title = "Public and Charter School only", placeholder = "Counselor Email" } })
-                    @Html.ValidationMessageFor(model => model.CounselorEmail, "", new { @class = "text-danger" })
-                </div>
 
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "phone form-control", title = "Public and Charter School only", placeholder = "Counselor Phone" } })
-                    @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
-                </div>
+        @Html.Display("No Counselor information necessary for Home School.", new { @class ="text-info hide", id ="NoCounselor"})
+
+        @* Drop Down List for counselor Goes here *@
+
+        <div class="form-group hide" id="CounselorPublic">
+
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Counselors", new { @class = "form-control", id = "Counselors", required = false })
+
+                @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group hide" id="CounselorPrivate">
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.CounselorFirstName, new { htmlAttributes = new { @class = "form-control", title = "First Name", placeholder = "Counselor First Name"}, id="CounselorFirstName"  })
+                @Html.ValidationMessageFor(model => model.CounselorFirstName, "", new { @class = "text-danger" })
             </div>
 
-       
-            @Html.Display("No Counselor information necessary for Home School.", new { @class ="text-info hide", id ="NoCounselor"})
-       
-            <div class="form-group hide" id="CounselorPublic">
-               
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Counselors at your school", new { @class = "form-control", id = "Counselor", required = false })
- 
-                    @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
-                </div>
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.CounselorLastName, new { htmlAttributes = new { @class = "form-control", title = "Last Name", placeholder = "Counselor Last Name" }, id="CounselorLastName" } )
+                @Html.ValidationMessageFor(model => model.CounselorLastName, "", new { @class = "text-danger" })
             </div>
-       
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.CounselorEmail, new { htmlAttributes = new { @class = "form-control", title = "Email", placeholder = "Counselor Email", id="CounselorEmail" } })
+                @Html.ValidationMessageFor(model => model.CounselorEmail, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "phone form-control", title = "Phone", placeholder = "Counselor Phone", id="CounselorPhone" } })
+                @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
         <br />
@@ -185,7 +188,7 @@
         @Html.HiddenFor(x => x.ProviderID, new { id = "ProviderID" })
 
         <div class="form-group">
-            
+
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
 
@@ -238,9 +241,6 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
 
@@ -249,22 +249,19 @@
 
     <script>
         $(function () {
-            var location = $('#EnrollmentLocation').val();
-            if (location == 1)
-            {
+            var location = $('#EnrollmentLocationId').val();
+            if (location == 1) {
                 $("#CounselorPrivate").addClass('hide');
                 $("#CounselorPublic").addClass('hide');
                 $("#NoCounselor").removeClass('hide');
             }
-            else if (location == 2)
-            {
-                
+            else if (location == 2) {
+
                 $("#CounselorPrivate").removeClass('hide');
                 $("#CounselorPublic").addClass('hide');
                 $("#NoCounselor").addClass('hide');
             }
-            else
-            {
+            else {
                 $("#CounselorPrivate").addClass('hide');
                 $("#CounselorPublic").removeClass('hide');
                 $("#NoCounselor").addClass('hide');
@@ -305,11 +302,38 @@
 
             $('input:radio:first').prop("checked", true).trigger("click");
 
+            // Counselor DropDownLists
+            // Check counselor choice to see if input fields are needed
+            $('#Counselors').change(function () {
+
+                var counselorId = $("#Counselors option:selected").val();
+                var counselorName = $("#Counselors option:selected").text();
+
+                if (counselorId == "0") {
+
+                    $('#CounselorPrivate').removeClass('hide');
+                    $('#CounselorFirstName').prop('required', true);
+                    $('#CounselorLastName').prop('required', true);
+                    $('#CounselorEmail').prop('required', true);
+                    $('#CounselorPhone').prop('required', true);
+                }
+                else {
+
+                    $('#CounselorPrivate').addClass('hide');
+                   
+                    $('#CounselorFirstName').prop('required', false);
+                    $('#CounselorLastName').prop('required', false);
+                    $('#CounselorEmail').prop('required', false);
+                    $('#CounselorPhone').prop('required', false);
+
+                }
+            });
+
             // Category DropDownLists
             //get Category list on changing of session dropdown list
             $('#Session').change(function () {
-                $("#Category").empty();
-                $("#Course").empty()
+                $("#Category, #Course").empty();
+
                 $('#Provider,#Credit,#CreditOptions,#Code,#CourseName,#Note').addClass('hide');
 
 
@@ -320,7 +344,7 @@
 
                 if (sessionId != "") {
 
-                   
+
                     $.ajax({
                         type: "POST",
                         url: '@Url.Action("GetCategories", "CCAs")',
@@ -348,7 +372,7 @@
                 }
             });
 
-       
+
 
             // Course DropDownLists
             //get course list on changing of category dropdown list
@@ -365,9 +389,9 @@
                 var session = $("#Session option:selected").val();
                 var sessionName = $("#Session option:selected").text();
 
-               
-                
-               
+
+
+
 
                 if (category != "" && session != "") {
 
@@ -438,7 +462,7 @@
                         dataType: 'json',
                         success: function (result) {
                             $("#CreditOptions").removeClass('hide');
-                            
+
                             $.each(result.CreditChoices, function (i, value) {
                                 if (value.Disabled != true) {
                                     $('#CreditOptions').append("<option value='" + value.Value + "'>" + value.Text + "</option>");
@@ -544,7 +568,7 @@
         (1) During any academic year, total enrolled credits may exceed a "full day equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.
     </p>
     <p>
-        (2) During the 2014-15 school year students are limited to 4.0 credits, and during the 2015-16 school year this rises to 5 credits; students may request more credits if this better meets the academic goals of the student.
+        (2) For current enrollment credit limits please visit <a href="http://www.schools.utah.gov/edonline/" target="_blank">credit information</a>.
     </p>
     <p>
         (3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.

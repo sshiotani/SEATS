@@ -5,6 +5,13 @@ using System.Web;
 
 namespace CcaRegistrationDf.Model
 {
+    /// <summary>
+    /// This class is neccessary to populate all the lists used for the DataSets in the report
+    /// generator in ReportsController.  The report has multiple tables that provide data and
+    /// each table needs a dataset list.  May look into creating a custom report view or table to 
+    /// provide a simpler data container.
+    /// 
+    /// </summary>
     public class ReportContainer
     {
         public ReportContainer()
@@ -68,12 +75,12 @@ namespace CcaRegistrationDf.Model
 
     public  class CategoryReport
     {
-        public string CourseCategory { get; set; }
+        public string Name { get; set; }
     }
 
     public class CourseReport
     {
-        public string OnlineCourse { get; set; }
+        public string Name { get; set; }
     }
 
 }

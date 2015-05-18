@@ -179,7 +179,7 @@ namespace CcaRegistrationDf.Controllers
                     IEnumerable<SelectListItem> schoolNameList;
                     var schoolList = await schools.CactusSchools.ToListAsync();
                     schoolList.RemoveAll(m => m.name == null);
-                    schoolNameList = schoolList.Where(m => m.district == district && !m.name.Contains("DISTRICT")).OrderBy(m => m.name).Distinct().Select(f => new SelectListItem
+                    schoolNameList = schoolList.Where(m => m.district == district && !m.name.ToLower().Contains("district")).OrderBy(m => m.name).Distinct().Select(f => new SelectListItem
                     {
                         Value = f.id.ToString(),
                         Text = f.name
