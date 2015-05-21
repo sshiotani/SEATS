@@ -11,18 +11,20 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ProvidersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Providers
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.Providers.ToListAsync());
         }
 
         // GET: Providers/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,8 +54,13 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
+                //var name = User.Identity.Name;
+                //provider.UserId = await db.Users.Where(m => m.UserName == name).Select(m => m.Id).FirstOrDefaultAsync();
                 db.Providers.Add(provider);
-                await db.SaveChangesAsync();
+                var count = await db.SaveChangesAsync();
+
+               
+
                 return RedirectToAction("Index");
             }
 
@@ -61,6 +68,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Providers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,6 +88,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "ID,Name,DistrictNumber,IsActive,ProviderFirstName,ProviderLastName,ProviderPhoneNumber,ProviderEmail,ProviderFax")] Provider provider)
         {
             if (ModelState.IsValid)
@@ -92,6 +101,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Providers/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -109,6 +119,7 @@ namespace CcaRegistrationDf.Controllers
         // POST: Providers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Provider provider = await db.Providers.FindAsync(id);

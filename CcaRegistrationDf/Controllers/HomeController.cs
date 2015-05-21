@@ -11,6 +11,7 @@ namespace CcaRegistrationDf.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         /// <summary>
         /// Checks user setup status, if user exists in the student tables the account is
         /// setup.  
@@ -22,13 +23,15 @@ namespace CcaRegistrationDf.Controllers
             {
                 if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                 {
+
                     var userId = User.Identity.GetUserId();
                     using (ApplicationDbContext db = new ApplicationDbContext())
                     {
-                        var setup = await db.Students.Where(m => m.UserId == userId).FirstOrDefaultAsync();
-                        if (setup == null)
+
+                        var setup = await db.Users.Where(m => m.Id == userId).Select(m => m.IsSetup).FirstOrDefaultAsync();
+                        if (!setup)
                         {
-                            return RedirectToAction("Index", "Students");
+                            return RedirectToAction("UserType");
                         }
                     }
                 }
@@ -40,6 +43,57 @@ namespace CcaRegistrationDf.Controllers
                 ViewBag.Message = "Error in account verification. Error: " + ex.Message;
                 return View("Error");
             }
+        }
+
+        //Get
+        public ActionResult UserType()
+        {
+            try
+            {
+
+                var model = new UserTypeViewModel();
+                model.UserType = db.Locations.Select(f => new SelectListItem()
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Unable to get User Types. Error:" + ex.Message;
+            }
+            return View("Error");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserType(UserTypeViewModel userType)
+        {
+            var type = await db.Locations.Where(m =>m.ID == userType.UserTypeID).FirstOrDefaultAsync();
+            switch (type.Name)
+            {
+                case "Provider":
+                    return RedirectToAction("Create", "ProviderUsers");
+                case "Primary":
+                    return RedirectToAction("Create", "PrimaryUsers");
+                case "Counselor":
+                    return RedirectToAction("Create", "Counselors");
+                case "Student/Parent":
+                    return RedirectToAction("Create", "Students");
+                default:
+                    break;
+            }
+
+            userType.UserType = db.Locations.Select(f => new SelectListItem()
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
+
+            return View(userType);
         }
 
         public ActionResult About()

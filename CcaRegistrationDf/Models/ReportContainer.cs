@@ -24,7 +24,7 @@ namespace CcaRegistrationDf.Model
             CourseReport = new List<CourseReport>();
             ProviderReport = new List<ProviderReport>();
             PrimaryReport = new List<PrimaryReport>();
-
+            CourseFeeReport = new List<CourseFeeReport>();
         }
 
         public List<StudentReport> StudentReport { get; set; }
@@ -35,6 +35,7 @@ namespace CcaRegistrationDf.Model
         public List<StudentBudgetReport> StudentBudgetReport { get; set; }
         public List<CategoryReport> CategoryReport { get; set; }
         public List<CourseReport> CourseReport { get; set; }
+        public List<CourseFeeReport> CourseFeeReport { get; set; }
     }
 
     public class StudentReport
@@ -83,4 +84,8 @@ namespace CcaRegistrationDf.Model
         public string Name { get; set; }
     }
 
+    public class CourseFeeReport
+    {
+        public decimal Fee { get; set; }
+    }
 }

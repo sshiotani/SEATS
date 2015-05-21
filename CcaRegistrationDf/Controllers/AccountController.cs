@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +8,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CcaRegistrationDf.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Net;
+
+
+
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -23,13 +26,13 @@ namespace CcaRegistrationDf.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
 
-       
+
 
         public ApplicationSignInManager SignInManager
         {
@@ -37,9 +40,9 @@ namespace CcaRegistrationDf.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -55,7 +58,7 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-       
+
 
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
@@ -98,7 +101,7 @@ namespace CcaRegistrationDf.Controllers
                 var user = Db.Users.First(u => u.Id == model.Id);
 
                 // Update the user data:
-             
+
                 user.Email = model.Email;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 await Db.SaveChangesAsync();
@@ -185,7 +188,41 @@ namespace CcaRegistrationDf.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateRole()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateRole(string role)
+        {
+
+            var idManager = new IdentityManager();
+            try
+            {
+                if (role != null)
+                {
+                    idManager.CreateRole(role);
+                }
+
+
+                return RedirectToAction("index");
+            }
+            catch( Exception ex)
+            {
+                ViewBag.Message = "Unable to create role. Error:" + ex.Message;
+                return View("Error");
+            }
+
+
+          
+
+        }
+
+       
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -272,7 +309,7 @@ namespace CcaRegistrationDf.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -307,8 +344,8 @@ namespace CcaRegistrationDf.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
 
@@ -574,6 +611,32 @@ namespace CcaRegistrationDf.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        public async Task<ActionResult> EmailAdminToConfirm()
+        {
+            try
+            {
+                var userType = TempData["UserType"] as string;
+                var db = new ApplicationDbContext();
+                var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync();
+                var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync();
+
+                var userId = User.Identity.GetUserId();
+
+                var user = await db.Users.Where(m => m.Id == userId).FirstOrDefaultAsync();
+
+                //var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+                await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
+
+                return View();
+            }
+            catch
+            {
+                ViewBag.Message("Unable to send email to Program Administrator.  Please contact us to confirm your account.");
+                return View("Error");
+            }
         }
 
         #region Helpers

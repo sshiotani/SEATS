@@ -196,19 +196,69 @@
     <Compile Include="Controllers\CounselorsController.cs" />
     <Compile Include="Controllers\CourseCategoriesController.cs" />
     <Compile Include="Controllers\CourseCreditsController.cs" />
+    <Compile Include="Controllers\CourseFeesController.cs" />
     <Compile Include="Controllers\ExcessiveFEDReasonsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
-    <Compile Include="Controllers\PrimariesController.cs" />
+    <Compile Include="Controllers\PrimaryUsersController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
+    <Compile Include="Controllers\ProviderUsersController.cs" />
+    <Compile Include="Controllers\UserProfilesController.cs" />
+    <Compile Include="Migrations\201505191301485_courseFee.cs" />
+    <Compile Include="Migrations\201505191301485_courseFee.Designer.cs">
+      <DependentUpon>201505191301485_courseFee.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191423424_role.cs" />
+    <Compile Include="Migrations\201505191423424_role.Designer.cs">
+      <DependentUpon>201505191423424_role.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191442449_userIds.cs" />
+    <Compile Include="Migrations\201505191442449_userIds.Designer.cs">
+      <DependentUpon>201505191442449_userIds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191638100_locations.cs" />
+    <Compile Include="Migrations\201505191638100_locations.Designer.cs">
+      <DependentUpon>201505191638100_locations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505192026176_UserProfile.cs" />
+    <Compile Include="Migrations\201505192026176_UserProfile.Designer.cs">
+      <DependentUpon>201505192026176_UserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505201405049_xtendUser.cs" />
+    <Compile Include="Migrations\201505201405049_xtendUser.Designer.cs">
+      <DependentUpon>201505201405049_xtendUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505201731273_addPrimProvUsers.cs" />
+    <Compile Include="Migrations\201505201731273_addPrimProvUsers.Designer.cs">
+      <DependentUpon>201505201731273_addPrimProvUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505201740011_removeSig.cs" />
+    <Compile Include="Migrations\201505201740011_removeSig.Designer.cs">
+      <DependentUpon>201505201740011_removeSig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505201812279_addSig.cs" />
+    <Compile Include="Migrations\201505201812279_addSig.Designer.cs">
+      <DependentUpon>201505201812279_addSig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505201859246_primaryEnrollment.cs" />
+    <Compile Include="Migrations\201505201859246_primaryEnrollment.Designer.cs">
+      <DependentUpon>201505201859246_primaryEnrollment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505202034079_primaryEnrollment1.cs" />
+    <Compile Include="Migrations\201505202034079_primaryEnrollment1.Designer.cs">
+      <DependentUpon>201505202034079_primaryEnrollment1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\PrimaryCcaViewModel.cs" />
+    <Compile Include="Models\ProviderCcaViewModel.cs" />
     <Compile Include="Models\ReportContainer.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
     <Compile Include="Controllers\StudentBudgetsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
-    <Compile Include="DAL\SoepContext.cs" />
     <Compile Include="Migrations\201505151427223_budget.cs" />
     <Compile Include="Migrations\201505151427223_budget.Designer.cs">
       <DependentUpon>201505151427223_budget.cs</DependentUpon>
@@ -300,26 +350,29 @@
     <Compile Include="Models\MainFormViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\StudentCcas\CourseCredit.cs" />
+    <Compile Include="Models\StudentCcas\CourseFee.cs" />
     <Compile Include="Models\StudentCcas\ExcessiveFEDReason.cs" />
     <Compile Include="Models\StudentCcas\OnlineCourse.cs" />
     <Compile Include="Models\StudentCcas\Parent.cs" />
     <Compile Include="Models\StudentCcas\Primary.cs" />
+    <Compile Include="Models\StudentCcas\PrimaryUser.cs" />
     <Compile Include="Models\StudentCcas\Provider.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
+    <Compile Include="Models\StudentCcas\ProviderUser.cs" />
     <Compile Include="Models\StudentCcas\Session.cs" />
     <Compile Include="Models\StudentCcas\Student.cs" />
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
+    <Compile Include="Models\StudentCcas\UserProfile.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\StudentStatusViewModel.cs" />
+    <Compile Include="Models\UserLocationViewModel.cs" />
+    <Compile Include="Models\UserProfileViewModel.cs" />
+    <Compile Include="Models\UserTypeViewModel.cs" />
+    <Compile Include="Models\UsoeCcaViewModel.cs" />
     <Compile Include="Monthly.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Monthly.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="MonthlyReport.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MonthlyReport.xsd</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -556,17 +609,6 @@
     <Content Include="Monthly.xss">
       <DependentUpon>Monthly.xsd</DependentUpon>
     </Content>
-    <Content Include="MonthlyReport.xsc">
-      <DependentUpon>MonthlyReport.xsd</DependentUpon>
-    </Content>
-    <None Include="MonthlyReport.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>MonthlyReport.Designer.cs</LastGenOutput>
-    </None>
-    <Content Include="MonthlyReport.xss">
-      <DependentUpon>MonthlyReport.xsd</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -590,7 +632,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -662,21 +706,11 @@
     <Content Include="Views\Providers\Details.cshtml" />
     <Content Include="Views\Providers\Edit.cshtml" />
     <Content Include="Views\Providers\Index.cshtml" />
-    <Content Include="Views\Counselors\Create.cshtml" />
-    <Content Include="Views\Counselors\Delete.cshtml" />
-    <Content Include="Views\Counselors\Details.cshtml" />
-    <Content Include="Views\Counselors\Edit.cshtml" />
-    <Content Include="Views\Counselors\Index.cshtml" />
     <Content Include="Views\OnlineCourses\Create.cshtml" />
     <Content Include="Views\OnlineCourses\Delete.cshtml" />
     <Content Include="Views\OnlineCourses\Details.cshtml" />
     <Content Include="Views\OnlineCourses\Edit.cshtml" />
     <Content Include="Views\OnlineCourses\Index.cshtml" />
-    <Content Include="Views\Primaries\Create.cshtml" />
-    <Content Include="Views\Primaries\Delete.cshtml" />
-    <Content Include="Views\Primaries\Details.cshtml" />
-    <Content Include="Views\Primaries\Edit.cshtml" />
-    <Content Include="Views\Primaries\Index.cshtml" />
     <Content Include="Views\CourseCredits\Index.cshtml" />
     <Content Include="Views\CourseCredits\Details.cshtml" />
     <Content Include="Views\CourseCredits\Create.cshtml" />
@@ -687,7 +721,6 @@
     <Content Include="Views\ExcessiveFEDReasons\Details.cshtml" />
     <Content Include="Views\ExcessiveFEDReasons\Edit.cshtml" />
     <Content Include="Views\ExcessiveFEDReasons\Index.cshtml" />
-    <Content Include="Views\Counselors\UpdateSchoolIds.cshtml" />
     <Content Include="Views\CCAs\Success.cshtml" />
     <Content Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsc">
       <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
@@ -708,6 +741,38 @@
     <Content Include="Views\StudentBudgets\Details.cshtml" />
     <Content Include="Views\StudentBudgets\Edit.cshtml" />
     <Content Include="Views\StudentBudgets\Index.cshtml" />
+    <Content Include="Views\CourseFees\Create.cshtml" />
+    <Content Include="Views\CourseFees\Delete.cshtml" />
+    <Content Include="Views\CourseFees\Details.cshtml" />
+    <Content Include="Views\CourseFees\Edit.cshtml" />
+    <Content Include="Views\CourseFees\Index.cshtml" />
+    <Content Include="Views\Account\CreateRole.cshtml" />
+    <Content Include="Views\Locations\Create.cshtml" />
+    <Content Include="Views\Locations\Delete.cshtml" />
+    <Content Include="Views\Locations\Details.cshtml" />
+    <Content Include="Views\Locations\Edit.cshtml" />
+    <Content Include="Views\Locations\Index.cshtml" />
+    <Content Include="Views\UserProfiles\Create.cshtml" />
+    <Content Include="Views\UserProfiles\Delete.cshtml" />
+    <Content Include="Views\UserProfiles\Details.cshtml" />
+    <Content Include="Views\UserProfiles\Edit.cshtml" />
+    <Content Include="Views\UserProfiles\Index.cshtml" />
+    <Content Include="Views\Home\UserType.cshtml" />
+    <Content Include="Views\ProviderUsers\Create.cshtml" />
+    <Content Include="Views\ProviderUsers\Delete.cshtml" />
+    <Content Include="Views\ProviderUsers\Details.cshtml" />
+    <Content Include="Views\ProviderUsers\Edit.cshtml" />
+    <Content Include="Views\ProviderUsers\Index.cshtml" />
+    <Content Include="Views\PrimaryUsers\Create.cshtml" />
+    <Content Include="Views\PrimaryUsers\Delete.cshtml" />
+    <Content Include="Views\PrimaryUsers\Details.cshtml" />
+    <Content Include="Views\PrimaryUsers\Edit.cshtml" />
+    <Content Include="Views\PrimaryUsers\Index.cshtml" />
+    <Content Include="Views\Counselors\Create.cshtml" />
+    <Content Include="Views\Counselors\Delete.cshtml" />
+    <Content Include="Views\Counselors\Details.cshtml" />
+    <Content Include="Views\Counselors\Edit.cshtml" />
+    <Content Include="Views\Counselors\Index.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -764,6 +829,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505151427223_budget.resx">
       <DependentUpon>201505151427223_budget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191301485_courseFee.resx">
+      <DependentUpon>201505191301485_courseFee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191423424_role.resx">
+      <DependentUpon>201505191423424_role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191442449_userIds.resx">
+      <DependentUpon>201505191442449_userIds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191638100_locations.resx">
+      <DependentUpon>201505191638100_locations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505192026176_UserProfile.resx">
+      <DependentUpon>201505192026176_UserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505201405049_xtendUser.resx">
+      <DependentUpon>201505201405049_xtendUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505201731273_addPrimProvUsers.resx">
+      <DependentUpon>201505201731273_addPrimProvUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505201740011_removeSig.resx">
+      <DependentUpon>201505201740011_removeSig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505201812279_addSig.resx">
+      <DependentUpon>201505201812279_addSig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505201859246_primaryEnrollment.resx">
+      <DependentUpon>201505201859246_primaryEnrollment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505202034079_primaryEnrollment1.resx">
+      <DependentUpon>201505202034079_primaryEnrollment1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>

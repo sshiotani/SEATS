@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
-using CcaRegistrationDf.DAL;
+
 using CcaRegistrationDf.Models;
 
 using Microsoft.AspNet.Identity;
@@ -154,7 +154,7 @@ namespace CcaRegistrationDf.Controllers
             }
             catch
             {
-                throw new HttpException(500, "Error processing request.");
+                throw;
 
             }
         }
@@ -209,9 +209,27 @@ namespace CcaRegistrationDf.Controllers
                 Mapper.CreateMap<StudentViewModel, Student>();
                 Student student = Mapper.Map<StudentViewModel, Student>(studentVm);
 
+               
+
                 student.UserId = User.Identity.GetUserId();
+
                 db.Students.Add(student);
-                await db.SaveChangesAsync();
+                
+                var count = await db.SaveChangesAsync();
+
+                if (count != 0) // Set account setup to true if successfully added
+                {
+                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync();
+                    user.IsSetup = true;
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    ViewBag.Message = "Unable to save student!";
+                    return View("Error");
+                }
+
+                
                 return RedirectToAction("Index","Parents");
             }
 

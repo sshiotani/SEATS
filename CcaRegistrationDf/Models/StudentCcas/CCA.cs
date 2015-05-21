@@ -38,6 +38,7 @@ namespace CcaRegistrationDf.Models
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public string PrimaryLEAReasonRejectingCCA { get; set; }
+        public Nullable<System.DateTime> DateBusinessAdministratorSignature { get; set; }
 
         //Provider Section
         public int ProviderID { get; set; }
@@ -93,6 +94,6 @@ namespace CcaRegistrationDf.Models
         public Nullable<decimal> UnallocatedReduction { get; set; }
         public Nullable<System.DateTime> WithdrawalDate { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
-
+        public string Notes { get; set; }
     }
 }

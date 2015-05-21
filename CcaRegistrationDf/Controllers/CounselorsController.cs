@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using CcaRegistrationDf.Models;
+using Microsoft.AspNet.Identity;
 using AutoMapper;
+using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -16,6 +17,7 @@ namespace CcaRegistrationDf.Controllers
     public class CounselorsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private CactusEntities cactusDb = new CactusEntities();
 
         // GET: Counselors
         public async Task<ActionResult> Index()
@@ -38,31 +40,13 @@ namespace CcaRegistrationDf.Controllers
             return View(counselor);
         }
 
-        // GET: Counselors/Details/5
-        public async Task<ActionResult> UpdateSchoolIds()
-        {
-            var toUpdate = await db.Counselors.Where(x => x.SchoolID == 0).ToListAsync();
-
-            using (CactusEntities cactus = new CactusEntities())
-            {
-                foreach (var counselor in toUpdate)
-                {
-                    var schoolId = cactus.CactusSchools.Where(x => x.name == counselor.School).Select(x => x.id).FirstOrDefault();
-
-                    counselor.SchoolID = Decimal.ToInt32(schoolId);
-                }
-            }
-
-          
-
-            await db.SaveChangesAsync();
-
-            return View();
-        }
-
         // GET: Counselors/Create
         public ActionResult Create()
         {
+            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
+            ViewBag.CounselorID = new List<SelectListItem>();
+
             return View();
         }
 
@@ -71,22 +55,81 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID")] CounselorViewModel counselorVm)
+        public async Task<ActionResult> Create([Bind(Include = "CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID,CounselorID")] CounselorViewModel counselorVm)
         {
             if (ModelState.IsValid)
             {
                 Mapper.CreateMap<CounselorViewModel, Counselor>();
-                Counselor counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
-                db.Counselors.Add(counselor);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                
+                Counselor counselor;
+                if (counselorVm.CounselorID == 0)
+                {
+                    counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
+                    db.Counselors.Add(counselor);
+                }
+                else
+                {
+                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
+                }
+
+                counselor.UserId = User.Identity.GetUserId();
+
+                var count = await db.SaveChangesAsync();
+
+                if (count != 0) // Set account setup to true if successfully added
+                {
+                    var user = await db.Users.Where(m => m.Id == counselor.UserId).FirstOrDefaultAsync();
+                    user.IsSetup = true;
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    ViewBag.Message = "Unable to save Primary User!";
+                    return View("Error");
+                }
+
+                TempData["UserType"] = "Primary School User";
+
+                return RedirectToAction("EmailAdminToConfirm","Account");
             }
 
+
+            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
+            ViewBag.CounselorID = new List<SelectListItem>();
             return View(counselorVm);
         }
 
+
+        public async Task<JsonResult> GetCounselors(int schoolId)
+        {
+            var counselors = await db.Counselors.Where(m => m.SchoolID == schoolId).Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.CounselorFirstName + " " + f.CounselorLastName
+            }).ToListAsync();
+
+            // Add a item to add new counselor to list.
+
+            var counselorList = counselors.AsEnumerable().Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "Counselor Not Listed."
+                    }
+                    });
+
+            return Json( new SelectList(counselorList,"Value","Text") );
+        }
+
+        public async Task<JsonResult> GetCounselorInformation(int counselorId)
+        {
+            var counselor = await db.Counselors.Where(c => c.ID == counselorId).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            return Json(counselor);
+        }
+
         // GET: Counselors/Edit/5
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,8 +149,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID")] Counselor counselor)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,PersonID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,School,SchoolID")] Counselor counselor)
         {
             if (ModelState.IsValid)
             {
@@ -119,7 +161,6 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Counselors/Delete/5
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,7 +178,6 @@ namespace CcaRegistrationDf.Controllers
         // POST: Counselors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Counselor counselor = await db.Counselors.FindAsync(id);

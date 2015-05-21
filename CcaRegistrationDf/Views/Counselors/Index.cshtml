@@ -4,99 +4,78 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Counselors</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table id="grid-basic" class="table table-condensed table-hover table-striped bg-white">
-    <thead>
-        <tr>
-            <th data-column-id="CactusID">
-                @Html.DisplayName("Cactus ID")
-            </th>
-            <th data-column-id="Email">
-                @Html.DisplayName("Email")
-            </th>
-            <th data-column-id="First Name">
-                @Html.DisplayName("First Name")
-            </th>
-            <th data-column-id="Last Name">
-                @Html.DisplayName("Last Name")
-            </th>
-            <th data-column-id="Phone">
-                @Html.DisplayName("Phone")
-            </th>
-            <th data-column-id="SchoolID">
-                @Html.DisplayName("SchoolID")
-            </th>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorCactusID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorPhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.School)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SchoolID)
+        </th>
+        <th></th>
+    </tr>
 
-            <th data-column-id="School">
-                @Html.DisplayName("School")
-            </th>
-
-            <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
-                @Html.DisplayName("Actions")
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CounselorCactusID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CounselorEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CounselorFirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CounselorLastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CounselorPhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SchoolID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.School)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/bootgrid")
-    <script>
-        // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
-        $(function () {
-            var grid = $("#grid-basic").bootgrid({
-                formatters: {
-                    "state": function (column, row) {
-                        var checkBox = "";
-                        if ($.trim(row.Active) == "check") checkBox = "checked=\"checked\"";
-
-                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
-
-                    },
-
-                    "actions": function (column, row) {
-                        var id = $.trim(row.Actionlinks);
-                        return "<a href=\" /OnlineCourses/Edit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> ";
-                           // + "<a href=\" /Courses/Details/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-menu-hamburger\"></span></a>";
-                    }
-                }
-            });
-
-        });
-
-    </script>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorCactusID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorPhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.School)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SchoolID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
 }
+
+</table>

@@ -6,61 +6,67 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Counselor</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
         <div class="form-group">
-            @Html.LabelFor(model => model.CounselorCactusID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CounselorCactusID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CounselorCactusID, "", new { @class = "text-danger" })
+            <div class="col-md-4">
+                @Html.DropDownList("EnrollmentLocationID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.DropDownList("EnrollmentLocationSchoolNamesID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.DropDownList("CounselorID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Counselors" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CounselorEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CounselorEmail, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CounselorEmail, "", new { @class = "text-danger" })
+        <div class="hide" id="CounselorInfo">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CounselorEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CounselorEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CounselorEmail, "", new { @class = "text-danger" })
+                </div>
             </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CounselorFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CounselorFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CounselorFirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CounselorLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CounselorLastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CounselorLastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CounselorPhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CounselorFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CounselorFirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CounselorFirstName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CounselorLastName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CounselorLastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CounselorLastName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CounselorPhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SchoolID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SchoolID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SchoolID, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -70,6 +76,130 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+        $(function () {
+
+
+
+            //Enrollment DropdownLists
+            // If District is Home School the EnrollmentLocationSchoolID=-1
+            // If District is Private School the EnrollmentLocationSchoolID=0
+            $('#EnrollmentLocation').change(function () {
+
+                $('#CurrentSchool, #Counselors').empty();
+                var items = '<option value="">Select School</option>';
+                $('#CurrentSchool').html(items);
+
+                // var lea = $("#EnrollmentLocation option:selected").text();
+                var district = $("#EnrollmentLocation option:selected").val();
+                var districtName = $("#EnrollmentLocation option:selected").text();
+
+                if (district != "") {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetSchoolNames", "Students")',
+                        data: { district: district },
+                        dataType: 'json',
+                        success: function (schoolList) {
+
+                            $.each(schoolList, function (i, school) {
+
+                                $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select Enrollment Location First</option>';
+                    $('#Course').html(items);
+                }
+
+            });
+
+            $('#CurrentSchool').change(function () {
+
+                $('#Counselors').empty();
+                var items = '<option value="">Select Counselor</option>';
+                $('#Counselors').html(items);
+
+
+                var schoolId = $("#CurrentSchool option:selected").val();
+                var schoolName = $("#CurrentSchool option:selected").text();
+
+                if (schoolId != "") {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCounselors", "Counselors")',
+                        data: { schoolId: schoolId },
+                        dataType: 'json',
+                        success: function (counselors) {
+
+                            $.each(counselors, function (i, counselor) {
+
+                                $('#Counselors').append("<option value='" + counselor.Value + "'>" + counselor.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select</option>';
+                    $('#Counselors').html(items);
+                }
+
+            });
+
+            $('#Counselors').change(function () {
+
+                $('#CounselorInfo').removeClass('hide');
+
+                var counselorId = $("#CurrentSchool option:selected").val();
+             
+
+                if (counselorId != "") {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCounselorInformation", "Counselors")',
+                        data: { schoolId: schoolId },
+                        dataType: 'json',
+                        success: function (counselor) {
+
+                                $('#CounselorEmail').val(counselor.Email);
+
+                            
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    
+                }
+
+            });
+
+
+            $(".phone").mask("(999) 999-9999");
+
+        });
+    </script>
+}
+
+
+

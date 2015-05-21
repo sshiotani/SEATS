@@ -9,6 +9,8 @@ namespace CcaRegistrationDf.Models
     public class Counselor
     {
         public int ID { get; set; }
+        public string UserId { get; set; }
+
         public Nullable<int> PersonID { get; set; }
         public Nullable<int> CounselorCactusID { get; set; }
      

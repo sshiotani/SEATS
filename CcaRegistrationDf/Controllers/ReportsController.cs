@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 
 using System.Net;
-using CcaRegistrationDf.DAL;
+
 using Microsoft.Reporting.WebForms;
 using System.IO;
 using System.Globalization;
@@ -163,12 +163,17 @@ namespace CcaRegistrationDf.Controllers
                 report.StudentBudgetReport.Add(studentBr);
 
                 var category = new CategoryReport();
-                category.Name = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                var categoryItem =  await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefaultAsync().ConfigureAwait(false);
+                category.Name = categoryItem.Name;
                 report.CategoryReport.Add(category);
 
                 var course = new CourseReport();
                 course.Name = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.CourseReport.Add(course);
+
+                var courseFee = new CourseFeeReport();
+                courseFee.Fee = await db.CourseFees.Where(m => m.ID == categoryItem.CourseFeeID).Select(m => m.Fee).FirstOrDefaultAsync().ConfigureAwait(false);
+                report.CourseFeeReport.Add(courseFee);
 
             }
 
@@ -191,22 +196,16 @@ namespace CcaRegistrationDf.Controllers
 
             ReportContainer report = await MakeReport();
 
-            ReportDataSource rd1 = new ReportDataSource("StudentData", report.StudentReport);
-            lr.DataSources.Add(rd1);
-            ReportDataSource rd2 = new ReportDataSource("ReportMonthly", report.BudgetReport);
-            lr.DataSources.Add(rd2);
-            ReportDataSource rd3 = new ReportDataSource("Credit", report.CreditReport);
-            lr.DataSources.Add(rd3);
-            ReportDataSource rd4 = new ReportDataSource("StudentBudget", report.StudentBudgetReport);
-            lr.DataSources.Add(rd4);
-            ReportDataSource rd5 = new ReportDataSource("CourseInformation", report.CategoryReport);
-            lr.DataSources.Add(rd5);
-            ReportDataSource rd6 = new ReportDataSource("CourseName", report.CourseReport);
-            lr.DataSources.Add(rd6);
-            ReportDataSource rd7 = new ReportDataSource("EnrollmentLocations", report.PrimaryReport);
-            lr.DataSources.Add(rd7);
-            ReportDataSource rd8 = new ReportDataSource("Provider", report.ProviderReport);
-            lr.DataSources.Add(rd8);
+            
+            lr.DataSources.Add(new ReportDataSource("StudentData", report.StudentReport));
+            lr.DataSources.Add(new ReportDataSource("ReportMonthly", report.BudgetReport));
+            lr.DataSources.Add(new ReportDataSource("Credit", report.CreditReport));
+            lr.DataSources.Add(new ReportDataSource("StudentBudget", report.StudentBudgetReport));
+            lr.DataSources.Add(new ReportDataSource("CourseInformation", report.CategoryReport));
+            lr.DataSources.Add(new ReportDataSource("CourseName", report.CourseReport));
+            lr.DataSources.Add(new ReportDataSource("EnrollmentLocations", report.PrimaryReport));
+            lr.DataSources.Add(new ReportDataSource("Provider", report.ProviderReport));
+            lr.DataSources.Add(new ReportDataSource("CourseFee", report.CourseFeeReport));
 
             string reportType = id;
             string mimeType;
