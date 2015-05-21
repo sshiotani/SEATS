@@ -73,7 +73,7 @@ namespace CcaRegistrationDf.Models
 
         //Counselor info
         [Display(Name = "Counselor Cactus ID")]
-        public Nullable<int> CounselorCactusID { get; set; }
+        public Nullable<int> CactusID { get; set; }
         public string CounselorEmail { get; set; }
         public string CounselorFirstName { get; set; }
         public string CounselorLastName { get; set; }

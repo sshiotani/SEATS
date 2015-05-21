@@ -86,7 +86,7 @@ namespace CcaRegistrationDf.Migrations
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        CounselorCactusID = c.Int(),
+                        CactusID = c.Int(),
                         CounselorEmail = c.String(),
                         CounselorFirstName = c.String(),
                         CounselorLastName = c.String(),

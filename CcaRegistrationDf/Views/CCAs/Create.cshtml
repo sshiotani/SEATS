@@ -94,11 +94,11 @@
 
         @Html.HiddenFor(x => x.EnrollmentLocationID, new {id="EnrollmentLocationId" })
 
-        <div class="form-group hide" id="CounselorCactusID">
-            @Html.LabelFor(model => model.CounselorCactusID, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="form-group hide" id="CactusID">
+            @Html.LabelFor(model => model.CactusID, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.CounselorCactusID, new { @class = "form-control", id = "CounselorCactusId", title = "Acts as Counselor Signature", placeholder = "Counselor Cactus ID" })
-                @Html.ValidationMessageFor(model => model.CounselorCactusID, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => model.CactusID, new { @class = "form-control", id = "CounselorCactusId", title = "Acts as Counselor Signature", placeholder = "Counselor Cactus ID" })
+                @Html.ValidationMessageFor(model => model.CactusID, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -289,14 +289,14 @@
             $("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
                 if ($(this).val() == 3) {
                     $("#ProviderSection").removeClass('hide');
-                    $("#CounselorCactusID").addClass('hide');
+                    $("#CactusID").addClass('hide');
                 }
                 else if ($(this).val() == 2) {
-                    $("#CounselorCactusID").removeClass('hide');
+                    $("#CactusID").removeClass('hide');
                     $("#ProviderSection").addClass('hide');
                 } else if ($(this).val() == 1) {
                     $("#ProviderSection").addClass('hide');
-                    $("#CounselorCactusID").addClass('hide');
+                    $("#CactusID").addClass('hide');
                 }
             });
 

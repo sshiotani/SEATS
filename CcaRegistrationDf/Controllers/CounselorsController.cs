@@ -40,10 +40,16 @@ namespace CcaRegistrationDf.Controllers
             return View(counselor);
         }
 
+      
         // GET: Counselors/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
 
@@ -55,24 +61,21 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,SchoolID,CounselorID")] CounselorViewModel counselorVm)
+        public async Task<ActionResult> Create([Bind(Include = "Email, FirstName, LastName, Phone, CactusID, EnrollmentLocationSchoolNameID, School, CounselorID")] CounselorViewModel counselorVm)
         {
             if (ModelState.IsValid)
             {
+                var counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
                 Mapper.CreateMap<CounselorViewModel, Counselor>();
 
-                
-                Counselor counselor;
+                counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
+
                 if (counselorVm.CounselorID == 0)
                 {
-                    counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
                     db.Counselors.Add(counselor);
                 }
-                else
-                {
-                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
-                }
 
+                counselor.SchoolID = counselorVm.EnrollmentLocationSchoolNameID;
                 counselor.UserId = User.Identity.GetUserId();
 
                 var count = await db.SaveChangesAsync();
@@ -94,21 +97,24 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("EmailAdminToConfirm","Account");
             }
 
+            var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
             return View(counselorVm);
         }
 
 
-        public async Task<JsonResult> GetCounselors(int schoolId)
+        public JsonResult GetCounselors(int schoolId)
         {
-            var counselors = await db.Counselors.Where(m => m.SchoolID == schoolId).Select(f => new SelectListItem
+            var counselors =  db.Counselors.Where(m => m.SchoolID == schoolId).Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
-                Text = f.CounselorFirstName + " " + f.CounselorLastName
-            }).ToListAsync();
+                Text = f.FirstName + " " + f.LastName
+            });
 
             // Add a item to add new counselor to list.
 
@@ -149,7 +155,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,PersonID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,School,SchoolID")] Counselor counselor)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,PersonID,CactusID,Email,FirstName,LastName,Phone,School,SchoolID")] Counselor counselor)
         {
             if (ModelState.IsValid)
             {

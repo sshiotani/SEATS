@@ -251,6 +251,10 @@
     <Compile Include="Migrations\201505202034079_primaryEnrollment1.Designer.cs">
       <DependentUpon>201505202034079_primaryEnrollment1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505211938557_CounselorUpdate.cs" />
+    <Compile Include="Migrations\201505211938557_CounselorUpdate.Designer.cs">
+      <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\ProviderCcaViewModel.cs" />
@@ -862,6 +866,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505202034079_primaryEnrollment1.resx">
       <DependentUpon>201505202034079_primaryEnrollment1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505211938557_CounselorUpdate.resx">
+      <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>

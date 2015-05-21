@@ -150,7 +150,7 @@ namespace CcaRegistrationDf.Controllers
                     model.CounselorList = db.Counselors.Where(m => m.SchoolID == schoolID).Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
-                        Text = f.CounselorFirstName + " " + f.CounselorLastName
+                        Text = f.FirstName + " " + f.LastName
                     });
 
                     // Add a item to add new counselor to list.
@@ -196,7 +196,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CounselorCactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments,EnrollmentLocationID")] CCAViewModel ccaVm)
+        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,FirstName,LastName,Phone,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments,EnrollmentLocationID")] CCAViewModel ccaVm)
         {
             if (ModelState.IsValid)
             {
@@ -214,17 +214,17 @@ namespace CcaRegistrationDf.Controllers
                     //If school counselor is not found create a new one.
                     if (ccaVm.EnrollmentLocationID == 2 || (cca.EnrollmentLocationID != 1 && cca.CounselorID == 0) )
                     {
-                        int counselorId = await db.Counselors.Where(x => x.CounselorEmail == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync();
+                        int counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync();
 
 
                         if (counselorId == 0)
                         {
                             var counselor = new Counselor()
                             {
-                                CounselorEmail = ccaVm.CounselorEmail,
-                                CounselorFirstName = ccaVm.CounselorFirstName,
-                                CounselorLastName = ccaVm.CounselorLastName,
-                                CounselorPhoneNumber = ccaVm.CounselorPhoneNumber
+                                Email = ccaVm.CounselorEmail,
+                                FirstName = ccaVm.CounselorFirstName,
+                                LastName = ccaVm.CounselorLastName,
+                                Phone = ccaVm.CounselorPhoneNumber
                             };
 
                             if (cca.EnrollmentLocationID != 2)
@@ -240,7 +240,7 @@ namespace CcaRegistrationDf.Controllers
 
 
                             await db.SaveChangesAsync().ConfigureAwait(false);
-                            cca.CounselorID = await db.Counselors.Where(m => m.CounselorEmail == ccaVm.CounselorEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                            cca.CounselorID = await db.Counselors.Where(m => m.Email == ccaVm.CounselorEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                         }
                         else
                         {
@@ -447,7 +447,7 @@ namespace CcaRegistrationDf.Controllers
                 {
                     return HttpNotFound();
                 }
-                ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", cCA.CounselorID);
+                ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", cCA.CounselorID);
                 ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
                 ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
 
@@ -488,7 +488,7 @@ namespace CcaRegistrationDf.Controllers
                 }
             }
 
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "CounselorEmail", ccaVm.CounselorID);
+            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", ccaVm.CounselorID);
             ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
             ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
 

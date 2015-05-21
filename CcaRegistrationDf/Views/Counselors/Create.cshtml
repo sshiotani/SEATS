@@ -22,55 +22,63 @@
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownList("EnrollmentLocationSchoolNamesID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
-                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
+                @Html.DropDownList("EnrollmentLocationSchoolNameID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNameID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
                 @Html.DropDownList("CounselorID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Counselors" })
-                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <br />
+        <hr />
         <div class="hide" id="CounselorInfo">
             <div class="form-group">
-                @Html.LabelFor(model => model.CounselorEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.CounselorEmail, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CounselorEmail, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" ,id ="Email"} })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.CounselorFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.CounselorFirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CounselorFirstName, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control",id ="FirstName" } })
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.CounselorLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.CounselorLastName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CounselorLastName, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" ,id ="LastName"} })
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.CounselorPhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.CounselorPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CounselorPhoneNumber, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control phone" ,id ="Phone"} })
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
                 </div>
             </div>
-
+            <div class="form-group">
+                @Html.LabelFor(model => model.CactusID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.CactusID, new { @class = "form-control", id = "CactusID" })
+                    @Html.ValidationMessageFor(model => model.CactusID, "", new { @class = "text-danger" })
+                </div>
+            </div>
         </div>
 
+        @Html.HiddenFor(x => x.School, new { id = "SchoolName" })
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -83,8 +91,6 @@
 
     <script>
         $(function () {
-
-
 
             //Enrollment DropdownLists
             // If District is Home School the EnrollmentLocationSchoolID=-1
@@ -136,6 +142,8 @@
                 var schoolId = $("#CurrentSchool option:selected").val();
                 var schoolName = $("#CurrentSchool option:selected").text();
 
+                $('#SchoolName').val(schoolName);
+
                 if (schoolId != "") {
 
                     $.ajax({
@@ -167,19 +175,24 @@
 
                 $('#CounselorInfo').removeClass('hide');
 
-                var counselorId = $("#CurrentSchool option:selected").val();
+                var counselorId = $("#Counselors option:selected").val();
              
 
-                if (counselorId != "") {
+                if (counselorId != "0")
+                {
 
                     $.ajax({
                         type: "POST",
                         url: '@Url.Action("GetCounselorInformation", "Counselors")',
-                        data: { schoolId: schoolId },
+                        data: { counselorId: counselorId },
                         dataType: 'json',
                         success: function (counselor) {
 
-                                $('#CounselorEmail').val(counselor.Email);
+                            $('#FirstName').val(counselor.FirstName);
+                            $('#LastName').val(counselor.LastName);
+                            $('#Phone').val(counselor.Phone);
+                            $('#Email').val(counselor.Email);
+
 
                             
                         },
@@ -188,8 +201,10 @@
                         }
                     });
                 }
-                else {
-                    
+                else
+                {
+                    $('#FirstName, #LastName, #Phone, #Email').val('');
+                   
                 }
 
             });

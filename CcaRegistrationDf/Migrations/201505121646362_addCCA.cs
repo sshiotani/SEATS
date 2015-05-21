@@ -20,9 +20,9 @@ namespace CcaRegistrationDf.Migrations
                 .PrimaryKey(t => t.ID);
             
             AlterColumn("dbo.CCAs", "ApplicationSubmissionDate", c => c.DateTime(nullable: false));
-            AlterColumn("dbo.Counselors", "CounselorEmail", c => c.String(nullable: false));
-            AlterColumn("dbo.Counselors", "CounselorFirstName", c => c.String(nullable: false));
-            AlterColumn("dbo.Counselors", "CounselorLastName", c => c.String(nullable: false));
+            AlterColumn("dbo.Counselors", "Email", c => c.String(nullable: false));
+            AlterColumn("dbo.Counselors", "FirstName", c => c.String(nullable: false));
+            AlterColumn("dbo.Counselors", "LastName", c => c.String(nullable: false));
             CreateIndex("dbo.Students", "StudentBudgetID");
             AddForeignKey("dbo.Students", "StudentBudgetID", "dbo.StudentBudgets", "ID", cascadeDelete: true);
             DropColumn("dbo.CCAs", "SubmitterTypeID");
@@ -45,9 +45,9 @@ namespace CcaRegistrationDf.Migrations
             AddColumn("dbo.CCAs", "SubmitterTypeID", c => c.Int());
             DropForeignKey("dbo.Students", "StudentBudgetID", "dbo.StudentBudgets");
             DropIndex("dbo.Students", new[] { "StudentBudgetID" });
-            AlterColumn("dbo.Counselors", "CounselorLastName", c => c.String());
-            AlterColumn("dbo.Counselors", "CounselorFirstName", c => c.String());
-            AlterColumn("dbo.Counselors", "CounselorEmail", c => c.String());
+            AlterColumn("dbo.Counselors", "LastName", c => c.String());
+            AlterColumn("dbo.Counselors", "FirstName", c => c.String());
+            AlterColumn("dbo.Counselors", "Email", c => c.String());
             AlterColumn("dbo.CCAs", "ApplicationSubmissionDate", c => c.DateTime());
             DropTable("dbo.StudentBudgets");
         }
