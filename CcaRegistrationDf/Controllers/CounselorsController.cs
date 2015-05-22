@@ -61,23 +61,39 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Email, FirstName, LastName, Phone, CactusID, EnrollmentLocationSchoolNameID, School, CounselorID")] CounselorViewModel counselorVm)
+        public async Task<ActionResult> Create([Bind(Include = "Email, FirstName, LastName, Phone, CactusID, EnrollmentLocationID, EnrollmentLocationSchoolNameID, School, CounselorID")] CounselorViewModel counselorVm)
         {
             if (ModelState.IsValid)
             {
-                var counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
                 Mapper.CreateMap<CounselorViewModel, Counselor>();
 
-                counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm);
+                Counselor counselor;
 
                 if (counselorVm.CounselorID == 0)
                 {
-                    db.Counselors.Add(counselor);
+                    counselor = new Counselor();
+                }
+                else
+                {
+                   counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
                 }
 
-                counselor.SchoolID = counselorVm.EnrollmentLocationSchoolNameID;
+                // All properties in the ViewModel will update the Counselor object so errors or not required empty properties will overwrite
+                // properties in the database. (CactusID is one known problem.)
+
+                if ((counselorVm.CactusID == 0 || counselorVm.CactusID == null) && counselor.CactusID != null)
+                    counselorVm.CactusID = counselor.CactusID;
+
+                counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm, counselor);
+
                 counselor.UserId = User.Identity.GetUserId();
 
+               
+                // If counselor not found in database need to add
+                if( counselor.ID == 0)
+                    db.Counselors.Add(counselor);
+
+                
                 var count = await db.SaveChangesAsync();
 
                 if (count != 0) // Set account setup to true if successfully added
@@ -92,10 +108,16 @@ namespace CcaRegistrationDf.Controllers
                     return View("Error");
                 }
 
-                TempData["UserType"] = "Primary School User";
+                TempData["UserType"] = "Counselor School User";
 
                 return RedirectToAction("EmailAdminToConfirm","Account");
             }
+
+            // Add model state errors since fields with errors are hidden on repost.
+
+            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+            foreach (var error in errors)
+                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
             var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
@@ -110,7 +132,7 @@ namespace CcaRegistrationDf.Controllers
 
         public JsonResult GetCounselors(int schoolId)
         {
-            var counselors =  db.Counselors.Where(m => m.SchoolID == schoolId).Select(f => new SelectListItem
+            var counselors =  db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolId).Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
                 Text = f.FirstName + " " + f.LastName
@@ -155,7 +177,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,PersonID,CactusID,Email,FirstName,LastName,Phone,School,SchoolID")] Counselor counselor)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,CactusID,Email,FirstName,LastName,Phone,School,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] Counselor counselor)
         {
             if (ModelState.IsValid)
             {

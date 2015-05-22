@@ -45,7 +45,10 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-        //Get
+        /// <summary>
+        /// Gets user types to display in dropdown for Account setup.  User chooses which type of account wanted.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult UserType()
         {
             try
@@ -66,6 +69,12 @@ namespace CcaRegistrationDf.Controllers
                 ViewBag.Message = "Unable to get User Types. Error:" + ex.Message;
             }
             return View("Error");
+        }
+
+        public ActionResult RequestSent()
+        {
+            return View();
+
         }
 
         [HttpPost]

@@ -630,11 +630,11 @@ namespace CcaRegistrationDf.Controllers
 
                 await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
 
-                return View();
+                return RedirectToAction("RequestSent","Home");
             }
             catch
             {
-                ViewBag.Message("Unable to send email to Program Administrator.  Please contact us to confirm your account.");
+                ViewBag.Message("Unable to send email to Program Administrator.  Please contact us to approve your account.");
                 return View("Error");
             }
         }

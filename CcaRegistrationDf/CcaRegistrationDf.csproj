@@ -255,6 +255,14 @@
     <Compile Include="Migrations\201505211938557_CounselorUpdate.Designer.cs">
       <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505221246248_counselorfix.cs" />
+    <Compile Include="Migrations\201505221246248_counselorfix.Designer.cs">
+      <DependentUpon>201505221246248_counselorfix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505221321070_counselorfix1.cs" />
+    <Compile Include="Migrations\201505221321070_counselorfix1.Designer.cs">
+      <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\ProviderCcaViewModel.cs" />
@@ -777,6 +785,7 @@
     <Content Include="Views\Counselors\Details.cshtml" />
     <Content Include="Views\Counselors\Edit.cshtml" />
     <Content Include="Views\Counselors\Index.cshtml" />
+    <Content Include="Views\Home\RequestSent.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -869,6 +878,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505211938557_CounselorUpdate.resx">
       <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505221246248_counselorfix.resx">
+      <DependentUpon>201505221246248_counselorfix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505221321070_counselorfix1.resx">
+      <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>

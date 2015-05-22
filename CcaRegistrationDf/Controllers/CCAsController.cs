@@ -147,7 +147,7 @@ namespace CcaRegistrationDf.Controllers
                     var user = User.Identity.GetUserId();
                     var schoolID = db.Students.Where(m => m.UserId == user).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
 
-                    model.CounselorList = db.Counselors.Where(m => m.SchoolID == schoolID).Select(f => new SelectListItem
+                    model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
                         Text = f.FirstName + " " + f.LastName
@@ -229,7 +229,7 @@ namespace CcaRegistrationDf.Controllers
 
                             if (cca.EnrollmentLocationID != 2)
                             {
-                                counselor.SchoolID = student.EnrollmentLocationSchoolNamesID;
+                                counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
                             }
                             else
                             {

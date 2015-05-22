@@ -9,9 +9,9 @@ namespace CcaRegistrationDf.Models
     public class Counselor
     {
         public int ID { get; set; }
+
         public string UserId { get; set; }
 
-        public int PersonID { get; set; }
         public Nullable<int> CactusID { get; set; }
      
         public string Email { get; set; }
@@ -22,13 +22,14 @@ namespace CcaRegistrationDf.Models
 
         public string Phone { get; set; }
 
-        public Nullable<int> SchoolID { get; set; }
+        public string School { get; set; } // School name
 
-        public string School { get; set; }
+        // EnrollmentLocationID, EnrollmentLocationSchoolNameID, CactusID, UserId,
+        // set when counselor registers for Account.
 
-        public Nullable<int> EnrollmentLocationID { get; set; }
+        public Nullable<int> EnrollmentLocationID { get; set; } //ID from Cactus Institutions table 
 
-        public Nullable<int> EnrollmentLocationSchoolNameID { get; set; }
+        public Nullable<int> EnrollmentLocationSchoolNameID { get; set; } // ID from Cactus School tables
         
     }
 }
