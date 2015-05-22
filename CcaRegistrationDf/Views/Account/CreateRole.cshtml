@@ -1,0 +1,8 @@
+﻿
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    @Html.TextBox("Role", string.Empty, new { style = "width:150px;" })
+    <input type="submit" value="Submit" class="btn btn-default" /> 
+}

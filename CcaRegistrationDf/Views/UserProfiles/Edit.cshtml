@@ -1,0 +1,42 @@
+﻿@model CcaRegistrationDf.Models.UserProfileViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+<p class ="text-info">To edit this user profile delete this profile and create a new correct one.</p>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>UserProfile</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Email, new { @class = "form-control" })
+               
+            </div>
+        </div>
+ 
+      
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserLocationID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.UserLocationName, new { @class = "form-control", id = "Locations" })
+              
+            </div>
+        </div>
+
+       
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
