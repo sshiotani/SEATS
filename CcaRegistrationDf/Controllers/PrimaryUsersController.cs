@@ -41,9 +41,13 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: PrimaryUsers/Create
-        public ActionResult Create()
+        public async  Task<ActionResult> Create()
         {
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View();
         }
@@ -77,6 +81,13 @@ namespace CcaRegistrationDf.Controllers
 
                 return RedirectToAction("EmailAdminToConfirm", "Account");
             }
+
+            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
 
             return View(primaryUser);
         }

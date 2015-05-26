@@ -263,6 +263,14 @@
     <Compile Include="Migrations\201505221321070_counselorfix1.Designer.cs">
       <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505261413579_removeEmail.cs" />
+    <Compile Include="Migrations\201505261413579_removeEmail.Designer.cs">
+      <DependentUpon>201505261413579_removeEmail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505261451487_requiredInfo.cs" />
+    <Compile Include="Migrations\201505261451487_requiredInfo.Designer.cs">
+      <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\ProviderCcaViewModel.cs" />
@@ -884,6 +892,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505221321070_counselorfix1.resx">
       <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505261413579_removeEmail.resx">
+      <DependentUpon>201505261413579_removeEmail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505261451487_requiredInfo.resx">
+      <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>

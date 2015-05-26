@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
 using CcaRegistrationDf.Models;
+using System.Text.RegularExpressions;
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -20,6 +21,7 @@ namespace CcaRegistrationDf.Controllers
         private CactusEntities cactusDb = new CactusEntities();
 
         // GET: Counselors
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.Counselors.ToListAsync());
@@ -78,8 +80,9 @@ namespace CcaRegistrationDf.Controllers
                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
                 }
 
-                // All properties in the ViewModel will update the Counselor object so errors or not required empty properties will overwrite
+                // Mapper causes all properties in the ViewModel to update the Counselor object so errors or not required empty properties will overwrite
                 // properties in the database. (CactusID is one known problem.)
+                // TODO: write own mapper type method that will check for nulls or known errors.
 
                 if ((counselorVm.CactusID == 0 || counselorVm.CactusID == null) && counselor.CactusID != null)
                     counselorVm.CactusID = counselor.CactusID;
@@ -87,6 +90,9 @@ namespace CcaRegistrationDf.Controllers
                 counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm, counselor);
 
                 counselor.UserId = User.Identity.GetUserId();
+
+                // Remove all non numeric chars
+                counselor.Phone = JustDigits(counselor.Phone);
 
                
                 // If counselor not found in database need to add
@@ -181,6 +187,8 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
+                counselor.Phone = JustDigits(counselor.Phone);
+
                 db.Entry(counselor).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -221,6 +229,16 @@ namespace CcaRegistrationDf.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// strips out extra chars from phone number so resulting string is only numbers.
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
+        private string JustDigits(string phoneNumber)
+        {
+            return Regex.Replace(phoneNumber, @"[^\d]", "");
         }
     }
 }

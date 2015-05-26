@@ -1,17 +1,17 @@
 ﻿@model CcaRegistrationDf.Models.ProviderUser
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Register";
 }
 
-<h2>Create</h2>
+<h2>Set Up User Account</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>ProviderUser</h4>
+        <h4>Provider User</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
        
@@ -32,18 +32,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control phone" } })
-                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control phone" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
             </div>
         </div>
 

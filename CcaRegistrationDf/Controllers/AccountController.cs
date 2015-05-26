@@ -613,6 +613,11 @@ namespace CcaRegistrationDf.Controllers
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Sends email to notify admin when a permissions needed account is requested.  (ie Provider, Primary, etc).
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> EmailAdminToConfirm()
         {
             try
@@ -626,8 +631,6 @@ namespace CcaRegistrationDf.Controllers
 
                 var user = await db.Users.Where(m => m.Id == userId).FirstOrDefaultAsync();
 
-                //var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-
                 await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
 
                 return RedirectToAction("RequestSent","Home");
@@ -640,6 +643,8 @@ namespace CcaRegistrationDf.Controllers
         }
 
         #region Helpers
+
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 

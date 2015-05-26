@@ -40,9 +40,13 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: ProviderUsers/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "Name");
+            var providers = await db.Providers.ToListAsync();
+
+            providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
+
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
             return View();
         }
 
@@ -51,7 +55,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "FirstName,LastName,PhoneNumber,Email,Fax,ProviderID")] ProviderUser providerUser)
+        public async Task<ActionResult> Create([Bind(Include = "FirstName,LastName,Phone,Fax,ProviderID")] ProviderUser providerUser)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +80,10 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("EmailAdminToConfirm", "Account");
             }
 
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "Name", providerUser.ProviderID);
+            var providers = await db.Providers.ToListAsync();
+            providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
+            
             return View(providerUser);
         }
 
@@ -92,7 +99,11 @@ namespace CcaRegistrationDf.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "Name", providerUser.ProviderID);
+
+            var providers = await db.Providers.ToListAsync();
+            providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
+            
             return View(providerUser);
         }
 
@@ -101,7 +112,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,PhoneNumber,Email,Fax,ProviderID")] ProviderUser providerUser)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,Phone,Email,Fax,ProviderID")] ProviderUser providerUser)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +120,10 @@ namespace CcaRegistrationDf.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "Name", providerUser.ProviderID);
+            var providers = await db.Providers.ToListAsync();
+            providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
+
             return View(providerUser);
         }
 
