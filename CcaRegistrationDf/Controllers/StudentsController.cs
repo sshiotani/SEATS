@@ -24,16 +24,32 @@ namespace CcaRegistrationDf.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Students
+        
+
         public async Task<ActionResult> Index()
         {
+            var userId = User.Identity.GetUserId();
+
             if (User.IsInRole("Admin"))
             {
                 var students = await db.Students.ToListAsync();
                 return View(students);
             }
+            else if (User.IsInRole("Primary"))
+            {
+                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
+                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
+                return View(primaryStudents);
+            }
+            else if(User.IsInRole("Counselor"))
+            {
+                var schoolId = await db.Counselors.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
+                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
+                return View(primaryStudents);
+            }
 
-            var UserIdentity = User.Identity.GetUserId();
-            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+           
+            var student = await db.Students.Where(u => u.UserId == userId).FirstOrDefaultAsync();
 
             if (student != null)
             {
@@ -238,6 +254,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Students/Edit/5
+      
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -267,7 +284,39 @@ namespace CcaRegistrationDf.Controllers
             }
             return View(student);
         }
+        // GET: Students/Edit/5
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EditAdmin(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
 
+            return View(student);
+        }
+
+        // POST: Students/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EditAdmin([Bind(Include = "ID,StudentFirstName,StudentLastName,SSID,StudentDOB,StudentEmail,EnrollmentLocationID,GraduationDate,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord,StudentBudgetID")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(student).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
         // GET: Students/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)

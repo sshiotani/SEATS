@@ -44,19 +44,11 @@ namespace CcaRegistrationDf.Models
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
-
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
-
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentBudget> StudentBudgets { get; set; }
-
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseFee> CourseFees { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }
-
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.UserProfile> UserProfiles { get; set; }
-
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }     
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderUser> ProviderUsers { get; set; }
-
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentCcas.PrimaryUser> PrimaryUsers { get; set; }
 
         

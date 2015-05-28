@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using CcaRegistrationDf.Models;
 using System;
+using System.Collections.Generic;
+using AutoMapper;
 
 
 namespace CcaRegistrationDf.Controllers
@@ -21,29 +23,58 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                // Check for account setup
+                if (User.Identity.IsAuthenticated)
                 {
 
                     var userId = User.Identity.GetUserId();
+
                     using (ApplicationDbContext db = new ApplicationDbContext())
                     {
-
                         var setup = await db.Users.Where(m => m.Id == userId).Select(m => m.IsSetup).FirstOrDefaultAsync();
                         if (!setup)
                         {
                             return RedirectToAction("UserType");
                         }
                     }
-                }
 
-                return View();
+                }
+               
+
             }
             catch (Exception ex)
             {
                 ViewBag.Message = "Error in account verification. Error: " + ex.Message;
                 return View("Error");
             }
+
+            return RedirectToAction("CheckRole");
         }
+
+        public ActionResult CheckRole()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return View("Index");
+            }
+            else if (User.IsInRole("Primary"))
+            {
+                return RedirectToAction("CcaInterface", "PrimaryUsers");
+            }
+            else if (User.IsInRole("Provider"))
+            {
+                return RedirectToAction("CcaInterface", "ProviderUsers");
+            }
+            else if (User.IsInRole("Counselor"))
+            {
+                return RedirectToAction( "CcaInterface","Counselors");
+            }
+            
+
+                return View("Index");
+        }
+
+        
 
         /// <summary>
         /// Gets user types to display in dropdown for Account setup.  User chooses which type of account wanted.
@@ -81,7 +112,7 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UserType(UserTypeViewModel userType)
         {
-            var type = await db.Locations.Where(m =>m.ID == userType.UserTypeID).FirstOrDefaultAsync();
+            var type = await db.Locations.Where(m => m.ID == userType.UserTypeID).FirstOrDefaultAsync();
             switch (type.Name)
             {
                 case "Provider":

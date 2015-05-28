@@ -34,8 +34,6 @@ namespace CcaRegistrationDf {
         
         private ProvidersDataTable tableProviders;
         
-        private StudentBudgetsDataTable tableStudentBudgets;
-        
         private StudentsDataTable tableStudents;
         
         private CactusInstitutionDataTable tableCactusInstitution;
@@ -98,9 +96,6 @@ namespace CcaRegistrationDf {
                 }
                 if ((ds.Tables["Providers"] != null)) {
                     base.Tables.Add(new ProvidersDataTable(ds.Tables["Providers"]));
-                }
-                if ((ds.Tables["StudentBudgets"] != null)) {
-                    base.Tables.Add(new StudentBudgetsDataTable(ds.Tables["StudentBudgets"]));
                 }
                 if ((ds.Tables["Students"] != null)) {
                     base.Tables.Add(new StudentsDataTable(ds.Tables["Students"]));
@@ -176,16 +171,6 @@ namespace CcaRegistrationDf {
         public ProvidersDataTable Providers {
             get {
                 return this.tableProviders;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public StudentBudgetsDataTable StudentBudgets {
-            get {
-                return this.tableStudentBudgets;
             }
         }
         
@@ -301,9 +286,6 @@ namespace CcaRegistrationDf {
                 if ((ds.Tables["Providers"] != null)) {
                     base.Tables.Add(new ProvidersDataTable(ds.Tables["Providers"]));
                 }
-                if ((ds.Tables["StudentBudgets"] != null)) {
-                    base.Tables.Add(new StudentBudgetsDataTable(ds.Tables["StudentBudgets"]));
-                }
                 if ((ds.Tables["Students"] != null)) {
                     base.Tables.Add(new StudentsDataTable(ds.Tables["Students"]));
                 }
@@ -376,12 +358,6 @@ namespace CcaRegistrationDf {
                     this.tableProviders.InitVars();
                 }
             }
-            this.tableStudentBudgets = ((StudentBudgetsDataTable)(base.Tables["StudentBudgets"]));
-            if ((initTable == true)) {
-                if ((this.tableStudentBudgets != null)) {
-                    this.tableStudentBudgets.InitVars();
-                }
-            }
             this.tableStudents = ((StudentsDataTable)(base.Tables["Students"]));
             if ((initTable == true)) {
                 if ((this.tableStudents != null)) {
@@ -427,8 +403,6 @@ namespace CcaRegistrationDf {
             base.Tables.Add(this.tableOnlineCourses);
             this.tableProviders = new ProvidersDataTable();
             base.Tables.Add(this.tableProviders);
-            this.tableStudentBudgets = new StudentBudgetsDataTable();
-            base.Tables.Add(this.tableStudentBudgets);
             this.tableStudents = new StudentsDataTable();
             base.Tables.Add(this.tableStudents);
             this.tableCactusInstitution = new CactusInstitutionDataTable();
@@ -492,12 +466,6 @@ namespace CcaRegistrationDf {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeProviders() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private bool ShouldSerializeStudentBudgets() {
             return false;
         }
         
@@ -588,9 +556,6 @@ namespace CcaRegistrationDf {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void ProvidersRowChangeEventHandler(object sender, ProvidersRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public delegate void StudentBudgetsRowChangeEventHandler(object sender, StudentBudgetsRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void StudentsRowChangeEventHandler(object sender, StudentsRowChangeEvent e);
@@ -696,10 +661,6 @@ namespace CcaRegistrationDf {
             
             private global::System.Data.DataColumn columnTwentyDaysPastSemesterStartDate;
             
-            private global::System.Data.DataColumn columnUnallocated;
-            
-            private global::System.Data.DataColumn columnUnallocatedReduction;
-            
             private global::System.Data.DataColumn columnWithdrawalDate;
             
             private global::System.Data.DataColumn columnGrand_Total;
@@ -711,6 +672,10 @@ namespace CcaRegistrationDf {
             private global::System.Data.DataColumn columnTeacherLastName;
             
             private global::System.Data.DataColumn columnExcessiveFEDReasonID;
+            
+            private global::System.Data.DataColumn columnDistribution;
+            
+            private global::System.Data.DataColumn columnOffset;
             
             private global::System.Data.DataColumn columnEnrollmentLocationID;
             
@@ -1101,22 +1066,6 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn UnallocatedColumn {
-                get {
-                    return this.columnUnallocated;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn UnallocatedReductionColumn {
-                get {
-                    return this.columnUnallocatedReduction;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn WithdrawalDateColumn {
                 get {
                     return this.columnWithdrawalDate;
@@ -1160,6 +1109,22 @@ namespace CcaRegistrationDf {
             public global::System.Data.DataColumn ExcessiveFEDReasonIDColumn {
                 get {
                     return this.columnExcessiveFEDReasonID;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DistributionColumn {
+                get {
+                    return this.columnDistribution;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OffsetColumn {
+                get {
+                    return this.columnOffset;
                 }
             }
             
@@ -1252,14 +1217,14 @@ namespace CcaRegistrationDf {
                         System.DateTime RemediationPeriodBegins, 
                         decimal TotalDisbursementsProvider, 
                         System.DateTime TwentyDaysPastSemesterStartDate, 
-                        decimal Unallocated, 
-                        decimal UnallocatedReduction, 
                         System.DateTime WithdrawalDate, 
                         decimal Grand_Total, 
                         int TeacherCactusID, 
                         string TeacherFirstName, 
                         string TeacherLastName, 
                         int ExcessiveFEDReasonID, 
+                        int Distribution, 
+                        int Offset, 
                         int EnrollmentLocationID) {
                 CCAsRow rowCCAsRow = ((CCAsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
@@ -1307,14 +1272,14 @@ namespace CcaRegistrationDf {
                         RemediationPeriodBegins,
                         TotalDisbursementsProvider,
                         TwentyDaysPastSemesterStartDate,
-                        Unallocated,
-                        UnallocatedReduction,
                         WithdrawalDate,
                         Grand_Total,
                         TeacherCactusID,
                         TeacherFirstName,
                         TeacherLastName,
                         ExcessiveFEDReasonID,
+                        Distribution,
+                        Offset,
                         EnrollmentLocationID};
                 if ((_parentStudentsRowByFK_dbo_CCAs_dbo_Students_StudentID != null)) {
                     columnValuesArray[3] = _parentStudentsRowByFK_dbo_CCAs_dbo_Students_StudentID[0];
@@ -1404,14 +1369,14 @@ namespace CcaRegistrationDf {
                 this.columnRemediationPeriodBegins = base.Columns["RemediationPeriodBegins"];
                 this.columnTotalDisbursementsProvider = base.Columns["TotalDisbursementsProvider"];
                 this.columnTwentyDaysPastSemesterStartDate = base.Columns["TwentyDaysPastSemesterStartDate"];
-                this.columnUnallocated = base.Columns["Unallocated"];
-                this.columnUnallocatedReduction = base.Columns["UnallocatedReduction"];
                 this.columnWithdrawalDate = base.Columns["WithdrawalDate"];
                 this.columnGrand_Total = base.Columns["Grand_Total"];
                 this.columnTeacherCactusID = base.Columns["TeacherCactusID"];
                 this.columnTeacherFirstName = base.Columns["TeacherFirstName"];
                 this.columnTeacherLastName = base.Columns["TeacherLastName"];
                 this.columnExcessiveFEDReasonID = base.Columns["ExcessiveFEDReasonID"];
+                this.columnDistribution = base.Columns["Distribution"];
+                this.columnOffset = base.Columns["Offset"];
                 this.columnEnrollmentLocationID = base.Columns["EnrollmentLocationID"];
             }
             
@@ -1506,10 +1471,6 @@ namespace CcaRegistrationDf {
                 base.Columns.Add(this.columnTotalDisbursementsProvider);
                 this.columnTwentyDaysPastSemesterStartDate = new global::System.Data.DataColumn("TwentyDaysPastSemesterStartDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTwentyDaysPastSemesterStartDate);
-                this.columnUnallocated = new global::System.Data.DataColumn("Unallocated", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUnallocated);
-                this.columnUnallocatedReduction = new global::System.Data.DataColumn("UnallocatedReduction", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUnallocatedReduction);
                 this.columnWithdrawalDate = new global::System.Data.DataColumn("WithdrawalDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnWithdrawalDate);
                 this.columnGrand_Total = new global::System.Data.DataColumn("Grand_Total", typeof(decimal), null, global::System.Data.MappingType.Element);
@@ -1522,6 +1483,10 @@ namespace CcaRegistrationDf {
                 base.Columns.Add(this.columnTeacherLastName);
                 this.columnExcessiveFEDReasonID = new global::System.Data.DataColumn("ExcessiveFEDReasonID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnExcessiveFEDReasonID);
+                this.columnDistribution = new global::System.Data.DataColumn("Distribution", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDistribution);
+                this.columnOffset = new global::System.Data.DataColumn("Offset", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOffset);
                 this.columnEnrollmentLocationID = new global::System.Data.DataColumn("EnrollmentLocationID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEnrollmentLocationID);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
@@ -1560,6 +1525,8 @@ namespace CcaRegistrationDf {
                 this.columnRecordNotes.MaxLength = 2147483647;
                 this.columnTeacherFirstName.MaxLength = 2147483647;
                 this.columnTeacherLastName.MaxLength = 2147483647;
+                this.columnDistribution.Caption = "EnrollmentLocationID";
+                this.columnOffset.Caption = "EnrollmentLocationID";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3030,328 +2997,6 @@ namespace CcaRegistrationDf {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class StudentBudgetsDataTable : global::System.Data.TypedTableBase<StudentBudgetsRow> {
-            
-            private global::System.Data.DataColumn columnID;
-            
-            private global::System.Data.DataColumn columnYear;
-            
-            private global::System.Data.DataColumn columnMonth;
-            
-            private global::System.Data.DataColumn columnOffSet;
-            
-            private global::System.Data.DataColumn columnDistribution;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsDataTable() {
-                this.TableName = "StudentBudgets";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal StudentBudgetsDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected StudentBudgetsDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IDColumn {
-                get {
-                    return this.columnID;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn YearColumn {
-                get {
-                    return this.columnYear;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MonthColumn {
-                get {
-                    return this.columnMonth;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn OffSetColumn {
-                get {
-                    return this.columnOffSet;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn DistributionColumn {
-                get {
-                    return this.columnDistribution;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRow this[int index] {
-                get {
-                    return ((StudentBudgetsRow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event StudentBudgetsRowChangeEventHandler StudentBudgetsRowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event StudentBudgetsRowChangeEventHandler StudentBudgetsRowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event StudentBudgetsRowChangeEventHandler StudentBudgetsRowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event StudentBudgetsRowChangeEventHandler StudentBudgetsRowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void AddStudentBudgetsRow(StudentBudgetsRow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRow AddStudentBudgetsRow(int Year, int Month, decimal OffSet, decimal Distribution) {
-                StudentBudgetsRow rowStudentBudgetsRow = ((StudentBudgetsRow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        null,
-                        Year,
-                        Month,
-                        OffSet,
-                        Distribution};
-                rowStudentBudgetsRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowStudentBudgetsRow);
-                return rowStudentBudgetsRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRow FindByID(int ID) {
-                return ((StudentBudgetsRow)(this.Rows.Find(new object[] {
-                            ID})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                StudentBudgetsDataTable cln = ((StudentBudgetsDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new StudentBudgetsDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal void InitVars() {
-                this.columnID = base.Columns["ID"];
-                this.columnYear = base.Columns["Year"];
-                this.columnMonth = base.Columns["Month"];
-                this.columnOffSet = base.Columns["OffSet"];
-                this.columnDistribution = base.Columns["Distribution"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            private void InitClass() {
-                this.columnID = new global::System.Data.DataColumn("ID", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnID);
-                this.columnYear = new global::System.Data.DataColumn("Year", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnYear);
-                this.columnMonth = new global::System.Data.DataColumn("Month", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMonth);
-                this.columnOffSet = new global::System.Data.DataColumn("OffSet", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnOffSet);
-                this.columnDistribution = new global::System.Data.DataColumn("Distribution", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDistribution);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnID}, true));
-                this.columnID.AutoIncrement = true;
-                this.columnID.AutoIncrementSeed = -1;
-                this.columnID.AutoIncrementStep = -1;
-                this.columnID.AllowDBNull = false;
-                this.columnID.ReadOnly = true;
-                this.columnID.Unique = true;
-                this.columnYear.AllowDBNull = false;
-                this.columnMonth.AllowDBNull = false;
-                this.columnOffSet.AllowDBNull = false;
-                this.columnDistribution.AllowDBNull = false;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRow NewStudentBudgetsRow() {
-                return ((StudentBudgetsRow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new StudentBudgetsRow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(StudentBudgetsRow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.StudentBudgetsRowChanged != null)) {
-                    this.StudentBudgetsRowChanged(this, new StudentBudgetsRowChangeEvent(((StudentBudgetsRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.StudentBudgetsRowChanging != null)) {
-                    this.StudentBudgetsRowChanging(this, new StudentBudgetsRowChangeEvent(((StudentBudgetsRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.StudentBudgetsRowDeleted != null)) {
-                    this.StudentBudgetsRowDeleted(this, new StudentBudgetsRowChangeEvent(((StudentBudgetsRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.StudentBudgetsRowDeleting != null)) {
-                    this.StudentBudgetsRowDeleting(this, new StudentBudgetsRowChangeEvent(((StudentBudgetsRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void RemoveStudentBudgetsRow(StudentBudgetsRow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                Monthly ds = new Monthly();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "StudentBudgetsDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class StudentsDataTable : global::System.Data.TypedTableBase<StudentsRow> {
             
             private global::System.Data.DataColumn columnID;
@@ -3389,8 +3034,6 @@ namespace CcaRegistrationDf {
             private global::System.Data.DataColumn columnIsPrimaryEnrollmentVerified;
             
             private global::System.Data.DataColumn columnIsSection504;
-            
-            private global::System.Data.DataColumn columnStudentBudgetID;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -3571,14 +3214,6 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn StudentBudgetIDColumn {
-                get {
-                    return this.columnStudentBudgetID;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3631,8 +3266,7 @@ namespace CcaRegistrationDf {
                         bool IsFeeWaived, 
                         bool IsIEP, 
                         bool IsPrimaryEnrollmentVerified, 
-                        bool IsSection504, 
-                        int StudentBudgetID) {
+                        bool IsSection504) {
                 StudentsRow rowStudentsRow = ((StudentsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -3652,8 +3286,7 @@ namespace CcaRegistrationDf {
                         IsFeeWaived,
                         IsIEP,
                         IsPrimaryEnrollmentVerified,
-                        IsSection504,
-                        StudentBudgetID};
+                        IsSection504};
                 rowStudentsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowStudentsRow);
                 return rowStudentsRow;
@@ -3701,7 +3334,6 @@ namespace CcaRegistrationDf {
                 this.columnIsIEP = base.Columns["IsIEP"];
                 this.columnIsPrimaryEnrollmentVerified = base.Columns["IsPrimaryEnrollmentVerified"];
                 this.columnIsSection504 = base.Columns["IsSection504"];
-                this.columnStudentBudgetID = base.Columns["StudentBudgetID"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3743,8 +3375,6 @@ namespace CcaRegistrationDf {
                 base.Columns.Add(this.columnIsPrimaryEnrollmentVerified);
                 this.columnIsSection504 = new global::System.Data.DataColumn("IsSection504", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIsSection504);
-                this.columnStudentBudgetID = new global::System.Data.DataColumn("StudentBudgetID", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnStudentBudgetID);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -3764,7 +3394,6 @@ namespace CcaRegistrationDf {
                 this.columnIsIEP.AllowDBNull = false;
                 this.columnIsPrimaryEnrollmentVerified.AllowDBNull = false;
                 this.columnIsSection504.AllowDBNull = false;
-                this.columnStudentBudgetID.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5079,38 +4708,6 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public decimal Unallocated {
-                get {
-                    try {
-                        return ((decimal)(this[this.tableCCAs.UnallocatedColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Unallocated\' in table \'CCAs\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableCCAs.UnallocatedColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public decimal UnallocatedReduction {
-                get {
-                    try {
-                        return ((decimal)(this[this.tableCCAs.UnallocatedReductionColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'UnallocatedReduction\' in table \'CCAs\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableCCAs.UnallocatedReductionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public System.DateTime WithdrawalDate {
                 get {
                     try {
@@ -5202,6 +4799,38 @@ namespace CcaRegistrationDf {
                 }
                 set {
                     this[this.tableCCAs.ExcessiveFEDReasonIDColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int Distribution {
+                get {
+                    try {
+                        return ((int)(this[this.tableCCAs.DistributionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Distribution\' in table \'CCAs\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableCCAs.DistributionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int Offset {
+                get {
+                    try {
+                        return ((int)(this[this.tableCCAs.OffsetColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Offset\' in table \'CCAs\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableCCAs.OffsetColumn] = value;
                 }
             }
             
@@ -5590,30 +5219,6 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsUnallocatedNull() {
-                return this.IsNull(this.tableCCAs.UnallocatedColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetUnallocatedNull() {
-                this[this.tableCCAs.UnallocatedColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsUnallocatedReductionNull() {
-                return this.IsNull(this.tableCCAs.UnallocatedReductionColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetUnallocatedReductionNull() {
-                this[this.tableCCAs.UnallocatedReductionColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsWithdrawalDateNull() {
                 return this.IsNull(this.tableCCAs.WithdrawalDateColumn);
             }
@@ -5682,6 +5287,30 @@ namespace CcaRegistrationDf {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetExcessiveFEDReasonIDNull() {
                 this[this.tableCCAs.ExcessiveFEDReasonIDColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDistributionNull() {
+                return this.IsNull(this.tableCCAs.DistributionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDistributionNull() {
+                this[this.tableCCAs.DistributionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsOffsetNull() {
+                return this.IsNull(this.tableCCAs.OffsetColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetOffsetNull() {
+                this[this.tableCCAs.OffsetColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6322,76 +5951,6 @@ namespace CcaRegistrationDf {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class StudentBudgetsRow : global::System.Data.DataRow {
-            
-            private StudentBudgetsDataTable tableStudentBudgets;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal StudentBudgetsRow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableStudentBudgets = ((StudentBudgetsDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int ID {
-                get {
-                    return ((int)(this[this.tableStudentBudgets.IDColumn]));
-                }
-                set {
-                    this[this.tableStudentBudgets.IDColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int Year {
-                get {
-                    return ((int)(this[this.tableStudentBudgets.YearColumn]));
-                }
-                set {
-                    this[this.tableStudentBudgets.YearColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int Month {
-                get {
-                    return ((int)(this[this.tableStudentBudgets.MonthColumn]));
-                }
-                set {
-                    this[this.tableStudentBudgets.MonthColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public decimal OffSet {
-                get {
-                    return ((decimal)(this[this.tableStudentBudgets.OffSetColumn]));
-                }
-                set {
-                    this[this.tableStudentBudgets.OffSetColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public decimal Distribution {
-                get {
-                    return ((decimal)(this[this.tableStudentBudgets.DistributionColumn]));
-                }
-                set {
-                    this[this.tableStudentBudgets.DistributionColumn] = value;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
         public partial class StudentsRow : global::System.Data.DataRow {
             
             private StudentsDataTable tableStudents;
@@ -6654,17 +6213,6 @@ namespace CcaRegistrationDf {
                 }
                 set {
                     this[this.tableStudents.IsSection504Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int StudentBudgetID {
-                get {
-                    return ((int)(this[this.tableStudents.StudentBudgetIDColumn]));
-                }
-                set {
-                    this[this.tableStudents.StudentBudgetIDColumn] = value;
                 }
             }
             
@@ -7105,40 +6653,6 @@ namespace CcaRegistrationDf {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public class StudentBudgetsRowChangeEvent : global::System.EventArgs {
-            
-            private StudentBudgetsRow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRowChangeEvent(StudentBudgetsRow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentBudgetsRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public class StudentsRowChangeEvent : global::System.EventArgs {
             
             private StudentsRow eventRow;
@@ -7406,8 +6920,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             tableMapping.ColumnMappings.Add("RemediationPeriodBegins", "RemediationPeriodBegins");
             tableMapping.ColumnMappings.Add("TotalDisbursementsProvider", "TotalDisbursementsProvider");
             tableMapping.ColumnMappings.Add("TwentyDaysPastSemesterStartDate", "TwentyDaysPastSemesterStartDate");
-            tableMapping.ColumnMappings.Add("Unallocated", "Unallocated");
-            tableMapping.ColumnMappings.Add("UnallocatedReduction", "UnallocatedReduction");
             tableMapping.ColumnMappings.Add("WithdrawalDate", "WithdrawalDate");
             tableMapping.ColumnMappings.Add("Grand_Total", "Grand_Total");
             tableMapping.ColumnMappings.Add("TeacherCactusID", "TeacherCactusID");
@@ -7418,42 +6930,41 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[CCAs] WHERE (([ID] = @Original_ID))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [CCAs] WHERE (([ID] = @Original_ID))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[CCAs] ([UserId], [ApplicationSubmissionDate], [StudentID], [St" +
-                "udentGradeLevel], [HasExcessiveFED], [ExcessiveFEDExplanation], [Comments], [Cou" +
-                "nselorID], [IsCounselorSigned], [PrimaryID], [IsBusinessAdministratorAcceptRejec" +
-                "tEnrollment], [PrimaryLEAExplantionRejection], [PrimaryLEAReasonRejectingCCA], [" +
-                "ProviderID], [CompletionStatus], [CourseBegin], [CourseStartDate], [CourseComple" +
-                "tionDate], [CreditCompletedToDate], [DateConfirmationActiveParticipation], [Date" +
-                "ContinuationActiveParticipation], [DateReportPassingGrade], [IsEnrollmentNoticeS" +
-                "ent], [IsProviderAcceptsRejectsCourseRequest], [IsProviderEnrollmentVerified], [" +
-                "IsProviderSignature], [ProviderExplanationRejection], [ProviderReasonRejection]," +
-                " [OnlineCourseID], [CourseCategoryID], [CourseCreditID], [CourseName2ndSemesterI" +
-                "D], [IsCourseConsistentWithStudentSEOP], [SessionID], [BudgetPrimaryProvider], [" +
-                "IsRemediation], [NotificationDate], [PrimaryNotificationDate], [PriorDisbursemen" +
-                "tProvider], [RecordNotes], [RemediationPeriodBegins], [TotalDisbursementsProvide" +
-                "r], [TwentyDaysPastSemesterStartDate], [Unallocated], [UnallocatedReduction], [W" +
-                "ithdrawalDate], [Grand_Total], [TeacherCactusID], [TeacherFirstName], [TeacherLa" +
-                "stName], [ExcessiveFEDReasonID], [EnrollmentLocationID]) VALUES (@UserId, @Appli" +
-                "cationSubmissionDate, @StudentID, @StudentGradeLevel, @HasExcessiveFED, @Excessi" +
-                "veFEDExplanation, @Comments, @CounselorID, @IsCounselorSigned, @PrimaryID, @IsBu" +
-                "sinessAdministratorAcceptRejectEnrollment, @PrimaryLEAExplantionRejection, @Prim" +
-                "aryLEAReasonRejectingCCA, @ProviderID, @CompletionStatus, @CourseBegin, @CourseS" +
-                "tartDate, @CourseCompletionDate, @CreditCompletedToDate, @DateConfirmationActive" +
-                "Participation, @DateContinuationActiveParticipation, @DateReportPassingGrade, @I" +
-                "sEnrollmentNoticeSent, @IsProviderAcceptsRejectsCourseRequest, @IsProviderEnroll" +
-                "mentVerified, @IsProviderSignature, @ProviderExplanationRejection, @ProviderReas" +
-                "onRejection, @OnlineCourseID, @CourseCategoryID, @CourseCreditID, @CourseName2nd" +
-                "SemesterID, @IsCourseConsistentWithStudentSEOP, @SessionID, @BudgetPrimaryProvid" +
-                "er, @IsRemediation, @NotificationDate, @PrimaryNotificationDate, @PriorDisbursem" +
-                "entProvider, @RecordNotes, @RemediationPeriodBegins, @TotalDisbursementsProvider" +
-                ", @TwentyDaysPastSemesterStartDate, @Unallocated, @UnallocatedReduction, @Withdr" +
-                "awalDate, @Grand_Total, @TeacherCactusID, @TeacherFirstName, @TeacherLastName, @" +
-                "ExcessiveFEDReasonID, @EnrollmentLocationID)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [CCAs] ([UserId], [ApplicationSubmissionDate], [StudentID], [StudentG" +
+                "radeLevel], [HasExcessiveFED], [ExcessiveFEDExplanation], [Comments], [Counselor" +
+                "ID], [IsCounselorSigned], [PrimaryID], [IsBusinessAdministratorAcceptRejectEnrol" +
+                "lment], [PrimaryLEAExplantionRejection], [PrimaryLEAReasonRejectingCCA], [Provid" +
+                "erID], [CompletionStatus], [CourseBegin], [CourseStartDate], [CourseCompletionDa" +
+                "te], [CreditCompletedToDate], [DateConfirmationActiveParticipation], [DateContin" +
+                "uationActiveParticipation], [DateReportPassingGrade], [IsEnrollmentNoticeSent], " +
+                "[IsProviderAcceptsRejectsCourseRequest], [IsProviderEnrollmentVerified], [IsProv" +
+                "iderSignature], [ProviderExplanationRejection], [ProviderReasonRejection], [Onli" +
+                "neCourseID], [CourseCategoryID], [CourseCreditID], [CourseName2ndSemesterID], [I" +
+                "sCourseConsistentWithStudentSEOP], [SessionID], [BudgetPrimaryProvider], [IsReme" +
+                "diation], [NotificationDate], [PrimaryNotificationDate], [PriorDisbursementProvi" +
+                "der], [RecordNotes], [RemediationPeriodBegins], [TotalDisbursementsProvider], [T" +
+                "wentyDaysPastSemesterStartDate], [WithdrawalDate], [Grand_Total], [TeacherCactus" +
+                "ID], [TeacherFirstName], [TeacherLastName], [ExcessiveFEDReasonID], [EnrollmentL" +
+                "ocationID]) VALUES (@UserId, @ApplicationSubmissionDate, @StudentID, @StudentGra" +
+                "deLevel, @HasExcessiveFED, @ExcessiveFEDExplanation, @Comments, @CounselorID, @I" +
+                "sCounselorSigned, @PrimaryID, @IsBusinessAdministratorAcceptRejectEnrollment, @P" +
+                "rimaryLEAExplantionRejection, @PrimaryLEAReasonRejectingCCA, @ProviderID, @Compl" +
+                "etionStatus, @CourseBegin, @CourseStartDate, @CourseCompletionDate, @CreditCompl" +
+                "etedToDate, @DateConfirmationActiveParticipation, @DateContinuationActivePartici" +
+                "pation, @DateReportPassingGrade, @IsEnrollmentNoticeSent, @IsProviderAcceptsReje" +
+                "ctsCourseRequest, @IsProviderEnrollmentVerified, @IsProviderSignature, @Provider" +
+                "ExplanationRejection, @ProviderReasonRejection, @OnlineCourseID, @CourseCategory" +
+                "ID, @CourseCreditID, @CourseName2ndSemesterID, @IsCourseConsistentWithStudentSEO" +
+                "P, @SessionID, @BudgetPrimaryProvider, @IsRemediation, @NotificationDate, @Prima" +
+                "ryNotificationDate, @PriorDisbursementProvider, @RecordNotes, @RemediationPeriod" +
+                "Begins, @TotalDisbursementsProvider, @TwentyDaysPastSemesterStartDate, @Withdraw" +
+                "alDate, @Grand_Total, @TeacherCactusID, @TeacherFirstName, @TeacherLastName, @Ex" +
+                "cessiveFEDReasonID, @EnrollmentLocationID)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ApplicationSubmissionDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ApplicationSubmissionDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7498,8 +7009,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RemediationPeriodBegins", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "RemediationPeriodBegins", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TotalDisbursementsProvider", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "TotalDisbursementsProvider", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TwentyDaysPastSemesterStartDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TwentyDaysPastSemesterStartDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Unallocated", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Unallocated", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UnallocatedReduction", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "UnallocatedReduction", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@WithdrawalDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "WithdrawalDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Grand_Total", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Grand_Total", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherCactusID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherCactusID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7509,38 +7018,37 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EnrollmentLocationID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EnrollmentLocationID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[CCAs] SET [UserId] = @UserId, [ApplicationSubmissionDate] = @Applic" +
-                "ationSubmissionDate, [StudentID] = @StudentID, [StudentGradeLevel] = @StudentGra" +
-                "deLevel, [HasExcessiveFED] = @HasExcessiveFED, [ExcessiveFEDExplanation] = @Exce" +
-                "ssiveFEDExplanation, [Comments] = @Comments, [CounselorID] = @CounselorID, [IsCo" +
-                "unselorSigned] = @IsCounselorSigned, [PrimaryID] = @PrimaryID, [IsBusinessAdmini" +
-                "stratorAcceptRejectEnrollment] = @IsBusinessAdministratorAcceptRejectEnrollment," +
-                " [PrimaryLEAExplantionRejection] = @PrimaryLEAExplantionRejection, [PrimaryLEARe" +
-                "asonRejectingCCA] = @PrimaryLEAReasonRejectingCCA, [ProviderID] = @ProviderID, [" +
-                "CompletionStatus] = @CompletionStatus, [CourseBegin] = @CourseBegin, [CourseStar" +
-                "tDate] = @CourseStartDate, [CourseCompletionDate] = @CourseCompletionDate, [Cred" +
-                "itCompletedToDate] = @CreditCompletedToDate, [DateConfirmationActiveParticipatio" +
-                "n] = @DateConfirmationActiveParticipation, [DateContinuationActiveParticipation]" +
-                " = @DateContinuationActiveParticipation, [DateReportPassingGrade] = @DateReportP" +
-                "assingGrade, [IsEnrollmentNoticeSent] = @IsEnrollmentNoticeSent, [IsProviderAcce" +
-                "ptsRejectsCourseRequest] = @IsProviderAcceptsRejectsCourseRequest, [IsProviderEn" +
-                "rollmentVerified] = @IsProviderEnrollmentVerified, [IsProviderSignature] = @IsPr" +
-                "oviderSignature, [ProviderExplanationRejection] = @ProviderExplanationRejection," +
-                " [ProviderReasonRejection] = @ProviderReasonRejection, [OnlineCourseID] = @Onlin" +
-                "eCourseID, [CourseCategoryID] = @CourseCategoryID, [CourseCreditID] = @CourseCre" +
-                "ditID, [CourseName2ndSemesterID] = @CourseName2ndSemesterID, [IsCourseConsistent" +
-                "WithStudentSEOP] = @IsCourseConsistentWithStudentSEOP, [SessionID] = @SessionID," +
-                " [BudgetPrimaryProvider] = @BudgetPrimaryProvider, [IsRemediation] = @IsRemediat" +
-                "ion, [NotificationDate] = @NotificationDate, [PrimaryNotificationDate] = @Primar" +
-                "yNotificationDate, [PriorDisbursementProvider] = @PriorDisbursementProvider, [Re" +
-                "cordNotes] = @RecordNotes, [RemediationPeriodBegins] = @RemediationPeriodBegins," +
-                " [TotalDisbursementsProvider] = @TotalDisbursementsProvider, [TwentyDaysPastSeme" +
-                "sterStartDate] = @TwentyDaysPastSemesterStartDate, [Unallocated] = @Unallocated," +
-                " [UnallocatedReduction] = @UnallocatedReduction, [WithdrawalDate] = @WithdrawalD" +
-                "ate, [Grand_Total] = @Grand_Total, [TeacherCactusID] = @TeacherCactusID, [Teache" +
-                "rFirstName] = @TeacherFirstName, [TeacherLastName] = @TeacherLastName, [Excessiv" +
-                "eFEDReasonID] = @ExcessiveFEDReasonID, [EnrollmentLocationID] = @EnrollmentLocat" +
-                "ionID WHERE (([ID] = @Original_ID))";
+            this._adapter.UpdateCommand.CommandText = "UPDATE [CCAs] SET [UserId] = @UserId, [ApplicationSubmissionDate] = @ApplicationS" +
+                "ubmissionDate, [StudentID] = @StudentID, [StudentGradeLevel] = @StudentGradeLeve" +
+                "l, [HasExcessiveFED] = @HasExcessiveFED, [ExcessiveFEDExplanation] = @ExcessiveF" +
+                "EDExplanation, [Comments] = @Comments, [CounselorID] = @CounselorID, [IsCounselo" +
+                "rSigned] = @IsCounselorSigned, [PrimaryID] = @PrimaryID, [IsBusinessAdministrato" +
+                "rAcceptRejectEnrollment] = @IsBusinessAdministratorAcceptRejectEnrollment, [Prim" +
+                "aryLEAExplantionRejection] = @PrimaryLEAExplantionRejection, [PrimaryLEAReasonRe" +
+                "jectingCCA] = @PrimaryLEAReasonRejectingCCA, [ProviderID] = @ProviderID, [Comple" +
+                "tionStatus] = @CompletionStatus, [CourseBegin] = @CourseBegin, [CourseStartDate]" +
+                " = @CourseStartDate, [CourseCompletionDate] = @CourseCompletionDate, [CreditComp" +
+                "letedToDate] = @CreditCompletedToDate, [DateConfirmationActiveParticipation] = @" +
+                "DateConfirmationActiveParticipation, [DateContinuationActiveParticipation] = @Da" +
+                "teContinuationActiveParticipation, [DateReportPassingGrade] = @DateReportPassing" +
+                "Grade, [IsEnrollmentNoticeSent] = @IsEnrollmentNoticeSent, [IsProviderAcceptsRej" +
+                "ectsCourseRequest] = @IsProviderAcceptsRejectsCourseRequest, [IsProviderEnrollme" +
+                "ntVerified] = @IsProviderEnrollmentVerified, [IsProviderSignature] = @IsProvider" +
+                "Signature, [ProviderExplanationRejection] = @ProviderExplanationRejection, [Prov" +
+                "iderReasonRejection] = @ProviderReasonRejection, [OnlineCourseID] = @OnlineCours" +
+                "eID, [CourseCategoryID] = @CourseCategoryID, [CourseCreditID] = @CourseCreditID," +
+                " [CourseName2ndSemesterID] = @CourseName2ndSemesterID, [IsCourseConsistentWithSt" +
+                "udentSEOP] = @IsCourseConsistentWithStudentSEOP, [SessionID] = @SessionID, [Budg" +
+                "etPrimaryProvider] = @BudgetPrimaryProvider, [IsRemediation] = @IsRemediation, [" +
+                "NotificationDate] = @NotificationDate, [PrimaryNotificationDate] = @PrimaryNotif" +
+                "icationDate, [PriorDisbursementProvider] = @PriorDisbursementProvider, [RecordNo" +
+                "tes] = @RecordNotes, [RemediationPeriodBegins] = @RemediationPeriodBegins, [Tota" +
+                "lDisbursementsProvider] = @TotalDisbursementsProvider, [TwentyDaysPastSemesterSt" +
+                "artDate] = @TwentyDaysPastSemesterStartDate, [WithdrawalDate] = @WithdrawalDate," +
+                " [Grand_Total] = @Grand_Total, [TeacherCactusID] = @TeacherCactusID, [TeacherFir" +
+                "stName] = @TeacherFirstName, [TeacherLastName] = @TeacherLastName, [ExcessiveFED" +
+                "ReasonID] = @ExcessiveFEDReasonID, [EnrollmentLocationID] = @EnrollmentLocationI" +
+                "D WHERE (([ID] = @Original_ID))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ApplicationSubmissionDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ApplicationSubmissionDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7585,8 +7093,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RemediationPeriodBegins", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "RemediationPeriodBegins", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TotalDisbursementsProvider", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "TotalDisbursementsProvider", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TwentyDaysPastSemesterStartDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TwentyDaysPastSemesterStartDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Unallocated", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Unallocated", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UnallocatedReduction", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "UnallocatedReduction", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@WithdrawalDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "WithdrawalDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Grand_Total", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Grand_Total", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherCactusID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherCactusID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -7610,7 +7116,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFEDExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, Unallocated, UnallocatedReduction, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFEDReasonID, EnrollmentLocationID FROM dbo.CCAs";
+            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFEDExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFEDReasonID, EnrollmentLocationID FROM CCAs";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -7737,8 +7243,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     global::System.Nullable<global::System.DateTime> RemediationPeriodBegins, 
                     global::System.Nullable<decimal> TotalDisbursementsProvider, 
                     global::System.Nullable<global::System.DateTime> TwentyDaysPastSemesterStartDate, 
-                    global::System.Nullable<decimal> Unallocated, 
-                    global::System.Nullable<decimal> UnallocatedReduction, 
                     global::System.Nullable<global::System.DateTime> WithdrawalDate, 
                     global::System.Nullable<decimal> Grand_Total, 
                     global::System.Nullable<int> TeacherCactusID, 
@@ -7919,59 +7423,47 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
-            if ((Unallocated.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[43].Value = ((decimal)(Unallocated.Value));
+            if ((WithdrawalDate.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[43].Value = ((System.DateTime)(WithdrawalDate.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
-            if ((UnallocatedReduction.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[44].Value = ((decimal)(UnallocatedReduction.Value));
+            if ((Grand_Total.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[44].Value = ((decimal)(Grand_Total.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
-            if ((WithdrawalDate.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[45].Value = ((System.DateTime)(WithdrawalDate.Value));
+            if ((TeacherCactusID.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[45].Value = ((int)(TeacherCactusID.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
-            if ((Grand_Total.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[46].Value = ((decimal)(Grand_Total.Value));
-            }
-            else {
+            if ((TeacherFirstName == null)) {
                 this.Adapter.InsertCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
-            if ((TeacherCactusID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[47].Value = ((int)(TeacherCactusID.Value));
-            }
             else {
-                this.Adapter.InsertCommand.Parameters[47].Value = global::System.DBNull.Value;
-            }
-            if ((TeacherFirstName == null)) {
-                this.Adapter.InsertCommand.Parameters[48].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[48].Value = ((string)(TeacherFirstName));
+                this.Adapter.InsertCommand.Parameters[46].Value = ((string)(TeacherFirstName));
             }
             if ((TeacherLastName == null)) {
-                this.Adapter.InsertCommand.Parameters[49].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[47].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[49].Value = ((string)(TeacherLastName));
+                this.Adapter.InsertCommand.Parameters[47].Value = ((string)(TeacherLastName));
             }
             if ((ExcessiveFEDReasonID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[50].Value = ((int)(ExcessiveFEDReasonID.Value));
+                this.Adapter.InsertCommand.Parameters[48].Value = ((int)(ExcessiveFEDReasonID.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[50].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[48].Value = global::System.DBNull.Value;
             }
             if ((EnrollmentLocationID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[51].Value = ((int)(EnrollmentLocationID.Value));
+                this.Adapter.InsertCommand.Parameters[49].Value = ((int)(EnrollmentLocationID.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[51].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[49].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -8037,8 +7529,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     global::System.Nullable<global::System.DateTime> RemediationPeriodBegins, 
                     global::System.Nullable<decimal> TotalDisbursementsProvider, 
                     global::System.Nullable<global::System.DateTime> TwentyDaysPastSemesterStartDate, 
-                    global::System.Nullable<decimal> Unallocated, 
-                    global::System.Nullable<decimal> UnallocatedReduction, 
                     global::System.Nullable<global::System.DateTime> WithdrawalDate, 
                     global::System.Nullable<decimal> Grand_Total, 
                     global::System.Nullable<int> TeacherCactusID, 
@@ -8220,61 +7710,49 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
-            if ((Unallocated.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((decimal)(Unallocated.Value));
+            if ((WithdrawalDate.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((System.DateTime)(WithdrawalDate.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
-            if ((UnallocatedReduction.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((decimal)(UnallocatedReduction.Value));
+            if ((Grand_Total.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((decimal)(Grand_Total.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
-            if ((WithdrawalDate.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((System.DateTime)(WithdrawalDate.Value));
+            if ((TeacherCactusID.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((int)(TeacherCactusID.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
-            if ((Grand_Total.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((decimal)(Grand_Total.Value));
-            }
-            else {
+            if ((TeacherFirstName == null)) {
                 this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
-            if ((TeacherCactusID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[47].Value = ((int)(TeacherCactusID.Value));
-            }
             else {
-                this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
-            }
-            if ((TeacherFirstName == null)) {
-                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((string)(TeacherFirstName));
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((string)(TeacherFirstName));
             }
             if ((TeacherLastName == null)) {
-                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(TeacherLastName));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(TeacherLastName));
             }
             if ((ExcessiveFEDReasonID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((int)(ExcessiveFEDReasonID.Value));
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((int)(ExcessiveFEDReasonID.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
             }
             if ((EnrollmentLocationID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[51].Value = ((int)(EnrollmentLocationID.Value));
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((int)(EnrollmentLocationID.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[51].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[52].Value = ((int)(Original_ID));
+            this.Adapter.UpdateCommand.Parameters[50].Value = ((int)(Original_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -9635,303 +9113,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
     [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
         ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-    public partial class StudentBudgetsTableAdapter : global::System.ComponentModel.Component {
-        
-        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
-        
-        private global::System.Data.SqlClient.SqlConnection _connection;
-        
-        private global::System.Data.SqlClient.SqlTransaction _transaction;
-        
-        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
-        
-        private bool _clearBeforeFill;
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public StudentBudgetsTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
-            get {
-                if ((this._adapter == null)) {
-                    this.InitAdapter();
-                }
-                return this._adapter;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        internal global::System.Data.SqlClient.SqlConnection Connection {
-            get {
-                if ((this._connection == null)) {
-                    this.InitConnection();
-                }
-                return this._connection;
-            }
-            set {
-                this._connection = value;
-                if ((this.Adapter.InsertCommand != null)) {
-                    this.Adapter.InsertCommand.Connection = value;
-                }
-                if ((this.Adapter.DeleteCommand != null)) {
-                    this.Adapter.DeleteCommand.Connection = value;
-                }
-                if ((this.Adapter.UpdateCommand != null)) {
-                    this.Adapter.UpdateCommand.Connection = value;
-                }
-                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
-                    if ((this.CommandCollection[i] != null)) {
-                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
-                    }
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        internal global::System.Data.SqlClient.SqlTransaction Transaction {
-            get {
-                return this._transaction;
-            }
-            set {
-                this._transaction = value;
-                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
-                    this.CommandCollection[i].Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.DeleteCommand != null))) {
-                    this.Adapter.DeleteCommand.Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.InsertCommand != null))) {
-                    this.Adapter.InsertCommand.Transaction = this._transaction;
-                }
-                if (((this.Adapter != null) 
-                            && (this.Adapter.UpdateCommand != null))) {
-                    this.Adapter.UpdateCommand.Transaction = this._transaction;
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
-            get {
-                if ((this._commandCollection == null)) {
-                    this.InitCommandCollection();
-                }
-                return this._commandCollection;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public bool ClearBeforeFill {
-            get {
-                return this._clearBeforeFill;
-            }
-            set {
-                this._clearBeforeFill = value;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private void InitAdapter() {
-            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
-            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
-            tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "StudentBudgets";
-            tableMapping.ColumnMappings.Add("ID", "ID");
-            tableMapping.ColumnMappings.Add("Year", "Year");
-            tableMapping.ColumnMappings.Add("Month", "Month");
-            tableMapping.ColumnMappings.Add("OffSet", "OffSet");
-            tableMapping.ColumnMappings.Add("Distribution", "Distribution");
-            this._adapter.TableMappings.Add(tableMapping);
-            this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
-            this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[StudentBudgets] WHERE (([ID] = @Original_ID))";
-            this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
-            this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
-            this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[StudentBudgets] ([Year], [Month], [OffSet], [Distribution]) VA" +
-                "LUES (@Year, @Month, @OffSet, @Distribution)";
-            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Year", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Year", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Month", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Month", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@OffSet", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "OffSet", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Distribution", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Distribution", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
-            this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[StudentBudgets] SET [Year] = @Year, [Month] = @Month, [OffSet] = @O" +
-                "ffSet, [Distribution] = @Distribution WHERE (([ID] = @Original_ID))";
-            this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Year", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Year", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Month", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Month", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@OffSet", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "OffSet", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Distribution", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "Distribution", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private void InitConnection() {
-            this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
-            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
-            this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT ID, Year, Month, OffSet, Distribution FROM dbo.StudentBudgets";
-            this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(Monthly.StudentBudgetsDataTable dataTable) {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((this.ClearBeforeFill == true)) {
-                dataTable.Clear();
-            }
-            int returnValue = this.Adapter.Fill(dataTable);
-            return returnValue;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual Monthly.StudentBudgetsDataTable GetData() {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
-            Monthly.StudentBudgetsDataTable dataTable = new Monthly.StudentBudgetsDataTable();
-            this.Adapter.Fill(dataTable);
-            return dataTable;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(Monthly.StudentBudgetsDataTable dataTable) {
-            return this.Adapter.Update(dataTable);
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(Monthly dataSet) {
-            return this.Adapter.Update(dataSet, "StudentBudgets");
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(global::System.Data.DataRow dataRow) {
-            return this.Adapter.Update(new global::System.Data.DataRow[] {
-                        dataRow});
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(global::System.Data.DataRow[] dataRows) {
-            return this.Adapter.Update(dataRows);
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_ID) {
-            this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ID));
-            global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
-            if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
-                        != global::System.Data.ConnectionState.Open)) {
-                this.Adapter.DeleteCommand.Connection.Open();
-            }
-            try {
-                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
-                return returnValue;
-            }
-            finally {
-                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
-                    this.Adapter.DeleteCommand.Connection.Close();
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int Year, int Month, decimal OffSet, decimal Distribution) {
-            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(Year));
-            this.Adapter.InsertCommand.Parameters[1].Value = ((int)(Month));
-            this.Adapter.InsertCommand.Parameters[2].Value = ((decimal)(OffSet));
-            this.Adapter.InsertCommand.Parameters[3].Value = ((decimal)(Distribution));
-            global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
-            if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
-                        != global::System.Data.ConnectionState.Open)) {
-                this.Adapter.InsertCommand.Connection.Open();
-            }
-            try {
-                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
-                return returnValue;
-            }
-            finally {
-                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
-                    this.Adapter.InsertCommand.Connection.Close();
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int Year, int Month, decimal OffSet, decimal Distribution, int Original_ID) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(Year));
-            this.Adapter.UpdateCommand.Parameters[1].Value = ((int)(Month));
-            this.Adapter.UpdateCommand.Parameters[2].Value = ((decimal)(OffSet));
-            this.Adapter.UpdateCommand.Parameters[3].Value = ((decimal)(Distribution));
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Original_ID));
-            global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
-            if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
-                        != global::System.Data.ConnectionState.Open)) {
-                this.Adapter.UpdateCommand.Connection.Open();
-            }
-            try {
-                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
-                return returnValue;
-            }
-            finally {
-                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
-                    this.Adapter.UpdateCommand.Connection.Close();
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    ///Represents the connection and commands used to retrieve and save data.
-    ///</summary>
-    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
-    [global::System.ComponentModel.ToolboxItem(true)]
-    [global::System.ComponentModel.DataObjectAttribute(true)]
-    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
-        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
     public partial class StudentsTableAdapter : global::System.ComponentModel.Component {
         
         private global::System.Data.SqlClient.SqlDataAdapter _adapter;
@@ -10062,16 +9243,15 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             tableMapping.ColumnMappings.Add("IsIEP", "IsIEP");
             tableMapping.ColumnMappings.Add("IsPrimaryEnrollmentVerified", "IsPrimaryEnrollmentVerified");
             tableMapping.ColumnMappings.Add("IsSection504", "IsSection504");
-            tableMapping.ColumnMappings.Add("StudentBudgetID", "StudentBudgetID");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Students] WHERE (([ID] = @Original_ID))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [Students] WHERE (([ID] = @Original_ID))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[Students] ([UserId], [ParentID], [StudentFirstName], [StudentLastName], [SSID], [StudentDOB], [StudentEmail], [EnrollmentLocationID], [EnrollmentLocationSchoolNamesID], [SchoolOfRecord], [GraduationDate], [HasHomeSchoolRelease], [IsEarlyGraduate], [IsFeeWaived], [IsIEP], [IsPrimaryEnrollmentVerified], [IsSection504], [StudentBudgetID]) VALUES (@UserId, @ParentID, @StudentFirstName, @StudentLastName, @SSID, @StudentDOB, @StudentEmail, @EnrollmentLocationID, @EnrollmentLocationSchoolNamesID, @SchoolOfRecord, @GraduationDate, @HasHomeSchoolRelease, @IsEarlyGraduate, @IsFeeWaived, @IsIEP, @IsPrimaryEnrollmentVerified, @IsSection504, @StudentBudgetID)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [Students] ([UserId], [ParentID], [StudentFirstName], [StudentLastName], [SSID], [StudentDOB], [StudentEmail], [EnrollmentLocationID], [EnrollmentLocationSchoolNamesID], [SchoolOfRecord], [GraduationDate], [HasHomeSchoolRelease], [IsEarlyGraduate], [IsFeeWaived], [IsIEP], [IsPrimaryEnrollmentVerified], [IsSection504]) VALUES (@UserId, @ParentID, @StudentFirstName, @StudentLastName, @SSID, @StudentDOB, @StudentEmail, @EnrollmentLocationID, @EnrollmentLocationSchoolNamesID, @SchoolOfRecord, @GraduationDate, @HasHomeSchoolRelease, @IsEarlyGraduate, @IsFeeWaived, @IsIEP, @IsPrimaryEnrollmentVerified, @IsSection504)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ParentID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ParentID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -10090,10 +9270,9 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsIEP", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsIEP", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsPrimaryEnrollmentVerified", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsPrimaryEnrollmentVerified", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsSection504", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsSection504", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentBudgetID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentBudgetID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[Students] SET [UserId] = @UserId, [ParentID] = @ParentID, [StudentFirstName] = @StudentFirstName, [StudentLastName] = @StudentLastName, [SSID] = @SSID, [StudentDOB] = @StudentDOB, [StudentEmail] = @StudentEmail, [EnrollmentLocationID] = @EnrollmentLocationID, [EnrollmentLocationSchoolNamesID] = @EnrollmentLocationSchoolNamesID, [SchoolOfRecord] = @SchoolOfRecord, [GraduationDate] = @GraduationDate, [HasHomeSchoolRelease] = @HasHomeSchoolRelease, [IsEarlyGraduate] = @IsEarlyGraduate, [IsFeeWaived] = @IsFeeWaived, [IsIEP] = @IsIEP, [IsPrimaryEnrollmentVerified] = @IsPrimaryEnrollmentVerified, [IsSection504] = @IsSection504, [StudentBudgetID] = @StudentBudgetID WHERE (([ID] = @Original_ID))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Students] SET [UserId] = @UserId, [ParentID] = @ParentID, [StudentFirstName] = @StudentFirstName, [StudentLastName] = @StudentLastName, [SSID] = @SSID, [StudentDOB] = @StudentDOB, [StudentEmail] = @StudentEmail, [EnrollmentLocationID] = @EnrollmentLocationID, [EnrollmentLocationSchoolNamesID] = @EnrollmentLocationSchoolNamesID, [SchoolOfRecord] = @SchoolOfRecord, [GraduationDate] = @GraduationDate, [HasHomeSchoolRelease] = @HasHomeSchoolRelease, [IsEarlyGraduate] = @IsEarlyGraduate, [IsFeeWaived] = @IsFeeWaived, [IsIEP] = @IsIEP, [IsPrimaryEnrollmentVerified] = @IsPrimaryEnrollmentVerified, [IsSection504] = @IsSection504 WHERE (([ID] = @Original_ID))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ParentID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ParentID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -10112,7 +9291,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsIEP", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsIEP", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsPrimaryEnrollmentVerified", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsPrimaryEnrollmentVerified", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsSection504", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsSection504", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentBudgetID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentBudgetID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
@@ -10129,7 +9307,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ParentID, StudentFirstName, StudentLastName, SSID, StudentDOB, StudentEmail, EnrollmentLocationID, EnrollmentLocationSchoolNamesID, SchoolOfRecord, GraduationDate, HasHomeSchoolRelease, IsEarlyGraduate, IsFeeWaived, IsIEP, IsPrimaryEnrollmentVerified, IsSection504, StudentBudgetID FROM dbo.Students";
+            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ParentID, StudentFirstName, StudentLastName, SSID, StudentDOB, StudentEmail, EnrollmentLocationID, EnrollmentLocationSchoolNamesID, SchoolOfRecord, GraduationDate, HasHomeSchoolRelease, IsEarlyGraduate, IsFeeWaived, IsIEP, IsPrimaryEnrollmentVerified, IsSection504 FROM Students";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -10229,8 +9407,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     bool IsFeeWaived, 
                     bool IsIEP, 
                     bool IsPrimaryEnrollmentVerified, 
-                    bool IsSection504, 
-                    int StudentBudgetID) {
+                    bool IsSection504) {
             if ((UserId == null)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -10303,7 +9480,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this.Adapter.InsertCommand.Parameters[14].Value = ((bool)(IsIEP));
             this.Adapter.InsertCommand.Parameters[15].Value = ((bool)(IsPrimaryEnrollmentVerified));
             this.Adapter.InsertCommand.Parameters[16].Value = ((bool)(IsSection504));
-            this.Adapter.InsertCommand.Parameters[17].Value = ((int)(StudentBudgetID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -10342,7 +9518,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     bool IsIEP, 
                     bool IsPrimaryEnrollmentVerified, 
                     bool IsSection504, 
-                    int StudentBudgetID, 
                     int Original_ID) {
             if ((UserId == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
@@ -10416,8 +9591,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this.Adapter.UpdateCommand.Parameters[14].Value = ((bool)(IsIEP));
             this.Adapter.UpdateCommand.Parameters[15].Value = ((bool)(IsPrimaryEnrollmentVerified));
             this.Adapter.UpdateCommand.Parameters[16].Value = ((bool)(IsSection504));
-            this.Adapter.UpdateCommand.Parameters[17].Value = ((int)(StudentBudgetID));
-            this.Adapter.UpdateCommand.Parameters[18].Value = ((int)(Original_ID));
+            this.Adapter.UpdateCommand.Parameters[17].Value = ((int)(Original_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -10906,8 +10080,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
         
         private ProvidersTableAdapter _providersTableAdapter;
         
-        private StudentBudgetsTableAdapter _studentBudgetsTableAdapter;
-        
         private StudentsTableAdapter _studentsTableAdapter;
         
         private CourseFeesTableAdapter _courseFeesTableAdapter;
@@ -11002,20 +10174,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
         [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
             "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3" +
             "a", "System.Drawing.Design.UITypeEditor")]
-        public StudentBudgetsTableAdapter StudentBudgetsTableAdapter {
-            get {
-                return this._studentBudgetsTableAdapter;
-            }
-            set {
-                this._studentBudgetsTableAdapter = value;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
-            "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3" +
-            "a", "System.Drawing.Design.UITypeEditor")]
         public StudentsTableAdapter StudentsTableAdapter {
             get {
                 return this._studentsTableAdapter;
@@ -11078,10 +10236,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                             && (this._providersTableAdapter.Connection != null))) {
                     return this._providersTableAdapter.Connection;
                 }
-                if (((this._studentBudgetsTableAdapter != null) 
-                            && (this._studentBudgetsTableAdapter.Connection != null))) {
-                    return this._studentBudgetsTableAdapter.Connection;
-                }
                 if (((this._studentsTableAdapter != null) 
                             && (this._studentsTableAdapter.Connection != null))) {
                     return this._studentsTableAdapter.Connection;
@@ -11116,9 +10270,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     count = (count + 1);
                 }
                 if ((this._providersTableAdapter != null)) {
-                    count = (count + 1);
-                }
-                if ((this._studentBudgetsTableAdapter != null)) {
                     count = (count + 1);
                 }
                 if ((this._studentsTableAdapter != null)) {
@@ -11192,15 +10343,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     allChangedRows.AddRange(updatedRows);
                 }
             }
-            if ((this._studentBudgetsTableAdapter != null)) {
-                global::System.Data.DataRow[] updatedRows = dataSet.StudentBudgets.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
-                updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
-                if (((updatedRows != null) 
-                            && (0 < updatedRows.Length))) {
-                    result = (result + this._studentBudgetsTableAdapter.Update(updatedRows));
-                    allChangedRows.AddRange(updatedRows);
-                }
-            }
             if ((this._courseFeesTableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.CourseFees.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
                 updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
@@ -11268,14 +10410,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     allAddedRows.AddRange(addedRows);
                 }
             }
-            if ((this._studentBudgetsTableAdapter != null)) {
-                global::System.Data.DataRow[] addedRows = dataSet.StudentBudgets.Select(null, null, global::System.Data.DataViewRowState.Added);
-                if (((addedRows != null) 
-                            && (0 < addedRows.Length))) {
-                    result = (result + this._studentBudgetsTableAdapter.Update(addedRows));
-                    allAddedRows.AddRange(addedRows);
-                }
-            }
             if ((this._courseFeesTableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.CourseFees.Select(null, null, global::System.Data.DataViewRowState.Added);
                 if (((addedRows != null) 
@@ -11299,14 +10433,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                 if (((deletedRows != null) 
                             && (0 < deletedRows.Length))) {
                     result = (result + this._courseFeesTableAdapter.Update(deletedRows));
-                    allChangedRows.AddRange(deletedRows);
-                }
-            }
-            if ((this._studentBudgetsTableAdapter != null)) {
-                global::System.Data.DataRow[] deletedRows = dataSet.StudentBudgets.Select(null, null, global::System.Data.DataViewRowState.Deleted);
-                if (((deletedRows != null) 
-                            && (0 < deletedRows.Length))) {
-                    result = (result + this._studentBudgetsTableAdapter.Update(deletedRows));
                     allChangedRows.AddRange(deletedRows);
                 }
             }
@@ -11422,11 +10548,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                 throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
                         "tring.");
             }
-            if (((this._studentBudgetsTableAdapter != null) 
-                        && (this.MatchTableAdapterConnection(this._studentBudgetsTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
-                        "tring.");
-            }
             if (((this._studentsTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._studentsTableAdapter.Connection) == false))) {
                 throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
@@ -11512,15 +10633,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                     if (this._providersTableAdapter.Adapter.AcceptChangesDuringUpdate) {
                         this._providersTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
                         adaptersWithAcceptChangesDuringUpdate.Add(this._providersTableAdapter.Adapter);
-                    }
-                }
-                if ((this._studentBudgetsTableAdapter != null)) {
-                    revertConnections.Add(this._studentBudgetsTableAdapter, this._studentBudgetsTableAdapter.Connection);
-                    this._studentBudgetsTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(workConnection));
-                    this._studentBudgetsTableAdapter.Transaction = ((global::System.Data.SqlClient.SqlTransaction)(workTransaction));
-                    if (this._studentBudgetsTableAdapter.Adapter.AcceptChangesDuringUpdate) {
-                        this._studentBudgetsTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
-                        adaptersWithAcceptChangesDuringUpdate.Add(this._studentBudgetsTableAdapter.Adapter);
                     }
                 }
                 if ((this._studentsTableAdapter != null)) {
@@ -11618,10 +10730,6 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
                 if ((this._providersTableAdapter != null)) {
                     this._providersTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._providersTableAdapter]));
                     this._providersTableAdapter.Transaction = null;
-                }
-                if ((this._studentBudgetsTableAdapter != null)) {
-                    this._studentBudgetsTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._studentBudgetsTableAdapter]));
-                    this._studentBudgetsTableAdapter.Transaction = null;
                 }
                 if ((this._studentsTableAdapter != null)) {
                     this._studentsTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._studentsTableAdapter]));

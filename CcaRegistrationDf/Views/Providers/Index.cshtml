@@ -20,20 +20,7 @@
         <th>
             @Html.DisplayNameFor(model => model.IsActive)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProviderFirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProviderLastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProviderPhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProviderEmail)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProviderFax)
+       
         </th>
         <th></th>
     </tr>
@@ -49,21 +36,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.IsActive)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProviderFirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProviderLastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProviderPhoneNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProviderEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProviderFax)
-        </td>
+       
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |

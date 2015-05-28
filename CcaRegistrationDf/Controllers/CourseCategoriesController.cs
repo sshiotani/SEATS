@@ -40,6 +40,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: CourseCategories/Create
         public ActionResult Create()
         {
+            ViewBag.CourseFeeID = new SelectList(db.CourseFees, "ID", "Fee");
             return View();
         }
 
@@ -57,6 +58,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CourseFeeID = new SelectList(db.CourseFees, "ID", "Fee");
             return View(courseCategory);
         }
 
@@ -72,6 +74,8 @@ namespace CcaRegistrationDf.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.CourseFeeID = new SelectList(db.CourseFees, "ID", "Fee");
             return View(courseCategory);
         }
 
@@ -80,7 +84,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,IsActive")] CourseCategory courseCategory)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,CourseFeeID,Name,IsActive")] CourseCategory courseCategory)
         {
             if (ModelState.IsValid)
             {
@@ -88,6 +92,8 @@ namespace CcaRegistrationDf.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
+            ViewBag.CourseFeeID = new SelectList(db.CourseFees, "ID", "Fee");
             return View(courseCategory);
         }
 

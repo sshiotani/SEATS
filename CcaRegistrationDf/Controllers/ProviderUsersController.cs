@@ -20,8 +20,18 @@ namespace CcaRegistrationDf.Controllers
         // GET: ProviderUsers
         public async Task<ActionResult> Index()
         {
+            // Look up all ccas associated with this provider
+            // Send to form to edit all ccas found.
             var providerUsers = db.ProviderUsers.Include(p => p.Provider);
             return View(await providerUsers.ToListAsync());
+        }
+
+        // GET: CCAs for Provider
+        public async Task<ActionResult> CcaInterface()
+        {
+            // Look up all ccas associated with this primary
+            // Send to form to edit these ccas
+            return View();
         }
 
         // GET: ProviderUsers/Details/5

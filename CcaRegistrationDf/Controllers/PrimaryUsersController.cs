@@ -22,7 +22,17 @@ namespace CcaRegistrationDf.Controllers
         // GET: PrimaryUsers
         public async Task<ActionResult> Index()
         {
+            // Look up all ccas associated with this primary
+            // Send to form to edit these ccas
             return View(await db.PrimaryUsers.ToListAsync());
+        }
+
+        // GET: CCAs for primary
+        public async Task<ActionResult> CcaInterface()
+        {
+            // Look up all ccas associated with this primary
+            // Send to form to edit these ccas
+            return View();
         }
 
         // GET: PrimaryUsers/Details/5

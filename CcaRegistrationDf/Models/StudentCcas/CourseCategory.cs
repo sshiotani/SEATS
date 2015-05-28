@@ -16,6 +16,7 @@ namespace CcaRegistrationDf.Models
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public int CourseFeeID { get; set; }
+        public virtual CourseFee CourseFee { get; set; }
     
         public virtual ICollection<OnlineCourse> Courses { get; set; }
     }

@@ -206,7 +206,6 @@
     <Compile Include="Controllers\PrimaryUsersController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\ProviderUsersController.cs" />
-    <Compile Include="Controllers\UserProfilesController.cs" />
     <Compile Include="Migrations\201505191301485_courseFee.cs" />
     <Compile Include="Migrations\201505191301485_courseFee.Designer.cs">
       <DependentUpon>201505191301485_courseFee.cs</DependentUpon>
@@ -271,9 +270,26 @@
     <Compile Include="Migrations\201505261451487_requiredInfo.Designer.cs">
       <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505261746026_ccaSchoolId.cs" />
+    <Compile Include="Migrations\201505261746026_ccaSchoolId.Designer.cs">
+      <DependentUpon>201505261746026_ccaSchoolId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281820322_removeStudentBudget.cs" />
+    <Compile Include="Migrations\201505281820322_removeStudentBudget.Designer.cs">
+      <DependentUpon>201505281820322_removeStudentBudget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281921483_moveOffset.cs" />
+    <Compile Include="Migrations\201505281921483_moveOffset.Designer.cs">
+      <DependentUpon>201505281921483_moveOffset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505282102189_addCredit2Cca.cs" />
+    <Compile Include="Migrations\201505282102189_addCredit2Cca.Designer.cs">
+      <DependentUpon>201505282102189_addCredit2Cca.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
     <Compile Include="Models\Location.cs" />
-    <Compile Include="Models\PrimaryCcaViewModel.cs" />
-    <Compile Include="Models\ProviderCcaViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
     <Compile Include="Models\ReportContainer.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
@@ -382,13 +398,11 @@
     <Compile Include="Models\StudentCcas\Session.cs" />
     <Compile Include="Models\StudentCcas\Student.cs" />
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
-    <Compile Include="Models\StudentCcas\UserProfile.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\StudentStatusViewModel.cs" />
     <Compile Include="Models\UserLocationViewModel.cs" />
-    <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="Models\UserTypeViewModel.cs" />
-    <Compile Include="Models\UsoeCcaViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\UsoeCcaViewModel.cs" />
     <Compile Include="Monthly.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -713,7 +727,6 @@
     <Content Include="Views\Parents\Details.cshtml" />
     <Content Include="Views\Parents\Edit.cshtml" />
     <Content Include="Views\Parents\Index.cshtml" />
-    <Content Include="Views\Students\EditAdmin.cshtml" />
     <Content Include="Views\CCAs\Create.cshtml" />
     <Content Include="Views\CCAs\Index.cshtml" />
     <Content Include="Views\CourseCategories\Create.cshtml" />
@@ -772,11 +785,6 @@
     <Content Include="Views\Locations\Details.cshtml" />
     <Content Include="Views\Locations\Edit.cshtml" />
     <Content Include="Views\Locations\Index.cshtml" />
-    <Content Include="Views\UserProfiles\Create.cshtml" />
-    <Content Include="Views\UserProfiles\Delete.cshtml" />
-    <Content Include="Views\UserProfiles\Details.cshtml" />
-    <Content Include="Views\UserProfiles\Edit.cshtml" />
-    <Content Include="Views\UserProfiles\Index.cshtml" />
     <Content Include="Views\Home\UserType.cshtml" />
     <Content Include="Views\ProviderUsers\Create.cshtml" />
     <Content Include="Views\ProviderUsers\Delete.cshtml" />
@@ -794,6 +802,11 @@
     <Content Include="Views\Counselors\Edit.cshtml" />
     <Content Include="Views\Counselors\Index.cshtml" />
     <Content Include="Views\Home\RequestSent.cshtml" />
+    <Content Include="Views\Counselors\CcaInterface.cshtml" />
+    <Content Include="Views\Home\CounselorInterface.cshtml" />
+    <Content Include="Views\Admin\CcaInterface.cshtml" />
+    <Content Include="Views\CCAs\UsoeEdit.cshtml" />
+    <Content Include="Views\Students\EditAdmin.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -898,6 +911,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505261451487_requiredInfo.resx">
       <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505261746026_ccaSchoolId.resx">
+      <DependentUpon>201505261746026_ccaSchoolId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281820322_removeStudentBudget.resx">
+      <DependentUpon>201505281820322_removeStudentBudget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281921483_moveOffset.resx">
+      <DependentUpon>201505281921483_moveOffset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505282102189_addCredit2Cca.resx">
+      <DependentUpon>201505282102189_addCredit2Cca.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report1.rdlc" />
   </ItemGroup>

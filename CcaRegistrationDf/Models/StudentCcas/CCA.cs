@@ -23,6 +23,7 @@ namespace CcaRegistrationDf.Models
         public string ExcessiveFEDExplanation { get; set; }
         public Nullable<int> ExcessiveFEDReasonID { get; set; }
         public string Comments { get; set; }
+        public Nullable<int> EnrollmentLocationSchoolNamesID { get; set; }
 
         //Counselor section
         public int CounselorID { get; set; }
@@ -68,12 +69,10 @@ namespace CcaRegistrationDf.Models
         public int CourseCategoryID { get; set; }
         public virtual CourseCategory CourseCategory { get; set; }
         //public Nullable<decimal> CourseFee { get; set; }
-        //public Nullable<int> CourseNameID { get; set; }
         public int CourseCreditID { get; set; }
-        public CourseCredit CourseCredit { get; set; }
+        public virtual CourseCredit CourseCredit { get; set; }
         public Nullable<int> CourseName2ndSemesterID { get; set; }
         public bool IsCourseConsistentWithStudentSEOP { get; set; }      
-        //public Nullable<int> PricingTier { get; set; }
         public int SessionID { get; set; }
         public Session Session { get; set; }
 
@@ -90,8 +89,8 @@ namespace CcaRegistrationDf.Models
         public Nullable<System.DateTime> RemediationPeriodBegins { get; set; }
         public Nullable<decimal> TotalDisbursementsProvider { get; set; }
         public Nullable<System.DateTime> TwentyDaysPastSemesterStartDate { get; set; }
-        public Nullable<decimal> Unallocated { get; set; }
-        public Nullable<decimal> UnallocatedReduction { get; set; }
+        public Nullable<decimal> Offset { get; set; }
+        public Nullable<decimal> Distribution { get; set; }
         public Nullable<System.DateTime> WithdrawalDate { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
         public string Notes { get; set; }

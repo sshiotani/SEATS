@@ -66,20 +66,7 @@ namespace CcaRegistrationDf.Controllers
                 line.PriorDisbursementProvider = cca.PriorDisbursementProvider;
                 line.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
 
-                int? studentBudgetId = await db.Students.Where(m => m.ID == cca.StudentID).Select(m => m.StudentBudgetID).FirstOrDefaultAsync();
-                if (studentBudgetId != null)
-                {
-                    var now = DateTime.Now;
-                    var month = now.Month;
-                    var year = now.Year;
-
-                    var studentBudget = db.StudentBudgets.Where(m => m.ID == studentBudgetId && m.Month == month && m.Year == year).FirstOrDefault();
-                    if (studentBudget != null)
-                    {
-                        line.Offset = studentBudget.OffSet;
-                        line.Distribution = studentBudget.Distribution;
-                    }
-                }
+               
 
                 line.CourseCategory = cca.CourseCategory.Name;
                 line.OnlineCourse = cca.OnlineCourse.Name;
@@ -141,26 +128,9 @@ namespace CcaRegistrationDf.Controllers
                 budget.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
                 budget.PriorDisbursementProvider = cca.PriorDisbursementProvider;
                 budget.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
+                budget.OffSet = cca.Offset;
+                budget.Distribution = cca.Distribution;
                 report.BudgetReport.Add(budget);
-
-                var studentBr = new StudentBudgetReport();
-
-                int? studentBudgetId = await db.Students.Where(m => m.ID == cca.StudentID).Select(m => m.StudentBudgetID).FirstOrDefaultAsync().ConfigureAwait(false);
-                if (studentBudgetId != null)
-                {
-                    var now = DateTime.Now;
-                    var month = now.Month;
-                    var year = now.Year;
-
-                    var studentBudget = await db.StudentBudgets.Where(m => m.ID == studentBudgetId && m.Month == month && m.Year == year).FirstOrDefaultAsync().ConfigureAwait(false);
-                    if (studentBudget != null)
-                    {
-                        studentBr.OffSet = studentBudget.OffSet;
-                        studentBr.Distribution = studentBudget.Distribution;
-                    }
-
-                }
-                report.StudentBudgetReport.Add(studentBr);
 
                 var category = new CategoryReport();
                 var categoryItem =  await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefaultAsync().ConfigureAwait(false);
@@ -200,7 +170,7 @@ namespace CcaRegistrationDf.Controllers
             lr.DataSources.Add(new ReportDataSource("StudentData", report.StudentReport));
             lr.DataSources.Add(new ReportDataSource("ReportMonthly", report.BudgetReport));
             lr.DataSources.Add(new ReportDataSource("Credit", report.CreditReport));
-            lr.DataSources.Add(new ReportDataSource("StudentBudget", report.StudentBudgetReport));
+            //lr.DataSources.Add(new ReportDataSource("StudentBudget", report.StudentBudgetReport));
             lr.DataSources.Add(new ReportDataSource("CourseInformation", report.CategoryReport));
             lr.DataSources.Add(new ReportDataSource("CourseName", report.CourseReport));
             lr.DataSources.Add(new ReportDataSource("EnrollmentLocations", report.PrimaryReport));
