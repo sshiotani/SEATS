@@ -39,7 +39,7 @@ namespace CcaRegistrationDf.Controllers
         private async Task<List<ReportViewModel>> GetReport()
         {
             var ccas = await db.CCAs.ToListAsync();
-            CactusEntities cactus = new CactusEntities();
+            SEATSEntities1 cactus = new SEATSEntities1();
             List<ReportViewModel> report = new List<ReportViewModel>();
 
             foreach (var cca in ccas)
@@ -59,7 +59,7 @@ namespace CcaRegistrationDf.Controllers
                 else if (cca.EnrollmentLocationID == 2)
                     line.EnrollmentLocation = "PRIVATE SCHOOL";
                 else
-                    line.EnrollmentLocation = await cactus.CactusInstitutions.Where(m => m.DistrictID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    line.EnrollmentLocation = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 line.CourseCredit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync().ConfigureAwait(false);
                 line.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
@@ -95,7 +95,7 @@ namespace CcaRegistrationDf.Controllers
         private async Task<ReportContainer> MakeReport()
         {
             var ccas = await db.CCAs.ToListAsync();
-            CactusEntities cactus = new CactusEntities();
+            SEATSEntities1 cactus = new SEATSEntities1();
 
             ReportContainer report = new ReportContainer();
 
@@ -113,7 +113,7 @@ namespace CcaRegistrationDf.Controllers
                 else if (cca.EnrollmentLocationID == 2)
                     primary.Name = "PRIVATE SCHOOL";
                 else
-                    primary.Name = await cactus.CactusInstitutions.Where(m => m.DistrictID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    primary.Name = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                 report.PrimaryReport.Add(primary);
 
                 var provider = new ProviderReport();
@@ -153,7 +153,7 @@ namespace CcaRegistrationDf.Controllers
         public async Task<ActionResult> GenerateReport(string id)
         {
             LocalReport lr = new LocalReport();
-            string path = Path.Combine(Server.MapPath("~/Reports"), "Report1.rdlc");
+            string path = Path.Combine(Server.MapPath("~/ReportFormats"), "Report1.rdlc");
             if (System.IO.File.Exists(path))
             {
                 lr.ReportPath = path;

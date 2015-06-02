@@ -11,6 +11,7 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class CourseFeesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -91,19 +92,26 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CourseFees/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CourseFee courseFee = await db.CourseFees.FindAsync(id);
-            if (courseFee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(courseFee);
+            ViewBag.Message = "Delete disabled!";
+            return View("Error");
         }
+
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    CourseFee courseFee = await db.CourseFees.FindAsync(id);
+        //    if (courseFee == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(courseFee);
+        //}
 
         // POST: CourseFees/Delete/5
         [HttpPost, ActionName("Delete")]

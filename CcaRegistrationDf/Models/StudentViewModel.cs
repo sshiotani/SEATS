@@ -56,12 +56,6 @@ namespace CcaRegistrationDf.Models
 
         // Credit Exceptions
 
-        public bool HasExcessiveFED { get; set; }
-        [Display(Name = "Why student is exceeding allowable online credits.")]
-        public string ExcessiveFEDExplanation { get; set; }
-        public Nullable<int> ExcessiveFEDReasonCode { get; set; }
-        public List<SelectListItem> ExcessiveFEDReasonList { get; set; }
-
         [Display(Name = "Student plans to graduate early.")]
         public bool IsEarlyGraduate { get; set; }
         [Display(Name = "Student has a fee waiver.")]

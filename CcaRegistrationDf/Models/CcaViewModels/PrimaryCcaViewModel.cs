@@ -8,7 +8,14 @@ namespace CcaRegistrationDf.Models
     public class PrimaryCcaViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
-        public int CCAID { get; set; }
+       
+        public int CcaID { get; set; }
+        public int StudentID { get; set; }
+        public Student Student { get; set; }
+        public int OnlineCourseID { get; set; }
+        public OnlineCourse OnlineCourse { get; set; }
+        public int CourseCreditID { get; set; }
+        public CourseCredit CourseCredit { get; set; }
 
         public Nullable<int> EnrollmentLocationID { get; set; }
 

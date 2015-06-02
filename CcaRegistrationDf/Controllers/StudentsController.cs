@@ -16,12 +16,9 @@ namespace CcaRegistrationDf.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
-    {
-        private readonly string[] FEDOPTIONS =  {
-        "Allowed by College and Career Ready Plan (SEOP or CCRP) providing for Early Graduation",
-        "Allowed by school district or charter school board policy (check with your school district office)" };
+    {      
 
-        private ApplicationDbContext db = new ApplicationDbContext();
+      private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Students
         
@@ -37,7 +34,7 @@ namespace CcaRegistrationDf.Controllers
             }
             else if (User.IsInRole("Primary"))
             {
-                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
+                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.CactusSchoolID).FirstOrDefaultAsync();
                 var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
                 return View(primaryStudents);
             }
@@ -111,8 +108,7 @@ namespace CcaRegistrationDf.Controllers
                 //Look up Lists of Schools
                 model.EnrollmentLocationSchoolNames = GetSchoolNames();
 
-                // List of Excessive credit reasons
-                model.ExcessiveFEDReasonList = GetFEDReasonList();
+               
 
                 return model;
             }
@@ -122,28 +118,7 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-        /// <summary>
-        /// Gets list of reasons for list for more than full day equivalent credit.  Currently set from
-        /// a readonly string at top of controller.
-        /// </summary>
-        /// <returns></returns>
-        private List<SelectListItem> GetFEDReasonList()
-        {
-            var fedList = new List<SelectListItem>();
-            SelectListItem fedListItem;
-
-            for (int i = 1; i <= FEDOPTIONS.Count(); i++)
-            {
-                fedListItem = new SelectListItem();
-                fedListItem.Value = i.ToString();
-                fedListItem.Text = FEDOPTIONS[i - 1];
-
-                fedList.Add(fedListItem);
-            }
-
-            return fedList;
-        }
-
+       
         /// <summary>
         /// Populates Leas into select list. Inserts Home and Private at top.
         /// </summary>
@@ -152,16 +127,16 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                using (CactusEntities leas = new CactusEntities())
+                using (SEATSEntities1 leas = new SEATSEntities1())
                 {
                     var leaList = await leas.CactusInstitutions.OrderBy(m => m.Name).ToListAsync();
 
-                    leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", DistrictID = 1.0M });
-                    leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", DistrictID = 2.0M });
+                    leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1});
+                    leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2});
 
                     var locations = leaList.Select(f => new SelectListItem
                     {
-                        Value = Decimal.ToInt32(f.DistrictID).ToString(),
+                        Value = f.ID.ToString(),
                         Text = f.Name
                     });
 
@@ -190,15 +165,15 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                using (CactusEntities schools = new CactusEntities())
+                using (SEATSEntities1 schools = new SEATSEntities1())
                 {
                     IEnumerable<SelectListItem> schoolNameList;
                     var schoolList = await schools.CactusSchools.ToListAsync();
-                    schoolList.RemoveAll(m => m.name == null);
-                    schoolNameList = schoolList.Where(m => m.district == district && !m.name.ToLower().Contains("district")).OrderBy(m => m.name).Distinct().Select(f => new SelectListItem
+                    schoolList.RemoveAll(m => m.Name == null);
+                    schoolNameList = schoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                     {
-                        Value = f.id.ToString(),
-                        Text = f.name
+                        Value = f.ID.ToString(),
+                        Text = f.Name
                     });
 
                     return Json(new SelectList(schoolNameList, "Value", "Text"));

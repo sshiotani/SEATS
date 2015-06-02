@@ -14,7 +14,7 @@ namespace CcaRegistrationDf.Models
     
     public partial class CactusInstitution
     {
-        public decimal DistrictID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
     }

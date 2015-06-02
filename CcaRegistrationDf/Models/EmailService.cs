@@ -16,7 +16,7 @@ namespace CcaRegistrationDf.Models
             {
                 MailMessage mail = new MailMessage();
                 mail.To.Add(message.Destination.ToString());
-                mail.From = new MailAddress("ioc-webmaster@noreply.com");
+                mail.From = new MailAddress("noreply@noreply.schools.utah.gov");
                 mail.Subject = message.Subject;
                 mail.Body = message.Body;
 

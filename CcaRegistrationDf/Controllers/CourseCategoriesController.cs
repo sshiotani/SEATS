@@ -49,7 +49,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Name,IsActive")] CourseCategory courseCategory)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Name,IsActive,CourseFeeID")] CourseCategory courseCategory)
         {
             if (ModelState.IsValid)
             {
@@ -98,19 +98,26 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CourseCategories/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id);
-            if (courseCategory == null)
-            {
-                return HttpNotFound();
-            }
-            return View(courseCategory);
+            ViewBag.Message = "Delete disabled for Categories! Disable if no longer needed.";
+            return View("Error");
         }
+
+
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    CourseCategory courseCategory = await db.CourseCategories.FindAsync(id);
+        //    if (courseCategory == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(courseCategory);
+        //}
 
         // POST: CourseCategories/Delete/5
         [HttpPost, ActionName("Delete")]

@@ -27,12 +27,13 @@ namespace CcaRegistrationDf
                       "~/Scripts/respond.min.js"
                       ));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/css/bootstrap.css",
-                      "~/Content/css/Site.css",
-                       "~/Content/css/jquery-ui.css",
-                       "~/Content/css/jquery.bootgrid.css",
-                       "~/Content/color/default.css"
+            bundles.Add(new StyleBundle("~/bundles/css").Include(
+                 "~/Content/default.css",
+                      "~/Content/bootstrap.css",
+                      "~/Content/Site.css",
+                       "~/Content/jquery-ui.css",
+                       "~/Content/jquery.bootgrid.css",
+                       "~/Content/style.css"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootgrid").Include(

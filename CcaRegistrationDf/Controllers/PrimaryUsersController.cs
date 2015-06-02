@@ -9,21 +9,20 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CcaRegistrationDf.Models;
-using CcaRegistrationDf.Models.StudentCcas;
+using AutoMapper;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin,Primary")]
     public class PrimaryUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private CactusEntities cactusDb = new CactusEntities();
+        private SEATSEntities1 cactusDb = new SEATSEntities1();
 
         // GET: PrimaryUsers
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index()
         {
-            // Look up all ccas associated with this primary
-            // Send to form to edit these ccas
             return View(await db.PrimaryUsers.ToListAsync());
         }
 
@@ -31,10 +30,34 @@ namespace CcaRegistrationDf.Controllers
         public async Task<ActionResult> CcaInterface()
         {
             // Look up all ccas associated with this primary
+            var userId = User.Identity.GetUserId();
+            var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.CactusSchoolID).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
+
+            // Create list of viewmodels populated from 
+            var ccaVmList = GetCcaViewModelList(ccas);
+
             // Send to form to edit these ccas
-            return View();
+            return View(ccas);
         }
 
+        private List<PrimaryCcaViewModel> GetCcaViewModelList(List<CCA> ccas)
+        {
+            var ccaVmList = new List<PrimaryCcaViewModel>();
+            foreach (var cca in ccas)
+            {
+                Mapper.CreateMap<CCA, PrimaryCcaViewModel>();
+
+                var ccaVm = Mapper.Map<CCA, PrimaryCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+
+                ccaVmList.Add(ccaVm);
+
+            }
+            return ccaVmList;
+        }
         // GET: PrimaryUsers/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -55,9 +78,9 @@ namespace CcaRegistrationDf.Controllers
         {
             var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View();
         }
@@ -67,7 +90,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Email,FirstName,LastName,Phone,EnrollmentLocationID")] PrimaryUser primaryUser)
+        public async Task<ActionResult> Create([Bind(Include = "Email,FirstName,LastName,Phone,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] PrimaryUser primaryUser)
         {
             if (ModelState.IsValid)
             {
@@ -94,9 +117,9 @@ namespace CcaRegistrationDf.Controllers
 
             var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0});
 
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
 
             return View(primaryUser);
@@ -114,7 +137,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View(primaryUser);
         }
@@ -124,7 +147,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,Email,FirstName,LastName,IsSigned,Phone,EnrollmentLocationID")] PrimaryUser primaryUser)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,Email,FirstName,LastName,IsSigned,Phone,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] PrimaryUser primaryUser)
         {
             if (ModelState.IsValid)
             {
@@ -133,7 +156,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View(primaryUser);
         }

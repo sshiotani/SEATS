@@ -12,7 +12,7 @@ using CcaRegistrationDf.Models;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin,Provider")]
     public class ProviderUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -20,8 +20,6 @@ namespace CcaRegistrationDf.Controllers
         // GET: ProviderUsers
         public async Task<ActionResult> Index()
         {
-            // Look up all ccas associated with this provider
-            // Send to form to edit all ccas found.
             var providerUsers = db.ProviderUsers.Include(p => p.Provider);
             return View(await providerUsers.ToListAsync());
         }

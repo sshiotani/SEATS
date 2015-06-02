@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CcaRegistrationDf.Models.StudentStatusViewModel>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Submission")
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.CompletionStatus)
+        </th>*@
+        <th>
+            @Html.DisplayName("Category")
+        </th>
+        <th>
+            @Html.DisplayName("Provider")
+        </th>
+        <th>
+            @Html.DisplayName("Session")
+        </th>
+        <th>
+            @Html.DisplayName("Course")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationSubmissionDate)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.CompletionStatus)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCategory.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Session.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })           
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+    </tr>
+}
+
+</table>

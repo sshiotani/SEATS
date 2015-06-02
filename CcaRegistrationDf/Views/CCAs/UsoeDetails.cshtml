@@ -1,0 +1,454 @@
+﻿@model CcaRegistrationDf.Models.CCA
+
+@{
+    ViewBag.Title = "UsoeDetails";
+}
+
+<h2>UsoeDetails</h2>
+
+<div>
+    <h4>CCA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationSubmissionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationSubmissionDate)
+        </dd>
+     
+        <dt>
+            @Html.DisplayNameFor(model => model.Student)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Student.StudentFirstName),
+            @Html.DisplayFor(model => model.Student.StudentLastName),
+            @Html.DisplayFor(model => model.Student.SSID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentGradeLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudentGradeLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HasExcessiveFED)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HasExcessiveFED)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExcessiveFEDExplanation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExcessiveFEDExplanation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExcessiveFEDReasonID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExcessiveFEDReasonID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EnrollmentLocationSchoolNamesID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnrollmentLocationSchoolNamesID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Counselor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Counselor.LastName),
+            @Html.DisplayFor(model => model.Counselor.FirstName),
+            @Html.DisplayFor(model => model.Counselor.)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsCounselorSigned)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCounselorSigned)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EnrollmentLocationID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnrollmentLocationID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrimaryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrimaryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrimaryLEAExplantionRejection)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrimaryLEAExplantionRejection)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrimaryLEAReasonRejectingCCA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrimaryLEAReasonRejectingCCA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateBusinessAdministratorSignature)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateBusinessAdministratorSignature)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Provider)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Provider.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherCactusID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TeacherCactusID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherFirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TeacherFirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherLastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TeacherLastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompletionStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompletionStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseBegin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseBegin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseStartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseCompletionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCompletionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCompletedToDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCompletedToDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateConfirmationActiveParticipation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateConfirmationActiveParticipation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateContinuationActiveParticipation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateContinuationActiveParticipation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateReportPassingGrade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateReportPassingGrade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsEnrollmentNoticeSent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsEnrollmentNoticeSent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsProviderEnrollmentVerified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsProviderEnrollmentVerified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsProviderSignature)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsProviderSignature)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProviderExplanationRejection)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProviderExplanationRejection)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProviderReasonRejection)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProviderReasonRejection)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OnlineCourse)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OnlineCourse.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseCategory)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCategory.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseCredit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCredit.Value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseName2ndSemesterID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseName2ndSemesterID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsCourseConsistentWithStudentSEOP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCourseConsistentWithStudentSEOP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Session)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Session.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetPrimaryProvider)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetPrimaryProvider)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsRemediation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsRemediation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NotificationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NotificationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrimaryNotificationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrimaryNotificationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PriorDisbursementProvider)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PriorDisbursementProvider)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordNotes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordNotes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemediationPeriodBegins)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemediationPeriodBegins)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalDisbursementsProvider)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalDisbursementsProvider)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TwentyDaysPastSemesterStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TwentyDaysPastSemesterStartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Offset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Offset)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Distribution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Distribution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WithdrawalDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WithdrawalDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Grand_Total)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Grand_Total)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

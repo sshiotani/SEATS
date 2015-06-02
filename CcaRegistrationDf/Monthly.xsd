@@ -504,14 +504,14 @@
               <DbSource ConnectionRef="DefaultConnection (Web.config)" DbObjectName="dbo.CactusInstitution" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
-                    <CommandText>SELECT DistrictID, Name, Code FROM dbo.CactusInstitution</CommandText>
+                    <CommandText>SELECT ID, Name, Code FROM dbo.CactusInstitution</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
             </MainSource>
             <Mappings>
-              <Mapping SourceColumn="DistrictID" DataSetColumn="DistrictID" />
+              <Mapping SourceColumn="ID" DataSetColumn="ID" />
               <Mapping SourceColumn="Name" DataSetColumn="Name" />
               <Mapping SourceColumn="Code" DataSetColumn="Code" />
             </Mappings>
@@ -874,7 +874,7 @@
         <xs:element name="CactusInstitution" msprop:Generator_TableClassName="CactusInstitutionDataTable" msprop:Generator_TableVarName="tableCactusInstitution" msprop:Generator_TablePropName="CactusInstitution" msprop:Generator_RowDeletingName="CactusInstitutionRowDeleting" msprop:Generator_RowChangingName="CactusInstitutionRowChanging" msprop:Generator_RowEvHandlerName="CactusInstitutionRowChangeEventHandler" msprop:Generator_RowDeletedName="CactusInstitutionRowDeleted" msprop:Generator_UserTableName="CactusInstitution" msprop:Generator_RowChangedName="CactusInstitutionRowChanged" msprop:Generator_RowEvArgName="CactusInstitutionRowChangeEvent" msprop:Generator_RowClassName="CactusInstitutionRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="DistrictID" msprop:Generator_ColumnVarNameInTable="columnDistrictID" msprop:Generator_ColumnPropNameInRow="DistrictID" msprop:Generator_ColumnPropNameInTable="DistrictIDColumn" msprop:Generator_UserColumnName="DistrictID" type="xs:decimal" />
+              <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:decimal" />
               <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">

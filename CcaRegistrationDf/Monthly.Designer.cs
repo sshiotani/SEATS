@@ -3527,7 +3527,7 @@ namespace CcaRegistrationDf {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class CactusInstitutionDataTable : global::System.Data.TypedTableBase<CactusInstitutionRow> {
             
-            private global::System.Data.DataColumn columnDistrictID;
+            private global::System.Data.DataColumn columnID;
             
             private global::System.Data.DataColumn columnName;
             
@@ -3568,9 +3568,9 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn DistrictIDColumn {
+            public global::System.Data.DataColumn IDColumn {
                 get {
-                    return this.columnDistrictID;
+                    return this.columnID;
                 }
             }
             
@@ -3627,10 +3627,10 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public CactusInstitutionRow AddCactusInstitutionRow(decimal DistrictID, string Name, string Code) {
+            public CactusInstitutionRow AddCactusInstitutionRow(decimal ID, string Name, string Code) {
                 CactusInstitutionRow rowCactusInstitutionRow = ((CactusInstitutionRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        DistrictID,
+                        ID,
                         Name,
                         Code};
                 rowCactusInstitutionRow.ItemArray = columnValuesArray;
@@ -3655,7 +3655,7 @@ namespace CcaRegistrationDf {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnDistrictID = base.Columns["DistrictID"];
+                this.columnID = base.Columns["ID"];
                 this.columnName = base.Columns["Name"];
                 this.columnCode = base.Columns["Code"];
             }
@@ -3663,13 +3663,13 @@ namespace CcaRegistrationDf {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnDistrictID = new global::System.Data.DataColumn("DistrictID", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDistrictID);
+                this.columnID = new global::System.Data.DataColumn("ID", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnID);
                 this.columnName = new global::System.Data.DataColumn("Name", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnName);
                 this.columnCode = new global::System.Data.DataColumn("Code", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCode);
-                this.columnDistrictID.AllowDBNull = false;
+                this.columnID.AllowDBNull = false;
                 this.columnName.MaxLength = 100;
                 this.columnCode.MaxLength = 2;
             }
@@ -6376,12 +6376,12 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public decimal DistrictID {
+            public decimal ID {
                 get {
-                    return ((decimal)(this[this.tableCactusInstitution.DistrictIDColumn]));
+                    return ((decimal)(this[this.tableCactusInstitution.IDColumn]));
                 }
                 set {
-                    this[this.tableCactusInstitution.DistrictIDColumn] = value;
+                    this[this.tableCactusInstitution.IDColumn] = value;
                 }
             }
             
@@ -9730,7 +9730,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "CactusInstitution";
-            tableMapping.ColumnMappings.Add("DistrictID", "DistrictID");
+            tableMapping.ColumnMappings.Add("ID", "ID");
             tableMapping.ColumnMappings.Add("Name", "Name");
             tableMapping.ColumnMappings.Add("Code", "Code");
             this._adapter.TableMappings.Add(tableMapping);
@@ -9749,7 +9749,7 @@ namespace CcaRegistrationDf.MonthlyTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT DistrictID, Name, Code FROM dbo.CactusInstitution";
+            this._commandCollection[0].CommandText = "SELECT ID, Name, Code FROM dbo.CactusInstitution";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

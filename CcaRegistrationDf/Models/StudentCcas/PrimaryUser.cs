@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace CcaRegistrationDf.Models.StudentCcas
+namespace CcaRegistrationDf.Models
 {
     public class PrimaryUser
     {
@@ -23,8 +24,9 @@ namespace CcaRegistrationDf.Models.StudentCcas
         [Display(Name = "Phone Number")]
         public string Phone { get; set; }
 
-        public int EnrollmentLocationID { get; set; }
-
-        public int EnrollmentLocationSchoolNameID { get; set; }
+        public int CactusInstitutionID { get; set; }
+ 
+        public int CactusSchoolID { get; set; }
+        
     }
 }

@@ -8,8 +8,7 @@ namespace CcaRegistrationDf.Models
     public class UsoeCcaViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
-
-        public string UserId { get; set; }
+      
         public int CcaID { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }

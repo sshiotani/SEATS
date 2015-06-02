@@ -18,15 +18,12 @@ namespace CcaRegistrationDf.Controllers
     public class CounselorsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private CactusEntities cactusDb = new CactusEntities();
+        private SEATSEntities1 cactusDb = new SEATSEntities1();
 
         // GET: Counselors
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index()
         {
-            // Look up all ccas associated with this counselor
-            // Send to form to edit ccas found.
-
             return View(await db.Counselors.ToListAsync());
         }
 
@@ -37,7 +34,6 @@ namespace CcaRegistrationDf.Controllers
             // Look up counselor associated with this user
             var userId = User.Identity.GetUserId();
             var counselor = await db.Counselors.Where(m => m.UserId == userId).FirstOrDefaultAsync();
-
 
             // Look up all ccas associated with this primary
             if (counselor != null)
@@ -64,6 +60,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 Mapper.CreateMap<CCA, CounselorCcaViewModel>();
                 var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
+
                 ccaVm.Session = await db.Session.Where(m => m.ID == ccaVm.SessionID).FirstOrDefaultAsync().ConfigureAwait(false);
                 ccaVm.OnlineCourse = await db.Courses.Where(m => m.ID == ccaVm.OnlineCourseID).FirstOrDefaultAsync().ConfigureAwait(false);
                 ccaVm.Provider = await db.Providers.Where(m => m.ID == ccaVm.ProviderID).FirstOrDefaultAsync().ConfigureAwait(false);
@@ -78,66 +75,6 @@ namespace CcaRegistrationDf.Controllers
             return ccaVmList;
         }
 
-        /// <summary>
-        /// Lets Counselor edit CCA fields
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        ///  
-        //[Authorize(Roles = "Counselor")]
-        //public async Task<ActionResult> EditCca(int? id)
-        //{
-        //    var cca = await db.CCAs.Where(m => m.ID == id).FirstOrDefaultAsync();
-        //    if (cca != null)
-        //    {
-        //        //var ccaVm = GetCcaViewModel(cca);
-        //        //return View(ccaVm);
-        //        return View(cca);
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Message = "Unable to find CCA.";
-        //        return View("Error");
-        //    }
-        //}
-
-        private async Task<CounselorCcaViewModel> GetCcaViewModel(CCA cca)
-        {
-            
-
-            Mapper.CreateMap<CCA, CounselorCcaViewModel>();
-            var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
-            ccaVm.Session = await db.Session.Where(m => m.ID == ccaVm.SessionID).FirstOrDefaultAsync().ConfigureAwait(false);
-            ccaVm.OnlineCourse = await db.Courses.Where(m => m.ID == ccaVm.OnlineCourseID).FirstOrDefaultAsync().ConfigureAwait(false);
-            ccaVm.Provider = await db.Providers.Where(m => m.ID == ccaVm.ProviderID).FirstOrDefaultAsync().ConfigureAwait(false);
-            ccaVm.Student = await db.Students.Where(m => m.ID == ccaVm.StudentID).FirstOrDefaultAsync().ConfigureAwait(false);
-            ccaVm.CourseCredit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).FirstOrDefaultAsync().ConfigureAwait(false);
-
-            return ccaVm;
-        }
-
-        /// <summary>
-        /// Lets Counselor edit CCA fields
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        ///  
-        //[Authorize(Roles = "Counselor")]
-        //public async Task<ActionResult> DetailsCca(int? id)
-        //{
-        //    var cca = await db.CCAs.Where(m => m.ID == id).FirstOrDefaultAsync();
-        //    if (cca != null)
-        //    {
-        //        Mapper.CreateMap<CCA, CounselorCcaViewModel>();
-        //        var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
-        //        return View(ccaVm);
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Message = "Unable to find CCA.";
-        //        return View("Error");
-        //    }
-        //}
 
         // GET: Counselors/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -160,9 +97,9 @@ namespace CcaRegistrationDf.Controllers
         {
             var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
 
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
@@ -222,7 +159,7 @@ namespace CcaRegistrationDf.Controllers
                 }
                 else
                 {
-                    ViewBag.Message = "Unable to save Primary User!";
+                    ViewBag.Message = "Unable to save Counselor!";
                     return View("Error");
                 }
 
@@ -239,9 +176,9 @@ namespace CcaRegistrationDf.Controllers
 
             var leas = await cactusDb.CactusInstitutions.ToListAsync();
 
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", DistrictID = 0.0M });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "DistrictID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
             return View(counselorVm);

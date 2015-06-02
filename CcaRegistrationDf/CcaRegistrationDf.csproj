@@ -254,18 +254,6 @@
     <Compile Include="Migrations\201505211938557_CounselorUpdate.Designer.cs">
       <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505221246248_counselorfix.cs" />
-    <Compile Include="Migrations\201505221246248_counselorfix.Designer.cs">
-      <DependentUpon>201505221246248_counselorfix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505221321070_counselorfix1.cs" />
-    <Compile Include="Migrations\201505221321070_counselorfix1.Designer.cs">
-      <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505261413579_removeEmail.cs" />
-    <Compile Include="Migrations\201505261413579_removeEmail.Designer.cs">
-      <DependentUpon>201505261413579_removeEmail.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201505261451487_requiredInfo.cs" />
     <Compile Include="Migrations\201505261451487_requiredInfo.Designer.cs">
       <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
@@ -285,6 +273,31 @@
     <Compile Include="Migrations\201505282102189_addCredit2Cca.cs" />
     <Compile Include="Migrations\201505282102189_addCredit2Cca.Designer.cs">
       <DependentUpon>201505282102189_addCredit2Cca.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506011549418_testStart.cs" />
+    <Compile Include="Migrations\201506011549418_testStart.Designer.cs">
+      <DependentUpon>201506011549418_testStart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cactus.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cactus.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cactus.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cactus.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CactusInstitution.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CactusSchool.cs">
+      <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
     <Compile Include="Models\Location.cs" />
@@ -352,32 +365,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CactusInstitution.cs">
-      <DependentUpon>Cactus.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CactusSchool.cs">
-      <DependentUpon>Cactus.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\CounselorViewModel.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
     <Compile Include="Models\BackupModel\MainTable-backup.cs" />
-    <Compile Include="Models\Cactus.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cactus.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Cactus.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cactus.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Cactus.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cactus.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\StudentCcas\CourseCategory.cs" />
     <Compile Include="Models\CourseResultModel.cs" />
     <Compile Include="Models\CourseStatusViewModel.cs" />
@@ -426,10 +418,10 @@
     <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618_log.ldf">
       <DependentUpon>aspnet-CcaRegistrationDf-20150320080618.mdf</DependentUpon>
     </Content>
-    <Content Include="Content\css\jquery-ui.css" />
-    <Content Include="Content\css\jquery.bootgrid.css" />
-    <Content Include="Content\css\jquery.bootgrid.min.css" />
-    <Content Include="Content\css\Site.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery.bootgrid.css" />
+    <Content Include="Content\jquery.bootgrid.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\images\excel-icon-sm.png" />
     <Content Include="Content\images\img-icon-sm.png" />
     <Content Include="Content\images\pdf-icon-sm.png" />
@@ -521,11 +513,11 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="Content\color\default.css" />
-    <Content Include="Content\css\animate.css" />
-    <Content Include="Content\css\bootstrap.css" />
-    <Content Include="Content\css\bootstrap.min.css" />
-    <Content Include="Content\css\style.css" />
+    <Content Include="Content\default.css" />
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\style.css" />
     <Content Include="Content\font-awesome\css\font-awesome.css" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
@@ -613,8 +605,11 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\css\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Monthly.xsc">
+      <DependentUpon>Monthly.xsd</DependentUpon>
+    </Content>
     <EntityDeploy Include="Models\Cactus.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Cactus.Designer.cs</LastGenOutput>
@@ -632,9 +627,6 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
-    <Content Include="Monthly.xsc">
-      <DependentUpon>Monthly.xsd</DependentUpon>
-    </Content>
     <None Include="Monthly.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>Monthly.Designer.cs</LastGenOutput>
@@ -643,6 +635,7 @@
     <Content Include="Monthly.xss">
       <DependentUpon>Monthly.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\File system.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -807,6 +800,9 @@
     <Content Include="Views\Admin\CcaInterface.cshtml" />
     <Content Include="Views\CCAs\UsoeEdit.cshtml" />
     <Content Include="Views\Students\EditAdmin.cshtml" />
+    <Content Include="Views\PrimaryUsers\CcaInterface.cshtml" />
+    <Content Include="Views\CCAs\StudentCcaView.cshtml" />
+    <Content Include="Views\CCAs\UsoeDetails.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -900,15 +896,6 @@
     <EmbeddedResource Include="Migrations\201505211938557_CounselorUpdate.resx">
       <DependentUpon>201505211938557_CounselorUpdate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505221246248_counselorfix.resx">
-      <DependentUpon>201505221246248_counselorfix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505221321070_counselorfix1.resx">
-      <DependentUpon>201505221321070_counselorfix1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505261413579_removeEmail.resx">
-      <DependentUpon>201505261413579_removeEmail.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505261451487_requiredInfo.resx">
       <DependentUpon>201505261451487_requiredInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -924,7 +911,10 @@
     <EmbeddedResource Include="Migrations\201505282102189_addCredit2Cca.resx">
       <DependentUpon>201505282102189_addCredit2Cca.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Report1.rdlc" />
+    <EmbeddedResource Include="Migrations\201506011549418_testStart.resx">
+      <DependentUpon>201506011549418_testStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

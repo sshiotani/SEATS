@@ -101,20 +101,29 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Providers/Delete/5
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Provider provider = await db.Providers.FindAsync(id);
-            if (provider == null)
-            {
-                return HttpNotFound();
-            }
-            return View(provider);
+            ViewBag.Message = "Delete Providers disabled! Disable provider if no longer valid.";
+            return View("Error");
         }
+
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+        //    ViewBag.Message = "Delete Providers disabled! Disable provider if no longer valid.";
+        //    return View("Error");
+
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Provider provider = await db.Providers.FindAsync(id);
+        //    if (provider == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(provider);
+        //}
 
         // POST: Providers/Delete/5
         [HttpPost, ActionName("Delete")]

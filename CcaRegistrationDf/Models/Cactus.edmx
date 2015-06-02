@@ -4,90 +4,89 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
-warning 6002: The table/view 'aspnet-CcaRegistrationDf-20150320080618.dbo.CactusInstitution' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'SEATS.dbo.CactusInstitution' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CactusInstitution">
           <Key>
-            <PropertyRef Name="DistrictID" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="DistrictID" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="Code" Type="char" MaxLength="2" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'aspnet-CcaRegistrationDf-20150320080618.dbo.CactusSchool' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CactusSchool">
           <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="district" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="id" Type="numeric" Precision="9" Scale="0" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="100" />
-          <Property Name="district" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="District" Type="int" />
         </EntityType>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="CactusInstitution" EntityType="Self.CactusInstitution" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [CactusInstitution].[DistrictID] AS [DistrictID], 
+    [CactusInstitution].[ID] AS [ID], 
     [CactusInstitution].[Name] AS [Name], 
     [CactusInstitution].[Code] AS [Code]
     FROM [dbo].[CactusInstitution] AS [CactusInstitution]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="CactusSchool" EntityType="Self.CactusSchool" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [CactusSchool].[id] AS [id], 
-    [CactusSchool].[name] AS [name], 
-    [CactusSchool].[district] AS [district]
+    [CactusSchool].[ID] AS [ID], 
+    [CactusSchool].[Name] AS [Name], 
+    [CactusSchool].[District] AS [District]
     FROM [dbo].[CactusSchool] AS [CactusSchool]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="CactusInstitution">
           <Key>
-            <PropertyRef Name="DistrictID" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="DistrictID" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Code" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="CactusEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CactusInstitutions" EntityType="Self.CactusInstitution" />
-          <EntitySet Name="CactusSchools" EntityType="Model.CactusSchool" />
-        </EntityContainer>
         <EntityType Name="CactusSchool">
           <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="district" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="id" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="district" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="District" Type="Int32" />
         </EntityType>
+        <EntityContainer Name="SEATSEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CactusInstitutions" EntityType="Self.CactusInstitution" />
+          <EntitySet Name="CactusSchools" EntityType="Self.CactusSchool" />
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="CactusEntities">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="SEATSEntities1">
           <EntitySetMapping Name="CactusInstitutions">
             <EntityTypeMapping TypeName="Model.CactusInstitution">
               <MappingFragment StoreEntitySet="CactusInstitution">
-                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CactusSchools">
             <EntityTypeMapping TypeName="Model.CactusSchool">
               <MappingFragment StoreEntitySet="CactusSchool">
-                <ScalarProperty Name="district" ColumnName="district" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="District" ColumnName="District" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -106,7 +105,7 @@ warning 6002: The table/view 'aspnet-CcaRegistrationDf-20150320080618.dbo.Cactus
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

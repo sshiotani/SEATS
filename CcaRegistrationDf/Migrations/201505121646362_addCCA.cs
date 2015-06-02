@@ -20,7 +20,7 @@ namespace CcaRegistrationDf.Migrations
                 .PrimaryKey(t => t.ID);
             
             AlterColumn("dbo.CCAs", "ApplicationSubmissionDate", c => c.DateTime(nullable: false));
-            AlterColumn("dbo.Counselors", "Email", c => c.String(nullable: false));
+           
             AlterColumn("dbo.Counselors", "FirstName", c => c.String(nullable: false));
             AlterColumn("dbo.Counselors", "LastName", c => c.String(nullable: false));
             CreateIndex("dbo.Students", "StudentBudgetID");
@@ -47,7 +47,7 @@ namespace CcaRegistrationDf.Migrations
             DropIndex("dbo.Students", new[] { "StudentBudgetID" });
             AlterColumn("dbo.Counselors", "LastName", c => c.String());
             AlterColumn("dbo.Counselors", "FirstName", c => c.String());
-            AlterColumn("dbo.Counselors", "Email", c => c.String());
+            
             AlterColumn("dbo.CCAs", "ApplicationSubmissionDate", c => c.DateTime());
             DropTable("dbo.StudentBudgets");
         }

@@ -16,7 +16,7 @@
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group" id="SubmitterTypeCheckBox">
+        <div class="form-group hide" id="SubmitterTypeCheckBox">
             @Html.Label("Which of the following are you?", new { @class = "col-md-4  control-radio" })
 
             <div class="col-md-8">
@@ -37,7 +37,7 @@
         <h4>Student Information</h4>
         <hr />
         <div class="form-group" id="GradeCheckBox">
-            @Html.Label("*Grade Level During Online Class Participation:", new { @class = "col-md-5  control-radio" })
+            @Html.Label("Grade Level During Online Class Participation:", new { @class = "col-md-5  control-radio" })
             <div class="col-md-6">
                 @Html.Label("seventhGrade", "7th*", new { @class = "control-radio" })
                 @Html.RadioButtonFor(model => model.StudentGradeLevel, 7, new { htmlAttributes = new { title = "7th Grade" }, id = "7" })
@@ -112,9 +112,9 @@
         @* Drop Down List for counselor Goes here *@
 
         <div class="form-group hide" id="CounselorPublic">
-            <p class="text-info">Please choose your school counselor.</p>
+            
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Counselors", new { @class = "form-control", id = "Counselors", required = false })
+                @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Please Choose a Counselor", new { @class = "form-control", id = "Counselors", required = false })
 
                 @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
             </div>
@@ -211,7 +211,7 @@
         </div>
 
         <br />
-        <div id="ProviderSection">
+        @*<div id="ProviderSection">
             <h4>Provider Information</h4>
             <hr />
 
@@ -231,7 +231,7 @@
             </div>
         </div>
 
-        <hr />
+        <hr />*@
 
         <div class="form-group">
             <div class=" col-md-12">
