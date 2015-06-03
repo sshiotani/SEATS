@@ -5,6 +5,9 @@ using System.Web;
 
 namespace CcaRegistrationDf.Models
 {
+    /// <summary>
+    /// This class is used to show the cca report before it is downloaded in Excel.
+    /// </summary>
     public class ReportViewModel
     {
         public string FiscalYear { get; set; }

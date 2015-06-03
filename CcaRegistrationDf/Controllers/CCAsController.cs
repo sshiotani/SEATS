@@ -126,6 +126,11 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
+        /// <summary>
+        /// Helpers to populate lists for Creating CCAs.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         private CCAViewModel GetSelectLists(CCAViewModel model)
         {
             try
@@ -531,6 +536,11 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs/Details/5
+        /// <summary>
+        /// This method provides details of the CCA to the USOE Admin .
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UsoeDetails(int? id)
         {
@@ -555,7 +565,11 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs/Edit/5
-
+        /// <summary>
+        /// Allows access for the USOE Admin to edit the USOE sections of the CCA.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UsoeEdit(int? id)
         {
@@ -648,6 +662,86 @@ namespace CcaRegistrationDf.Controllers
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
             await SetUpEditViewModel(ccaVm);
+
+            return View(ccaVm);
+        }
+
+        // GET: CCAs/Edit/5
+        /// <summary>
+        /// Allows access for the USOE Admin to edit the USOE sections of the CCA.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Primary")]
+        public async Task<ActionResult> PrimaryEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                CCA cca = await db.CCAs.FindAsync(id);
+                if (cca == null)
+                {
+                    return HttpNotFound();
+                }
+
+                Mapper.CreateMap<CCA, PrimaryCcaViewModel>();
+
+                var ccaVm = Mapper.Map<CCA, PrimaryCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+
+                //await SetUpEditViewModel(ccaVm);
+
+                return View(ccaVm);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
+                return View("Error");
+            }
+        }
+
+        // POST: CCAs/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Primary")]
+        public async Task<ActionResult> PrimaryEdit(PrimaryCcaViewModel ccaVm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID);
+                    cca.IsBusinessAdministratorAcceptRejectEnrollment = ccaVm.IsBusinessAdministratorAcceptRejectEnrollment;
+                    cca.PrimaryLEAExplantionRejection = ccaVm.PrimaryLEAExplantionRejection;
+                    cca.PrimaryLEAReasonRejectingCCA = ccaVm.PrimaryLEAReasonRejectingCCA;
+
+
+                    db.Entry(cca).State = EntityState.Modified;
+
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("CcaInterface", "PrimaryUsers");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+                    return View("Error");
+                }
+            }
+
+            //Capture errors from Modelstate and return to user.
+
+            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+            foreach (var error in errors)
+                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
+            //await SetUpEditViewModel(ccaVm);
 
             return View(ccaVm);
         }

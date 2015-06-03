@@ -34,7 +34,7 @@ namespace CcaRegistrationDf.Controllers
             }
             else if (User.IsInRole("Primary"))
             {
-                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.CactusSchoolID).FirstOrDefaultAsync();
+                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
                 var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
                 return View(primaryStudents);
             }

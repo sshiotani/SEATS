@@ -278,6 +278,10 @@
     <Compile Include="Migrations\201506011549418_testStart.Designer.cs">
       <DependentUpon>201506011549418_testStart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506031721060_primaryUserCactus.cs" />
+    <Compile Include="Migrations\201506031721060_primaryUserCactus.Designer.cs">
+      <DependentUpon>201506031721060_primaryUserCactus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -392,7 +396,6 @@
     <Compile Include="Models\StudentCcas\StudentBudget.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\StudentStatusViewModel.cs" />
-    <Compile Include="Models\UserLocationViewModel.cs" />
     <Compile Include="Models\UserTypeViewModel.cs" />
     <Compile Include="Models\CcaViewModels\UsoeCcaViewModel.cs" />
     <Compile Include="Monthly.Designer.cs">
@@ -803,6 +806,7 @@
     <Content Include="Views\PrimaryUsers\CcaInterface.cshtml" />
     <Content Include="Views\CCAs\StudentCcaView.cshtml" />
     <Content Include="Views\CCAs\UsoeDetails.cshtml" />
+    <Content Include="Views\CCAs\PrimaryEdit.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -913,6 +917,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506011549418_testStart.resx">
       <DependentUpon>201506011549418_testStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506031721060_primaryUserCactus.resx">
+      <DependentUpon>201506031721060_primaryUserCactus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>

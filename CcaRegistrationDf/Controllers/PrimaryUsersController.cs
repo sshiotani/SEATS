@@ -13,7 +13,7 @@ using AutoMapper;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize(Roles="Admin,Primary")]
+    [Authorize]
     public class PrimaryUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -27,11 +27,12 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs for primary
+        [Authorize(Roles = "Primary")]
         public async Task<ActionResult> CcaInterface()
         {
             // Look up all ccas associated with this primary
             var userId = User.Identity.GetUserId();
-            var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.CactusSchoolID).FirstOrDefaultAsync().ConfigureAwait(false);
+            var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync().ConfigureAwait(false);
 
             var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
 
@@ -39,16 +40,16 @@ namespace CcaRegistrationDf.Controllers
             var ccaVmList = GetCcaViewModelList(ccas);
 
             // Send to form to edit these ccas
-            return View(ccas);
+            return View(ccaVmList);
         }
 
         private List<PrimaryCcaViewModel> GetCcaViewModelList(List<CCA> ccas)
         {
+            Mapper.CreateMap<CCA, PrimaryCcaViewModel>();
+
             var ccaVmList = new List<PrimaryCcaViewModel>();
             foreach (var cca in ccas)
             {
-                Mapper.CreateMap<CCA, PrimaryCcaViewModel>();
-
                 var ccaVm = Mapper.Map<CCA, PrimaryCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
@@ -59,6 +60,7 @@ namespace CcaRegistrationDf.Controllers
             return ccaVmList;
         }
         // GET: PrimaryUsers/Details/5
+         [Authorize(Roles = "Primary")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -126,6 +128,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: PrimaryUsers/Edit/5
+         [Authorize(Roles = "Primary")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)

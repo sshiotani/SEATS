@@ -4,7 +4,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayName("Submission")
+            @Html.DisplayName("Submission Date")
         </th>
         @*<th>
             @Html.DisplayNameFor(model => model.CompletionStatus)
@@ -27,7 +27,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.ApplicationSubmissionDate)
+            @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
         </td>
         @*<td>
             @Html.DisplayFor(modelItem => item.CompletionStatus)
@@ -45,7 +45,7 @@
             @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })           
+                 
         </td>
         @*<td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

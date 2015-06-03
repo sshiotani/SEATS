@@ -19,8 +19,9 @@ namespace CcaRegistrationDf.Models
 
         public Nullable<int> EnrollmentLocationID { get; set; }
 
-        public Nullable<int> PrimaryID { get; set; }
-        public virtual Primary Primary { get; set; }
+
+        public Nullable<int> ProviderID { get; set; }
+        public Provider Provider { get; set; }
 
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }

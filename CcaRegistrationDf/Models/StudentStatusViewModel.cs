@@ -7,6 +7,9 @@ namespace CcaRegistrationDf.Models
 {
 	public class StudentStatusViewModel
 	{
+        /// <summary>
+        /// This class is used to list the CCA for student/parent viewing.
+        /// </summary>
 		public DateTime ApplicationSubmissionDate { get; set; }
 		public string CompletionStatus { get; set; }
 

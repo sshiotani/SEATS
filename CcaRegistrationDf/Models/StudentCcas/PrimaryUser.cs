@@ -24,9 +24,9 @@ namespace CcaRegistrationDf.Models
         [Display(Name = "Phone Number")]
         public string Phone { get; set; }
 
-        public int CactusInstitutionID { get; set; }
- 
-        public int CactusSchoolID { get; set; }
+        public int EnrollmentLocationID { get; set; }
+
+        public int EnrollmentLocationSchoolNameID { get; set; }
         
     }
 }

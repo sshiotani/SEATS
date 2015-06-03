@@ -8,6 +8,9 @@ using System.Web.Mvc;
 
 namespace CcaRegistrationDf.Models
 {
+    /// <summary>
+    /// This View Model is used for the student account registration process.
+    /// </summary>
     public class StudentViewModel
     {
         [Required]
