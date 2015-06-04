@@ -13,12 +13,13 @@ using AutoMapper;
 
 namespace CcaRegistrationDf.Controllers
 {
-    [Authorize(Roles="Admin,Provider")]
+    [Authorize]
     public class ProviderUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: ProviderUsers
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index()
         {
             var providerUsers = db.ProviderUsers.Include(p => p.Provider);
@@ -26,6 +27,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs for Provider
+        [Authorize(Roles = "Admin,Provider")]
         public async Task<ActionResult> CcaInterface()
         {
             // Look up all ccas associated with this provider
@@ -37,7 +39,7 @@ namespace CcaRegistrationDf.Controllers
             var ccas = await db.CCAs.Where(m => m.ProviderID == provider.ProviderID).ToListAsync().ConfigureAwait(false);
 
             // Create list of viewmodels populated from 
-            var ccaVmList = GetCcaViewModelList(ccas);
+            var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
             ViewBag.SchoolName = await db.Providers.Where(m => m.ID == provider.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
@@ -46,25 +48,39 @@ namespace CcaRegistrationDf.Controllers
       
         }
 
-        private List<ProviderCcaViewModel> GetCcaViewModelList(List<CCA> ccas)
+        private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
         {
             Mapper.CreateMap<CCA, ProviderCcaViewModel>();
 
             var ccaVmList = new List<ProviderCcaViewModel>();
-            foreach (var cca in ccas)
+
+            using (SEATSEntities1 cactusDb = new SEATSEntities1())
             {
-                var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
+                foreach (var cca in ccas)
+                {
+                    var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
-                ccaVm.CcaID = cca.ID;
+                    ccaVm.CcaID = cca.ID;
 
-                ccaVmList.Add(ccaVm);
+                    if (cca.EnrollmentLocationID < 3)
+                    {
+                        ccaVm.Primary = "HOME/PRIVATE SCHOOL";
+                    }
+                    else
+                    {
+                        ccaVm.Primary = await cactusDb.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    }
 
+                    ccaVmList.Add(ccaVm);
+
+                }
+
+                return ccaVmList;
             }
-
-            return ccaVmList;
         }
 
         // GET: ProviderUsers/Details/5
+        [Authorize(Roles = "Admin,Provider")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -128,6 +144,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: ProviderUsers/Edit/5
+        [Authorize(Roles = "Admin,Provider")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -168,7 +185,8 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: ProviderUsers/Delete/5
-        [Authorize(Roles="Admin")]
+       
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -184,7 +202,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // POST: ProviderUsers/Delete/5
-         [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

@@ -9,10 +9,18 @@ namespace CcaRegistrationDf.Models
     public class ProviderCcaViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
-        public int StudentID { get; set; }
         public int CcaID { get; set; }
         public int ProviderID { get; set; }
         public virtual Provider Provider { get; set; }
+        public int StudentID { get; set; }
+        public Student Student { get; set; }
+        public int OnlineCourseID { get; set; }
+        public OnlineCourse OnlineCourse { get; set; }
+        public int CourseCreditID { get; set; }
+        public CourseCredit CourseCredit { get; set; }
+
+        public string Primary { get; set; }
+
         [Display(Name = "Teacher Cactus ID")]
         public Nullable<int> TeacherCactusID { get; set; }
         public string TeacherFirstName { get; set; }

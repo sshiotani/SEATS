@@ -1,0 +1,100 @@
+﻿@model IEnumerable<CcaRegistrationDf.Models.ProviderCcaViewModel>
+
+@{
+    ViewBag.Title = "CcaInterface";
+}
+
+<h2>CcaInterface</h2>
+
+
+<table id="grid-basic" class="table table-hover table-striped bg-white">
+    <thead>
+        <tr>
+            <th data-column-id="Submission Date">
+                @Html.DisplayName("Submission Date")
+            </th>
+
+            <th data-column-id="Student">
+                @Html.DisplayName("Student")
+            </th>
+            <th data-column-id="Course">
+                @Html.DisplayName("Course")
+            </th>
+            <th data-column-id="Credit">
+                @Html.DisplayName("Credit")
+            </th>
+            <th data-column-id="Primary">
+                @Html.DisplayName("Primary")
+            </th>
+
+
+
+            <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
+                @Html.DisplayName("Actions")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+ 
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.StudentLastName),
+                    @Html.DisplayFor(modelItem => item.Student.StudentFirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCredit.Value)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Primary)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.CcaID)
+                </td>
+            </tr>
+        }
+        </tbody>
+
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/bootgrid")
+
+    <script>
+        // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
+        $(function () {
+            var grid = $("#grid-basic").bootgrid({
+                formatters: {
+                    "state": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.Consistent) == "check") checkBox = "checked=\"checked\"";
+
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+
+                    },
+
+                    "actions": function (column, row) {
+                        var id = $.trim(row.Actionlinks);
+                        return "<a href=\" /CCAs/ProviderEdit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> " +
+                             "<a href=\" /CCAs/ProviderDetails/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-menu-hamburger\"></span></a>";
+                    }
+                }
+            });
+
+        });
+
+    </script>
+}
+
+

@@ -38,7 +38,8 @@ namespace CcaRegistrationDf
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootgrid").Include(
-                        "~/Scripts/jquery.bootgrid.js"
+                        "~/Scripts/jquery.bootgrid.min.js"
+                        , "jquery.bootgrid.fa.min.js"
                         ));
 
 

@@ -668,7 +668,7 @@ namespace CcaRegistrationDf.Controllers
 
         // GET: CCAs/Edit/5
         /// <summary>
-        /// Allows access for the USOE Admin to edit the USOE sections of the CCA.
+        /// Allows access for the Primary User to edit the Primary sections of the CCA.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -748,7 +748,7 @@ namespace CcaRegistrationDf.Controllers
 
         // GET: CCAs/Details/5
         /// <summary>
-        /// This method provides details of the CCA to the USOE Admin .
+        /// This method provides details of the CCA to the Primary and Counselors.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -775,6 +775,118 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
+
+
+        // GET: CCAs/Edit/5
+        /// <summary>
+        /// Allows access for the Provider User to the CCA with ID of id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ProviderEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+                if (cca == null)
+                {
+                    return HttpNotFound();
+                }
+
+                Mapper.CreateMap<CCA, ProviderCcaViewModel>();
+
+                var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+
+                //await SetUpEditViewModel(ccaVm);
+
+                return View(ccaVm);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
+                return View("Error");
+            }
+        }
+
+        // POST: CCAs/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ProviderEdit(ProviderCcaViewModel ccaVm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
+
+                    // Map viewmodel to cca
+
+                    Mapper.CreateMap<ProviderCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
+
+                    Mapper.Map<ProviderCcaViewModel, CCA>(ccaVm, cca);
+
+                    db.Entry(cca).State = EntityState.Modified;
+
+                    await db.SaveChangesAsync().ConfigureAwait(false);
+                    return RedirectToAction("CcaInterface", "ProviderUsers");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+                    return View("Error");
+                }
+            }
+
+            //Capture errors from Modelstate and return to user.
+
+            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+            foreach (var error in errors)
+                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
+            //await SetUpEditViewModel(ccaVm);
+
+            return View(ccaVm);
+        }
+
+        // GET: CCAs/Details/5
+        /// <summary>
+        /// This method provides details of the CCA to the Provider .
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ProviderDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+                if (cCA == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(cCA);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error retrieving details! Error: " + ex.Message;
+                return View("Error");
+            }
+        }
         // GET: CCAs/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)

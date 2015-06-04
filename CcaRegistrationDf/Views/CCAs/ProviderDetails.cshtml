@@ -1,10 +1,10 @@
 ﻿@model CcaRegistrationDf.Models.CCA
 
 @{
-    ViewBag.Title = "Primary Details";
+    ViewBag.Title = "ProviderDetails";
 }
 
-<h2>Details</h2>
+<h2>ProviderDetails</h2>
 
 <div>
     <h4>CCA</h4>
@@ -17,6 +17,7 @@
         <dd>
             @Html.DisplayFor(model => model.ApplicationSubmissionDate)
         </dd>
+
 
         <dt>
             @Html.DisplayNameFor(model => model.Student)
@@ -69,14 +70,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayName("School ID")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EnrollmentLocationSchoolNamesID)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Counselor)
         </dt>
 
@@ -86,14 +79,7 @@
             @Html.DisplayFor(model => model.Counselor.Email)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsCounselorSigned)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsCounselorSigned)
-        </dd>
-
+        
         <dt>
             @Html.DisplayName("Primary Accepts")
         </dt>
@@ -133,6 +119,7 @@
         <dd>
             @Html.DisplayFor(model => model.Provider.Name)
         </dd>
+     
 
         <dt>
             @Html.DisplayNameFor(model => model.TeacherFirstName)
@@ -182,17 +169,12 @@
             @Html.DisplayFor(model => model.CourseCompletionDate)
         </dd>
 
-        <dt>
-            @Html.DisplayName("Credit Completed")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreditCompletedToDate)
-        </dd>
+     
 
         <dt>
             @Html.DisplayName("Participation Began")
         </dt>
+
 
         <dd>
             @Html.DisplayFor(model => model.DateConfirmationActiveParticipation)
@@ -222,7 +204,13 @@
             @Html.DisplayFor(model => model.IsEnrollmentNoticeSent)
         </dd>
 
-       
+        <dt>
+            @Html.DisplayName("Provider Accepts")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+        </dd>
 
         <dt>
             @Html.DisplayName("Verified Enrollment")
@@ -239,13 +227,7 @@
         <dd>
             @Html.DisplayFor(model => model.IsProviderSignature)
         </dd>
-        <dt>
-            @Html.DisplayName("Provider Accepts")
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsProviderAcceptsRejectsCourseRequest)
-        </dd>
         <dt>
             @Html.DisplayName("Rejection Reason ")
         </dt>
@@ -261,8 +243,6 @@
         <dd>
             @Html.DisplayFor(model => model.ProviderExplanationRejection)
         </dd>
-
-       
 
         <dt>
             @Html.DisplayNameFor(model => model.OnlineCourse)
@@ -281,6 +261,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.CourseFee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseFee)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.CourseCredit)
         </dt>
 
@@ -288,6 +276,13 @@
             @Html.DisplayFor(model => model.CourseCredit.Value)
         </dd>
 
+        <dt>
+            @Html.DisplayName("Credit Completed")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCompletedToDate)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.CourseName2ndSemesterID)
         </dt>
@@ -344,13 +339,13 @@
             @Html.DisplayFor(model => model.PrimaryNotificationDate)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.PriorDisbursementProvider)
+        <dt>
+            @Html.DisplayName("Prior Disbursements")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PriorDisbursementProvider)
-        </dd>*@
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.RecordNotes)
@@ -361,7 +356,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RemediationPeriodBegins)
+            @Html.DisplayName("Remediation Begins")
         </dt>
 
         <dd>
@@ -377,7 +372,7 @@
         </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.TwentyDaysPastSemesterStartDate)
+            @Html.DisplayName("20 days past start")
         </dt>
 
         <dd>
@@ -427,5 +422,6 @@
     </dl>
 </div>
 <p>
+  
     @Html.ActionLink("Back to List", "Index")
 </p>

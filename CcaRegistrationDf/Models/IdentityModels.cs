@@ -38,7 +38,6 @@ namespace CcaRegistrationDf.Models
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Parent> Parents { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineCourse> Courses { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Provider> Providers { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Primary> Primaries { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Counselor> Counselors { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Session { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
