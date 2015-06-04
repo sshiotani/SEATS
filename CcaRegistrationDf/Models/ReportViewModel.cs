@@ -10,6 +10,7 @@ namespace CcaRegistrationDf.Models
     /// </summary>
     public class ReportViewModel
     {
+        public int Id { get; set; }
         public string FiscalYear { get; set; }
         public string SSID { get; set; }
         public string CourseCredit { get; set; }

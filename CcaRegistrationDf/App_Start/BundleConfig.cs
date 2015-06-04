@@ -12,7 +12,7 @@ namespace CcaRegistrationDf
                         "~/Scripts/jquery-{version}.js"
                         , "~/Scripts/jquery-ui-{version}.js"
                         , "~/Scripts/jquery.maskedinput.js"
-                        
+
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -29,8 +29,9 @@ namespace CcaRegistrationDf
                       ));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
+                "~/Content/bootstrap.css",
                  "~/Content/default.css",
-                      "~/Content/bootstrap.css",
+
                       "~/Content/Site.css",
                        "~/Content/jquery-ui.css",
                        "~/Content/jquery.bootgrid.css",
@@ -39,7 +40,7 @@ namespace CcaRegistrationDf
 
             bundles.Add(new ScriptBundle("~/bundles/bootgrid").Include(
                         "~/Scripts/jquery.bootgrid.min.js"
-                        , "jquery.bootgrid.fa.min.js"
+                        , "~/Scripts/jquery.bootgrid.fa.min.js"
                         ));
 
 

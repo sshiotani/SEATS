@@ -46,6 +46,7 @@ namespace CcaRegistrationDf.Controllers
             {
 
                 ReportViewModel line = new ReportViewModel();
+                line.Id = cca.ID;
 
                 line.StudentFirstName = cca.Student.StudentFirstName;
                 line.StudentLastName = cca.Student.StudentLastName;
@@ -74,20 +75,6 @@ namespace CcaRegistrationDf.Controllers
                 report.Add(line);
 
             }
-
-
-
-            //report.Credit = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).FirstAsync();
-
-            //report.Name = await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstAsync();
-            //report.Name = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).FirstAsync();
-            //report.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).FirstAsync();
-
-            //report.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
-            //report.PriorDisbursementProvider = cca.PriorDisbursementProvider;
-            //report.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
-
-
 
             return report;
         }
