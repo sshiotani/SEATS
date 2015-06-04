@@ -68,13 +68,13 @@ namespace CcaRegistrationDf.Models
         public virtual OnlineCourse OnlineCourse { get; set; }
         public int CourseCategoryID { get; set; }
         public virtual CourseCategory CourseCategory { get; set; }
-        //public Nullable<decimal> CourseFee { get; set; }
+        public Nullable<decimal> CourseFee { get; set; }
         public int CourseCreditID { get; set; }
         public virtual CourseCredit CourseCredit { get; set; }
         public Nullable<int> CourseName2ndSemesterID { get; set; }
         public bool IsCourseConsistentWithStudentSEOP { get; set; }      
         public int SessionID { get; set; }
-        public Session Session { get; set; }
+        public virtual Session Session { get; set; }
 
        
 

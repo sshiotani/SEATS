@@ -20,7 +20,7 @@ namespace CcaRegistrationDf.Controllers
         public async Task<ActionResult> Index()
         {
             var courses = db.Courses.Include(o => o.CourseCategory).Include(o => o.Provider).Include(o => o.Session);
-            return View(await courses.ToListAsync());
+            return View(await courses.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: OnlineCourses/Details/5
@@ -30,7 +30,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OnlineCourse onlineCourse = await db.Courses.FindAsync(id);
+            OnlineCourse onlineCourse = await db.Courses.FindAsync(id).ConfigureAwait(false);
             if (onlineCourse == null)
             {
                 return HttpNotFound();
@@ -57,7 +57,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Courses.Add(onlineCourse);
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
@@ -74,7 +74,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OnlineCourse onlineCourse = await db.Courses.FindAsync(id);
+            OnlineCourse onlineCourse = await db.Courses.FindAsync(id).ConfigureAwait(false);
             if (onlineCourse == null)
             {
                 return HttpNotFound();
@@ -95,7 +95,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(onlineCourse).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             ViewBag.CourseCategoryID = new SelectList(db.CourseCategories, "ID", "Name", onlineCourse.CourseCategoryID);
@@ -111,7 +111,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OnlineCourse onlineCourse = await db.Courses.FindAsync(id);
+            OnlineCourse onlineCourse = await db.Courses.FindAsync(id).ConfigureAwait(false);
             if (onlineCourse == null)
             {
                 return HttpNotFound();
@@ -124,7 +124,7 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            OnlineCourse onlineCourse = await db.Courses.FindAsync(id);
+            OnlineCourse onlineCourse = await db.Courses.FindAsync(id).ConfigureAwait(false);
             db.Courses.Remove(onlineCourse);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

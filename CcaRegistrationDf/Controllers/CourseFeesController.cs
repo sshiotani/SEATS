@@ -19,7 +19,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: CourseFees
         public async Task<ActionResult> Index()
         {
-            return View(await db.CourseFees.ToListAsync());
+            return View(await db.CourseFees.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: CourseFees/Details/5
@@ -29,7 +29,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseFee courseFee = await db.CourseFees.FindAsync(id);
+            CourseFee courseFee = await db.CourseFees.FindAsync(id).ConfigureAwait(false);
             if (courseFee == null)
             {
                 return HttpNotFound();
@@ -53,7 +53,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.CourseFees.Add(courseFee);
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +67,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseFee courseFee = await db.CourseFees.FindAsync(id);
+            CourseFee courseFee = await db.CourseFees.FindAsync(id).ConfigureAwait(false);
             if (courseFee == null)
             {
                 return HttpNotFound();
@@ -85,7 +85,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(courseFee).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(courseFee);
@@ -118,9 +118,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            CourseFee courseFee = await db.CourseFees.FindAsync(id);
+            CourseFee courseFee = await db.CourseFees.FindAsync(id).ConfigureAwait(false);
             db.CourseFees.Remove(courseFee);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

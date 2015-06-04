@@ -20,7 +20,7 @@ namespace CcaRegistrationDf.Controllers
         [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.Providers.ToListAsync());
+            return View(await db.Providers.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: Providers/Details/5
@@ -31,7 +31,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Provider provider = await db.Providers.FindAsync(id);
+            Provider provider = await db.Providers.FindAsync(id).ConfigureAwait(false);
             if (provider == null)
             {
                 return HttpNotFound();
@@ -57,7 +57,7 @@ namespace CcaRegistrationDf.Controllers
                 //var name = User.Identity.Name;
                 //provider.UserId = await db.Users.Where(m => m.UserName == name).Select(m => m.Id).FirstOrDefaultAsync();
                 db.Providers.Add(provider);
-                var count = await db.SaveChangesAsync();
+                var count = await db.SaveChangesAsync().ConfigureAwait(false);
 
                
 
@@ -75,7 +75,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Provider provider = await db.Providers.FindAsync(id);
+            Provider provider = await db.Providers.FindAsync(id).ConfigureAwait(false);
             if (provider == null)
             {
                 return HttpNotFound();
@@ -94,7 +94,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(provider).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(provider);
@@ -131,9 +131,9 @@ namespace CcaRegistrationDf.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Provider provider = await db.Providers.FindAsync(id);
+            Provider provider = await db.Providers.FindAsync(id).ConfigureAwait(false);
             db.Providers.Remove(provider);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

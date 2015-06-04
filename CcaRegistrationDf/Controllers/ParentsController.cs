@@ -19,7 +19,7 @@ namespace CcaRegistrationDf.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                var parents = await db.Parents.ToListAsync();
+                var parents = await db.Parents.ToListAsync().ConfigureAwait(false);
                 return View(parents);
             }
 
@@ -27,11 +27,11 @@ namespace CcaRegistrationDf.Controllers
 
             var UserIdentity = User.Identity.GetUserId();
 
-            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
 
             if(student.ParentID != null)
             {
-                var parent = await db.Parents.Where(u => u.ID == student.ParentID).FirstOrDefaultAsync();
+                var parent = await db.Parents.Where(u => u.ID == student.ParentID).FirstOrDefaultAsync().ConfigureAwait(false);
                 if (parent != null)
                 {
                     return View(parent);
@@ -51,7 +51,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Parent parent = await db.Parents.FindAsync(id);
+            Parent parent = await db.Parents.FindAsync(id).ConfigureAwait(false);
             if (parent == null)
             {
                 return HttpNotFound();
@@ -76,18 +76,18 @@ namespace CcaRegistrationDf.Controllers
             {
                 // Check email to see if parent already parentID
 
-                int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m=>m.ID).FirstOrDefaultAsync();
+                int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
                //If not add them
                 if(parentID == null)
                 {
                     db.Parents.Add(parent);
-                    parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync();
+                    parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                 }
 
                 // Add parent Id to student
                 var UserIdentity = User.Identity.GetUserId();
-                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 // Find parent with
                 student.ParentID = parentID;
@@ -98,7 +98,7 @@ namespace CcaRegistrationDf.Controllers
                     return View("Error");
                 }
 
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
 
                 return RedirectToAction("Index","Home");
             }
@@ -113,7 +113,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Parent parent = await db.Parents.FindAsync(id);
+            Parent parent = await db.Parents.FindAsync(id).ConfigureAwait(false);
             if (parent == null)
             {
                 return HttpNotFound();
@@ -131,7 +131,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(parent).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(parent);
@@ -144,7 +144,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Parent parent = await db.Parents.FindAsync(id);
+            Parent parent = await db.Parents.FindAsync(id).ConfigureAwait(false);
             if (parent == null)
             {
                 return HttpNotFound();
@@ -157,9 +157,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Parent parent = await db.Parents.FindAsync(id);
+            Parent parent = await db.Parents.FindAsync(id).ConfigureAwait(false);
             db.Parents.Remove(parent);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

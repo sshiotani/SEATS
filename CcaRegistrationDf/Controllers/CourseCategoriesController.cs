@@ -19,7 +19,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: CourseCategories
         public async Task<ActionResult> Index()
         {
-            return View(await db.CourseCategories.ToListAsync());
+            return View(await db.CourseCategories.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: CourseCategories/Details/5
@@ -29,7 +29,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id);
+            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id).ConfigureAwait(false);
             if (courseCategory == null)
             {
                 return HttpNotFound();
@@ -54,7 +54,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.CourseCategories.Add(courseCategory);
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
@@ -69,7 +69,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id);
+            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id).ConfigureAwait(false);
             if (courseCategory == null)
             {
                 return HttpNotFound();
@@ -124,9 +124,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id);
+            CourseCategory courseCategory = await db.CourseCategories.FindAsync(id).ConfigureAwait(false);
             db.CourseCategories.Remove(courseCategory);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

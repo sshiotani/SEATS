@@ -61,7 +61,7 @@ namespace CcaRegistrationDf.Controllers
         public async Task<ActionResult> StudentCcaView()
         {
             var UserIdentity = User.Identity.GetUserId();
-            var ccas = await db.CCAs.Where(m => m.UserId == UserIdentity).ToListAsync();
+            var ccas = await db.CCAs.Where(m => m.UserId == UserIdentity).ToListAsync().ConfigureAwait(false);
 
             List<StudentStatusViewModel> courses = new List<StudentStatusViewModel>();
             Mapper.CreateMap<CCA, StudentStatusViewModel>();
@@ -92,7 +92,7 @@ namespace CcaRegistrationDf.Controllers
             }
             try
             {
-                CCA cCA = await db.CCAs.FindAsync(id);
+                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
                 if (cCA == null)
                 {
                     return HttpNotFound();
@@ -208,7 +208,7 @@ namespace CcaRegistrationDf.Controllers
                     MapModel(ccaVm, out cca, out student);
 
                     //If school counselor is not found create a new one.
-                    await CounselorCreate(ccaVm, cca, student);
+                    await CounselorCreate(ccaVm, cca, student).ConfigureAwait(false);
 
                     db.CCAs.Add(cca);
                     await db.SaveChangesAsync().ConfigureAwait(false);
@@ -246,7 +246,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 if (ccaVm.EnrollmentLocationID == 2 || (cca.EnrollmentLocationID != 1 && cca.CounselorID == 0))
                 {
-                    int counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync();
+                    int counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
                     if (counselorId == 0)
                     {
@@ -404,7 +404,7 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                var courses = await db.Courses.ToListAsync();
+                var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
 
                 var courseResult = courses.Where(x => x.ID == courseId).Select(f => new CourseResultModel()
                 {
@@ -415,7 +415,7 @@ namespace CcaRegistrationDf.Controllers
                     Notes = f.Notes
                 }).FirstOrDefault();
 
-                courseResult.CreditChoices = await GetCourseCredit(courseResult.Credit);
+                courseResult.CreditChoices = await GetCourseCredit(courseResult.Credit).ConfigureAwait(false);
 
                 return (Json(courseResult));
             }
@@ -438,7 +438,7 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                var creditOptions = await db.CourseCredits.ToListAsync();
+                var creditOptions = await db.CourseCredits.ToListAsync().ConfigureAwait(false);
 
                 var creditList = creditOptions.Select(f => new SelectListItem
                 {
@@ -482,7 +482,7 @@ namespace CcaRegistrationDf.Controllers
 
             try
             {
-                CCA cCA = await db.CCAs.FindAsync(id);
+                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
                 if (cCA == null)
                 {
                     return HttpNotFound();
@@ -518,7 +518,7 @@ namespace CcaRegistrationDf.Controllers
                     CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                     db.Entry(cca).State = EntityState.Modified;
 
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -550,7 +550,7 @@ namespace CcaRegistrationDf.Controllers
             }
             try
             {
-                CCA cCA = await db.CCAs.FindAsync(id);
+                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
                 if (cCA == null)
                 {
                     return HttpNotFound();
@@ -580,7 +580,7 @@ namespace CcaRegistrationDf.Controllers
 
             try
             {
-                CCA cca = await db.CCAs.FindAsync(id);
+                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
                 if (cca == null)
                 {
                     return HttpNotFound();
@@ -592,7 +592,7 @@ namespace CcaRegistrationDf.Controllers
 
                 ccaVm.CcaID = cca.ID;
 
-                await SetUpEditViewModel(ccaVm);
+                await SetUpEditViewModel(ccaVm).ConfigureAwait(false);
 
                 return View(ccaVm);
             }
@@ -614,8 +614,8 @@ namespace CcaRegistrationDf.Controllers
                     var leaId = (decimal)ccaVm.Student.EnrollmentLocationID;
                     var schoolId = (decimal)ccaVm.Student.EnrollmentLocationSchoolNamesID;
 
-                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync();
-                    ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync();
+                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 }
             }
@@ -637,7 +637,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 try
                 {
-                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID);
+                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
 
                     Mapper.CreateMap<UsoeCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
 
@@ -645,7 +645,7 @@ namespace CcaRegistrationDf.Controllers
 
                     //db.Entry(cca).State = EntityState.Modified;
 
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "Admin");
                 }
                 catch (Exception ex)
@@ -661,7 +661,7 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            await SetUpEditViewModel(ccaVm);
+            await SetUpEditViewModel(ccaVm).ConfigureAwait(false);
 
             return View(ccaVm);
         }
@@ -682,7 +682,7 @@ namespace CcaRegistrationDf.Controllers
 
             try
             {
-                CCA cca = await db.CCAs.FindAsync(id);
+                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
                 if (cca == null)
                 {
                     return HttpNotFound();
@@ -717,7 +717,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 try
                 {
-                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID);
+                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
                     cca.IsBusinessAdministratorAcceptRejectEnrollment = ccaVm.IsBusinessAdministratorAcceptRejectEnrollment;
                     cca.PrimaryLEAExplantionRejection = ccaVm.PrimaryLEAExplantionRejection;
                     cca.PrimaryLEAReasonRejectingCCA = ccaVm.PrimaryLEAReasonRejectingCCA;
@@ -725,7 +725,7 @@ namespace CcaRegistrationDf.Controllers
 
                     db.Entry(cca).State = EntityState.Modified;
 
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "PrimaryUsers");
                 }
                 catch (Exception ex)
@@ -746,6 +746,35 @@ namespace CcaRegistrationDf.Controllers
             return View(ccaVm);
         }
 
+        // GET: CCAs/Details/5
+        /// <summary>
+        /// This method provides details of the CCA to the USOE Admin .
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Primary,Counselor")]
+        public async Task<ActionResult> PrimaryDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+                if (cCA == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(cCA);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error retrieving details! Error: " + ex.Message;
+                return View("Error");
+            }
+        }
+
         // GET: CCAs/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
@@ -754,7 +783,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CCA cCA = await db.CCAs.FindAsync(id);
+            CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
             if (cCA == null)
             {
                 return HttpNotFound();
@@ -768,9 +797,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            CCA cCA = await db.CCAs.FindAsync(id);
+            CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
             db.CCAs.Remove(cCA);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

@@ -24,7 +24,7 @@ namespace CcaRegistrationDf.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.Counselors.ToListAsync());
+            return View(await db.Counselors.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: CCAs for Counselor
@@ -33,16 +33,17 @@ namespace CcaRegistrationDf.Controllers
         {
             // Look up counselor associated with this user
             var userId = User.Identity.GetUserId();
-            var counselor = await db.Counselors.Where(m => m.UserId == userId).FirstOrDefaultAsync();
+            var counselor = await db.Counselors.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
 
             // Look up all ccas associated with this primary
             if (counselor != null)
             {
-                var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync();
+                var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
 
                 // Create list of viewmodels populated from 
-                var ccaVmList = await GetCcaViewModelList(ccas);
+                var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
+                ViewBag.SchoolName = await cactusDb.CactusSchools.Where(m => m.ID == counselor.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 // Send to form to edit these ccas
                 return View(ccaVmList);
@@ -83,7 +84,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
+            Counselor counselor = await db.Counselors.FindAsync(id).ConfigureAwait(false);
             if (counselor == null)
             {
                 return HttpNotFound();
@@ -95,7 +96,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: Counselors/Create
         public async Task<ActionResult> Create()
         {
-            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -126,7 +127,7 @@ namespace CcaRegistrationDf.Controllers
                 }
                 else
                 {
-                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync();
+                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync().ConfigureAwait(false);
                 }
 
                 // Mapper causes all properties in the ViewModel to update the Counselor object so errors or not required empty properties will overwrite
@@ -153,9 +154,9 @@ namespace CcaRegistrationDf.Controllers
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == counselor.UserId).FirstOrDefaultAsync();
+                    var user = await db.Users.Where(m => m.Id == counselor.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
                     user.IsSetup = true;
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                 }
                 else
                 {
@@ -174,7 +175,7 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -219,7 +220,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
+            Counselor counselor = await db.Counselors.FindAsync(id).ConfigureAwait(false);
             if (counselor == null)
             {
                 return HttpNotFound();
@@ -252,7 +253,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Counselor counselor = await db.Counselors.FindAsync(id);
+            Counselor counselor = await db.Counselors.FindAsync(id).ConfigureAwait(false);
             if (counselor == null)
             {
                 return HttpNotFound();
@@ -265,9 +266,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Counselor counselor = await db.Counselors.FindAsync(id);
+            Counselor counselor = await db.Counselors.FindAsync(id).ConfigureAwait(false);
             db.Counselors.Remove(counselor);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

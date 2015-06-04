@@ -31,14 +31,14 @@ namespace CcaRegistrationDf.Controllers
         // GET: Reports
         public async Task<ActionResult> Index()
         {
-            List<ReportViewModel> reports = await GetReport();
+            List<ReportViewModel> reports = await GetReport().ConfigureAwait(false);
 
             return View(reports);
         }
 
         private async Task<List<ReportViewModel>> GetReport()
         {
-            var ccas = await db.CCAs.ToListAsync();
+            var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
             SEATSEntities1 cactus = new SEATSEntities1();
             List<ReportViewModel> report = new List<ReportViewModel>();
 
@@ -94,7 +94,7 @@ namespace CcaRegistrationDf.Controllers
 
         private async Task<ReportContainer> MakeReport()
         {
-            var ccas = await db.CCAs.ToListAsync();
+            var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
             SEATSEntities1 cactus = new SEATSEntities1();
 
             ReportContainer report = new ReportContainer();
@@ -164,7 +164,7 @@ namespace CcaRegistrationDf.Controllers
                 return View("Error");
             }
 
-            ReportContainer report = await MakeReport();
+            ReportContainer report = await MakeReport().ConfigureAwait(false);
 
             
             lr.DataSources.Add(new ReportDataSource("StudentData", report.StudentReport));

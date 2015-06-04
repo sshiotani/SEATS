@@ -29,24 +29,24 @@ namespace CcaRegistrationDf.Controllers
 
             if (User.IsInRole("Admin"))
             {
-                var students = await db.Students.ToListAsync();
+                var students = await db.Students.ToListAsync().ConfigureAwait(false);
                 return View(students);
             }
             else if (User.IsInRole("Primary"))
             {
-                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
-                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
+                var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync().ConfigureAwait(false);
+                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
                 return View(primaryStudents);
             }
             else if(User.IsInRole("Counselor"))
             {
-                var schoolId = await db.Counselors.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
-                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync();
+                var schoolId = await db.Counselors.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync().ConfigureAwait(false);
+                var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
                 return View(primaryStudents);
             }
 
-           
-            var student = await db.Students.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+
+            var student = await db.Students.Where(u => u.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
 
             if (student != null)
             {
@@ -63,7 +63,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
             if (student == null)
             {
                 return HttpNotFound();
@@ -76,13 +76,13 @@ namespace CcaRegistrationDf.Controllers
         {
             // Check to see if this information already parentID.  If not then create one.
             var UserIdentity = User.Identity.GetUserId();
-            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync();
+            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
             if (student == null)
             {
                 var model = new StudentViewModel();
                 try
                 {
-                    model = await GetClientSelectLists(model); // Create SelectLists for Enrollment and Credit Exceptions
+                    model = await GetClientSelectLists(model).ConfigureAwait(false); // Create SelectLists for Enrollment and Credit Exceptions
                 }
                 catch (Exception ex)
                 {
@@ -103,7 +103,7 @@ namespace CcaRegistrationDf.Controllers
             try
             {
                 //Look up Lists of Leas
-                model.EnrollmentLocation = await GetEnrollmentLocations();
+                model.EnrollmentLocation = await GetEnrollmentLocations().ConfigureAwait(false);
 
                 //Look up Lists of Schools
                 model.EnrollmentLocationSchoolNames = GetSchoolNames();
@@ -129,7 +129,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 using (SEATSEntities1 leas = new SEATSEntities1())
                 {
-                    var leaList = await leas.CactusInstitutions.OrderBy(m => m.Name).ToListAsync();
+                    var leaList = await leas.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
                     leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1});
                     leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2});
@@ -168,7 +168,7 @@ namespace CcaRegistrationDf.Controllers
                 using (SEATSEntities1 schools = new SEATSEntities1())
                 {
                     IEnumerable<SelectListItem> schoolNameList;
-                    var schoolList = await schools.CactusSchools.ToListAsync();
+                    var schoolList = await schools.CactusSchools.ToListAsync().ConfigureAwait(false);
                     schoolList.RemoveAll(m => m.Name == null);
                     schoolNameList = schoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                     {
@@ -205,14 +205,14 @@ namespace CcaRegistrationDf.Controllers
                 student.UserId = User.Identity.GetUserId();
 
                 db.Students.Add(student);
-                
-                var count = await db.SaveChangesAsync();
+
+                var count = await db.SaveChangesAsync().ConfigureAwait(false);
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync();
+                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
                     user.IsSetup = true;
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                 }
                 else
                 {
@@ -225,7 +225,7 @@ namespace CcaRegistrationDf.Controllers
             }
 
             studentVm.EnrollmentLocationID = 0;
-            return View(await GetClientSelectLists(studentVm));
+            return View(await GetClientSelectLists(studentVm).ConfigureAwait(false));
         }
 
         // GET: Students/Edit/5
@@ -236,7 +236,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
             if (student == null)
             {
                 return HttpNotFound();
@@ -254,7 +254,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(student).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(student);
@@ -267,7 +267,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
             if (student == null)
             {
                 return HttpNotFound();
@@ -300,7 +300,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
             if (student == null)
             {
                 return HttpNotFound();
@@ -314,9 +314,9 @@ namespace CcaRegistrationDf.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Student student = await db.Students.FindAsync(id);
+            Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
             db.Students.Remove(student);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

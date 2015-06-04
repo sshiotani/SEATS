@@ -23,7 +23,7 @@ namespace CcaRegistrationDf.Controllers
         [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.PrimaryUsers.ToListAsync());
+            return View(await db.PrimaryUsers.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: CCAs for primary
@@ -32,12 +32,14 @@ namespace CcaRegistrationDf.Controllers
         {
             // Look up all ccas associated with this primary
             var userId = User.Identity.GetUserId();
-            var schoolId = await db.PrimaryUsers.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync().ConfigureAwait(false);
+            var school = await db.PrimaryUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
 
-            var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
+            var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == school.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
 
             // Create list of viewmodels populated from 
             var ccaVmList = GetCcaViewModelList(ccas);
+
+            ViewBag.SchoolName = await cactusDb.CactusSchools.Where(m => m.ID == school.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
             // Send to form to edit these ccas
             return View(ccaVmList);
@@ -67,7 +69,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id);
+            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id).ConfigureAwait(false);
             if (primaryUser == null)
             {
                 return HttpNotFound();
@@ -78,7 +80,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: PrimaryUsers/Create
         public async  Task<ActionResult> Create()
         {
-            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -102,9 +104,9 @@ namespace CcaRegistrationDf.Controllers
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync();
+                    var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
                     user.IsSetup = true;
-                    await db.SaveChangesAsync();
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                 }
                 else
                 {
@@ -117,7 +119,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("EmailAdminToConfirm", "Account");
             }
 
-            var leas = await cactusDb.CactusInstitutions.ToListAsync();
+            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0});
 
@@ -135,7 +137,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id);
+            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id).ConfigureAwait(false);
             if (primaryUser == null)
             {
                 return HttpNotFound();
@@ -155,7 +157,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(primaryUser).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
@@ -172,7 +174,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id);
+            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id).ConfigureAwait(false);
             if (primaryUser == null)
             {
                 return HttpNotFound();
@@ -186,11 +188,11 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id);
+            PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id).ConfigureAwait(false);
             db.PrimaryUsers.Remove(primaryUser);
-            var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync();
+            var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
             user.IsSetup = false;
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

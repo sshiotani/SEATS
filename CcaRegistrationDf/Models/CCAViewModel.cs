@@ -60,6 +60,7 @@ namespace CcaRegistrationDf.Models
 		public IEnumerable<SelectListItem> CourseCredit { get; set; }
 		public int SessionID { get; set; }
 		public IEnumerable<SelectListItem> Session { get; set; }
+        public Nullable<decimal> CourseFee { get; set; }
 
 		//Misc
 		public string Comments { get; set; }

@@ -31,16 +31,17 @@ namespace CcaRegistrationDf.Controllers
 
                     using (ApplicationDbContext db = new ApplicationDbContext())
                     {
-                        var setup = await db.Users.Where(m => m.Id == userId).Select(m => m.IsSetup).FirstOrDefaultAsync();
+                        var setup = await db.Users.Where(m => m.Id == userId).Select(m => m.IsSetup).FirstOrDefaultAsync().ConfigureAwait(false);
                         if (!setup)
                         {
                             return RedirectToAction("UserType");
                         }
                     }
 
+                    return RedirectToAction("CheckRole");
                 }
-               
 
+                return View();
             }
             catch (Exception ex)
             {
@@ -48,9 +49,14 @@ namespace CcaRegistrationDf.Controllers
                 return View("Error");
             }
 
-            return RedirectToAction("CheckRole");
+            
         }
 
+        /// <summary>
+        /// This method redirects User depending on their role.  Right now we direct Outside Users (besides Student/Parents)
+        /// to their CCA Interface.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CheckRole()
         {
             if (User.IsInRole("Admin"))
@@ -67,14 +73,13 @@ namespace CcaRegistrationDf.Controllers
             }
             else if (User.IsInRole("Counselor"))
             {
-                return RedirectToAction( "CcaInterface","Counselors");
+                return RedirectToAction("CcaInterface", "Counselors");
             }
-            
 
-                return View("Index");
+            return View("Index");
         }
 
-        
+
 
         /// <summary>
         /// Gets user types to display in dropdown for Account setup.  User chooses which type of account wanted.
@@ -112,7 +117,7 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UserType(UserTypeViewModel userType)
         {
-            var type = await db.Locations.Where(m => m.ID == userType.UserTypeID).FirstOrDefaultAsync();
+            var type = await db.Locations.Where(m => m.ID == userType.UserTypeID).FirstOrDefaultAsync().ConfigureAwait(false);
             switch (type.Name)
             {
                 case "Provider":

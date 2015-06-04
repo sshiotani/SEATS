@@ -30,7 +30,7 @@ namespace CcaRegistrationDf.Models
             }
             catch
             {
-                throw;
+                throw new HttpException(500, "Confiration Email Not Sent!");
             }
         }
     }

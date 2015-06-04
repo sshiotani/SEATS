@@ -7,8 +7,8 @@ namespace CcaRegistrationDf.Models
 {
     public class UsoeCcaViewModel
     {
+        // Items pulled from CCA
         public DateTime ApplicationSubmissionDate { get; set; }
-      
         public int CcaID { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }
@@ -17,6 +17,8 @@ namespace CcaRegistrationDf.Models
         public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
 
+        //Items to be input by USOE 
+        public Nullable<decimal> CourseFee { get; set; }
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }
         public bool IsRemediation { get; set; }
         public Nullable<System.DateTime> NotificationDate { get; set; }

@@ -20,7 +20,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: CourseCredits
         public async Task<ActionResult> Index()
         {
-            return View(await db.CourseCredits.ToListAsync());
+            return View(await db.CourseCredits.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: CourseCredits/Details/5
@@ -30,7 +30,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id);
+            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id).ConfigureAwait(false);
             if (courseCredit == null)
             {
                 return HttpNotFound();
@@ -68,7 +68,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id);
+            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id).ConfigureAwait(false);
             if (courseCredit == null)
             {
                 return HttpNotFound();
@@ -86,7 +86,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(courseCredit).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(courseCredit);
@@ -99,7 +99,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id);
+            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id).ConfigureAwait(false);
             if (courseCredit == null)
             {
                 return HttpNotFound();
@@ -112,9 +112,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id);
+            CourseCredit courseCredit = await db.CourseCredits.FindAsync(id).ConfigureAwait(false);
             db.CourseCredits.Remove(courseCredit);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 

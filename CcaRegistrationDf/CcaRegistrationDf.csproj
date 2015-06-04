@@ -282,6 +282,10 @@
     <Compile Include="Migrations\201506031721060_primaryUserCactus.Designer.cs">
       <DependentUpon>201506031721060_primaryUserCactus.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506041402058_CourseFeeUpdate.cs" />
+    <Compile Include="Migrations\201506041402058_CourseFeeUpdate.Designer.cs">
+      <DependentUpon>201506041402058_CourseFeeUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -807,6 +811,7 @@
     <Content Include="Views\CCAs\StudentCcaView.cshtml" />
     <Content Include="Views\CCAs\UsoeDetails.cshtml" />
     <Content Include="Views\CCAs\PrimaryEdit.cshtml" />
+    <Content Include="Views\CCAs\PrimaryDetails.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -920,6 +925,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506031721060_primaryUserCactus.resx">
       <DependentUpon>201506031721060_primaryUserCactus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506041402058_CourseFeeUpdate.resx">
+      <DependentUpon>201506041402058_CourseFeeUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>

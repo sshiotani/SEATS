@@ -10,7 +10,7 @@ namespace CcaRegistrationDf.Models
     {
         public DateTime ApplicationSubmissionDate { get; set; }
         public int StudentID { get; set; }
-        public int CCAID { get; set; }
+        public int CcaID { get; set; }
         public int ProviderID { get; set; }
         public virtual Provider Provider { get; set; }
         [Display(Name = "Teacher Cactus ID")]

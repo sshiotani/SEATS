@@ -12,8 +12,8 @@ namespace CcaRegistrationDf.Models
         // This is the fee for 1/2 credit all course fee 
         public decimal Fee { get; set; }
 
-        // Fiscal Year this Fee is valid
-        // public int FiscalYear { get; set; } 
+        // Fiscal Year this Fee is valid (ie for 2015-2016 ValidYear = 2016)
+        public Nullable<int> ValidYear { get; set; } 
      
     }
 }

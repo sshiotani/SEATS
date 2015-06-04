@@ -19,7 +19,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: Sessions
         public async Task<ActionResult> Index()
         {
-            return View(await db.Session.ToListAsync());
+            return View(await db.Session.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: Sessions/Details/5
@@ -29,7 +29,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Session.FindAsync(id);
+            Session session = await db.Session.FindAsync(id).ConfigureAwait(false);
             if (session == null)
             {
                 return HttpNotFound();
@@ -67,7 +67,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Session.FindAsync(id);
+            Session session = await db.Session.FindAsync(id).ConfigureAwait(false);
             if (session == null)
             {
                 return HttpNotFound();
@@ -85,7 +85,7 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(session).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(session);
@@ -98,7 +98,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Session.FindAsync(id);
+            Session session = await db.Session.FindAsync(id).ConfigureAwait(false);
             if (session == null)
             {
                 return HttpNotFound();
@@ -111,9 +111,9 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Session session = await db.Session.FindAsync(id);
+            Session session = await db.Session.FindAsync(id).ConfigureAwait(false);
             db.Session.Remove(session);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 
