@@ -79,26 +79,41 @@ namespace CcaRegistrationDf.Controllers
                 int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
                //If not add them
-                if(parentID == null)
+                if(parentID == 0 || parentID == null)
                 {
                     db.Parents.Add(parent);
+                    await db.SaveChangesAsync().ConfigureAwait(false);
                     parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                 }
 
                 // Add parent Id to student
+                
                 var UserIdentity = User.Identity.GetUserId();
                 var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 // Find parent with
                 student.ParentID = parentID;
 
-                if(student.ParentID == null)
+                if(student.ParentID == null || parentID == 0)
                 {
                     ViewBag.Message = "Unable to associate parent information with student.  Please contact help desk.";
                     return View("Error");
                 }
 
-                await db.SaveChangesAsync().ConfigureAwait(false);
+                var count = await db.SaveChangesAsync().ConfigureAwait(false);
+
+                // After parent is saved successfully student account is setup. Check for successful save and mark as setup.
+                if (count != 0)
+                {
+                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    user.IsSetup = true;
+                    await db.SaveChangesAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    ViewBag.Message = "Unable to save parent!";
+                    return View("Error");
+                }
 
                 return RedirectToAction("Index","Home");
             }

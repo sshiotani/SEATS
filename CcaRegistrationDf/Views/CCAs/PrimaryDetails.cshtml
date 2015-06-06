@@ -25,7 +25,8 @@
         <dd>
             @Html.DisplayFor(model => model.Student.StudentFirstName),
             @Html.DisplayFor(model => model.Student.StudentLastName),
-            @Html.DisplayFor(model => model.Student.SSID)
+            @Html.DisplayFor(model => model.Student.SSID),
+            @Html.DisplayFor(model => model.Student.StudentDOB)
         </dd>
 
         <dt>
@@ -37,7 +38,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.HasExcessiveFED)
+            @Html.DisplayName("Is over FDE")
         </dt>
 
         <dd>
@@ -45,7 +46,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ExcessiveFEDExplanation)
+            @Html.DisplayName("Over FDE Explanation")
         </dt>
 
         <dd>
@@ -53,28 +54,13 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ExcessiveFEDReasonID)
+            @Html.DisplayName("Over FDE Reason")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.ExcessiveFEDReasonID)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comments)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("School ID")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EnrollmentLocationSchoolNamesID)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Counselor)
@@ -86,14 +72,7 @@
             @Html.DisplayFor(model => model.Counselor.Email)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsCounselorSigned)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsCounselorSigned)
-        </dd>
-
+       
         <dt>
             @Html.DisplayName("Primary Accepts")
         </dt>
@@ -119,6 +98,13 @@
         </dd>
 
         <dt>
+            @Html.DisplayName("Signature")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessAdministratorSignature)
+        </dd>
+        <dt>
             @Html.DisplayName("Date Signature")
         </dt>
 
@@ -133,7 +119,13 @@
         <dd>
             @Html.DisplayFor(model => model.Provider.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherCactusID)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.TeacherCactusID)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.TeacherFirstName)
         </dt>
@@ -159,14 +151,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CourseBegin)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseBegin)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.CourseStartDate)
         </dt>
 
@@ -174,13 +158,6 @@
             @Html.DisplayFor(model => model.CourseStartDate)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseCompletionDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseCompletionDate)
-        </dd>
 
         <dt>
             @Html.DisplayName("Credit Completed")
@@ -189,22 +166,7 @@
         <dd>
             @Html.DisplayFor(model => model.CreditCompletedToDate)
         </dd>
-
-        <dt>
-            @Html.DisplayName("Participation Began")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateConfirmationActiveParticipation)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Continued Participation")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateContinuationActiveParticipation)
-        </dd>
+     
 
         <dt>
             @Html.DisplayName("Date Course Passed")
@@ -213,56 +175,7 @@
         <dd>
             @Html.DisplayFor(model => model.DateReportPassingGrade)
         </dd>
-
-        <dt>
-            @Html.DisplayName("Enroll Notice Sent")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsEnrollmentNoticeSent)
-        </dd>
-
-       
-
-        <dt>
-            @Html.DisplayName("Verified Enrollment")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsProviderEnrollmentVerified)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Provider Signed")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsProviderSignature)
-        </dd>
-        <dt>
-            @Html.DisplayName("Provider Accepts")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsProviderAcceptsRejectsCourseRequest)
-        </dd>
-        <dt>
-            @Html.DisplayName("Rejection Reason ")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProviderReasonRejection)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Rejection Explanation")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProviderExplanationRejection)
-        </dd>
-
-       
+     
 
         <dt>
             @Html.DisplayNameFor(model => model.OnlineCourse)
@@ -272,13 +185,13 @@
             @Html.DisplayFor(model => model.OnlineCourse.Name)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.CourseCategory)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.CourseCategory.Name)
-        </dd>
+        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.CourseCredit)
@@ -286,14 +199,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.CourseCredit.Value)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseName2ndSemesterID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseName2ndSemesterID)
         </dd>
 
         <dt>
@@ -311,94 +216,14 @@
         <dd>
             @Html.DisplayFor(model => model.Session.Name)
         </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.BudgetPrimaryProvider)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BudgetPrimaryProvider)
-        </dd>
-
+  
         <dt>
-            @Html.DisplayNameFor(model => model.IsRemediation)
+            @Html.DisplayName("Primary Notes")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IsRemediation)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.NotificationDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.NotificationDate)
+            @Html.DisplayFor(model => model.PrimaryNotes)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PrimaryNotificationDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PrimaryNotificationDate)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.PriorDisbursementProvider)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PriorDisbursementProvider)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RecordNotes)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RecordNotes)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RemediationPeriodBegins)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RemediationPeriodBegins)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.TotalDisbursementsProvider)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalDisbursementsProvider)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TwentyDaysPastSemesterStartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TwentyDaysPastSemesterStartDate)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Offset)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Offset)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Distribution)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Distribution)
-        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.WithdrawalDate)
@@ -406,22 +231,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.WithdrawalDate)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Grand_Total)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Grand_Total)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Notes)
         </dd>
 
     </dl>

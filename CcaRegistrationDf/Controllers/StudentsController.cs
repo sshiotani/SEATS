@@ -16,12 +16,12 @@ namespace CcaRegistrationDf.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
-    {      
+    {
 
-      private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Students
-        
+
 
         public async Task<ActionResult> Index()
         {
@@ -38,7 +38,7 @@ namespace CcaRegistrationDf.Controllers
                 var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
                 return View(primaryStudents);
             }
-            else if(User.IsInRole("Counselor"))
+            else if (User.IsInRole("Counselor"))
             {
                 var schoolId = await db.Counselors.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync().ConfigureAwait(false);
                 var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
@@ -74,27 +74,34 @@ namespace CcaRegistrationDf.Controllers
         // GET: Students/Create
         public async Task<ActionResult> Create()
         {
-            // Check to see if this information already parentID.  If not then create one.
-            var UserIdentity = User.Identity.GetUserId();
-            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
-            if (student == null)
+            try
             {
-                var model = new StudentViewModel();
-                try
+                StudentViewModel model;
+
+                // Check to see if this information already exists.  If not then create one.
+                var UserIdentity = User.Identity.GetUserId();
+                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (student == null)
                 {
-                    model = await GetClientSelectLists(model).ConfigureAwait(false); // Create SelectLists for Enrollment and Credit Exceptions
+                     model = new StudentViewModel();
+
                 }
-                catch (Exception ex)
+                else
                 {
-                    ViewBag.Message = ex.Message;
-                    return View("Error");
+                    Mapper.CreateMap<Student, StudentViewModel>();
+                    model = Mapper.Map<Student, StudentViewModel>(student);
+                    ModelState.AddModelError("", "Account setup not completed.  Please input all required information.");
                 }
 
+
+                model = await GetClientSelectLists(model).ConfigureAwait(false); // Create SelectLists for Enrollment and Credit Exceptions
                 return View(model);
             }
-
-            ModelState.AddModelError("", "You have already filled out this information.  If you need to make changes edit your account.");
-            return View("Index");
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
 
         }
 
@@ -108,7 +115,7 @@ namespace CcaRegistrationDf.Controllers
                 //Look up Lists of Schools
                 model.EnrollmentLocationSchoolNames = GetSchoolNames();
 
-               
+
 
                 return model;
             }
@@ -118,7 +125,7 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-       
+
         /// <summary>
         /// Populates Leas into select list. Inserts Home and Private at top.
         /// </summary>
@@ -131,8 +138,8 @@ namespace CcaRegistrationDf.Controllers
                 {
                     var leaList = await leas.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-                    leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1});
-                    leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2});
+                    leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1 });
+                    leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2 });
 
                     var locations = leaList.Select(f => new SelectListItem
                     {
@@ -200,7 +207,7 @@ namespace CcaRegistrationDf.Controllers
                 Mapper.CreateMap<StudentViewModel, Student>();
                 Student student = Mapper.Map<StudentViewModel, Student>(studentVm);
 
-               
+
 
                 student.UserId = User.Identity.GetUserId();
 
@@ -208,20 +215,14 @@ namespace CcaRegistrationDf.Controllers
 
                 var count = await db.SaveChangesAsync().ConfigureAwait(false);
 
-                if (count != 0) // Set account setup to true if successfully added
-                {
-                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
-                    user.IsSetup = true;
-                    await db.SaveChangesAsync().ConfigureAwait(false);
-                }
-                else
+                if (count == 0) // Set account setup to true if successfully added
                 {
                     ViewBag.Message = "Unable to save student!";
                     return View("Error");
                 }
 
-                
-                return RedirectToAction("Index","Parents");
+
+                return RedirectToAction("Index", "Parents");
             }
 
             studentVm.EnrollmentLocationID = 0;
@@ -229,7 +230,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Students/Edit/5
-      
+
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)

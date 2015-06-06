@@ -12,6 +12,7 @@ namespace CcaRegistrationDf.Models
 
         public string UserId { get; set; }
         public Nullable<int> ParentID { get; set; }
+        public virtual Parent Parent { get; set; }
 
         // Personal info
         public string StudentFirstName { get; set; }

@@ -5,7 +5,7 @@
     background-attachment:fixed;
     
 }
-
+/**/
 /*.body-background {
     background: url(img/bg1.jpg) no-repeat top center;
     
@@ -28,9 +28,20 @@
     white-space: normal;
 }
 
+/* Will prevent empty dd tags as showing as missing lines.*/
+.dl-horizontal > dd:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
     max-width: 280px;
 }
+
+
+
+

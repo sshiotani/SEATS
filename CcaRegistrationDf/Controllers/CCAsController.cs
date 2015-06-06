@@ -611,13 +611,36 @@ namespace CcaRegistrationDf.Controllers
                 using (SEATSEntities1 cactus = new SEATSEntities1())
                 {
 
-                    var leaId = (decimal)ccaVm.Student.EnrollmentLocationID;
-                    var schoolId = (decimal)ccaVm.Student.EnrollmentLocationSchoolNamesID;
+                    var leaId = ccaVm.Student.EnrollmentLocationID;
+                    var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
 
                     ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                     ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        private void SetUpProviderEditViewModel(ProviderCcaViewModel ccaVm)
+        {
+
+            try
+            {
+                var sessionList = new SelectList(db.Session, "ID", "Name",ccaVm.SessionID);
+                var categoryList = new SelectList(db.CourseCategories, "ID", "Name",ccaVm.CourseCategoryID);
+                var providerCourses = db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID);
+                var courseList= new SelectList(providerCourses, "ID", "Name",ccaVm.OnlineCourseID);
+
+                ccaVm.CourseCreditList = new List<SelectListItem>();
+
+                ViewBag.SessionID = sessionList;
+                ViewBag.CourseCategoryID = categoryList;
+                ViewBag.OnlineCourseID = courseList;
+
             }
             catch
             {
@@ -805,7 +828,11 @@ namespace CcaRegistrationDf.Controllers
 
                 ccaVm.CcaID = cca.ID;
 
-                //await SetUpEditViewModel(ccaVm);
+                //ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
+                //ViewBag.CourseCategoryID = new SelectList(db.CourseCategories, "ID", "Name");
+                //ViewBag.OnlineCourseID = new SelectList(db.Courses, "ID", "Name");
+
+                SetUpProviderEditViewModel(ccaVm);
 
                 return View(ccaVm);
             }
@@ -854,7 +881,7 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            //await SetUpEditViewModel(ccaVm);
+            SetUpProviderEditViewModel(ccaVm);
 
             return View(ccaVm);
         }

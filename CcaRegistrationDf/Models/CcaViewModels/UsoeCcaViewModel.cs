@@ -21,6 +21,7 @@ namespace CcaRegistrationDf.Models
         public Nullable<decimal> CourseFee { get; set; }
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }
         public bool IsRemediation { get; set; }
+        public bool IsEnrollmentNoticeSent { get; set; }
         public Nullable<System.DateTime> NotificationDate { get; set; }
         public Nullable<System.DateTime> PrimaryNotificationDate { get; set; }
         public Nullable<decimal> PriorDisbursementProvider { get; set; }

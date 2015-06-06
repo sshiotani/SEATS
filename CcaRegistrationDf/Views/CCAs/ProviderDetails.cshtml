@@ -4,7 +4,7 @@
     ViewBag.Title = "ProviderDetails";
 }
 
-<h2>ProviderDetails</h2>
+<h2>Provider CCA details</h2>
 
 <div>
     <h4>CCA</h4>
@@ -26,7 +26,9 @@
         <dd>
             @Html.DisplayFor(model => model.Student.StudentFirstName),
             @Html.DisplayFor(model => model.Student.StudentLastName),
-            @Html.DisplayFor(model => model.Student.SSID)
+            @Html.DisplayFor(model => model.Student.StudentDOB),
+            @Html.DisplayFor(model => model.Student.SSID),
+            @Html.DisplayFor(model => model.Student.StudentEmail)
         </dd>
 
         <dt>
@@ -38,7 +40,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.HasExcessiveFED)
+            @Html.DisplayName("Parent")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Student.Parent.GuardianFirstName),
+            @Html.DisplayFor(model => model.Student.Parent.GuardianLastName),
+            @Html.DisplayFor(model => model.Student.Parent.GuardianEmail),
+            @Html.DisplayFor(model => model.Student.Parent.GuardianPhone1)
+        </dd>
+       
+
+        <dt>
+            @Html.DisplayName("Over FDE")
         </dt>
 
         <dd>
@@ -46,29 +60,14 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ExcessiveFEDExplanation)
+            @Html.DisplayName("Over FDE Explanation")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.ExcessiveFEDExplanation)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ExcessiveFEDReasonID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ExcessiveFEDReasonID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comments)
-        </dd>
-
+       
         <dt>
             @Html.DisplayNameFor(model => model.Counselor)
         </dt>
@@ -79,7 +78,6 @@
             @Html.DisplayFor(model => model.Counselor.Email)
         </dd>
 
-        
         <dt>
             @Html.DisplayName("Primary Accepts")
         </dt>
@@ -146,14 +144,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CourseBegin)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseBegin)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.CourseStartDate)
         </dt>
 
@@ -168,8 +158,6 @@
         <dd>
             @Html.DisplayFor(model => model.CourseCompletionDate)
         </dd>
-
-     
 
         <dt>
             @Html.DisplayName("Participation Began")
@@ -211,21 +199,20 @@
         <dd>
             @Html.DisplayFor(model => model.IsProviderAcceptsRejectsCourseRequest)
         </dd>
-
-        <dt>
-            @Html.DisplayName("Verified Enrollment")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsProviderEnrollmentVerified)
-        </dd>
-
+    
         <dt>
             @Html.DisplayName("Provider Signed")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.IsProviderSignature)
+        </dd>
+        <dt>
+            @Html.DisplayName("Provider Signature")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProviderSignature)
         </dd>
 
         <dt>
@@ -306,53 +293,14 @@
         <dd>
             @Html.DisplayFor(model => model.Session.Name)
         </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.BudgetPrimaryProvider)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BudgetPrimaryProvider)
-        </dd>
+ 
 
         <dt>
-            @Html.DisplayNameFor(model => model.IsRemediation)
+            @Html.DisplayName("Provider Notes")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IsRemediation)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.NotificationDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.NotificationDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PrimaryNotificationDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PrimaryNotificationDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Prior Disbursements")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PriorDisbursementProvider)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RecordNotes)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RecordNotes)
+            @Html.DisplayFor(model => model.ProviderNotes)
         </dd>
 
         <dt>
@@ -363,14 +311,6 @@
             @Html.DisplayFor(model => model.RemediationPeriodBegins)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.TotalDisbursementsProvider)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalDisbursementsProvider)
-        </dd>*@
-
         <dt>
             @Html.DisplayName("20 days past start")
         </dt>
@@ -378,22 +318,7 @@
         <dd>
             @Html.DisplayFor(model => model.TwentyDaysPastSemesterStartDate)
         </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Offset)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Offset)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Distribution)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Distribution)
-        </dd>*@
+    
 
         <dt>
             @Html.DisplayNameFor(model => model.WithdrawalDate)
@@ -402,22 +327,7 @@
         <dd>
             @Html.DisplayFor(model => model.WithdrawalDate)
         </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Grand_Total)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Grand_Total)
-        </dd>*@
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
+     
 
     </dl>
 </div>

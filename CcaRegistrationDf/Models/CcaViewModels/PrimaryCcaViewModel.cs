@@ -23,9 +23,10 @@ namespace CcaRegistrationDf.Models
         public Nullable<int> ProviderID { get; set; }
         public Provider Provider { get; set; }
 
+        public string BusinessAdministratorSignature { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public string PrimaryLEAReasonRejectingCCA { get; set; }
-
+        public string PrimaryNotes { get; set; }
     }
 }

@@ -30,12 +30,12 @@ namespace CcaRegistrationDf
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
                 "~/Content/bootstrap.css",
-                 "~/Content/default.css",
-
-                      "~/Content/Site.css",
                        "~/Content/jquery-ui.css",
                        "~/Content/jquery.bootgrid.css",
-                       "~/Content/style.css"
+                       "~/Content/style.css",
+                         "~/Content/Site.css",
+                        "~/Content/default.css",
+                       "~/Content/animate.css"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootgrid").Include(

@@ -290,6 +290,10 @@
     <Compile Include="Migrations\201506041626029_RemovePrimary.Designer.cs">
       <DependentUpon>201506041626029_RemovePrimary.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506051424139_InterfaceUpdate.cs" />
+    <Compile Include="Migrations\201506051424139_InterfaceUpdate.Designer.cs">
+      <DependentUpon>201506051424139_InterfaceUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -573,14 +577,6 @@
     <Content Include="Scripts\jquery.maskedinput.min.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.scrollTo.js" />
-    <Content Include="Scripts\js\bootstrap.js" />
-    <Content Include="Scripts\js\bootstrap.min.js" />
-    <Content Include="Scripts\js\custom.js" />
-    <Content Include="Scripts\js\jquery-1.10.2.js" />
-    <Content Include="Scripts\js\jquery.easing.min.js" />
-    <Content Include="Scripts\js\jquery.min.js" />
-    <Content Include="Scripts\js\jquery.scrollTo.js" />
-    <Content Include="Scripts\js\wow.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -939,6 +935,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506041626029_RemovePrimary.resx">
       <DependentUpon>201506041626029_RemovePrimary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506051424139_InterfaceUpdate.resx">
+      <DependentUpon>201506051424139_InterfaceUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>

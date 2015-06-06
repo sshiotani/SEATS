@@ -86,8 +86,8 @@
 
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
-                        return "<a href=\" /CCAs/ProviderEdit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> " +
-                             "<a href=\" /CCAs/ProviderDetails/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-menu-hamburger\"></span></a>";
+                        return "<a href=\" /CCAs/ProviderEdit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\" title = \"Edit\" ></span></button> " +
+                             "<a href=\" /CCAs/ProviderDetails/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-list-alt\" title = \"Details\"></span></a>";
                     }
                 }
             });

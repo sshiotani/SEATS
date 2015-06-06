@@ -32,11 +32,12 @@ namespace CcaRegistrationDf.Models
 
         //Primary Section
         public Nullable<int> EnrollmentLocationID { get; set; }
-      
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public string PrimaryLEAReasonRejectingCCA { get; set; }
         public Nullable<System.DateTime> DateBusinessAdministratorSignature { get; set; }
+        public string BusinessAdministratorSignature { get; set; }
+        public string PrimaryNotes { get; set; }
 
         //Provider Section
         public int ProviderID { get; set; }
@@ -56,9 +57,11 @@ namespace CcaRegistrationDf.Models
         public bool IsEnrollmentNoticeSent { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
         public bool IsProviderEnrollmentVerified { get; set; }
+        public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
         public string ProviderReasonRejection { get; set; }
+        public string ProviderNotes { get; set; }
 
         //Course
         public int OnlineCourseID { get; set; }
@@ -82,6 +85,7 @@ namespace CcaRegistrationDf.Models
         public Nullable<System.DateTime> NotificationDate { get; set; }
         public Nullable<System.DateTime> PrimaryNotificationDate { get; set; }
         public Nullable<decimal> PriorDisbursementProvider { get; set; }
+        [DisplayFormat(NullDisplayText = "")]
         public string RecordNotes { get; set; }
         public Nullable<System.DateTime> RemediationPeriodBegins { get; set; }
         public Nullable<decimal> TotalDisbursementsProvider { get; set; }
