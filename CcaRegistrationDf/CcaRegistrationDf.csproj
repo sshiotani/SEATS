@@ -575,7 +575,6 @@
     <Content Include="Scripts\jquery.easing.min.js" />
     <Content Include="Scripts\jquery.maskedinput.js" />
     <Content Include="Scripts\jquery.maskedinput.min.js" />
-    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.scrollTo.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
