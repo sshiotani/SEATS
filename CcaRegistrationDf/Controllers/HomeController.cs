@@ -49,7 +49,7 @@ namespace CcaRegistrationDf.Controllers
                 return View("Error");
             }
 
-            
+
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace CcaRegistrationDf.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return View("Index");
+                return RedirectToAction("Index", "Admin");
             }
             else if (User.IsInRole("Primary"))
             {
@@ -76,10 +76,18 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("CcaInterface", "Counselors");
             }
 
-            return View("Index");
+            return RedirectToAction("Index2");
         }
 
+        public async Task<ActionResult> Index2()
+        {
 
+
+            return View();
+
+
+
+        }
 
         /// <summary>
         /// Gets user types to display in dropdown for Account setup.  User chooses which type of account wanted.

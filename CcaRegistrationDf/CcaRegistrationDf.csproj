@@ -815,6 +815,8 @@
     <Content Include="Views\ProviderUsers\CcaInterface.cshtml" />
     <Content Include="Views\CCAs\ProviderEdit.cshtml" />
     <Content Include="Views\CCAs\ProviderDetails.cshtml" />
+    <Content Include="Views\Home\Index2.cshtml" />
+    <Content Include="Views\Shared\HomeLayout2.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>

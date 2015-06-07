@@ -366,11 +366,11 @@ hr {
 --- Intro logged in
 ============================ */
 
-.intro-small {
+.intro2{
 	width:100%;
-	position:relative;
+	position:fixed;
 	
-	background: url(../img/bg6-sm.jpg) no-repeat top center;
+	background: url(../Content/img/bg6a.jpg) no-repeat top center;
 }
 
 #intro-small.intro {
