@@ -10,6 +10,7 @@ namespace CcaRegistrationDf.Models
     public class ProviderCcaViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
+        public int FiscalYear { get; set; }
         public int CcaID { get; set; }
         public int ProviderID { get; set; }
         public Provider Provider { get; set; }

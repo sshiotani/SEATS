@@ -13,10 +13,10 @@ namespace CcaRegistrationDf.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SEATSEntities1 : DbContext
+    public partial class SEATSEntities : DbContext
     {
-        public SEATSEntities1()
-            : base("name=SEATSEntities1")
+        public SEATSEntities()
+            : base("name=SEATSEntities")
         {
         }
     

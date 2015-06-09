@@ -34,7 +34,7 @@ namespace CcaRegistrationDf.Models
         public string StudentLastName { get; set; }
 
         [Display(Name = "Student Number")]
-        public Nullable<int> SSID { get; set; }
+        public Nullable<int> StudentNumber { get; set; }
 
         [Required]
         [Display(Name = "Graduation Date")]

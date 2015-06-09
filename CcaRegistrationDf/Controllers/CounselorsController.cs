@@ -18,7 +18,8 @@ namespace CcaRegistrationDf.Controllers
     public class CounselorsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities1 cactusDb = new SEATSEntities1();
+        private SEATSEntities cactus = new SEATSEntities();
+       
 
         // GET: Counselors
         [Authorize(Roles = "Admin")]
@@ -43,7 +44,7 @@ namespace CcaRegistrationDf.Controllers
                 // Create list of viewmodels populated from 
                 var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
-                ViewBag.SchoolName = await cactusDb.CactusSchools.Where(m => m.ID == counselor.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                ViewBag.SchoolName = await cactus.CactusSchools.Where(m => m.ID == counselor.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 // Send to form to edit these ccas
                 return View(ccaVmList);
@@ -96,7 +97,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: Counselors/Create
         public async Task<ActionResult> Create()
         {
-            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
+            var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -127,7 +128,7 @@ namespace CcaRegistrationDf.Controllers
                 }
                 else
                 {
-                    counselor = await db.Counselors.Where(c => c.ID == counselorVm.CounselorID).FirstOrDefaultAsync().ConfigureAwait(false);
+                    counselor = await db.Counselors.FindAsync(counselorVm.CounselorID).ConfigureAwait(false);
                 }
 
                 // Mapper causes all properties in the ViewModel to update the Counselor object so errors or not required empty properties will overwrite
@@ -154,7 +155,7 @@ namespace CcaRegistrationDf.Controllers
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == counselor.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    var user = db.Users.Find(counselor.UserId);
                     user.IsSetup = true;
                     await db.SaveChangesAsync().ConfigureAwait(false);
                 }
@@ -175,7 +176,7 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
+            var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 

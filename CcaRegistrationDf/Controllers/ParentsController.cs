@@ -105,7 +105,7 @@ namespace CcaRegistrationDf.Controllers
                 // After parent is saved successfully student account is setup. Check for successful save and mark as setup.
                 if (count != 0)
                 {
-                    var user = await db.Users.Where(m => m.Id == student.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    var user = db.Users.Find(student.UserId);
                     user.IsSetup = true;
                     await db.SaveChangesAsync().ConfigureAwait(false);
                 }

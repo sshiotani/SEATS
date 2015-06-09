@@ -629,7 +629,7 @@ namespace CcaRegistrationDf.Controllers
 
                 var userId = User.Identity.GetUserId();
 
-                var user = await db.Users.Where(m => m.Id == userId).FirstOrDefaultAsync();
+                var user = db.Users.Find(userId);
 
                 await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
 

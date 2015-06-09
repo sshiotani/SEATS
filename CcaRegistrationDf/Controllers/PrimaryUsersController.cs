@@ -17,7 +17,8 @@ namespace CcaRegistrationDf.Controllers
     public class PrimaryUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities1 cactusDb = new SEATSEntities1();
+        private SEATSEntities cactus = new SEATSEntities();
+        
 
         // GET: PrimaryUsers
         [Authorize(Roles="Admin")]
@@ -39,7 +40,7 @@ namespace CcaRegistrationDf.Controllers
             // Create list of viewmodels populated from 
             var ccaVmList = GetCcaViewModelList(ccas);
 
-            ViewBag.SchoolName = await cactusDb.CactusSchools.Where(m => m.ID == school.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+            ViewBag.SchoolName = await cactus.CactusSchools.Where(m => m.ID == school.EnrollmentLocationSchoolNameID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
             // Send to form to edit these ccas
             return View(ccaVmList);
@@ -80,7 +81,7 @@ namespace CcaRegistrationDf.Controllers
         // GET: PrimaryUsers/Create
         public async  Task<ActionResult> Create()
         {
-            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
+            var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -104,7 +105,8 @@ namespace CcaRegistrationDf.Controllers
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    var user = db.Users.Find(primaryUser.UserId);
+                    
                     user.IsSetup = true;
                     await db.SaveChangesAsync().ConfigureAwait(false);
                 }
@@ -119,7 +121,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("EmailAdminToConfirm", "Account");
             }
 
-            var leas = await cactusDb.CactusInstitutions.ToListAsync().ConfigureAwait(false);
+            var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0});
 
@@ -142,7 +144,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "ID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View(primaryUser);
         }
@@ -161,7 +163,7 @@ namespace CcaRegistrationDf.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EnrollmentLocationID = new SelectList(cactusDb.CactusInstitutions, "ID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name");
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             return View(primaryUser);
         }
@@ -190,7 +192,7 @@ namespace CcaRegistrationDf.Controllers
         {
             PrimaryUser primaryUser = await db.PrimaryUsers.FindAsync(id).ConfigureAwait(false);
             db.PrimaryUsers.Remove(primaryUser);
-            var user = await db.Users.Where(m => m.Id == primaryUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var user = db.Users.Find(primaryUser.UserId);
             user.IsSetup = false;
             await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");

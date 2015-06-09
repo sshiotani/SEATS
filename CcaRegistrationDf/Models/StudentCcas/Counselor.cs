@@ -22,10 +22,7 @@ namespace CcaRegistrationDf.Models
 
         public string Phone { get; set; }
 
-        public string School { get; set; } // School name
-
-        // EnrollmentLocationID, EnrollmentLocationSchoolNameID, CactusID, UserId,
-        // set when counselor registers for Account.
+        public string School { get; set; } // School name      
 
         public Nullable<int> EnrollmentLocationID { get; set; } //ID from Cactus Institutions table 
 

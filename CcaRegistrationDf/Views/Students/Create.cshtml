@@ -76,8 +76,8 @@
                 @Html.ValidationMessageFor(model => model.StudentEmail, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.SSID, new { @class = "form-control", id = "ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
-                @Html.ValidationMessageFor(model => model.SSID, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => model.StudentNumber, new { @class = "form-control", id = "ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
+                @Html.ValidationMessageFor(model => model.StudentNumber, "", new { @class = "text-danger" })
             </div>
 
         </div>

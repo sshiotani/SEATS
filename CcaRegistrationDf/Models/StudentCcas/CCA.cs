@@ -12,6 +12,7 @@ namespace CcaRegistrationDf.Models
         public int ID { get; set; }
 
         public DateTime ApplicationSubmissionDate { get; set; }
+        public int FiscalYear { get; set; }
 
         public string UserId { get; set; }
 

@@ -62,7 +62,7 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="District" Type="Int32" />
         </EntityType>
-        <EntityContainer Name="SEATSEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SEATSEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CactusInstitutions" EntityType="Self.CactusInstitution" />
           <EntitySet Name="CactusSchools" EntityType="Self.CactusSchool" />
         </EntityContainer>
@@ -71,7 +71,7 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="SEATSEntities1">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="SEATSEntities">
           <EntitySetMapping Name="CactusInstitutions">
             <EntityTypeMapping TypeName="Model.CactusInstitution">
               <MappingFragment StoreEntitySet="CactusInstitution">

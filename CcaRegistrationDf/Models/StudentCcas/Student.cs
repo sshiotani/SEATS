@@ -16,8 +16,9 @@ namespace CcaRegistrationDf.Models
 
         // Personal info
         public string StudentFirstName { get; set; }
-        public string StudentLastName { get; set; }    
-        public Nullable<int> SSID { get; set; }
+        public string StudentLastName { get; set; }
+        public Nullable<int> StudentNumber { get; set; }    
+        public string SSID { get; set; }
         public Nullable<System.DateTime> StudentDOB { get; set; }
         public string StudentEmail { get; set; }
 

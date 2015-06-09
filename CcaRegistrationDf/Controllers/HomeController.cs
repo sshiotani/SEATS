@@ -14,12 +14,13 @@ namespace CcaRegistrationDf.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
         /// <summary>
         /// Checks user setup status, if user exists in the student tables the account is
         /// setup.  
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             try
             {
@@ -29,14 +30,16 @@ namespace CcaRegistrationDf.Controllers
 
                     var userId = User.Identity.GetUserId();
 
-                    using (ApplicationDbContext db = new ApplicationDbContext())
+
+                    var user = db.Users.Find(userId);
+
+                    var setup = user.IsSetup;
+
+                    if (!setup)
                     {
-                        var setup = await db.Users.Where(m => m.Id == userId).Select(m => m.IsSetup).FirstOrDefaultAsync().ConfigureAwait(false);
-                        if (!setup)
-                        {
-                            return RedirectToAction("UserType");
-                        }
+                        return RedirectToAction("UserType");
                     }
+
 
                     return RedirectToAction("CheckRole");
                 }
@@ -79,7 +82,7 @@ namespace CcaRegistrationDf.Controllers
             return RedirectToAction("Index2");
         }
 
-        public async Task<ActionResult> Index2()
+        public ActionResult Index2()
         {
 
 
@@ -125,7 +128,7 @@ namespace CcaRegistrationDf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UserType(UserTypeViewModel userType)
         {
-            var type = await db.Locations.Where(m => m.ID == userType.UserTypeID).FirstOrDefaultAsync().ConfigureAwait(false);
+            var type = await db.Locations.FindAsync(userType.UserTypeID).ConfigureAwait(false);
             switch (type.Name)
             {
                 case "Provider":

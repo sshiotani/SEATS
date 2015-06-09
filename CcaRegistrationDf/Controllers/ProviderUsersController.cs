@@ -17,6 +17,7 @@ namespace CcaRegistrationDf.Controllers
     public class ProviderUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private SEATSEntities cactus = new SEATSEntities();
 
         // GET: ProviderUsers
         [Authorize(Roles = "Admin")]
@@ -45,7 +46,7 @@ namespace CcaRegistrationDf.Controllers
 
             // Send to form to edit these ccas
             return View(ccaVmList);
-      
+
         }
 
         private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
@@ -54,8 +55,7 @@ namespace CcaRegistrationDf.Controllers
 
             var ccaVmList = new List<ProviderCcaViewModel>();
 
-            using (SEATSEntities1 cactusDb = new SEATSEntities1())
-            {
+           
                 foreach (var cca in ccas)
                 {
                     var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
@@ -68,7 +68,7 @@ namespace CcaRegistrationDf.Controllers
                     }
                     else
                     {
-                        ccaVm.Primary = await cactusDb.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                        ccaVm.Primary = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
                     }
 
                     ccaVmList.Add(ccaVm);
@@ -76,7 +76,7 @@ namespace CcaRegistrationDf.Controllers
                 }
 
                 return ccaVmList;
-            }
+            
         }
 
         // GET: ProviderUsers/Details/5
@@ -121,9 +121,17 @@ namespace CcaRegistrationDf.Controllers
 
                 if (count != 0) // Set account setup to true if successfully added
                 {
-                    var user = await db.Users.Where(m => m.Id == providerUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
-                    user.IsSetup = true;
-                    await db.SaveChangesAsync().ConfigureAwait(false);
+                    var user = db.Users.Find(providerUser.UserId);
+                    if (user != null)
+                    {
+                        user.IsSetup = true;
+                        await db.SaveChangesAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Unable to find Provider UserId!";
+                        return View("Error");
+                    }
                 }
                 else
                 {
@@ -139,7 +147,7 @@ namespace CcaRegistrationDf.Controllers
             var providers = await db.Providers.ToListAsync().ConfigureAwait(false);
             providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
             ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
-            
+
             return View(providerUser);
         }
 
@@ -160,7 +168,7 @@ namespace CcaRegistrationDf.Controllers
             var providers = await db.Providers.ToListAsync().ConfigureAwait(false);
             providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
             ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
-            
+
             return View(providerUser);
         }
 
@@ -185,7 +193,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: ProviderUsers/Delete/5
-       
+
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
@@ -209,7 +217,7 @@ namespace CcaRegistrationDf.Controllers
         {
             ProviderUser providerUser = await db.ProviderUsers.FindAsync(id).ConfigureAwait(false);
             db.ProviderUsers.Remove(providerUser);
-            var user = await db.Users.Where(m => m.Id == providerUser.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var user = db.Users.Find(providerUser.UserId);
             user.IsSetup = false;
             await db.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");

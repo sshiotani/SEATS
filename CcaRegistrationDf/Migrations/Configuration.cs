@@ -41,7 +41,10 @@ namespace CcaRegistrationDf.Migrations
 
             success = idManager.CreateRole("Provider");
             if (!success == true) return success;
-
+            success = idManager.CreateRole("Primary");
+            if (!success == true) return success;
+            success = idManager.CreateRole("Counselor");
+            if (!success == true) return success;
             success = idManager.CreateRole("User");
             if (!success) return success;
 
@@ -76,15 +79,15 @@ namespace CcaRegistrationDf.Migrations
 
 
 
-            success = idManager.AddUserToRole(newUser.Id, "Provider");
+            //success = idManager.AddUserToRole(newUser.Id, "Provider");
 
-            if (!success) return success;
+            //if (!success) return success;
 
 
 
-            success = idManager.AddUserToRole(newUser.Id, "User");
+            //success = idManager.AddUserToRole(newUser.Id, "User");
 
-            if (!success) return success;
+            //if (!success) return success;
 
 
 

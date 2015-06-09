@@ -49,7 +49,6 @@ namespace CcaRegistrationDf.Models
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }     
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderUser> ProviderUsers { get; set; }
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryUser> PrimaryUsers { get; set; }
-
         
     }
 

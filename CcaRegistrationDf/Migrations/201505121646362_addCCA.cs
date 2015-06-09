@@ -20,7 +20,7 @@ namespace CcaRegistrationDf.Migrations
                 .PrimaryKey(t => t.ID);
             
             AlterColumn("dbo.CCAs", "ApplicationSubmissionDate", c => c.DateTime(nullable: false));
-           
+
             AlterColumn("dbo.Counselors", "FirstName", c => c.String(nullable: false));
             AlterColumn("dbo.Counselors", "LastName", c => c.String(nullable: false));
             CreateIndex("dbo.Students", "StudentBudgetID");

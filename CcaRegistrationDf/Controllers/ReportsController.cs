@@ -27,6 +27,7 @@ namespace CcaRegistrationDf.Controllers
     public class ReportsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private SEATSEntities cactus = new SEATSEntities();
 
         // GET: Reports
         public async Task<ActionResult> Index()
@@ -39,7 +40,7 @@ namespace CcaRegistrationDf.Controllers
         private async Task<List<ReportViewModel>> GetReport()
         {
             var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
-            SEATSEntities1 cactus = new SEATSEntities1();
+            
             List<ReportViewModel> report = new List<ReportViewModel>();
 
             foreach (var cca in ccas)
@@ -82,7 +83,7 @@ namespace CcaRegistrationDf.Controllers
         private async Task<ReportContainer> MakeReport()
         {
             var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
-            SEATSEntities1 cactus = new SEATSEntities1();
+            
 
             ReportContainer report = new ReportContainer();
 

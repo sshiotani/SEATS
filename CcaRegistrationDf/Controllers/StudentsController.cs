@@ -11,14 +11,25 @@ using System.Collections.Generic;
 using System;
 using System.Web;
 using AutoMapper;
+using CcaRegistrationDf.Models.Services;
+using CcaRegistrationDf.Models.Interfaces;
+
 
 namespace CcaRegistrationDf.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
     {
-
+        
+        private const short MAXAGE = 17; // Not currently enrolled students must be under 18
         private ApplicationDbContext db = new ApplicationDbContext();
+        private SEATSEntities cactus = new SEATSEntities();
+        private ISsidFindingService ssidFindingService;
+
+        public StudentsController(ISsidFindingService ssidFindingService)
+        {
+            this.ssidFindingService = ssidFindingService;
+        }
 
         // GET: Students
 
@@ -134,9 +145,7 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                using (SEATSEntities1 leas = new SEATSEntities1())
-                {
-                    var leaList = await leas.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+                    var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
                     leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1 });
                     leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2 });
@@ -148,7 +157,6 @@ namespace CcaRegistrationDf.Controllers
                     });
 
                     return locations;
-                }
             }
             catch
             {
@@ -172,10 +180,9 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                using (SEATSEntities1 schools = new SEATSEntities1())
-                {
+               
                     IEnumerable<SelectListItem> schoolNameList;
-                    var schoolList = await schools.CactusSchools.ToListAsync().ConfigureAwait(false);
+                    var schoolList = await cactus.CactusSchools.ToListAsync().ConfigureAwait(false);
                     schoolList.RemoveAll(m => m.Name == null);
                     schoolNameList = schoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                     {
@@ -184,7 +191,7 @@ namespace CcaRegistrationDf.Controllers
                     });
 
                     return Json(new SelectList(schoolNameList, "Value", "Text"));
-                }
+                
             }
             catch
             {
@@ -203,30 +210,95 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Map studentViewModel to student and assign values
-                Mapper.CreateMap<StudentViewModel, Student>();
-                Student student = Mapper.Map<StudentViewModel, Student>(studentVm);
-
-
-
-                student.UserId = User.Identity.GetUserId();
-
-                db.Students.Add(student);
-
-                var count = await db.SaveChangesAsync().ConfigureAwait(false);
-
-                if (count == 0) // Set account setup to true if successfully added
+                try
                 {
-                    ViewBag.Message = "Unable to save student!";
+                    //Map studentViewModel to student and assign values
+                    Mapper.CreateMap<StudentViewModel, Student>();
+                    Student student = Mapper.Map<StudentViewModel, Student>(studentVm);
+
+                    if ((studentVm.EnrollmentLocationID == 1 || studentVm.EnrollmentLocationID == 2) && AgeCheck(studentVm.StudentDOB))
+                    {
+                        ViewBag.Message = "Unable to process application. Error: Applicant too old";
+                        return View("ErrorResults");
+                    }
+
+                    student.SSID = await GetSSID(studentVm);
+
+                    student.UserId = User.Identity.GetUserId();
+
+                    db.Students.Add(student);
+
+                    var count = await db.SaveChangesAsync().ConfigureAwait(false);
+
+                    if (count == 0) // Set account setup to true if successfully added
+                    {
+                        ViewBag.Message = "Unable to save student!";
+                        return View("Error");
+                    }
+
+
+                    return RedirectToAction("Index", "Parents");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Unable to create new student account! Error: " + ex.Message;
                     return View("Error");
                 }
-
-
-                return RedirectToAction("Index", "Parents");
             }
 
             studentVm.EnrollmentLocationID = 0;
             return View(await GetClientSelectLists(studentVm).ConfigureAwait(false));
+        }
+
+
+        /// <summary>
+        /// Checks age for not currently enrolled applicants if age is over 17 not eligible.
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+         private bool AgeCheck(DateTime? dateTime)
+        {
+
+            DateTime today = DateTime.Today;
+            DateTime birthDate = dateTime ?? DateTime.Today;
+
+            if (dateTime != today)
+            {
+                int age = today.Year - birthDate.Year;
+
+                if (today < birthDate.AddYears(age)) age--;
+
+                if (age > MAXAGE)
+                    return true;
+                else
+                    return false;
+            }
+
+            throw new NullReferenceException();
+        }
+
+
+        /// <summary>
+        /// Gets SSID from SSID Server
+        /// </summary>
+        /// <param name="studentVm"></param>
+        /// <returns></returns>
+        public async Task<string> GetSSID(StudentViewModel studentVm)
+        {
+            if (studentVm.StudentNumber != null && studentVm.StudentNumber > 0)
+            {
+                
+                var result = await ssidFindingService.GetSsid(studentVm);
+
+                if (result != null)
+                {
+                    return result;
+                }
+
+                throw new NullReferenceException();
+            }
+
+            return "No SSID found!";
         }
 
         // GET: Students/Edit/5
@@ -250,7 +322,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,StudentFirstName,StudentLastName,SSID,StudentDOB,StudentEmail,EnrollmentLocationID,GraduationDate,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord,StudentBudgetID")] Student student)
+        public async Task<ActionResult> Edit([Bind(Include = "ParentID,StudentFirstName,StudentLastName,SSID,StudentNumber,StudentDOB,StudentEmail,EnrollmentLocationID,EnrollmentLocationSchoolNamesID,GraduationDate,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
         {
             if (ModelState.IsValid)
             {
