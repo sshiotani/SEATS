@@ -15,33 +15,12 @@ namespace CcaRegistrationDf.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Parents
+        [Authorize(Roles = ("Admin"))]
         public async Task<ActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                var parents = await db.Parents.ToListAsync().ConfigureAwait(false);
-                return View(parents);
-            }
+            var parents = await db.Parents.ToListAsync().ConfigureAwait(false);
+            return View(parents);
 
-            // find Student info associated with user and check for existing parent association
-
-            var UserIdentity = User.Identity.GetUserId();
-
-            var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
-
-            if(student.ParentID != null)
-            {
-                var parent = await db.Parents.Where(u => u.ID == student.ParentID).FirstOrDefaultAsync().ConfigureAwait(false);
-                if (parent != null)
-                {
-                    return View(parent);
-                }
-                
-            }
-
-            //Otherwise create one
-
-            return RedirectToAction("Create");
         }
 
         // GET: Parents/Details/5
@@ -76,10 +55,10 @@ namespace CcaRegistrationDf.Controllers
             {
                 // Check email to see if parent already parentID
 
-                int? parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                int parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
-               //If not add them
-                if(parentID == 0 || parentID == null)
+                //If not add them
+                if (parentID == 0 || parentID == null)
                 {
                     db.Parents.Add(parent);
                     await db.SaveChangesAsync().ConfigureAwait(false);
@@ -87,35 +66,26 @@ namespace CcaRegistrationDf.Controllers
                 }
 
                 // Add parent Id to student
-                
+
                 var UserIdentity = User.Identity.GetUserId();
                 var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                // Find parent with
-                student.ParentID = parentID;
+                student.ParentID = (int?)parentID;
 
-                if(student.ParentID == null || parentID == 0)
+                if (student.ParentID == null || parentID == 0)
                 {
                     ViewBag.Message = "Unable to associate parent information with student.  Please contact help desk.";
                     return View("Error");
                 }
 
-                var count = await db.SaveChangesAsync().ConfigureAwait(false);
+                // Account registration is complete mark account as setup.
 
-                // After parent is saved successfully student account is setup. Check for successful save and mark as setup.
-                if (count != 0)
-                {
-                    var user = db.Users.Find(student.UserId);
-                    user.IsSetup = true;
-                    await db.SaveChangesAsync().ConfigureAwait(false);
-                }
-                else
-                {
-                    ViewBag.Message = "Unable to save parent!";
-                    return View("Error");
-                }
+                var user = db.Users.Find(student.UserId);
+                user.IsSetup = true;
 
-                return RedirectToAction("Index","Home");
+                await db.SaveChangesAsync().ConfigureAwait(false);
+
+                return RedirectToAction("Index", "Home");
             }
 
             return View(parent);
