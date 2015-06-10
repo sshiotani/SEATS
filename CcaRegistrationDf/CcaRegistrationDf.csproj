@@ -343,6 +343,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
+    <Compile Include="Models\Interfaces\IApplicationDbContext.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />

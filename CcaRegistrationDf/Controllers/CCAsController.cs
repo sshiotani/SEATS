@@ -12,6 +12,7 @@ using CcaRegistrationDf.Models;
 using AutoMapper;
 
 using Microsoft.AspNet.Identity.Owin;
+using Interfaces;
 
 namespace CcaRegistrationDf.Controllers
 {
@@ -20,8 +21,18 @@ namespace CcaRegistrationDf.Controllers
     {
 
 
-        private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities cactus = new SEATSEntities();
+        private ApplicationDbContext db;
+        private SEATSEntities cactus;
+
+
+        //private IApplicationDbContext db;
+
+        public CCAsController()
+        {
+            this.db = new ApplicationDbContext();
+            this.cactus = new SEATSEntities();
+
+        }
 
         // GET: CCAs
         /// <summary>
@@ -61,23 +72,33 @@ namespace CcaRegistrationDf.Controllers
         /// <returns></returns>
         public async Task<ActionResult> StudentCcaView()
         {
-            var UserIdentity = User.Identity.GetUserId();
-            var ccas = await db.CCAs.Where(m => m.UserId == UserIdentity).ToListAsync().ConfigureAwait(false);
-
             List<StudentStatusViewModel> courses = new List<StudentStatusViewModel>();
-            Mapper.CreateMap<CCA, StudentStatusViewModel>();
-
-            foreach (var cca in ccas)
+            var userId = User.Identity.GetUserId();
+            try
             {
-                try
-                {
-                    var course = Mapper.Map<CCA, StudentStatusViewModel>(cca);
-                    courses.Add(course);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new StudentStatusViewModel 
+                { 
+                    ApplicationSubmissionDate = f.ApplicationSubmissionDate,
+                    CompletionStatus = f.CompletionStatus,
+                    CourseCategoryID = f.CourseCategoryID,
+                    CourseCategory = f.CourseCategory,
+                    OnlineCourseID = f.OnlineCourseID,
+                    OnlineCourse = f.OnlineCourse,
+                    ProviderID = f.ProviderID,
+                    Provider = f.Provider,
+                    SessionID = f.SessionID,
+                    Session = f.Session
+                }).ToListAsync().ConfigureAwait(false);
+                
+                //Mapper.CreateMap<CCA, StudentStatusViewModel>();
+                //foreach (var cca in ccas)
+                //{
+                //    courses.Add(Mapper.Map<CCA, StudentStatusViewModel>(cca));
+                //}
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
             }
 
             return View(courses);
@@ -143,9 +164,8 @@ namespace CcaRegistrationDf.Controllers
                 }
                 else
                 {
-
-                    var user = User.Identity.GetUserId();
-                    var schoolID = db.Students.Where(m => m.UserId == user).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
+                    var userId = User.Identity.GetUserId();
+                    var schoolID = db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
 
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
@@ -161,8 +181,6 @@ namespace CcaRegistrationDf.Controllers
                         Text = "Counselor Not Listed."
                     }
                     });
-
-
                 }
 
                 model.ExcessiveFEDReasonList = db.ExcessiveFEDReasons.Select(f => new SelectListItem
@@ -265,7 +283,7 @@ namespace CcaRegistrationDf.Controllers
                 var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                await userManager.SendEmailAsync(admin.Id, "New SEOP Application", "A new application for SOEP has been received for " + cca.Student.StudentEmail);
+                await userManager.SendEmailAsync(admin.Id, "Counselor Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentEmail);
                 // Uncomment when testing is done and we roll out to production.
 
                 //var counselor = await db.Counselors.FindAsync(cca.CounselorID);
@@ -387,6 +405,7 @@ namespace CcaRegistrationDf.Controllers
 
                 cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                 cca.ApplicationSubmissionDate = DateTime.Now;
+
                 var userId = User.Identity.GetUserId();
                 cca.UserId = userId;
                 student = db.Students.Where(x => x.UserId == userId).First();
@@ -703,9 +722,21 @@ namespace CcaRegistrationDf.Controllers
             {
                 var leaId = ccaVm.Student.EnrollmentLocationID;
                 var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
-
-                ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (leaId == 1) // HomeSchool
+                {
+                    ViewBag.Lea = "HOMESCHOOL";
+                    ViewBag.School = "HOMESCHOOL";
+                }
+                else if (leaId == 2) //PrivateSchool
+                {
+                    ViewBag.Lea = "PRIVATESCHOOL";
+                    ViewBag.School = ccaVm.Student.SchoolOfRecord;
+                }
+                else
+                {
+                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                }
 
             }
             catch

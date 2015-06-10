@@ -57,6 +57,8 @@
         // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
         $(function () {
             var grid = $("#grid-basic").bootgrid({
+                caseSensitive: false
+                    ,
                 formatters: {
                     "state": function (column, row) {
                         var checkBox = "";

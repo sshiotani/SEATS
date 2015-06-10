@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CcaRegistrationDfTests
+namespace CcaRegistrationDf
 {
     [TestClass]
     public class UnitTest1

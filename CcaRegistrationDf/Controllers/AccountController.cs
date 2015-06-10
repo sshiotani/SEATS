@@ -622,12 +622,11 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
+                var userId = User.Identity.GetUserId();
                 var userType = TempData["UserType"] as string;
                 var db = new ApplicationDbContext();
                 var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync();
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync();
-
-                var userId = User.Identity.GetUserId();
 
                 var user = db.Users.Find(userId);
 

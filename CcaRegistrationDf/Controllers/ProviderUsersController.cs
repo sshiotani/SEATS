@@ -16,8 +16,16 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class ProviderUsersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities cactus = new SEATSEntities();
+        private ApplicationDbContext db;
+        private SEATSEntities cactus;
+        
+
+        public ProviderUsersController()
+        {
+            this.db = new ApplicationDbContext();
+            this.cactus = new SEATSEntities();
+           
+        }
 
         // GET: ProviderUsers
         [Authorize(Roles = "Admin")]
@@ -35,14 +43,15 @@ namespace CcaRegistrationDf.Controllers
 
             // Send to form to edit these ccas
             var userId = User.Identity.GetUserId();
-            var provider = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var providerUser = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
 
-            var ccas = await db.CCAs.Where(m => m.ProviderID == provider.ProviderID).ToListAsync().ConfigureAwait(false);
+            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
 
             // Create list of viewmodels populated from 
             var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
-            ViewBag.SchoolName = await db.Providers.Where(m => m.ID == provider.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+            var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
+            ViewBag.SchoolName = provider.Name;
 
             // Send to form to edit these ccas
             return View(ccaVmList);
@@ -115,7 +124,7 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                providerUser.UserId = User.Identity.GetUserId();
+                providerUser.UserId = User.Identity.GetUserId(); ;
                 db.ProviderUsers.Add(providerUser);
                 var count = await db.SaveChangesAsync().ConfigureAwait(false);
 

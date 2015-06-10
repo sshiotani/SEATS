@@ -28,9 +28,9 @@ namespace CcaRegistrationDf.Models
 
                 await smtp.SendMailAsync(mail);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new HttpException(500, "Confiration Email Not Sent!");
+                throw new HttpException(500, "Confirmation Email Not Sent! " + ex.Message);
             }
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Interfaces;
 
 namespace CcaRegistrationDf.Models
 {
@@ -22,8 +23,24 @@ namespace CcaRegistrationDf.Models
         public bool IsSetup { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Student> Students { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Parent> Parents { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineCourse> Courses { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Provider> Providers { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Counselor> Counselors { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Session { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentBudget> StudentBudgets { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseFee> CourseFees { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderUser> ProviderUsers { get; set; }
+        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryUser> PrimaryUsers { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -34,21 +51,7 @@ namespace CcaRegistrationDf.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Student> Students { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Parent> Parents { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineCourse> Courses { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Provider> Providers { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Counselor> Counselors { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Session { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentBudget> StudentBudgets { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseFee> CourseFees { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }     
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderUser> ProviderUsers { get; set; }
-        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryUser> PrimaryUsers { get; set; }
+      
         
     }
 

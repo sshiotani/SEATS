@@ -17,9 +17,15 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class CounselorsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities cactus = new SEATSEntities();
+        private ApplicationDbContext db;
+        private SEATSEntities cactus;
+     
        
+        public CounselorsController()
+        {
+            this.db = new ApplicationDbContext();
+            this.cactus  = new SEATSEntities();
+        }
 
         // GET: Counselors
         [Authorize(Roles = "Admin")]
@@ -140,7 +146,7 @@ namespace CcaRegistrationDf.Controllers
 
                 counselor = Mapper.Map<CounselorViewModel, Counselor>(counselorVm, counselor);
 
-                counselor.UserId = User.Identity.GetUserId();
+                counselor.UserId = User.Identity.GetUserId();;
 
                 // Remove all non numeric chars
                 counselor.Phone = JustDigits(counselor.Phone);

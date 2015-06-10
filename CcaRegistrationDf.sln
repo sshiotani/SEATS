@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcaRegistrationDf", "CcaRegistrationDf\CcaRegistrationDf.csproj", "{5764559A-069F-4DEC-868B-685BCCD0CF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcaRegistrationDfTests", "CcaRegistrationDfTests\CcaRegistrationDfTests.csproj", "{146741D3-327B-460B-81D2-55E406EEBB4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcaRegistrationDf.Tests", "CcaRegistrationDfTests\CcaRegistrationDf.Tests.csproj", "{146741D3-327B-460B-81D2-55E406EEBB4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
