@@ -19,6 +19,7 @@
         @Html.HiddenFor(model => model.ApplicationSubmissionDate)
         @Html.HiddenFor(model => model.ProviderID)
         @Html.HiddenFor(model => model.StudentID)
+        @*@Html.HiddenFor(model => model.CourseCreditID)*@
 
 
 
@@ -52,11 +53,12 @@
 
                     @Html.ValidationMessageFor(model => model.OnlineCourseID, "", new { @class = "text-danger" })
 
+                   
 
-                    @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCreditList, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
+                    @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCreditList, "Credit", new { @class = "form-control dropdown-wrapper", id = "CreditOptions", title = "To change credit: Unselect and reselect the course." })
 
                     @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
-
+                    
 
 
                 </div>
@@ -269,7 +271,7 @@
                         data: { courseId: course },
                         dataType: 'json',
                         success: function (result) {
-                            $("#CreditOptions").removeClass('hide');
+                            
 
                             $.each(result.CreditChoices, function (i, value) {
                                 if (value.Disabled != true) {

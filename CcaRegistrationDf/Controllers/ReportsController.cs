@@ -165,7 +165,7 @@ namespace CcaRegistrationDf.Controllers
 
             
             lr.DataSources.Add(new ReportDataSource("StudentData", report.StudentReport));
-            lr.DataSources.Add(new ReportDataSource("ReportMonthly", report.BudgetReport));
+            lr.DataSources.Add(new ReportDataSource("CCA", report.BudgetReport));
             lr.DataSources.Add(new ReportDataSource("Credit", report.CreditReport));
             //lr.DataSources.Add(new ReportDataSource("StudentBudget", report.StudentBudgetReport));
             lr.DataSources.Add(new ReportDataSource("CourseInformation", report.CategoryReport));

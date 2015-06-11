@@ -449,7 +449,17 @@
       <DependentUpon>Monthly.xsd</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SEATSDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="StudentData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StudentData.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Students.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -794,6 +804,28 @@
     </Content>
     <Content Include="Students.xsc">
       <DependentUpon>Students.xsd</DependentUpon>
+    </Content>
+    <Content Include="StudentData.xsc">
+      <DependentUpon>StudentData.xsd</DependentUpon>
+    </Content>
+    <Content Include="SEATSDataSet.xsc">
+      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="SEATSDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>SEATSDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="SEATSDataSet.xss">
+      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="StudentData.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>StudentData.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="StudentData.xss">
+      <DependentUpon>StudentData.xsd</DependentUpon>
     </Content>
     <None Include="Students.xsd">
       <Generator>MSDataSetGenerator</Generator>

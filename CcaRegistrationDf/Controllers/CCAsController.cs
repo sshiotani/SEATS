@@ -735,28 +735,7 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-        private void SetUpProviderEditViewModel(ProviderCcaViewModel ccaVm)
-        {
-
-            try
-            {
-                var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
-                var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
-                var providerCourses = db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID);
-                var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
-
-                ccaVm.CourseCreditList = new List<SelectListItem>();
-
-                ViewBag.SessionID = sessionList;
-                ViewBag.CourseCategoryID = categoryList;
-                ViewBag.OnlineCourseID = courseList;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
+       
 
         // POST: CCAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -775,6 +754,11 @@ namespace CcaRegistrationDf.Controllers
                     Mapper.CreateMap<UsoeCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
 
                     cca = Mapper.Map<UsoeCcaViewModel, CCA>(ccaVm, cca);
+
+                    // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
+
+                    var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
+                    cca.FiscalYear = GetFiscalYear(session.Name);
 
                     //db.Entry(cca).State = EntityState.Modified;
 
@@ -922,19 +906,8 @@ namespace CcaRegistrationDf.Controllers
 
             try
             {
-                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
-                if (cca == null)
-                {
-                    return HttpNotFound();
-                }
 
-                Mapper.CreateMap<CCA, ProviderCcaViewModel>();
-
-                var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
-
-                ccaVm.CcaID = cca.ID;
-
-                SetUpProviderEditViewModel(ccaVm);
+                var ccaVm = await SetUpProviderEditViewModel(id);
 
                 return View(ccaVm);
             }
@@ -945,6 +918,37 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
+        private async Task<ProviderCcaViewModel> SetUpProviderEditViewModel(int? id)
+        {
+
+            try
+            {
+                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+                
+                Mapper.CreateMap<CCA, ProviderCcaViewModel>();
+
+                var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+                var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
+                var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
+                var providerCourses = db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID);
+                var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
+                var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync();
+                ccaVm.CourseCreditList = new SelectList(credit,"ID","Value",ccaVm.CourseCreditID);
+
+                ViewBag.SessionID = sessionList;
+                ViewBag.CourseCategoryID = categoryList;
+                ViewBag.OnlineCourseID = courseList;
+
+                return ccaVm;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
         // POST: CCAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -965,6 +969,12 @@ namespace CcaRegistrationDf.Controllers
 
                     Mapper.Map<ProviderCcaViewModel, CCA>(ccaVm, cca);
 
+                    // In case the session changed we need to change FiscalYear
+                    // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
+
+                    var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
+                    cca.FiscalYear = GetFiscalYear(session.Name);
+
                     db.Entry(cca).State = EntityState.Modified;
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
@@ -983,9 +993,9 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            SetUpProviderEditViewModel(ccaVm);
 
-            return View(ccaVm);
+
+            return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
 
         // GET: CCAs/Details/5
