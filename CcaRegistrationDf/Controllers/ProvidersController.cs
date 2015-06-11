@@ -14,7 +14,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class ProvidersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        //private SeatsContext db { get; set; }
+
+        public ProvidersController()
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: Providers
         [Authorize(Roles="Admin")]

@@ -64,8 +64,7 @@
         </div>
     </nav>
 
-    @*@if (!Request.IsAuthenticated) //User is not logged in.
-    {*@
+   
          <!-- /Section: intro -->
         <section id="intro" class="intro">
 
@@ -82,26 +81,14 @@
         </section>
     <!-- /Section: intro -->
 
-    @*}
-    else
-    {
-          <!-- /Section: intro -->
-        <section id="intro" class="intro-small">
-
-         
-
-        </section>
-    <!-- /Section: intro -->
-    }*@
+ 
 
     <section id="service" class="home-section text-center">
         @RenderBody()
     </section>
 
     <hr />
-    @*<footer>
-        <p>&copy; @DateTime.Now.Year - SEATS</p>
-    </footer>*@
+   
 
 
     <noscript>
@@ -110,7 +97,7 @@
 
     <!-- Core JavaScript Files -->
     @Scripts.Render("~/bundles/jquery")
-    @*<script src="~/Scripts/jquery.min.js"></script>*@
+  
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.easing.min.js"></script>
     <script src="~/Scripts/jquery.scrollTo.js"></script>

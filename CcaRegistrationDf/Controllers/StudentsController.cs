@@ -22,13 +22,18 @@ namespace CcaRegistrationDf.Controllers
     {
 
         private const short MAXAGE = 17; // Not currently enrolled students must be under 18
+        // Sets custom CactusInstitution IDs for EnrollmentLocation list.
+        private const short HOMESCHOOLID = 1;
+        private const short PRIVATESCHOOLID = 2; 
         private ApplicationDbContext db = new ApplicationDbContext();
+        //private SeatsContext db { get; set; }
         private SEATSEntities cactus = new SEATSEntities();
         private ISsidFindingService ssidFindingService;
 
         public StudentsController(ISsidFindingService ssidFindingService)
         {
             this.ssidFindingService = ssidFindingService;
+           
         }
 
         // GET: Students
@@ -55,7 +60,6 @@ namespace CcaRegistrationDf.Controllers
                 var primaryStudents = await db.Students.Where(m => m.EnrollmentLocationSchoolNamesID == schoolId).ToListAsync().ConfigureAwait(false);
                 return View(primaryStudents);
             }
-
 
             var student = await db.Students.Where(u => u.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
 
@@ -103,7 +107,6 @@ namespace CcaRegistrationDf.Controllers
                     return RedirectToAction("Create", "Parent");
                 }
 
-
                 model = await GetClientSelectLists(model).ConfigureAwait(false); // Create SelectLists for Enrollment and Credit Exceptions
                 return View(model);
             }
@@ -125,8 +128,6 @@ namespace CcaRegistrationDf.Controllers
                 //Look up Lists of Schools
                 model.EnrollmentLocationSchoolNames = GetSchoolNames();
 
-
-
                 return model;
             }
             catch
@@ -146,8 +147,8 @@ namespace CcaRegistrationDf.Controllers
             {
                 var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = 1 });
-                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = 2 });
+                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
 
                 var locations = leaList.Select(f => new SelectListItem
                 {
@@ -217,12 +218,13 @@ namespace CcaRegistrationDf.Controllers
 
                     //Age check for not enrolled applicants
 
-                    //if ((studentVm.EnrollmentLocationID == 1 || studentVm.EnrollmentLocationID == 2) && AgeCheck(studentVm.StudentDOB))
-                    //{
-                    //    ViewBag.Message = "Unable to process application. Error: Applicant too old";
-                    //    return View("Error");
-                    //}
+                    if ((studentVm.EnrollmentLocationID == 1 || studentVm.EnrollmentLocationID == 2) && AgeCheck(studentVm.StudentDOB))
+                    {
+                        ViewBag.Message = "Unable to process application. Error: Applicant too old";
+                        return View("Error");
+                    }
 
+                    // Find SSID using ssidFindingService
                     student.SSID = await GetSSID(studentVm);
 
                     student.UserId = User.Identity.GetUserId();
@@ -237,7 +239,7 @@ namespace CcaRegistrationDf.Controllers
                         return View("Error");
                     }
 
-
+                    // Check for parent association
                     if (student.ParentID == null || student.ParentID == 0)
                     {
                         return RedirectToAction("Create", "Parents");
@@ -327,7 +329,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ParentID,StudentFirstName,StudentLastName,SSID,StudentNumber,StudentDOB,StudentEmail,EnrollmentLocationID,EnrollmentLocationSchoolNamesID,GraduationDate,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
+        public async Task<ActionResult> Edit([Bind(Include = "StudentNumber,StudentEmail,EnrollmentLocationID,EnrollmentLocationSchoolNamesID,GraduationDate,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -337,6 +339,7 @@ namespace CcaRegistrationDf.Controllers
             }
             return View(student);
         }
+
         // GET: Students/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> EditAdmin(int? id)
@@ -360,7 +363,7 @@ namespace CcaRegistrationDf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> EditAdmin([Bind(Include = "ID,StudentFirstName,StudentLastName,SSID,StudentDOB,StudentEmail,EnrollmentLocationID,GraduationDate,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord,StudentBudgetID")] Student student)
+        public async Task<ActionResult> EditAdmin([Bind(Include = "ID,StudentFirstName,StudentLastName,SSID,StudentDOB,StudentEmail,EnrollmentLocationID,GraduationDate,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
         {
             if (ModelState.IsValid)
             {

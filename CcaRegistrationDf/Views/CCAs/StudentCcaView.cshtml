@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CcaRegistrationDf.Models.StudentStatusViewModel>
+﻿@model IEnumerable<CcaRegistrationDf.Models.CourseStatusViewModel>
 
 <h2>My Online Applications</h2>
 <table class="table">
@@ -6,9 +6,7 @@
         <th>
             @Html.DisplayName("Submission Date")
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.CompletionStatus)
-        </th>*@
+       
         <th>
             @Html.DisplayName("Category")
         </th>
@@ -21,7 +19,9 @@
         <th>
             @Html.DisplayName("Course")
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayName("Status")
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -29,9 +29,7 @@
         <td>
             @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.CompletionStatus)
-        </td>*@
+        
         <td>
             @Html.DisplayFor(modelItem => item.CourseCategory.Name)
         </td>
@@ -45,8 +43,9 @@
             @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
         </td>
         <td>
-                 
+            @Html.DisplayFor(modelItem => item.CompletionStatus)
         </td>
+        
         @*<td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |

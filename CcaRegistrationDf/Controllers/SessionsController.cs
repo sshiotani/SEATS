@@ -14,8 +14,15 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles = "Admin")]
     public class SessionsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
 
+        //private SeatsContext db { get; set; }
+       
+        public SessionsController()
+        {
+            this.db = new ApplicationDbContext();
+            
+        }
         // GET: Sessions
         public async Task<ActionResult> Index()
         {

@@ -13,7 +13,14 @@ namespace CcaRegistrationDf.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        //private SeatsContext db { get; set; }
+
+        public HomeController(SeatsContext db)
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         /// <summary>
         /// Checks user setup status, if user exists in the student tables the account is
@@ -85,10 +92,12 @@ namespace CcaRegistrationDf.Controllers
         public ActionResult Index2()
         {
 
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
 
-            return View();
-
-
+            return RedirectToAction("Index");
 
         }
 

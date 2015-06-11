@@ -19,12 +19,12 @@ namespace CcaRegistrationDf.Controllers
         private ApplicationDbContext db;
         private SEATSEntities cactus;
         
-
+         //private SeatsContext db { get; set; }
+       
         public ProviderUsersController()
         {
             this.db = new ApplicationDbContext();
             this.cactus = new SEATSEntities();
-           
         }
 
         // GET: ProviderUsers
@@ -47,7 +47,7 @@ namespace CcaRegistrationDf.Controllers
 
             var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
 
-            // Create list of viewmodels populated from 
+            // Create list of viewmodels populated from ccas
             var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
             var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
@@ -186,7 +186,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,Phone,Email,Fax,ProviderID")] ProviderUser providerUser)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,Phone,Fax,ProviderID")] ProviderUser providerUser)
         {
             if (ModelState.IsValid)
             {

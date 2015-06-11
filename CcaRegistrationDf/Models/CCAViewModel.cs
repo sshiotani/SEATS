@@ -11,6 +11,7 @@ namespace CcaRegistrationDf.Models
 	{
 
 		public int SubmitterTypeID { get; set; }
+        public string UserId { get; set; }
 
 		// Student
 		[Required]

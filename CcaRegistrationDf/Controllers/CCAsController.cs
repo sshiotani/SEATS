@@ -19,13 +19,13 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class CCAsController : Controller
     {
-
-
-        private ApplicationDbContext db;
+        private const short HOMESCHOOLID = 1;
+        private const short PRIVATESCHOOLID = 2;
+        private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
+        //private SeatsContext db;
         private SEATSEntities cactus;
 
-
-        //private IApplicationDbContext db;
+        private ApplicationDbContext db;
 
         public CCAsController()
         {
@@ -72,12 +72,12 @@ namespace CcaRegistrationDf.Controllers
         /// <returns></returns>
         public async Task<ActionResult> StudentCcaView()
         {
-            List<StudentStatusViewModel> courses = new List<StudentStatusViewModel>();
+            List<CourseStatusViewModel> courses = new List<CourseStatusViewModel>();
             var userId = User.Identity.GetUserId();
             try
             {
-                courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new StudentStatusViewModel 
-                { 
+                courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new CourseStatusViewModel
+                {
                     ApplicationSubmissionDate = f.ApplicationSubmissionDate,
                     CompletionStatus = f.CompletionStatus,
                     CourseCategoryID = f.CourseCategoryID,
@@ -89,16 +89,11 @@ namespace CcaRegistrationDf.Controllers
                     SessionID = f.SessionID,
                     Session = f.Session
                 }).ToListAsync().ConfigureAwait(false);
-                
-                //Mapper.CreateMap<CCA, StudentStatusViewModel>();
-                //foreach (var cca in ccas)
-                //{
-                //    courses.Add(Mapper.Map<CCA, StudentStatusViewModel>(cca));
-                //}
+
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", "Error getting list of applications. " + ex.Message);
             }
 
             return View(courses);
@@ -129,14 +124,19 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: CCAs/Create
-        public ActionResult Create()
+        /// <summary>
+        /// Set up lists and viewmodel for creation of student CCA
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> Create()
         {
             try
             {
-                var model = new CCAViewModel();
                 var userId = User.Identity.GetUserId();
-                var lea = db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationID).FirstOrDefault();
-                model.EnrollmentLocationID = (int)lea;
+                var model = new CCAViewModel();
+                var leaId = await db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationID).FirstOrDefaultAsync().ConfigureAwait(false);
+                model.EnrollmentLocationID = (int)leaId;
+                model.UserId = userId;
                 model = GetSelectLists(model);
 
                 return View(model);
@@ -157,15 +157,14 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                var lea = model.EnrollmentLocationID;
-                if (lea == 0 || lea == 1)
+                var leaId = model.EnrollmentLocationID;
+                if (leaId == 0 || leaId == 1)
                 {
                     model.CounselorList = new List<SelectListItem>();
                 }
                 else
                 {
-                    var userId = User.Identity.GetUserId();
-                    var schoolID = db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
+                    var schoolID = db.Students.Where(m => m.UserId == model.UserId).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
 
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
@@ -220,32 +219,30 @@ namespace CcaRegistrationDf.Controllers
             {
                 try
                 {
-                    CCA cca;
-                    Student student;
+                    var userId = User.Identity.GetUserId();
+                    ccaVm.UserId = userId;
 
-                    // Map ViewModel to CCA
-                    MapModel(ccaVm, out cca, out student);
+                    //Get student associated with this user
+                    Student student = await db.Students.Where(x => x.UserId == userId).FirstOrDefaultAsync();
 
-                    //If school counselor is not found create a new one.
+                    // Map ViewModel to CCA and student
+                    CCA cca = MapModel(ccaVm, student);
+
+                    //Assign Counselor
                     await CounselorCreate(ccaVm, cca, student).ConfigureAwait(false);
 
-                    var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
-
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
-                    cca.FiscalYear = GetFiscalYear(session);
-
+                    var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
+                    cca.FiscalYear = GetFiscalYear(session.Name);
 
                     db.CCAs.Add(cca);
                     var count = await db.SaveChangesAsync().ConfigureAwait(false);
-
 
                     // Send out email notifications to parent and counselor
                     if (count > 0)
                     {
                         await Notify(cca);
                     }
-
-
 
                     return View("Success");
                 }
@@ -278,23 +275,16 @@ namespace CcaRegistrationDf.Controllers
 
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-            if (cca.CounselorID != null)
-            {
-                var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
-                var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
+            //Email Counselor
+            var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
+            var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                await userManager.SendEmailAsync(admin.Id, "Counselor Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentEmail);
-                // Uncomment when testing is done and we roll out to production.
+            await userManager.SendEmailAsync(admin.Id, "Counselor Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentEmail);
+            // Uncomment when testing is done and we roll out to production.
 
-                //var counselor = await db.Counselors.FindAsync(cca.CounselorID);
-                //await UserManager.SendEmailAsync(counselor.UserId, "A new application for SEOP has been received for a student at your school.");
-            }
-            else
-            {
-                var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
-                var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
-                await userManager.SendEmailAsync(admin.Id, "New SEOP Application", "A new application for SOEP has been received for " + cca.Student.StudentEmail + " but no counselor has been identified.");
-            }
+            //var counselor = await db.Counselors.FindAsync(cca.CounselorID);
+            //await UserManager.SendEmailAsync(counselor.UserId, "A new application for SEOP has been received for a student at your school.");
+
 
             //Email Parent
 
@@ -303,34 +293,32 @@ namespace CcaRegistrationDf.Controllers
 
             msg.Destination = parent.GuardianEmail;
             msg.Subject = "SEOP Application Received.";
-            msg.Body = "An application has been received for a course in the Utah Online Public Education Program.";
+            msg.Body = "An application has been received for a course in the Utah Online Public Education Program from a student in your care.  Approval will take approximately 10 days.  More information can be found at https://seats.schools.utah.gov/";
 
             EmailService emailService = new EmailService();
             await emailService.SendAsync(msg).ConfigureAwait(false);
 
-            //Email Provider
-            var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
-            msg.Destination = provider.Email;
-            msg.Subject = "Enrollment Request for Provider Review";
-            msg.Body = "USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " who wishes to enroll in a course or courses under the SOEP.\n " + ". Please review these CCAs within 72 Business Hours.  https://seats.schools.utah.gov/";
-            await emailService.SendAsync(msg).ConfigureAwait(false);
+            //Email Provider uncomment when provider emails are populated
+            //***********************************************************
+            //var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
+            //msg.Destination = provider.Email;
+            //msg.Subject = "Enrollment Request for Provider Review";
+            //msg.Body = "USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " who wishes to enroll in a course or courses under the SOEP.\n " + ". Please review these CCAs within 72 Business Hours.  https://seats.schools.utah.gov/";
+            //await emailService.SendAsync(msg).ConfigureAwait(false);
         }
-
-
-
 
         /// <summary>
         /// Gets all numeric chars out of string and tries to find Year
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
-        private int GetFiscalYear(Models.Session session)
+        private int GetFiscalYear(string session)
         {
-            if (session != null && session.Name != null)
+            if (session != null)
             {
-                var fiscalYear = new string(session.Name.Where(c => char.IsDigit(c)).ToArray());
-
-                fiscalYear = fiscalYear.Substring(fiscalYear.Length - 4);
+                var fiscalYear = new string(session.Where(c => char.IsDigit(c)).ToArray());
+                if (fiscalYear.Length >= YEARDIGITS)
+                    fiscalYear = fiscalYear.Substring(fiscalYear.Length - YEARDIGITS);
 
                 return Convert.ToInt32(fiscalYear);
             }
@@ -349,11 +337,17 @@ namespace CcaRegistrationDf.Controllers
         /// <returns></returns>
         private async Task CounselorCreate(CCAViewModel ccaVm, CCA cca, Student student)
         {
+            // Homeschoolers will be assigned Counselor at the ID=0 entry (now Cory Kanth)
             try
             {
-                if (ccaVm.EnrollmentLocationID == 2 || (cca.EnrollmentLocationID != 1 && cca.CounselorID == 0))
+                if (cca.EnrollmentLocationID == PRIVATESCHOOLID || (cca.EnrollmentLocationID != HOMESCHOOLID && cca.CounselorID == 0))
                 {
-                    int counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                    int counselorId = 0;
+                    // Check for existing counselor entry
+                    if (ccaVm.CounselorEmail != null)
+                    {
+                        counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                    }
 
                     if (counselorId == 0)
                     {
@@ -365,7 +359,7 @@ namespace CcaRegistrationDf.Controllers
                             Phone = ccaVm.CounselorPhoneNumber
                         };
 
-                        if (cca.EnrollmentLocationID != 2)
+                        if (cca.EnrollmentLocationID != PRIVATESCHOOLID)
                         {
                             counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
                         }
@@ -397,21 +391,17 @@ namespace CcaRegistrationDf.Controllers
         /// <param name="ccaVm"></param>
         /// <param name="cca"></param>
         /// <param name="student"></param>
-        private void MapModel(CCAViewModel ccaVm, out CCA cca, out Student student)
+        private CCA MapModel(CCAViewModel ccaVm, Student student)
         {
             try
             {
                 Mapper.CreateMap<CCAViewModel, CCA>();
-
-                cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
+                var cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                 cca.ApplicationSubmissionDate = DateTime.Now;
-
-                var userId = User.Identity.GetUserId();
-                cca.UserId = userId;
-                student = db.Students.Where(x => x.UserId == userId).First();
                 cca.StudentID = student.ID;
                 cca.EnrollmentLocationID = student.EnrollmentLocationID;
                 cca.EnrollmentLocationSchoolNamesID = student.EnrollmentLocationSchoolNamesID;
+                return cca;
             }
             catch
             {
@@ -442,7 +432,7 @@ namespace CcaRegistrationDf.Controllers
                 {
                     categorySelected = courses.Where(x => x.SessionID == sessionId).Select(x => x.CourseCategoryID).Distinct();
                 }
-                else // Show all non summer categories
+                else // Show all non summer categories 0 is All Sessions
                 {
                     categorySelected = courses.Where(x => x.SessionID == sessionId || x.SessionID == 0).Select(x => x.CourseCategoryID).Distinct();
                 }
@@ -704,7 +694,7 @@ namespace CcaRegistrationDf.Controllers
 
                 ccaVm.CcaID = cca.ID;
 
-                await SetUpEditViewModel(ccaVm).ConfigureAwait(false);
+                await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
 
                 return View(ccaVm);
             }
@@ -715,7 +705,7 @@ namespace CcaRegistrationDf.Controllers
             }
         }
 
-        private async Task SetUpEditViewModel(UsoeCcaViewModel ccaVm)
+        private async Task SetUpUsoeEditViewModel(UsoeCcaViewModel ccaVm)
         {
 
             try
@@ -804,7 +794,7 @@ namespace CcaRegistrationDf.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            await SetUpEditViewModel(ccaVm).ConfigureAwait(false);
+            await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
 
             return View(ccaVm);
         }
@@ -836,8 +826,6 @@ namespace CcaRegistrationDf.Controllers
                 var ccaVm = Mapper.Map<CCA, PrimaryCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
-
-                //await SetUpEditViewModel(ccaVm);
 
                 return View(ccaVm);
             }
@@ -883,8 +871,6 @@ namespace CcaRegistrationDf.Controllers
             var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
-
-            //await SetUpEditViewModel(ccaVm);
 
             return View(ccaVm);
         }
@@ -947,10 +933,6 @@ namespace CcaRegistrationDf.Controllers
                 var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
-
-                //ViewBag.SessionID = new SelectList(db.Session, "ID", "Name");
-                //ViewBag.CourseCategoryID = new SelectList(db.CourseCategories, "ID", "Name");
-                //ViewBag.OnlineCourseID = new SelectList(db.Courses, "ID", "Name");
 
                 SetUpProviderEditViewModel(ccaVm);
 

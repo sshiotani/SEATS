@@ -23,23 +23,23 @@ namespace CcaRegistrationDf.Models
         public bool IsSetup { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, ISeatsContext
     {
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Student> Students { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Parent> Parents { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.OnlineCourse> Courses { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Provider> Providers { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Counselor> Counselors { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Session> Session { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCategory> CourseCategories { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCredit> CourseCredits { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CCA> CCAs { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.StudentBudget> StudentBudgets { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseFee> CourseFees { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.Location> Locations { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderUser> ProviderUsers { get; set; }
-        public virtual System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryUser> PrimaryUsers { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<OnlineCourse> Courses { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<Counselor> Counselors { get; set; }
+        public DbSet<Session> Session { get; set; }
+        public DbSet<CourseCategory> CourseCategories { get; set; }
+        public DbSet<CourseCredit> CourseCredits { get; set; }
+        public DbSet<CCA> CCAs { get; set; }
+        public DbSet<ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
+        public DbSet<StudentBudget> StudentBudgets { get; set; }
+        public DbSet<CourseFee> CourseFees { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<ProviderUser> ProviderUsers { get; set; }
+        public DbSet<PrimaryUser> PrimaryUsers { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

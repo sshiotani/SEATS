@@ -343,7 +343,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
-    <Compile Include="Models\Interfaces\IApplicationDbContext.cs" />
+    <Compile Include="Models\Interfaces\ISeatsContext.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
@@ -410,6 +410,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CounselorViewModel.cs" />
+    <Compile Include="Models\SeatsContext.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />

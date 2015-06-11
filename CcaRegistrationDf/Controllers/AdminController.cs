@@ -15,7 +15,9 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private ApplicationDbContext db;
+        //private SeatsContext db { get; set; }
+
+        private ApplicationDbContext db { get; set; }
 
         public AdminController()
         {

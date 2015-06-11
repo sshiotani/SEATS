@@ -15,6 +15,10 @@
                     @Html.DisplayName("Submission Date")
                 </th>
 
+                <th data-column-id="fiscalyear">
+                    @Html.DisplayName("Fiscal Year")
+                </th>
+
                 <th data-column-id="Student">
                     @Html.DisplayName("Student")
                 </th>
@@ -43,6 +47,10 @@
                 <tr>
                     <td>
                         @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FiscalYear)
                     </td>
 
                     <td>

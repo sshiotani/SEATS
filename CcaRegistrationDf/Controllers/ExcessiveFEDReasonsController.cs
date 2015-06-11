@@ -14,7 +14,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles="Admin")]
     public class ExcessiveFEDReasonsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        //private SeatsContext db { get; set; }
+
+        public ExcessiveFEDReasonsController()
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: ExcessiveFEDReasons
         public async Task<ActionResult> Index()

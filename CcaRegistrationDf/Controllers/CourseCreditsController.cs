@@ -15,7 +15,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles="Admin")]
     public class CourseCreditsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        //private SeatsContext db { get; set; }
+
+        public CourseCreditsController()
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: CourseCredits
         public async Task<ActionResult> Index()

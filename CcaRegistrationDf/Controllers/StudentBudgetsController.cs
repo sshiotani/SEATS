@@ -14,7 +14,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles="Admin")]
     public class StudentBudgetsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+        //private SeatsContext db { get; set; }
+       
+        public StudentBudgetsController()
+        {
+            this.db = new ApplicationDbContext();
+           
+        }
 
         // GET: StudentBudgets
         public async Task<ActionResult> Index()

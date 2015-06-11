@@ -26,8 +26,17 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles = "Admin")]
     public class ReportsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-        private SEATSEntities cactus = new SEATSEntities();
+        private ApplicationDbContext db;
+        private SEATSEntities cactus;
+
+        //private SeatsContext db { get; set; }
+       
+        public ReportsController()
+        {
+            this.db = new ApplicationDbContext();
+            this.cactus = new SEATSEntities();
+        }
+
 
         // GET: Reports
         public async Task<ActionResult> Index()

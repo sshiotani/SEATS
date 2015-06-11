@@ -18,12 +18,14 @@ namespace CcaRegistrationDf.Controllers
     public class CounselorsController : Controller
     {
         private ApplicationDbContext db;
+        //private SeatsContext db { get; set; }
         private SEATSEntities cactus;
-     
+
        
         public CounselorsController()
         {
             this.db = new ApplicationDbContext();
+           // this.db = db;
             this.cactus  = new SEATSEntities();
         }
 
@@ -85,6 +87,7 @@ namespace CcaRegistrationDf.Controllers
 
 
         // GET: Counselors/Details/5
+        [Authorize(Roles="Counselor,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -221,6 +224,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Counselors/Edit/5
+        [Authorize(Roles = "Counselor,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -240,6 +244,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Counselor,Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,CactusID,Email,FirstName,LastName,Phone,School,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] Counselor counselor)
         {
             if (ModelState.IsValid)
@@ -254,6 +259,7 @@ namespace CcaRegistrationDf.Controllers
         }
 
         // GET: Counselors/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

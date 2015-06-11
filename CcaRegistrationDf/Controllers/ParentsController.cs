@@ -12,7 +12,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class ParentsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        //private SeatsContext db { get; set; }
+
+        public ParentsController()
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: Parents
         [Authorize(Roles = ("Admin"))]

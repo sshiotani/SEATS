@@ -14,8 +14,14 @@ namespace CcaRegistrationDf.Controllers
     [Authorize(Roles="Admin")]
     public class LocationsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
 
+        //private SeatsContext db { get; set; }
+
+        public LocationsController()
+        {
+            this.db = new ApplicationDbContext();
+        }
         // GET: Locations
         public async Task<ActionResult> Index()
         {

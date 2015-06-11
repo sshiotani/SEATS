@@ -16,9 +16,15 @@ namespace CcaRegistrationDf.Controllers
     [Authorize]
     public class PrimaryUsersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
         private SEATSEntities cactus = new SEATSEntities();
         
+        //private SeatsContext db { get; set; }
+
+        public PrimaryUsersController()
+        {
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: PrimaryUsers
         [Authorize(Roles="Admin")]
