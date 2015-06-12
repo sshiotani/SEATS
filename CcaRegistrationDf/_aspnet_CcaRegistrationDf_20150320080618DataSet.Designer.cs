@@ -289,9 +289,9 @@ namespace CcaRegistrationDf {
             
             private global::System.Data.DataColumn columnStudentGradeLevel;
             
-            private global::System.Data.DataColumn columnHasExcessiveFDE;
+            private global::System.Data.DataColumn columnHasExcessiveFED;
             
-            private global::System.Data.DataColumn columnExcessiveFDEExplanation;
+            private global::System.Data.DataColumn columnExcessiveFEDExplanation;
             
             private global::System.Data.DataColumn columnComments;
             
@@ -381,7 +381,7 @@ namespace CcaRegistrationDf {
             
             private global::System.Data.DataColumn columnTeacherLastName;
             
-            private global::System.Data.DataColumn columnExcessiveFDEReasonID;
+            private global::System.Data.DataColumn columnExcessiveFEDReasonID;
             
             private global::System.Data.DataColumn columnEnrollmentLocationID;
             
@@ -460,17 +460,17 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn HasExcessiveFDEColumn {
+            public global::System.Data.DataColumn HasExcessiveFEDColumn {
                 get {
-                    return this.columnHasExcessiveFDE;
+                    return this.columnHasExcessiveFED;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ExcessiveFDEExplanationColumn {
+            public global::System.Data.DataColumn ExcessiveFEDExplanationColumn {
                 get {
-                    return this.columnExcessiveFDEExplanation;
+                    return this.columnExcessiveFEDExplanation;
                 }
             }
             
@@ -828,9 +828,9 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ExcessiveFDEReasonIDColumn {
+            public global::System.Data.DataColumn ExcessiveFEDReasonIDColumn {
                 get {
-                    return this.columnExcessiveFDEReasonID;
+                    return this.columnExcessiveFEDReasonID;
                 }
             }
             
@@ -884,8 +884,8 @@ namespace CcaRegistrationDf {
                         System.DateTime ApplicationSubmissionDate, 
                         int StudentID, 
                         int StudentGradeLevel, 
-                        bool HasExcessiveFDE, 
-                        string ExcessiveFDEExplanation, 
+                        bool HasExcessiveFED, 
+                        string ExcessiveFEDExplanation, 
                         string Comments, 
                         int CounselorID, 
                         bool IsCounselorSigned, 
@@ -930,7 +930,7 @@ namespace CcaRegistrationDf {
                         int TeacherCactusID, 
                         string TeacherFirstName, 
                         string TeacherLastName, 
-                        int ExcessiveFDEReasonID, 
+                        int ExcessiveFEDReasonID, 
                         int EnrollmentLocationID) {
                 CCAsRow rowCCAsRow = ((CCAsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
@@ -939,8 +939,8 @@ namespace CcaRegistrationDf {
                         ApplicationSubmissionDate,
                         StudentID,
                         StudentGradeLevel,
-                        HasExcessiveFDE,
-                        ExcessiveFDEExplanation,
+                        HasExcessiveFED,
+                        ExcessiveFEDExplanation,
                         Comments,
                         CounselorID,
                         IsCounselorSigned,
@@ -985,7 +985,7 @@ namespace CcaRegistrationDf {
                         TeacherCactusID,
                         TeacherFirstName,
                         TeacherLastName,
-                        ExcessiveFDEReasonID,
+                        ExcessiveFEDReasonID,
                         EnrollmentLocationID};
                 rowCCAsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowCCAsRow);
@@ -1021,8 +1021,8 @@ namespace CcaRegistrationDf {
                 this.columnApplicationSubmissionDate = base.Columns["ApplicationSubmissionDate"];
                 this.columnStudentID = base.Columns["StudentID"];
                 this.columnStudentGradeLevel = base.Columns["StudentGradeLevel"];
-                this.columnHasExcessiveFDE = base.Columns["HasExcessiveFED"];
-                this.columnExcessiveFDEExplanation = base.Columns["ExcessiveFDEExplanation"];
+                this.columnHasExcessiveFED = base.Columns["HasExcessiveFED"];
+                this.columnExcessiveFEDExplanation = base.Columns["ExcessiveFEDExplanation"];
                 this.columnComments = base.Columns["Comments"];
                 this.columnCounselorID = base.Columns["CounselorID"];
                 this.columnIsCounselorSigned = base.Columns["IsCounselorSigned"];
@@ -1067,7 +1067,7 @@ namespace CcaRegistrationDf {
                 this.columnTeacherCactusID = base.Columns["TeacherCactusID"];
                 this.columnTeacherFirstName = base.Columns["TeacherFirstName"];
                 this.columnTeacherLastName = base.Columns["TeacherLastName"];
-                this.columnExcessiveFDEReasonID = base.Columns["ExcessiveFDEReasonID"];
+                this.columnExcessiveFEDReasonID = base.Columns["ExcessiveFEDReasonID"];
                 this.columnEnrollmentLocationID = base.Columns["EnrollmentLocationID"];
             }
             
@@ -1084,10 +1084,10 @@ namespace CcaRegistrationDf {
                 base.Columns.Add(this.columnStudentID);
                 this.columnStudentGradeLevel = new global::System.Data.DataColumn("StudentGradeLevel", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnStudentGradeLevel);
-                this.columnHasExcessiveFDE = new global::System.Data.DataColumn("HasExcessiveFED", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnHasExcessiveFDE);
-                this.columnExcessiveFDEExplanation = new global::System.Data.DataColumn("ExcessiveFDEExplanation", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnExcessiveFDEExplanation);
+                this.columnHasExcessiveFED = new global::System.Data.DataColumn("HasExcessiveFED", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHasExcessiveFED);
+                this.columnExcessiveFEDExplanation = new global::System.Data.DataColumn("ExcessiveFEDExplanation", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnExcessiveFEDExplanation);
                 this.columnComments = new global::System.Data.DataColumn("Comments", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnComments);
                 this.columnCounselorID = new global::System.Data.DataColumn("CounselorID", typeof(int), null, global::System.Data.MappingType.Element);
@@ -1176,8 +1176,8 @@ namespace CcaRegistrationDf {
                 base.Columns.Add(this.columnTeacherFirstName);
                 this.columnTeacherLastName = new global::System.Data.DataColumn("TeacherLastName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTeacherLastName);
-                this.columnExcessiveFDEReasonID = new global::System.Data.DataColumn("ExcessiveFDEReasonID", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnExcessiveFDEReasonID);
+                this.columnExcessiveFEDReasonID = new global::System.Data.DataColumn("ExcessiveFEDReasonID", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnExcessiveFEDReasonID);
                 this.columnEnrollmentLocationID = new global::System.Data.DataColumn("EnrollmentLocationID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEnrollmentLocationID);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
@@ -1191,8 +1191,8 @@ namespace CcaRegistrationDf {
                 this.columnUserId.MaxLength = 2147483647;
                 this.columnApplicationSubmissionDate.AllowDBNull = false;
                 this.columnStudentID.AllowDBNull = false;
-                this.columnHasExcessiveFDE.AllowDBNull = false;
-                this.columnExcessiveFDEExplanation.MaxLength = 2147483647;
+                this.columnHasExcessiveFED.AllowDBNull = false;
+                this.columnExcessiveFEDExplanation.MaxLength = 2147483647;
                 this.columnComments.MaxLength = 2147483647;
                 this.columnCounselorID.AllowDBNull = false;
                 this.columnIsCounselorSigned.AllowDBNull = false;
@@ -1423,28 +1423,28 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool HasExcessiveFDE {
+            public bool HasExcessiveFED {
                 get {
-                    return ((bool)(this[this.tableCCAs.HasExcessiveFDEColumn]));
+                    return ((bool)(this[this.tableCCAs.HasExcessiveFEDColumn]));
                 }
                 set {
-                    this[this.tableCCAs.HasExcessiveFDEColumn] = value;
+                    this[this.tableCCAs.HasExcessiveFEDColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string ExcessiveFDEExplanation {
+            public string ExcessiveFEDExplanation {
                 get {
                     try {
-                        return ((string)(this[this.tableCCAs.ExcessiveFDEExplanationColumn]));
+                        return ((string)(this[this.tableCCAs.ExcessiveFEDExplanationColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ExcessiveFDEExplanation\' in table \'CCAs\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ExcessiveFEDExplanation\' in table \'CCAs\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableCCAs.ExcessiveFDEExplanationColumn] = value;
+                    this[this.tableCCAs.ExcessiveFEDExplanationColumn] = value;
                 }
             }
             
@@ -2087,17 +2087,17 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int ExcessiveFDEReasonID {
+            public int ExcessiveFEDReasonID {
                 get {
                     try {
-                        return ((int)(this[this.tableCCAs.ExcessiveFDEReasonIDColumn]));
+                        return ((int)(this[this.tableCCAs.ExcessiveFEDReasonIDColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ExcessiveFDEReasonID\' in table \'CCAs\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ExcessiveFEDReasonID\' in table \'CCAs\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableCCAs.ExcessiveFDEReasonIDColumn] = value;
+                    this[this.tableCCAs.ExcessiveFEDReasonIDColumn] = value;
                 }
             }
             
@@ -2143,14 +2143,14 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsExcessiveFDEExplanationNull() {
-                return this.IsNull(this.tableCCAs.ExcessiveFDEExplanationColumn);
+            public bool IsExcessiveFEDExplanationNull() {
+                return this.IsNull(this.tableCCAs.ExcessiveFEDExplanationColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetExcessiveFDEExplanationNull() {
-                this[this.tableCCAs.ExcessiveFDEExplanationColumn] = global::System.Convert.DBNull;
+            public void SetExcessiveFEDExplanationNull() {
+                this[this.tableCCAs.ExcessiveFEDExplanationColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2515,14 +2515,14 @@ namespace CcaRegistrationDf {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsExcessiveFDEReasonIDNull() {
-                return this.IsNull(this.tableCCAs.ExcessiveFDEReasonIDColumn);
+            public bool IsExcessiveFEDReasonIDNull() {
+                return this.IsNull(this.tableCCAs.ExcessiveFEDReasonIDColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetExcessiveFDEReasonIDNull() {
-                this[this.tableCCAs.ExcessiveFDEReasonIDColumn] = global::System.Convert.DBNull;
+            public void SetExcessiveFEDReasonIDNull() {
+                this[this.tableCCAs.ExcessiveFEDReasonIDColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2703,7 +2703,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             tableMapping.ColumnMappings.Add("StudentID", "StudentID");
             tableMapping.ColumnMappings.Add("StudentGradeLevel", "StudentGradeLevel");
             tableMapping.ColumnMappings.Add("HasExcessiveFED", "HasExcessiveFED");
-            tableMapping.ColumnMappings.Add("ExcessiveFDEExplanation", "ExcessiveFDEExplanation");
+            tableMapping.ColumnMappings.Add("ExcessiveFEDExplanation", "ExcessiveFEDExplanation");
             tableMapping.ColumnMappings.Add("Comments", "Comments");
             tableMapping.ColumnMappings.Add("CounselorID", "CounselorID");
             tableMapping.ColumnMappings.Add("IsCounselorSigned", "IsCounselorSigned");
@@ -2748,7 +2748,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             tableMapping.ColumnMappings.Add("TeacherCactusID", "TeacherCactusID");
             tableMapping.ColumnMappings.Add("TeacherFirstName", "TeacherFirstName");
             tableMapping.ColumnMappings.Add("TeacherLastName", "TeacherLastName");
-            tableMapping.ColumnMappings.Add("ExcessiveFDEReasonID", "ExcessiveFDEReasonID");
+            tableMapping.ColumnMappings.Add("ExcessiveFEDReasonID", "ExcessiveFEDReasonID");
             tableMapping.ColumnMappings.Add("EnrollmentLocationID", "EnrollmentLocationID");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
@@ -2759,7 +2759,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[CCAs] ([UserId], [ApplicationSubmissionDate], [StudentID], [St" +
-                "udentGradeLevel], [HasExcessiveFED], [ExcessiveFDEExplanation], [Comments], [Cou" +
+                "udentGradeLevel], [HasExcessiveFED], [ExcessiveFEDExplanation], [Comments], [Cou" +
                 "nselorID], [IsCounselorSigned], [PrimaryID], [IsBusinessAdministratorAcceptRejec" +
                 "tEnrollment], [PrimaryLEAExplantionRejection], [PrimaryLEAReasonRejectingCCA], [" +
                 "ProviderID], [CompletionStatus], [CourseBegin], [CourseStartDate], [CourseComple" +
@@ -2773,9 +2773,9 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                 "tProvider], [RecordNotes], [RemediationPeriodBegins], [TotalDisbursementsProvide" +
                 "r], [TwentyDaysPastSemesterStartDate], [Unallocated], [UnallocatedReduction], [W" +
                 "ithdrawalDate], [Grand_Total], [TeacherCactusID], [TeacherFirstName], [TeacherLa" +
-                "stName], [ExcessiveFDEReasonID], [EnrollmentLocationID]) VALUES (@UserId, @Appli" +
+                "stName], [ExcessiveFEDReasonID], [EnrollmentLocationID]) VALUES (@UserId, @Appli" +
                 "cationSubmissionDate, @StudentID, @StudentGradeLevel, @HasExcessiveFED, @Excessi" +
-                "veFDEExplanation, @Comments, @CounselorID, @IsCounselorSigned, @PrimaryID, @IsBu" +
+                "veFEDExplanation, @Comments, @CounselorID, @IsCounselorSigned, @PrimaryID, @IsBu" +
                 "sinessAdministratorAcceptRejectEnrollment, @PrimaryLEAExplantionRejection, @Prim" +
                 "aryLEAReasonRejectingCCA, @ProviderID, @CompletionStatus, @CourseBegin, @CourseS" +
                 "tartDate, @CourseCompletionDate, @CreditCompletedToDate, @DateConfirmationActive" +
@@ -2788,14 +2788,14 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                 "entProvider, @RecordNotes, @RemediationPeriodBegins, @TotalDisbursementsProvider" +
                 ", @TwentyDaysPastSemesterStartDate, @Unallocated, @UnallocatedReduction, @Withdr" +
                 "awalDate, @Grand_Total, @TeacherCactusID, @TeacherFirstName, @TeacherLastName, @" +
-                "ExcessiveFDEReasonID, @EnrollmentLocationID)";
+                "ExcessiveFEDReasonID, @EnrollmentLocationID)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ApplicationSubmissionDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ApplicationSubmissionDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentGradeLevel", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentGradeLevel", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@HasExcessiveFED", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "HasExcessiveFED", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFDEExplanation", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFDEExplanation", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFEDExplanation", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFEDExplanation", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Comments", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Comments", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CounselorID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CounselorID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsCounselorSigned", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsCounselorSigned", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2840,14 +2840,14 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherCactusID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherCactusID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherFirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherFirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherLastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherLastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFDEReasonID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFDEReasonID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFEDReasonID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFEDReasonID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EnrollmentLocationID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EnrollmentLocationID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[CCAs] SET [UserId] = @UserId, [ApplicationSubmissionDate] = @Applic" +
                 "ationSubmissionDate, [StudentID] = @StudentID, [StudentGradeLevel] = @StudentGra" +
-                "deLevel, [HasExcessiveFED] = @HasExcessiveFED, [ExcessiveFDEExplanation] = @Exce" +
-                "ssiveFDEExplanation, [Comments] = @Comments, [CounselorID] = @CounselorID, [IsCo" +
+                "deLevel, [HasExcessiveFED] = @HasExcessiveFED, [ExcessiveFEDExplanation] = @Exce" +
+                "ssiveFEDExplanation, [Comments] = @Comments, [CounselorID] = @CounselorID, [IsCo" +
                 "unselorSigned] = @IsCounselorSigned, [PrimaryID] = @PrimaryID, [IsBusinessAdmini" +
                 "stratorAcceptRejectEnrollment] = @IsBusinessAdministratorAcceptRejectEnrollment," +
                 " [PrimaryLEAExplantionRejection] = @PrimaryLEAExplantionRejection, [PrimaryLEARe" +
@@ -2874,7 +2874,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                 " [UnallocatedReduction] = @UnallocatedReduction, [WithdrawalDate] = @WithdrawalD" +
                 "ate, [Grand_Total] = @Grand_Total, [TeacherCactusID] = @TeacherCactusID, [Teache" +
                 "rFirstName] = @TeacherFirstName, [TeacherLastName] = @TeacherLastName, [Excessiv" +
-                "eFDEReasonID] = @ExcessiveFDEReasonID, [EnrollmentLocationID] = @EnrollmentLocat" +
+                "eFEDReasonID] = @ExcessiveFEDReasonID, [EnrollmentLocationID] = @EnrollmentLocat" +
                 "ionID WHERE (([ID] = @Original_ID))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserId", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2882,7 +2882,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StudentGradeLevel", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StudentGradeLevel", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@HasExcessiveFED", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "HasExcessiveFED", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFDEExplanation", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFDEExplanation", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFEDExplanation", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFEDExplanation", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Comments", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Comments", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CounselorID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CounselorID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsCounselorSigned", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IsCounselorSigned", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2927,7 +2927,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherCactusID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherCactusID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherFirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherFirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@TeacherLastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "TeacherLastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFDEReasonID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFDEReasonID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ExcessiveFEDReasonID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ExcessiveFEDReasonID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EnrollmentLocationID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EnrollmentLocationID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
@@ -2945,7 +2945,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFDEExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, Unallocated, UnallocatedReduction, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFDEReasonID, EnrollmentLocationID FROM dbo.CCAs";
+            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFEDExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, Unallocated, UnallocatedReduction, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFEDReasonID, EnrollmentLocationID FROM dbo.CCAs";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -3033,8 +3033,8 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                     System.DateTime ApplicationSubmissionDate, 
                     int StudentID, 
                     global::System.Nullable<int> StudentGradeLevel, 
-                    bool HasExcessiveFDE, 
-                    string ExcessiveFDEExplanation, 
+                    bool HasExcessiveFED, 
+                    string ExcessiveFEDExplanation, 
                     string Comments, 
                     int CounselorID, 
                     bool IsCounselorSigned, 
@@ -3079,7 +3079,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                     global::System.Nullable<int> TeacherCactusID, 
                     string TeacherFirstName, 
                     string TeacherLastName, 
-                    global::System.Nullable<int> ExcessiveFDEReasonID, 
+                    global::System.Nullable<int> ExcessiveFEDReasonID, 
                     global::System.Nullable<int> EnrollmentLocationID) {
             if ((UserId == null)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
@@ -3095,12 +3095,12 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            this.Adapter.InsertCommand.Parameters[4].Value = ((bool)(HasExcessiveFDE));
-            if ((ExcessiveFDEExplanation == null)) {
+            this.Adapter.InsertCommand.Parameters[4].Value = ((bool)(HasExcessiveFED));
+            if ((ExcessiveFEDExplanation == null)) {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(ExcessiveFDEExplanation));
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(ExcessiveFEDExplanation));
             }
             if ((Comments == null)) {
                 this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
@@ -3296,8 +3296,8 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             else {
                 this.Adapter.InsertCommand.Parameters[49].Value = ((string)(TeacherLastName));
             }
-            if ((ExcessiveFDEReasonID.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[50].Value = ((int)(ExcessiveFDEReasonID.Value));
+            if ((ExcessiveFEDReasonID.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[50].Value = ((int)(ExcessiveFEDReasonID.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[50].Value = global::System.DBNull.Value;
@@ -3333,8 +3333,8 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                     System.DateTime ApplicationSubmissionDate, 
                     int StudentID, 
                     global::System.Nullable<int> StudentGradeLevel, 
-                    bool HasExcessiveFDE, 
-                    string ExcessiveFDEExplanation, 
+                    bool HasExcessiveFED, 
+                    string ExcessiveFEDExplanation, 
                     string Comments, 
                     int CounselorID, 
                     bool IsCounselorSigned, 
@@ -3379,7 +3379,7 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
                     global::System.Nullable<int> TeacherCactusID, 
                     string TeacherFirstName, 
                     string TeacherLastName, 
-                    global::System.Nullable<int> ExcessiveFDEReasonID, 
+                    global::System.Nullable<int> ExcessiveFEDReasonID, 
                     global::System.Nullable<int> EnrollmentLocationID, 
                     int Original_ID) {
             if ((UserId == null)) {
@@ -3396,12 +3396,12 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((bool)(HasExcessiveFDE));
-            if ((ExcessiveFDEExplanation == null)) {
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((bool)(HasExcessiveFED));
+            if ((ExcessiveFEDExplanation == null)) {
                 this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(ExcessiveFDEExplanation));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(ExcessiveFEDExplanation));
             }
             if ((Comments == null)) {
                 this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
@@ -3597,8 +3597,8 @@ namespace CcaRegistrationDf._aspnet_CcaRegistrationDf_20150320080618DataSetTable
             else {
                 this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(TeacherLastName));
             }
-            if ((ExcessiveFDEReasonID.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[50].Value = ((int)(ExcessiveFDEReasonID.Value));
+            if ((ExcessiveFEDReasonID.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[50].Value = ((int)(ExcessiveFEDReasonID.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;

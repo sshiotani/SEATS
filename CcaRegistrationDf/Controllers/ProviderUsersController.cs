@@ -124,7 +124,9 @@ namespace CcaRegistrationDf.Controllers
         {
             if (ModelState.IsValid)
             {
-                providerUser.UserId = User.Identity.GetUserId(); ;
+                providerUser.UserId = User.Identity.GetUserId();
+                var identityUser = db.Users.Find(providerUser.UserId);
+                providerUser.Email = identityUser.Email;
                 db.ProviderUsers.Add(providerUser);
                 var count = await db.SaveChangesAsync().ConfigureAwait(false);
 

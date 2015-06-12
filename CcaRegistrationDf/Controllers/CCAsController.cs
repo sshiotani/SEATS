@@ -272,7 +272,6 @@ namespace CcaRegistrationDf.Controllers
         /// <returns></returns>
         private async Task Notify(CCA cca)
         {
-
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             //Email Counselor

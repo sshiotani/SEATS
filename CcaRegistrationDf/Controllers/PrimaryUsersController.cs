@@ -106,6 +106,9 @@ namespace CcaRegistrationDf.Controllers
             if (ModelState.IsValid)
             {
                 primaryUser.UserId = User.Identity.GetUserId();
+                var identityUser = db.Users.Find(primaryUser.UserId);
+                primaryUser.Email = identityUser.Email;
+
                 db.PrimaryUsers.Add(primaryUser);
                 var count = await db.SaveChangesAsync();
 

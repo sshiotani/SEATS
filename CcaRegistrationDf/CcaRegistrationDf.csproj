@@ -321,6 +321,10 @@
     <Compile Include="Migrations\201506091510312_newDatabase.Designer.cs">
       <DependentUpon>201506091510312_newDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506121344046_June12.cs" />
+    <Compile Include="Migrations\201506121344046_June12.Designer.cs">
+      <DependentUpon>201506121344046_June12.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -966,6 +970,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505201812279_addSig.resx">
       <DependentUpon>201505201812279_addSig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505201859246_primaryEnrollment.resx">
       <DependentUpon>201505201859246_primaryEnrollment.cs</DependentUpon>
@@ -1011,6 +1016,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506091510312_newDatabase.resx">
       <DependentUpon>201506091510312_newDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506121344046_June12.resx">
+      <DependentUpon>201506121344046_June12.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>

@@ -113,6 +113,17 @@ namespace CcaRegistrationDf.Controllers
             return View(model);
         }
 
+        //
+        // GET: /Account/Edit
+        [Authorize(Roles = "Admin")]
+        public ActionResult Details(string id, CcaRegistrationDf.Controllers.ManageController.ManageMessageId? Message = null)
+        {
+            var Db = new ApplicationDbContext();
+            var user = Db.Users.First(u => u.Id == id);
+            
+            ViewBag.MessageId = Message;
+            return View(user);
+        }
 
         //
         // GET: Delete
