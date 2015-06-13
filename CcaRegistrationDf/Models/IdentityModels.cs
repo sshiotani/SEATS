@@ -51,6 +51,8 @@ namespace CcaRegistrationDf.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryRejectionReasons> PrimaryRejectionReasons { get; set; }
+
       
         
     }

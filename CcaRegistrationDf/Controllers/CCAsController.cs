@@ -810,6 +810,8 @@ namespace CcaRegistrationDf.Controllers
 
                 ccaVm.CcaID = cca.ID;
 
+                ViewBag.PrimaryRejectionReasonID = new SelectList(db.PrimaryRejectionReasons, "ID", "Reason");
+
                 return View(ccaVm);
             }
             catch (Exception ex)
@@ -834,8 +836,9 @@ namespace CcaRegistrationDf.Controllers
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
                     cca.IsBusinessAdministratorAcceptRejectEnrollment = ccaVm.IsBusinessAdministratorAcceptRejectEnrollment;
                     cca.PrimaryLEAExplantionRejection = ccaVm.PrimaryLEAExplantionRejection;
-                    cca.PrimaryLEAReasonRejectingCCA = ccaVm.PrimaryLEAReasonRejectingCCA;
-
+                    cca.PrimaryRejectionReasonID = ccaVm.PrimaryRejectionReasonID;
+                    cca.PrimaryNotes = ccaVm.PrimaryNotes;
+                    cca.BusinessAdministratorSignature = ccaVm.BusinessAdministratorSignature;
 
                     db.Entry(cca).State = EntityState.Modified;
 

@@ -34,8 +34,9 @@ namespace CcaRegistrationDf.Models
         //Primary Section
         public Nullable<int> EnrollmentLocationID { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public int PrimaryRejectionReasonID{ get; set; }
+        public virtual  PrimaryRejectionReasons PrimaryRejectionReasons { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
-        public string PrimaryLEAReasonRejectingCCA { get; set; }
         public Nullable<System.DateTime> DateBusinessAdministratorSignature { get; set; }
         public string BusinessAdministratorSignature { get; set; }
         public string PrimaryNotes { get; set; }

@@ -222,6 +222,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
+    <Compile Include="Controllers\PrimaryRejectionReasonsController.cs" />
     <Compile Include="Controllers\PrimaryUsersController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\ProviderUsersController.cs" />
@@ -325,6 +326,10 @@
     <Compile Include="Migrations\201506121344046_June12.Designer.cs">
       <DependentUpon>201506121344046_June12.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506131657331_ProviderRejectionReasons.cs" />
+    <Compile Include="Migrations\201506131657331_ProviderRejectionReasons.Designer.cs">
+      <DependentUpon>201506131657331_ProviderRejectionReasons.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -418,6 +423,7 @@
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />
+    <Compile Include="Models\StudentCcas\PrimaryRejectionReasons.cs" />
     <Compile Include="Models\WebApiConfiguration.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
@@ -887,6 +893,11 @@
     <Content Include="Views\CCAs\ProviderDetails.cshtml" />
     <Content Include="Views\Home\Index2.cshtml" />
     <Content Include="Views\Shared\HomeLayout2.cshtml" />
+    <Content Include="Views\PrimaryRejectionReasons\Create.cshtml" />
+    <Content Include="Views\PrimaryRejectionReasons\Delete.cshtml" />
+    <Content Include="Views\PrimaryRejectionReasons\Details.cshtml" />
+    <Content Include="Views\PrimaryRejectionReasons\Edit.cshtml" />
+    <Content Include="Views\PrimaryRejectionReasons\Index.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -1019,6 +1030,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506121344046_June12.resx">
       <DependentUpon>201506121344046_June12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506131657331_ProviderRejectionReasons.resx">
+      <DependentUpon>201506131657331_ProviderRejectionReasons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
   </ItemGroup>

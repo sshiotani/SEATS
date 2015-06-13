@@ -26,7 +26,8 @@ namespace CcaRegistrationDf.Models
         public string BusinessAdministratorSignature { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
-        public string PrimaryLEAReasonRejectingCCA { get; set; }
+  
         public string PrimaryNotes { get; set; }
+        public int PrimaryRejectionReasonID { get; set; }
     }
 }
