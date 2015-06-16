@@ -79,7 +79,7 @@ namespace CcaRegistrationDf.Controllers
                 courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new CourseStatusViewModel
                 {
                     ApplicationSubmissionDate = f.ApplicationSubmissionDate,
-                    CompletionStatus = f.CompletionStatus,
+                    CompletionStatus = f.CourseCompletionStatus.Status,
                     CourseCategoryID = f.CourseCategoryID,
                     CourseCategory = f.CourseCategory,
                     OnlineCourseID = f.OnlineCourseID,
@@ -272,38 +272,58 @@ namespace CcaRegistrationDf.Controllers
         /// <returns></returns>
         private async Task Notify(CCA cca)
         {
+            //Email Counselor
+
+            await EmailCounselor(cca);
+
+            //Email Parent
+
+            await EmailParent(cca);
+
+            //Email Provider uncomment when provider emails are populated
+            //
+
+           // await EmailProvider(cca);
+        }
+
+        private async Task EmailProvider(CCA cca)
+        {
+            EmailService emailService = new EmailService();
+            IdentityMessage msg = new IdentityMessage();
+            var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
+            msg.Destination = provider.Email;
+            msg.Subject = "Enrollment Request for Provider Review";
+            msg.Body = "USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " who wishes to enroll in a course or courses under the SOEP.\n " + ". Please review these CCAs within 72 Business Hours.  https://seats.schools.utah.gov/";
+            await emailService.SendAsync(msg).ConfigureAwait(false);
+        }
+
+        private async Task EmailParent(CCA cca)
+        {
+            IdentityMessage msg = new IdentityMessage();
+            EmailService emailService = new EmailService();
+            var parent = await db.Parents.FindAsync(cca.Student.ParentID).ConfigureAwait(false);
+
+            msg.Destination = parent.GuardianEmail;
+            msg.Subject = "SEOP Application Received.";
+            msg.Body = "<p>Dear Parent or Guardian,</p> <p>An \"Enrollment Request\" for online enrollment in a course taught by a school district or charter school outside of your primary school district or charter school has been filed with the Utah State Office of Education (USOE) for your child.  WITHIN APPROXIMATELY 72 BUSINESS HOURS (approximately 10 business days), YOU CAN EXPECT TO RECEIVE A NOTICE OF ENROLLMENT or REJECTION THIS STUDENT. If you have any questions in this period, please feel free to contact USOE as below.</p> <p>Please call us at 801.538.7660 with any questions.</p>On behalf of the Utah State Office of Education, we thank you for your assistance. </p><p>E-Mail:				edonline@schools.utah.gov </p><p>Tel.: 801.538.7660.</p><p>More information can be found at https://seats.schools.utah.gov/ </p>";
+
+            
+            await emailService.SendAsync(msg).ConfigureAwait(false);
+        }
+
+        private async Task EmailCounselor(CCA cca)
+        {
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             //Email Counselor
             var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
             var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-            await userManager.SendEmailAsync(admin.Id, "Counselor Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentEmail);
+            await userManager.SendEmailAsync(admin.Id, "Counselor Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail);
             // Uncomment when testing is done and we roll out to production.
 
             //var counselor = await db.Counselors.FindAsync(cca.CounselorID);
             //await UserManager.SendEmailAsync(counselor.UserId, "A new application for SEOP has been received for a student at your school.");
-
-
-            //Email Parent
-
-            IdentityMessage msg = new IdentityMessage();
-            var parent = await db.Parents.FindAsync(cca.Student.ParentID).ConfigureAwait(false);
-
-            msg.Destination = parent.GuardianEmail;
-            msg.Subject = "SEOP Application Received.";
-            msg.Body = "An application has been received for a course in the Utah Online Public Education Program from a student in your care.  Approval will take approximately 10 days.  More information can be found at https://seats.schools.utah.gov/";
-
-            EmailService emailService = new EmailService();
-            await emailService.SendAsync(msg).ConfigureAwait(false);
-
-            //Email Provider uncomment when provider emails are populated
-            //***********************************************************
-            //var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
-            //msg.Destination = provider.Email;
-            //msg.Subject = "Enrollment Request for Provider Review";
-            //msg.Body = "USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " who wishes to enroll in a course or courses under the SOEP.\n " + ". Please review these CCAs within 72 Business Hours.  https://seats.schools.utah.gov/";
-            //await emailService.SendAsync(msg).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -324,8 +344,6 @@ namespace CcaRegistrationDf.Controllers
 
             throw new NullReferenceException();
         }
-
-
 
         /// <summary>
         /// Creates Counselor if no matching counselor was found in database.
@@ -810,7 +828,8 @@ namespace CcaRegistrationDf.Controllers
 
                 ccaVm.CcaID = cca.ID;
 
-                ViewBag.PrimaryRejectionReasonID = new SelectList(db.PrimaryRejectionReasons, "ID", "Reason");
+                var reasons = await db.PrimaryRejectionReasons.ToListAsync().ConfigureAwait(false);
+                ViewBag.PrimaryRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
 
                 return View(ccaVm);
             }
@@ -836,7 +855,7 @@ namespace CcaRegistrationDf.Controllers
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
                     cca.IsBusinessAdministratorAcceptRejectEnrollment = ccaVm.IsBusinessAdministratorAcceptRejectEnrollment;
                     cca.PrimaryLEAExplantionRejection = ccaVm.PrimaryLEAExplantionRejection;
-                    cca.PrimaryRejectionReasonID = ccaVm.PrimaryRejectionReasonID;
+                    cca.PrimaryRejectionReasonsID = ccaVm.PrimaryRejectionReasonsID;
                     cca.PrimaryNotes = ccaVm.PrimaryNotes;
                     cca.BusinessAdministratorSignature = ccaVm.BusinessAdministratorSignature;
 
@@ -938,10 +957,14 @@ namespace CcaRegistrationDf.Controllers
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
                 var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync();
                 ccaVm.CourseCreditList = new SelectList(credit,"ID","Value",ccaVm.CourseCreditID);
+                var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false),"ID","Status");
 
                 ViewBag.SessionID = sessionList;
                 ViewBag.CourseCategoryID = categoryList;
                 ViewBag.OnlineCourseID = courseList;
+                ViewBag.ProviderRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
+                ViewBag.CourseCompletionStatusID = status;
 
                 return ccaVm;
 

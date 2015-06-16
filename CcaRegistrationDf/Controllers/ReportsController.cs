@@ -1,23 +1,12 @@
 ﻿using CcaRegistrationDf.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-
-using AutoMapper;
-
-using Microsoft.AspNet.Identity;
-
 using System.Data.Entity;
-
-using System.Net;
-
-using Microsoft.Reporting.WebForms;
-using System.IO;
-using System.Globalization;
-using CcaRegistrationDf.Model;
+using OfficeOpenXml;
+using System.Data;
+using System;
 
 
 
@@ -41,12 +30,12 @@ namespace CcaRegistrationDf.Controllers
         // GET: Reports
         public async Task<ActionResult> Index()
         {
-            List<ReportViewModel> reports = await GetReport().ConfigureAwait(false);
+            List<ReportViewModel> reports = await DisplayReport().ConfigureAwait(false);
 
             return View(reports);
         }
 
-        private async Task<List<ReportViewModel>> GetReport()
+        private async Task<List<ReportViewModel>> DisplayReport()
         {
             var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
             
@@ -89,126 +78,85 @@ namespace CcaRegistrationDf.Controllers
             return report;
         }
 
-        private async Task<ReportContainer> MakeReport()
+        /// <summary>
+        /// Makes a DataTable for use in the Excel generation method.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MakeDataTable()
         {
-            var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
-            
+            DataTable table = new DataTable();
 
-            ReportContainer report = new ReportContainer();
+            table.Columns.Add("First Name", typeof(string));
+            table.Columns.Add("Last Name", typeof(string));
+            table.Columns.Add("SSID", typeof(string));
+            table.Columns.Add("Credit", typeof(string));
+            table.Columns.Add("Primary", typeof(string));
+            table.Columns.Add("Provider", typeof(string));
+            table.Columns.Add("Course Fee", typeof(string));
+            table.Columns.Add("Budget", typeof(decimal));
+            table.Columns.Add("Prior", typeof(decimal));
+            table.Columns.Add("Total", typeof(decimal));
+            table.Columns.Add("Offset", typeof(decimal));
+            table.Columns.Add("Distribution", typeof(string));
+            table.Columns.Add("Category", typeof(string));
+            table.Columns.Add("Course", typeof(string));
+
+
+            var ccas = db.CCAs.ToList();
+          
 
             foreach (var cca in ccas)
             {
-                var student = new StudentReport();
-                student.StudentFirstName = cca.Student.StudentFirstName;
-                student.StudentLastName = cca.Student.StudentLastName;
-                student.SSID = cca.Student.SSID.ToString();
-                report.StudentReport.Add(student);
-
-                var primary = new PrimaryReport();
+   
+                string primaryName;
                 if (cca.EnrollmentLocationID == 1)
-                    primary.Name = "HOME SCHOOL";
+                    primaryName = "HOME SCHOOL";
                 else if (cca.EnrollmentLocationID == 2)
-                    primary.Name = "PRIVATE SCHOOL";
+                    primaryName = "PRIVATE SCHOOL";
                 else
-                    primary.Name = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                report.PrimaryReport.Add(primary);
+                    primaryName = cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefault();
+                
+                string providerName = db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefault();
 
-                var provider = new ProviderReport();
-                provider.Name = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                report.ProviderReport.Add(provider);
-
-                var credit = new CreditReport();
-                credit.Value = await db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefaultAsync().ConfigureAwait(false);
-                report.CreditReport.Add(credit);
-
-                var budget = new BudgetReport();
-                budget.BudgetPrimaryProvider = cca.BudgetPrimaryProvider;
-                budget.PriorDisbursementProvider = cca.PriorDisbursementProvider;
-                budget.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
-                budget.OffSet = cca.Offset;
-                budget.Distribution = cca.Distribution;
-                report.BudgetReport.Add(budget);
-
-                var category = new CategoryReport();
-                var categoryItem =  await db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefaultAsync().ConfigureAwait(false);
-                category.Name = categoryItem.Name;
-                report.CategoryReport.Add(category);
-
-                var course = new CourseReport();
-                course.Name = await db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                report.CourseReport.Add(course);
-
-                var courseFee = new CourseFeeReport();
-                courseFee.Fee = await db.CourseFees.Where(m => m.ID == categoryItem.CourseFeeID).Select(m => m.Fee).FirstOrDefaultAsync().ConfigureAwait(false);
-                report.CourseFeeReport.Add(courseFee);
-
-            }
-
-            return report;
-        }
-
-        public async Task<ActionResult> GenerateReport(string id)
-        {
-            LocalReport lr = new LocalReport();
-            string path = Path.Combine(Server.MapPath("~/ReportFormats"), "Report1.rdlc");
-            if (System.IO.File.Exists(path))
-            {
-                lr.ReportPath = path;
-            }
-            else
-            {
-                ViewBag.Message = "Report File does not exist.";
-                return View("Error");
-            }
-
-            ReportContainer report = await MakeReport().ConfigureAwait(false);
-
+                string creditValue = db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefault();
             
-            lr.DataSources.Add(new ReportDataSource("StudentData", report.StudentReport));
-            lr.DataSources.Add(new ReportDataSource("CCA", report.BudgetReport));
-            lr.DataSources.Add(new ReportDataSource("Credit", report.CreditReport));
-            //lr.DataSources.Add(new ReportDataSource("StudentBudget", report.StudentBudgetReport));
-            lr.DataSources.Add(new ReportDataSource("CourseInformation", report.CategoryReport));
-            lr.DataSources.Add(new ReportDataSource("CourseName", report.CourseReport));
-            lr.DataSources.Add(new ReportDataSource("EnrollmentLocations", report.PrimaryReport));
-            lr.DataSources.Add(new ReportDataSource("Provider", report.ProviderReport));
-            lr.DataSources.Add(new ReportDataSource("CourseFee", report.CourseFeeReport));
+                var categoryItem = db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefault();
+                string categoryName = categoryItem.Name;
+               
+                string courseName = db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefault();
+              
+                decimal courseFee = db.CourseFees.Where(m => m.ID == categoryItem.CourseFeeID).Select(m => m.Fee).FirstOrDefault();
 
-            string reportType = id;
-            string mimeType;
-            string encoding;
-            string fileNameExtension;
+                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, creditValue, primaryName, providerName, courseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, categoryName, courseName);
+            }
 
+            TempData["Table"] = table;
 
-
-            string deviceInfo =
-
-            "<DeviceInfo>" +
-            "  <OutputFormat>" + id + "</OutputFormat>" +
-            "  <PageWidth>8.5in</PageWidth>" +
-            "  <PageHeight>11in</PageHeight>" +
-            "  <MarginTop>0.5in</MarginTop>" +
-            "  <MarginLeft>1in</MarginLeft>" +
-            "  <MarginRight>1in</MarginRight>" +
-            "  <MarginBottom>0.5in</MarginBottom>" +
-            "</DeviceInfo>";
-
-            Warning[] warnings;
-            string[] streams;
-            byte[] renderedBytes;
-
-            renderedBytes = lr.Render(
-                reportType,
-                deviceInfo,
-                out mimeType,
-                out encoding,
-                out fileNameExtension,
-                out streams,
-                out warnings);
-
-
-            return File(renderedBytes, mimeType);
+            return RedirectToAction("DumpExcel");
         }
+
+
+        /// <summary>
+        /// Uses the EPPlus package to generate Excel spreadsheet from DataTable.
+        /// </summary>
+        public void DumpExcel()
+        {
+            var table = TempData["Table"] as DataTable;
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet sheet = package.Workbook.Worksheets.Add("Monthly");
+                sheet.Cells["A1"].LoadFromDataTable(table, true);
+
+                //Write it back to the client
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;  filename=Monthly-" + String.Format("{0:MM-dd-yyyy}",DateTime.Now) +".xlsx");
+                Response.BinaryWrite(package.GetAsByteArray());
+
+            }
+        }
+
+       
 
     }
 }

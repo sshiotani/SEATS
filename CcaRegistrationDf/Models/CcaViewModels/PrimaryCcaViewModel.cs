@@ -28,6 +28,6 @@ namespace CcaRegistrationDf.Models
         public string PrimaryLEAExplantionRejection { get; set; }
   
         public string PrimaryNotes { get; set; }
-        public int PrimaryRejectionReasonID { get; set; }
+        public int PrimaryRejectionReasonsID { get; set; }
     }
 }

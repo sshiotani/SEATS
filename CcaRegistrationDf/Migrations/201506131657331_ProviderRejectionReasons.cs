@@ -8,7 +8,7 @@ namespace CcaRegistrationDf.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.PrimaryRejectionReasons",
+                "dbo.RejectionReasons",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
@@ -16,21 +16,21 @@ namespace CcaRegistrationDf.Migrations
                     })
                 .PrimaryKey(t => t.ID);
             
-            AddColumn("dbo.CCAs", "PrimaryRejectionReasonID", c => c.Int(nullable: false));
+            AddColumn("dbo.CCAs", "PrimaryRejectionReasonsID", c => c.Int(nullable: false));
             AddColumn("dbo.CCAs", "PrimaryRejectionReasons_ID", c => c.Int());
             CreateIndex("dbo.CCAs", "PrimaryRejectionReasons_ID");
-            AddForeignKey("dbo.CCAs", "PrimaryRejectionReasons_ID", "dbo.PrimaryRejectionReasons", "ID");
+            AddForeignKey("dbo.CCAs", "PrimaryRejectionReasons_ID", "dbo.RejectionReasons", "ID");
             DropColumn("dbo.CCAs", "PrimaryLEAReasonRejectingCCA");
         }
         
         public override void Down()
         {
             AddColumn("dbo.CCAs", "PrimaryLEAReasonRejectingCCA", c => c.String());
-            DropForeignKey("dbo.CCAs", "PrimaryRejectionReasons_ID", "dbo.PrimaryRejectionReasons");
+            DropForeignKey("dbo.CCAs", "PrimaryRejectionReasons_ID", "dbo.RejectionReasons");
             DropIndex("dbo.CCAs", new[] { "PrimaryRejectionReasons_ID" });
             DropColumn("dbo.CCAs", "PrimaryRejectionReasons_ID");
-            DropColumn("dbo.CCAs", "PrimaryRejectionReasonID");
-            DropTable("dbo.PrimaryRejectionReasons");
+            DropColumn("dbo.CCAs", "PrimaryRejectionReasonsID");
+            DropTable("dbo.RejectionReasons");
         }
     }
 }

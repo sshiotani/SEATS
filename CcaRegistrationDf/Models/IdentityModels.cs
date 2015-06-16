@@ -53,6 +53,10 @@ namespace CcaRegistrationDf.Models
 
         public System.Data.Entity.DbSet<CcaRegistrationDf.Models.PrimaryRejectionReasons> PrimaryRejectionReasons { get; set; }
 
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.ProviderRejectionReasons> ProviderRejectionReasons { get; set; }
+
+        public System.Data.Entity.DbSet<CcaRegistrationDf.Models.CourseCompletionStatus> CourseCompletionStatus { get; set; }
+
       
         
     }

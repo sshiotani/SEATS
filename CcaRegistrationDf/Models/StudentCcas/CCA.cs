@@ -34,7 +34,7 @@ namespace CcaRegistrationDf.Models
         //Primary Section
         public Nullable<int> EnrollmentLocationID { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
-        public int PrimaryRejectionReasonID{ get; set; }
+        public Nullable<int> PrimaryRejectionReasonsID{ get; set; }
         public virtual  PrimaryRejectionReasons PrimaryRejectionReasons { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public Nullable<System.DateTime> DateBusinessAdministratorSignature { get; set; }
@@ -48,7 +48,8 @@ namespace CcaRegistrationDf.Models
         public Nullable<int> TeacherCactusID { get; set; }
         public string TeacherFirstName { get; set; }
         public string TeacherLastName { get; set; }
-        public string CompletionStatus { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
+        public virtual CourseCompletionStatus CourseCompletionStatus{ get; set; }
         public Nullable<System.DateTime> CourseBegin { get; set; }
         public Nullable<System.DateTime> CourseStartDate { get; set; }
         public Nullable<System.DateTime> CourseCompletionDate { get; set; }
@@ -62,7 +63,8 @@ namespace CcaRegistrationDf.Models
         public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
-        public string ProviderReasonRejection { get; set; }
+        public Nullable<int> ProviderRejectionReasonsID { get; set; }
+        public virtual ProviderRejectionReasons ProviderRejectionReasons { get; set; }
         public string ProviderNotes { get; set; }
 
         //Course

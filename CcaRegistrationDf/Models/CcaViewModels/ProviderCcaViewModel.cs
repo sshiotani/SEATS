@@ -32,7 +32,7 @@ namespace CcaRegistrationDf.Models
         public Nullable<int> TeacherCactusID { get; set; }
         public string TeacherFirstName { get; set; }
         public string TeacherLastName { get; set; }
-        public string CompletionStatus { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
         //public Nullable<System.DateTime> CourseBegin { get; set; }
         public Nullable<System.DateTime> CourseStartDate { get; set; }
         public Nullable<System.DateTime> CourseCompletionDate { get; set; }
@@ -46,7 +46,7 @@ namespace CcaRegistrationDf.Models
         public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
-        public string ProviderReasonRejection { get; set; }
+        public Nullable<int> ProviderRejectionReasonsID { get; set; }
         public string ProviderNotes { get; set; }
     }
 }

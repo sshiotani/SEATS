@@ -99,7 +99,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PrimaryLEAReasonRejectingCCA)
+            @Html.DisplayFor(model => model.PrimaryRejectionReasons.Reason)
         </dd>
 
         <dt>
@@ -136,11 +136,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CompletionStatus)
+            @Html.DisplayName("Status")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CompletionStatus)
+            @Html.DisplayFor(model => model.CourseCompletionStatus.Status)
         </dd>
 
         <dt>
@@ -216,11 +216,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayName("Rejection Reason ")
+            @Html.DisplayName("Rejection Reason")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ProviderReasonRejection)
+            @Html.DisplayFor(model => model.ProviderRejectionReasons.Reason)
         </dd>
 
         <dt>

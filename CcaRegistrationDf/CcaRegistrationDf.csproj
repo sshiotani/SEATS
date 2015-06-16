@@ -57,6 +57,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -126,7 +130,6 @@
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -214,6 +217,7 @@
     <Compile Include="Controllers\CCAsController.cs" />
     <Compile Include="Controllers\CounselorsController.cs" />
     <Compile Include="Controllers\CourseCategoriesController.cs" />
+    <Compile Include="Controllers\CourseCompletionStatusController.cs" />
     <Compile Include="Controllers\CourseCreditsController.cs" />
     <Compile Include="Controllers\CourseFeesController.cs" />
     <Compile Include="Controllers\ExcessiveFEDReasonsController.cs" />
@@ -222,6 +226,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
+    <Compile Include="Controllers\ProviderRejectionReasonsController.cs" />
     <Compile Include="Controllers\PrimaryRejectionReasonsController.cs" />
     <Compile Include="Controllers\PrimaryUsersController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
@@ -330,6 +335,18 @@
     <Compile Include="Migrations\201506131657331_ProviderRejectionReasons.Designer.cs">
       <DependentUpon>201506131657331_ProviderRejectionReasons.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506161304511_PrimaryRejectionReason.cs" />
+    <Compile Include="Migrations\201506161304511_PrimaryRejectionReason.Designer.cs">
+      <DependentUpon>201506161304511_PrimaryRejectionReason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506161352319_ProviderRejectionReason.cs" />
+    <Compile Include="Migrations\201506161352319_ProviderRejectionReason.Designer.cs">
+      <DependentUpon>201506161352319_ProviderRejectionReason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506161456291_CompletionStatus.cs" />
+    <Compile Include="Migrations\201506161456291_CompletionStatus.Designer.cs">
+      <DependentUpon>201506161456291_CompletionStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -352,8 +369,8 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
-    <Compile Include="Models\Interfaces\ISeatsContext.cs" />
-    <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
+    <Compile Include="Models\CcaViewModels\Interfaces\ISeatsContext.cs" />
+    <Compile Include="Models\CcaViewModels\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
     <Compile Include="Models\ReportContainer.cs" />
@@ -422,8 +439,10 @@
     <Compile Include="Models\SeatsContext.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
+    <Compile Include="Models\StudentCcas\CourseCompletionStatus.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />
     <Compile Include="Models\StudentCcas\PrimaryRejectionReasons.cs" />
+    <Compile Include="Models\StudentCcas\ProviderRejectionReasons.cs" />
     <Compile Include="Models\WebApiConfiguration.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
@@ -453,28 +472,8 @@
     <Compile Include="Models\UserTypeViewModel.cs" />
     <Compile Include="Models\CcaViewModels\UsoeCcaViewModel.cs" />
     <Compile Include="Models\WebApiException.cs" />
-    <Compile Include="Monthly.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Monthly.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SEATSDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="StudentData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StudentData.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Students.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Students.xsd</DependentUpon>
-    </Compile>
     <Compile Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -636,6 +635,7 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -690,17 +690,6 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Monthly.xsc">
-      <DependentUpon>Monthly.xsd</DependentUpon>
-    </Content>
-    <None Include="Monthly.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Monthly.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Monthly.xss">
-      <DependentUpon>Monthly.xsd</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\File system.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -812,39 +801,6 @@
     <Content Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsc">
       <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
     </Content>
-    <Content Include="Students.xsc">
-      <DependentUpon>Students.xsd</DependentUpon>
-    </Content>
-    <Content Include="StudentData.xsc">
-      <DependentUpon>StudentData.xsd</DependentUpon>
-    </Content>
-    <Content Include="SEATSDataSet.xsc">
-      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="SEATSDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>SEATSDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="SEATSDataSet.xss">
-      <DependentUpon>SEATSDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="StudentData.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>StudentData.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="StudentData.xss">
-      <DependentUpon>StudentData.xsd</DependentUpon>
-    </Content>
-    <None Include="Students.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Students.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Students.xss">
-      <DependentUpon>Students.xsd</DependentUpon>
-    </Content>
     <Content Include="Views\StudentBudgets\Create.cshtml" />
     <Content Include="Views\StudentBudgets\Delete.cshtml" />
     <Content Include="Views\StudentBudgets\Details.cshtml" />
@@ -898,6 +854,16 @@
     <Content Include="Views\PrimaryRejectionReasons\Details.cshtml" />
     <Content Include="Views\PrimaryRejectionReasons\Edit.cshtml" />
     <Content Include="Views\PrimaryRejectionReasons\Index.cshtml" />
+    <Content Include="Views\ProviderRejectionReasons\Create.cshtml" />
+    <Content Include="Views\ProviderRejectionReasons\Delete.cshtml" />
+    <Content Include="Views\ProviderRejectionReasons\Details.cshtml" />
+    <Content Include="Views\ProviderRejectionReasons\Edit.cshtml" />
+    <Content Include="Views\ProviderRejectionReasons\Index.cshtml" />
+    <Content Include="Views\CourseCompletionStatus\Create.cshtml" />
+    <Content Include="Views\CourseCompletionStatus\Delete.cshtml" />
+    <Content Include="Views\CourseCompletionStatus\Details.cshtml" />
+    <Content Include="Views\CourseCompletionStatus\Edit.cshtml" />
+    <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -1034,7 +1000,15 @@
     <EmbeddedResource Include="Migrations\201506131657331_ProviderRejectionReasons.resx">
       <DependentUpon>201506131657331_ProviderRejectionReasons.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportFormats\Report1.rdlc" />
+    <EmbeddedResource Include="Migrations\201506161304511_PrimaryRejectionReason.resx">
+      <DependentUpon>201506161304511_PrimaryRejectionReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506161352319_ProviderRejectionReason.resx">
+      <DependentUpon>201506161352319_ProviderRejectionReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506161456291_CompletionStatus.resx">
+      <DependentUpon>201506161456291_CompletionStatus.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -19,8 +19,8 @@ namespace CcaRegistrationDf.Models
                 mail.From = new MailAddress("noreply@noreply.schools.utah.gov");
                 mail.Subject = message.Subject;
                 mail.Body = message.Body;
-
                 mail.IsBodyHtml = true;
+
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "198.60.12.9";
                 smtp.Port = 25;
