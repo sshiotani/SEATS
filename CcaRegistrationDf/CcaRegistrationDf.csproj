@@ -599,18 +599,6 @@
     <Content Include="Content\img\icons\weather-main.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\spinner.gif" />
-    <Content Include="Content\img\team\1.jpg" />
-    <Content Include="Content\img\team\2.jpg" />
-    <Content Include="Content\img\team\3.jpg" />
-    <Content Include="Content\img\team\4.jpg" />
-    <Content Include="Content\img\works\1.jpg" />
-    <Content Include="Content\img\works\2.jpg" />
-    <Content Include="Content\img\works\3.jpg" />
-    <Content Include="Content\img\works\4.jpg" />
-    <Content Include="Content\img\works\5.jpg" />
-    <Content Include="Content\img\works\6.jpg" />
-    <Content Include="Content\img\works\7.jpg" />
-    <Content Include="Content\img\works\8.jpg" />
     <Content Include="Scripts\custom.js" />
     <EntityDeploy Include="Models\Cactus.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
