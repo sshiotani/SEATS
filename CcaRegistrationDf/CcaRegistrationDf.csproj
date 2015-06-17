@@ -485,6 +485,7 @@
     <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618_log.ldf">
       <DependentUpon>aspnet-CcaRegistrationDf-20150320080618.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\img\mt1.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.bootgrid.css" />
     <Content Include="Content\jquery.bootgrid.min.css" />
@@ -535,14 +536,8 @@
     <Content Include="Content\images\ui-icons_fcd113_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\images\word-icon-sm.png" />
-    <Content Include="Content\img\bg2.jpg" />
-    <Content Include="Content\img\bg3-lg.jpg" />
-    <Content Include="Content\img\bg3.jpg" />
-    <Content Include="Content\img\bg4.jpg" />
     <Content Include="Content\img\bg5.jpg" />
     <Content Include="Content\img\bg5a.jpg" />
-    <Content Include="Content\img\bg5b.jpg" />
-    <Content Include="Content\img\bg6-sm.jpg" />
     <Content Include="Content\img\bg6.jpg" />
     <Content Include="Content\img\bg6a.jpg" />
     <Content Include="Content\img\bg7.jpg" />
@@ -589,7 +584,6 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\img\bg1.jpg" />
     <Content Include="Content\img\icons\button-icons.png" />
     <Content Include="Content\img\icons\grid-menu-icons.png" />
     <Content Include="Content\img\icons\menu-icons.png" />
