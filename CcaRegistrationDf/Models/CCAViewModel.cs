@@ -47,10 +47,10 @@ namespace CcaRegistrationDf.Models
 
 		//Provider
 		public int ProviderID { get; set; }
-		[Display(Name = "Teacher Cactus ID")]
-		public Nullable<int> TeacherCactusID { get; set; }
-		public string TeacherFirstName { get; set; }
-		public string TeacherLastName { get; set; }
+        //[Display(Name = "Teacher Cactus ID")]
+        //public Nullable<int> TeacherCactusID { get; set; }
+        //public string TeacherFirstName { get; set; }
+        //public string TeacherLastName { get; set; }
 
 		//Course
 		public int OnlineCourseID { get; set; }

@@ -19,6 +19,7 @@ namespace CcaRegistrationDf.Models
 
         //Items to be input by USOE 
         public Nullable<decimal> CourseFee { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }
         public bool IsRemediation { get; set; }
         public bool IsEnrollmentNoticeSent { get; set; }

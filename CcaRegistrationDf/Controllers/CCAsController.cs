@@ -213,7 +213,7 @@ namespace CcaRegistrationDf.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,FirstName,LastName,Phone,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,Phone,ProviderID,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
         {
             if (ModelState.IsValid)
             {
@@ -274,19 +274,19 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                //Email Admin
-                await EmailAdmin(cca);
-                //Email Counselor
-
-                await EmailCounselor(cca);
-
                 //Email Parent
 
                 await EmailParent(cca);
 
-                //Email Provider uncomment when provider emails are populated
-                //
+                //Email Admin
+                await EmailAdmin(cca);
 
+                //Email Counselor
+
+                await EmailCounselor(cca);
+
+                //Email Provider 
+                
                 //await EmailProvider(cca);
             }
             catch 
@@ -345,7 +345,7 @@ namespace CcaRegistrationDf.Controllers
                 var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "Dear Counselor, A new application for SOEP has been received from " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail);
+                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
             }
             catch
             {
@@ -357,15 +357,22 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
-                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                IdentityMessage msg = new IdentityMessage();
 
                 var counselor = await db.Counselors.FindAsync(cca.CounselorID);
-                await userManager.SendEmailAsync(counselor.UserId, "Counselor Notification:New SEOP Application", "A new application for SEOP has been received for a student at your school.");
+
+                msg.Destination = counselor.Email;
+                msg.Subject = "SEOP Application Received.";
+                msg.Body = "<p>Dear Counselor,</p> <p>An \"Enrollment Request\" for online enrollment in SOEP has been received for a student at your school.  Please create an account at https://seats.schools.utah.gov/ and log in to see the application.</p><p>Thank you.</p>";
+
+                EmailService emailService = new EmailService();
+                await emailService.SendAsync(msg).ConfigureAwait(false);
             }
             catch
             {
                 throw;
             }
+           
         }
 
         /// <summary>
@@ -420,7 +427,10 @@ namespace CcaRegistrationDf.Controllers
 
                         if (cca.EnrollmentLocationID != PRIVATESCHOOLID)
                         {
+                            counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
                             counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
+                            var school = await cactus.CactusSchools.FindAsync(student.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
+                            counselor.School = school.Name;
                         }
                         else
                         {
@@ -769,6 +779,9 @@ namespace CcaRegistrationDf.Controllers
 
             try
             {
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
+                ViewBag.CourseCompletionStatusID = status;
+
                 var leaId = ccaVm.Student.EnrollmentLocationID;
                 var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
                 if (leaId == 1) // HomeSchool
@@ -999,13 +1012,16 @@ namespace CcaRegistrationDf.Controllers
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
                 var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync();
                 ccaVm.CourseCreditList = new SelectList(credit, "ID", "Value", ccaVm.CourseCreditID);
-                var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
+                
+
 
                 ViewBag.SessionID = sessionList;
                 ViewBag.CourseCategoryID = categoryList;
                 ViewBag.OnlineCourseID = courseList;
+
+                var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
                 ViewBag.ProviderRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
                 ViewBag.CourseCompletionStatusID = status;
 
                 return ccaVm;

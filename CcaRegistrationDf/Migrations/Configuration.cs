@@ -38,7 +38,8 @@ namespace CcaRegistrationDf.Migrations
 
             success = idManager.CreateRole("Admin");
             if (!success == true) return success;
-
+            success = idManager.CreateRole("Support");
+            if (!success == true) return success;
             success = idManager.CreateRole("Provider");
             if (!success == true) return success;
             success = idManager.CreateRole("Primary");
