@@ -56,7 +56,8 @@ namespace CcaRegistrationDf.Migrations
             {
                 UserName = "admin",
                 Email = "spencer.shiotani@schools.utah.gov",
-                EmailConfirmed=true
+                EmailConfirmed = true,
+                IsSetup = true
             };
 
 
@@ -94,7 +95,6 @@ namespace CcaRegistrationDf.Migrations
             return success;
 
         }
-
 
     }
 }

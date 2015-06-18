@@ -15,23 +15,30 @@ namespace CcaRegistrationDf.Models
             try
             {
                 MailMessage mail = new MailMessage();
-                mail.To.Add(message.Destination.ToString());
-                mail.From = new MailAddress("noreply@noreply.schools.utah.gov");
+                mail.To.Add(message.Destination);
+                mail.From = new MailAddress("noreply@noreply.schools.utah.gov","SEATS");
                 mail.Subject = message.Subject;
                 mail.Body = message.Body;
                 mail.IsBodyHtml = true;
 
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "198.60.12.9";
-                smtp.Port = 25;
-                smtp.UseDefaultCredentials = true;
+                using (SmtpClient smtp = new SmtpClient())
+                {
+                    smtp.Host = "198.60.12.9";
+                    smtp.Port = 25;
+                    //smtp.UseDefaultCredentials = true;
 
-                await smtp.SendMailAsync(mail);
+                    await smtp.SendMailAsync(mail);
+                }
+                mail.Dispose();
+
+                
             }
             catch (Exception ex)
             {
                 throw new HttpException(500, "Confirmation Email Not Sent! " + ex.Message);
             }
         }
+
+        
     }
 }

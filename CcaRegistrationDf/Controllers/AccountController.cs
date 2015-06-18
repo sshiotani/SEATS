@@ -362,7 +362,7 @@ namespace CcaRegistrationDf.Controllers
 
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to cory.kanth@schools.utah.gov.</p>");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return View("DisplayEmail");
                 }
