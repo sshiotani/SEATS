@@ -7,6 +7,8 @@ using System.Data.Entity;
 using OfficeOpenXml;
 using System.Data;
 using System;
+using System.Drawing;
+using OfficeOpenXml.Style;
 
 
 
@@ -147,6 +149,18 @@ namespace CcaRegistrationDf.Controllers
             {
                 ExcelWorksheet sheet = package.Workbook.Worksheets.Add("Monthly");
                 sheet.Cells["A1"].LoadFromDataTable(table, true);
+
+                // Fit Column to cell width
+                sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+
+                //Format the header
+                using (ExcelRange rng = sheet.Cells["A1:N1"])
+                {
+                    rng.Style.Font.Bold = true;
+                    rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
+                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(79, 129, 189));  //Set color to dark blue
+                    rng.Style.Font.Color.SetColor(Color.White);
+                }
 
                 //Write it back to the client
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

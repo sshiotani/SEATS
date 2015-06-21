@@ -17,7 +17,7 @@ namespace CcaRegistrationDf.Controllers
 
         //private SeatsContext db { get; set; }
 
-        public HomeController(SeatsContext db)
+        public HomeController()
         {
             this.db = new ApplicationDbContext();
         }
@@ -109,15 +109,12 @@ namespace CcaRegistrationDf.Controllers
         {
             try
             {
+                var locations = db.Locations;
+                var selected = locations.Where(m => m.Name.Contains("Student/Parent")).Select(m=>m.ID).First();
 
-                var model = new UserTypeViewModel();
-                model.UserType = db.Locations.Select(f => new SelectListItem()
-                {
-                    Value = f.ID.ToString(),
-                    Text = f.Name
-                });
+                ViewBag.UserTypeID = new SelectList(locations, "ID", "Name", selected);
 
-                return View(model);
+                return View();
 
             }
             catch (Exception ex)
@@ -152,11 +149,9 @@ namespace CcaRegistrationDf.Controllers
                     break;
             }
 
-            userType.UserType = db.Locations.Select(f => new SelectListItem()
-                {
-                    Value = f.ID.ToString(),
-                    Text = f.Name
-                });
+            var locations = await db.Locations.ToListAsync().ConfigureAwait(false);
+
+            ViewBag.UserTypeID = new SelectList(locations, "ID", "Name");
 
             return View(userType);
         }

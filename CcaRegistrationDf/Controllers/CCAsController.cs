@@ -12,19 +12,19 @@ using CcaRegistrationDf.Models;
 using AutoMapper;
 
 using Microsoft.AspNet.Identity.Owin;
-using Interfaces;
+
 
 namespace CcaRegistrationDf.Controllers
 {
     [Authorize]
     public class CCAsController : Controller
     {
-        private const short HOMESCHOOLID = 1;
-        private const short PRIVATESCHOOLID = 2;
+        private const short HOMESCHOOLID = 1; //LEA ID of a HOMESCHOOL student
+        private const short PRIVATESCHOOLID = 2; // ... PRIVATESCHOOL
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
+
         //private SeatsContext db;
         private SEATSEntities cactus;
-
         private ApplicationDbContext db;
 
         public CCAsController()
@@ -62,7 +62,6 @@ namespace CcaRegistrationDf.Controllers
             {
                 return RedirectToAction("StudentCcaView");
             }
-
 
         }
 
@@ -1012,8 +1011,6 @@ namespace CcaRegistrationDf.Controllers
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
                 var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync();
                 ccaVm.CourseCreditList = new SelectList(credit, "ID", "Value", ccaVm.CourseCreditID);
-                
-
 
                 ViewBag.SessionID = sessionList;
                 ViewBag.CourseCategoryID = categoryList;

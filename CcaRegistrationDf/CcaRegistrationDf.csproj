@@ -257,8 +257,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
-    <Compile Include="Models\CcaViewModels\Interfaces\ISeatsContext.cs" />
-    <Compile Include="Models\CcaViewModels\Interfaces\ISsidFindingService.cs" />
+    <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
     <Compile Include="Models\ReportContainer.cs" />
@@ -272,7 +271,6 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CounselorViewModel.cs" />
-    <Compile Include="Models\SeatsContext.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
     <Compile Include="Models\StudentCcas\CourseCompletionStatus.cs" />
@@ -283,7 +281,6 @@
     <Compile Include="Models\StudentCcas\CCA.cs" />
     <Compile Include="Models\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
-    <Compile Include="Models\BackupModel\MainTable-backup.cs" />
     <Compile Include="Models\StudentCcas\CourseCategory.cs" />
     <Compile Include="Models\CourseResultModel.cs" />
     <Compile Include="Models\CourseStatusViewModel.cs" />

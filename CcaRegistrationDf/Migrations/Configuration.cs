@@ -56,7 +56,7 @@ namespace CcaRegistrationDf.Migrations
             var newUser = new ApplicationUser()
             {
                 UserName = "admin",
-                Email = "spencer.shiotani@schools.utah.gov",
+                Email = "edonline@schools.utah.gov",
                 EmailConfirmed = true,
                 IsSetup = true
             };

@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using Interfaces;
+
 
 namespace CcaRegistrationDf.Models
 {
@@ -23,7 +23,7 @@ namespace CcaRegistrationDf.Models
         public bool IsSetup { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, ISeatsContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Parent> Parents { get; set; }

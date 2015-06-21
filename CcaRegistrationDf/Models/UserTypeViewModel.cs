@@ -13,6 +13,5 @@ namespace CcaRegistrationDf.Models
     {
         public int UserTypeID { get; set; }
         public Location User { get; set; }
-        public IEnumerable<SelectListItem> UserType { get; set; }
     }
 }

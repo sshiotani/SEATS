@@ -228,9 +228,6 @@ namespace CcaRegistrationDf.Controllers
                 return View("Error");
             }
 
-
-          
-
         }
 
        
@@ -245,6 +242,12 @@ namespace CcaRegistrationDf.Controllers
 
         //
         // POST: /Account/Login
+        /// <summary>
+        /// Added functionality to check for confirmed email.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -342,8 +345,14 @@ namespace CcaRegistrationDf.Controllers
             return View();
         }
 
-        //
+        
+        
         // POST: /Account/Register
+        /// <summary>
+        /// Uncommented the email confirmation functionality
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -362,7 +371,7 @@ namespace CcaRegistrationDf.Controllers
 
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to cory.kanth@schools.utah.gov.</p>");
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return View("DisplayEmail");
                 }
@@ -414,7 +423,7 @@ namespace CcaRegistrationDf.Controllers
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", user.UserName + ", please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                await UserManager.SendEmailAsync(user.Id, "Reset SEATS Password", user.UserName + ", please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
@@ -449,7 +458,7 @@ namespace CcaRegistrationDf.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
