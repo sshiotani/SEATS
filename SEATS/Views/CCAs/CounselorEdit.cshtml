@@ -1,0 +1,104 @@
+﻿@model SEATS.Models.CounselorCcaViewModel
+
+@{
+    ViewBag.Title = "CounselorEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Counselor Edit CCA</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Counselor Approval (@Model.Counselor.FirstName @Model.Counselor.LastName)</h4>
+        <hr />
+
+
+        @Html.HiddenFor(model => model.CcaID)
+
+
+
+        <div class="form-group">
+            @Html.Label("Submission Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static text-info">@Model.ApplicationSubmissionDate</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Student", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static text-info">@Model.Student.StudentLastName,@Model.Student.StudentFirstName, @Model.Student.SSID</p>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CounselorID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CounselorID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.Label("Session", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static text-info">@Model.Session.Name</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Course", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static text-info">@Model.OnlineCourse.Name</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Credit", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static text-info">@Model.CourseCredit.Value</p>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.ProviderID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ProviderID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ProviderID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.Label("SEOP Consistent", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsCourseConsistentWithStudentSEOP)
+                    @Html.ValidationMessageFor(model => model.IsCourseConsistentWithStudentSEOP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Approve Enrollment", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsCounselorSigned)
+                    @Html.ValidationMessageFor(model => model.IsCounselorSigned, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -7,13 +7,13 @@ namespace SEATS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class init : IMigrationMetadata
+    public sealed partial class counselorsig : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(counselorsig));
         
         string IMigrationMetadata.Id
         {
-            get { return "201506181316519_init"; }
+            get { return "201506221835016_counselorsig"; }
         }
         
         string IMigrationMetadata.Source

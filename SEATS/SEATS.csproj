@@ -231,9 +231,9 @@
     <Compile Include="Controllers\PrimaryUsersController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\ProviderUsersController.cs" />
-    <Compile Include="Migrations\201506181316519_init.cs" />
-    <Compile Include="Migrations\201506181316519_init.Designer.cs">
-      <DependentUpon>201506181316519_init.cs</DependentUpon>
+    <Compile Include="Migrations\201506221835016_counselorsig.cs" />
+    <Compile Include="Migrations\201506221835016_counselorsig.Designer.cs">
+      <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
@@ -678,6 +678,7 @@
     <Content Include="Views\CourseCompletionStatus\Details.cshtml" />
     <Content Include="Views\CourseCompletionStatus\Edit.cshtml" />
     <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
+    <Content Include="Views\CCAs\CounselorEdit.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -688,16 +689,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201506181316519_init.resx">
-      <DependentUpon>201506181316519_init.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201506221835016_counselorsig.resx">
+      <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -860,6 +860,80 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Counselor")]
+        public async Task<ActionResult> CounselorEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+                if (cca == null)
+                {
+                    return HttpNotFound();
+                }
+
+                Mapper.CreateMap<CCA, CounselorCcaViewModel>();
+
+                var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+
+                return View(ccaVm);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
+                return View("Error");
+            }
+        }
+
+        // POST: CCAs/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Counselor")]
+        public async Task<ActionResult> CounselorEdit(CounselorCcaViewModel ccaVm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
+                    cca.IsCounselorSigned= ccaVm.IsCounselorSigned;
+                    cca.IsCourseConsistentWithStudentSEOP = ccaVm.IsCourseConsistentWithStudentSEOP;                  
+
+                    db.Entry(cca).State = EntityState.Modified;
+
+                    await db.SaveChangesAsync().ConfigureAwait(false);
+                    return RedirectToAction("CcaInterface", "Counselors");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+                    return View("Error");
+                }
+            }
+
+            //Capture errors from Modelstate and return to user.
+
+            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+            foreach (var error in errors)
+                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
+            return View(ccaVm);
+        }
+
+        // GET: CCAs/Edit/5
+        /// <summary>
+        /// Allows access for the Primary User to edit the Primary sections of the CCA.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Primary")]
         public async Task<ActionResult> PrimaryEdit(int? id)
         {
