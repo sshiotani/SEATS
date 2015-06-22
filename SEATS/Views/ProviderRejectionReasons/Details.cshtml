@@ -1,0 +1,22 @@
+﻿@model SEATS.Models.ProviderRejectionReasons
+
+
+    <div>
+        <h4>ProviderRejectionReasons</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Reason)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Reason)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+

@@ -1,0 +1,306 @@
+﻿@model SEATS.Models.ProviderCcaViewModel
+
+@{
+    ViewBag.Title = "ProviderEdit";
+}
+
+<h2>Provider Edit CCA</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Provider CCA Update</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.CcaID)
+        @Html.HiddenFor(model => model.ApplicationSubmissionDate)
+        @Html.HiddenFor(model => model.ProviderID)
+        @Html.HiddenFor(model => model.StudentID)
+        @*@Html.HiddenFor(model => model.CourseCreditID)*@
+
+
+
+        <div class="form-group">
+            @Html.Label("Submission Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@String.Format("{0:MM/dd/yyyy}", Model.ApplicationSubmissionDate)</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Student", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Model.Student.StudentLastName, @Model.Student.StudentFirstName ,@Model.Student.SSID</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Course", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Model.OnlineCourse.Name</p>
+                <div class="col-md-4" id="EditCourse">
+                    <p class="form-control-static text-danger">Verify all changes are valid before saving. (i.e. Course is valid for that Category and Session)</p>
+                    @Html.DropDownList("SessionID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Session" })
+
+                    @Html.ValidationMessageFor(model => model.SessionID, "", new { @class = "text-danger" })
+
+                    @Html.DropDownList("CourseCategoryID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Category" })
+
+                    @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
+                    @Html.DropDownList("OnlineCourseID", null , htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+
+                    @Html.ValidationMessageFor(model => model.OnlineCourseID, "", new { @class = "text-danger" })
+
+                   
+
+                    @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCreditList, "Credit", new { @class = "form-control dropdown-wrapper", id = "CreditOptions", title = "To change credit: Unselect and reselect the course." })
+
+                    @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
+                    
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Credit", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Model.CourseCredit.Value</p>
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Accept Student", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+                    @Html.ValidationMessageFor(model => model.IsProviderAcceptsRejectsCourseRequest, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+
+            @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProviderRejectionReasonsID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.ValidationMessageFor(model => model.ProviderRejectionReasonsID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProviderExplanationRejection, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProviderExplanationRejection, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherCactusID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CourseCompletionStatusID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.ValidationMessageFor(model => model.CourseCompletionStatusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CourseStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CourseStartDate, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.CourseStartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CourseCompletionDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CourseCompletionDate, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.CourseCompletionDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreditCompletedToDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CreditCompletedToDate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CreditCompletedToDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.CourseBegin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CourseBegin, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.CourseBegin, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.Label("Date Active", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateConfirmationActiveParticipation, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Continue Participation", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateContinuationActiveParticipation, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateContinuationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateReportPassingGrade, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateReportPassingGrade, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateReportPassingGrade, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+       
+
+        <div class="form-group">
+            @Html.Label("Provider Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ProviderNotes, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProviderNotes, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Signature", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProviderSignature, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProviderSignature, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Provider Signed", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsProviderSignature)
+                    @Html.ValidationMessageFor(model => model.IsProviderSignature, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+        $(function () {
+
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $('#Course').change(function () {
+                //$('#Code,#Note,#CourseName,#Credit').addClass('hide');
+
+
+                $("#CreditOptions").empty();
+                var items = '<option value="">Select Credit</option>';
+                $('#CreditOptions').html(items);
+
+                var courseName = $("#Course option:selected").text().split('-')[0];
+
+                if (courseName != "") {
+                    $("#CourseName").removeClass('hide');
+                    $('#CourseName').html("COURSE:" + courseName);
+
+                }
+
+                var course = $("#Course option:selected").val();
+                if (course != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCourseInformation", "CCAs")',
+                        data: { courseId: course },
+                        dataType: 'json',
+                        success: function (result) {
+                            
+
+                            $.each(result.CreditChoices, function (i, value) {
+                                if (value.Disabled != true) {
+                                    $('#CreditOptions').append("<option value='" + value.Value + "'>" + value.Text + "</option>");
+                                }
+                            });
+
+
+
+                            $("#Code").removeClass('hide');
+                            $('#Code').html("CODE: " + result.Code);
+
+                            if (result.Notes != null) {
+                                $('#Note').removeClass('hide');
+                                $('#Note').html("NOTES: " + result.Notes);
+                            }
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+
+            });
+
+        });
+
+
+    </script>
+}

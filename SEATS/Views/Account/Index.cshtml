@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SEATS.Models.EditUserViewModel>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Registered Users</h2>
+
+<p>
+    @Html.ActionLink("Create New User", "Register")
+</p>
+
+<table id="grid-basic" class="table table-condensed table-hover table-striped">
+    <thead>
+        <tr>
+            <th data-column-id="email">
+                Email
+            </th>
+            <th data-column-id="username">
+                User Name
+            </th>
+           
+
+            <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
+                @Html.DisplayName("Actions")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Roles", "UserRoles", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details",new { id = item.Id})*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/bootgrid")
+
+    <script>
+        // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
+        $(function () {
+            var grid = $("#grid-basic").bootgrid({
+                caseSensitive: false
+                    ,
+                formatters: {
+                    "state": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.Active) == "check") checkBox = "checked=\"checked\"";
+
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+
+                    },
+
+                    "actions": function (column, row) {
+                        var id = $.trim(row.Actionlinks);
+                        return "<a href=\" /Account/Edit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> " +
+                         "<a href=\" /Account/UserRoles/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-user\"></span></button> ";
+                    }
+                }
+            });
+
+        });
+
+    </script>
+}
