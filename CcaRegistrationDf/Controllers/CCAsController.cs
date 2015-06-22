@@ -286,7 +286,7 @@ namespace CcaRegistrationDf.Controllers
 
                 //Email Provider 
                 
-                //await EmailProvider(cca);
+                await EmailProvider(cca);
             }
             catch 
             {
@@ -302,7 +302,7 @@ namespace CcaRegistrationDf.Controllers
                 var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
                 msg.Destination = provider.Email;
                 msg.Subject = "Enrollment Request for Provider Review";
-                msg.Body = "USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " who wishes to enroll in a course or courses under the SOEP.\n " + ". Please review these CCAs within 72 Business Hours.  https://seats.schools.utah.gov/";
+                msg.Body = "<p>USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the SOEP.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
