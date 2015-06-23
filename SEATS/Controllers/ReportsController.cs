@@ -103,9 +103,7 @@ namespace SEATS.Controllers
             table.Columns.Add("Category", typeof(string));
             table.Columns.Add("Course", typeof(string));
 
-
             var ccas = db.CCAs.ToList();
-          
 
             foreach (var cca in ccas)
             {

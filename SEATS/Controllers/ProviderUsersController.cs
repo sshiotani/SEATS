@@ -120,7 +120,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "FirstName,LastName,Phone,Fax,ProviderID")] ProviderUser providerUser)
+        public async Task<ActionResult> Create([Bind(Include = "FirstName,LastName,Phone,Fax,ProviderID,Email")] ProviderUser providerUser)
         {
             if (ModelState.IsValid)
             {
@@ -178,7 +178,7 @@ namespace SEATS.Controllers
 
             var providers = await db.Providers.ToListAsync().ConfigureAwait(false);
             providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
-            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name",providerUser.ProviderID);
 
             return View(providerUser);
         }
@@ -188,7 +188,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,Phone,Fax,ProviderID")] ProviderUser providerUser)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,FirstName,LastName,Phone,Fax,ProviderID,Email")] ProviderUser providerUser)
         {
             if (ModelState.IsValid)
             {
@@ -198,7 +198,7 @@ namespace SEATS.Controllers
             }
             var providers = await db.Providers.ToListAsync().ConfigureAwait(false);
             providers.Insert(0, new Provider() { ID = 0, Name = "Providers", DistrictNumber = "0" });
-            ViewBag.ProviderID = new SelectList(providers, "ID", "Name");
+            ViewBag.ProviderID = new SelectList(providers, "ID", "Name", providerUser.ProviderID);
 
             return View(providerUser);
         }

@@ -260,6 +260,7 @@
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
+    <Compile Include="Models\PrimaryUserViewModel.cs" />
     <Compile Include="Models\ReportContainer.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />

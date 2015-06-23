@@ -30,11 +30,24 @@ namespace SEATS.Controllers
         [Authorize(Roles="Admin")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.PrimaryUsers.ToListAsync().ConfigureAwait(false));
+            var userList = new List<PrimaryUserViewModel>();
+            var primaryUsers = await db.PrimaryUsers.ToListAsync();
+
+            foreach (var user in primaryUsers)
+            {
+                var userVm = new PrimaryUserViewModel();
+                userVm.PrimaryUser = user;
+                userVm.Lea = await cactus.CactusInstitutions.Where(m => m.ID == user.EnrollmentLocationID).Select(c => c.Name).FirstAsync();
+                userVm.School = await cactus.CactusSchools.Where(m => m.ID == user.EnrollmentLocationSchoolNameID).Select(c => c.Name).FirstAsync();
+                userList.Add(userVm);
+            }
+
+
+           return View(userList);
         }
 
         // GET: CCAs for primary
-        [Authorize(Roles = "Primary")]
+        [Authorize(Roles = "Primary,Admin")]
         public async Task<ActionResult> CcaInterface()
         {
             // Look up all ccas associated with this primary
@@ -69,7 +82,7 @@ namespace SEATS.Controllers
             return ccaVmList;
         }
         // GET: PrimaryUsers/Details/5
-         [Authorize(Roles = "Primary")]
+         [Authorize(Roles = "Primary,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -88,6 +101,7 @@ namespace SEATS.Controllers
         public async  Task<ActionResult> Create()
         {
             var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
+            
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -107,7 +121,7 @@ namespace SEATS.Controllers
             {
                 primaryUser.UserId = User.Identity.GetUserId();
                 var identityUser = db.Users.Find(primaryUser.UserId);
-                primaryUser.Email = identityUser.Email;
+                //primaryUser.Email = identityUser.Email;
 
                 db.PrimaryUsers.Add(primaryUser);
                 var count = await db.SaveChangesAsync();
@@ -134,14 +148,14 @@ namespace SEATS.Controllers
 
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0});
 
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name",primaryUser.EnrollmentLocationID);
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
 
             return View(primaryUser);
         }
 
         // GET: PrimaryUsers/Edit/5
-         [Authorize(Roles = "Primary")]
+         [Authorize(Roles = "Primary,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,8 +167,9 @@ namespace SEATS.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name");
-            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
+
+            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name", primaryUser.EnrollmentLocationID);
+            ViewBag.EnrollmentLocationSchoolNameID = new SelectList(cactus.CactusSchools, "ID", "Name", primaryUser.EnrollmentLocationSchoolNameID);
             return View(primaryUser);
         }
 
@@ -163,7 +178,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,Email,FirstName,LastName,IsSigned,Phone,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] PrimaryUser primaryUser)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,UserId,Email,FirstName,LastName,Phone,EnrollmentLocationID,EnrollmentLocationSchoolNameID")] PrimaryUser primaryUser)
         {
             if (ModelState.IsValid)
             {
@@ -172,8 +187,8 @@ namespace SEATS.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name");
-            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
+            ViewBag.EnrollmentLocationID = new SelectList(cactus.CactusInstitutions, "ID", "Name",primaryUser.EnrollmentLocationID);
+            ViewBag.EnrollmentLocationSchoolNameID = new SelectList(cactus.CactusSchools, "ID", "Name", primaryUser.EnrollmentLocationSchoolNameID);
             return View(primaryUser);
         }
 
