@@ -72,7 +72,13 @@
             @Html.DisplayFor(model => model.Counselor.Email)
         </dd>
 
-       
+        <dt>
+            @Html.DisplayName("Counselor Approval")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCounselorSigned)
+            @Html.DisplayName(" (Counselor Approval based on SOEP, IEP and IB Program requirements)")
         <dt>
             @Html.DisplayName("Primary Accepts")
         </dt>

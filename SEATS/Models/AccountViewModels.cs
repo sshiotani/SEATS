@@ -50,7 +50,7 @@ namespace SEATS.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "User Name")]
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
 
