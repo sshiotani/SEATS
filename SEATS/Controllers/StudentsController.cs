@@ -72,6 +72,7 @@ namespace SEATS.Controllers
         }
 
         // GET: Students/Details/5
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -79,10 +80,29 @@ namespace SEATS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
+           
             if (student == null)
             {
                 return HttpNotFound();
             }
+
+            if(student.EnrollmentLocationID == HOMESCHOOLID)
+            {
+                ViewBag.Lea = "Home School";
+                ViewBag.School = "Home School";
+
+            }
+            else if (student.EnrollmentLocationID == PRIVATESCHOOLID)
+            {
+                ViewBag.Lea = "Private School";
+                ViewBag.School = student.SchoolOfRecord;
+            }
+            else
+            {
+                ViewBag.Lea = await cactus.CactusInstitutions.Where(m => m.ID == student.EnrollmentLocationID).Select(m => m.Name).FirstAsync();
+                ViewBag.School = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstAsync();
+            }
+
             return View(student);
         }
 
@@ -309,7 +329,7 @@ namespace SEATS.Controllers
         }
 
         // GET: Students/Edit/5
-
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -329,6 +349,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "StudentNumber,StudentEmail,EnrollmentLocationID,EnrollmentLocationSchoolNamesID,GraduationDate,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
         {
             if (ModelState.IsValid)

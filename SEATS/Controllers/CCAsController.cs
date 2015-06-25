@@ -281,12 +281,12 @@ namespace SEATS.Controllers
                 await EmailAdmin(cca);
 
                 //Email Counselor
-
+                
                 await EmailCounselor(cca);
 
                 //Email Primary
-
-                await EmailPrimary(cca);
+                if(!(cca.EnrollmentLocationID == HOMESCHOOLID || cca.EnrollmentLocationID == PRIVATESCHOOLID))
+                    await EmailPrimary(cca);
 
                 //Email Provider 
                 
@@ -306,7 +306,8 @@ namespace SEATS.Controllers
                 var provider = await db.Providers.FindAsync(cca.ProviderID).ConfigureAwait(false);
                 msg.Destination = provider.Email;
                 msg.Subject = "Enrollment Request for Provider Review";
-                msg.Body = "<p>USOE has received a CCA for " + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the SOEP.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p>";
+                var initial = cca.Student.StudentFirstName[0];
+                msg.Body = "<p>USOE has received a CCA for " + initial + ". " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -348,7 +349,8 @@ namespace SEATS.Controllers
                 var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
+                var initial = cca.Student.StudentFirstName[0];
+                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + initial  + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
             }
             catch
             {
@@ -363,10 +365,10 @@ namespace SEATS.Controllers
                 IdentityMessage msg = new IdentityMessage();
 
                 var counselor = await db.Counselors.FindAsync(cca.CounselorID);
-
+                var initial = cca.Student.StudentFirstName[0];
                 msg.Destination = counselor.Email;
                 msg.Subject = "SEOP Application Received.";
-                msg.Body = "<p>Dear Counselor,</p> <p>An \"Enrollment Request\" for online enrollment in SOEP has been received for a student at your school.  Please create an account at https://seats.schools.utah.gov/ and log in to see the application.</p><p>Thank you.</p>";
+                msg.Body = "<p>Dear Counselor,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this school year. The student is:<p>First Name: " + initial + ".</p><p> Last Name: " + cca.Student.StudentLastName + "</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary school of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable.</p><p>To facilitate Counselor review, the Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid your LEA’s approving official (usually the Business Administrator) in their acceptance of this Acknowledgement.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Counselor\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline. http://www.schools.utah.gov/edonline/default.aspx </p>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -383,14 +385,15 @@ namespace SEATS.Controllers
             try
             {
                 var primaryUsers = await db.PrimaryUsers.Where(m => m.EnrollmentLocationSchoolNameID == cca.EnrollmentLocationSchoolNamesID).ToListAsync();
-                if (primaryUsers != null)
+                if (primaryUsers.Count != 0)
                 {
                     foreach (var user in primaryUsers)
                     {
+                        var initial = cca.Student.StudentFirstName[0];
                         IdentityMessage msg = new IdentityMessage();
                         msg.Destination = user.Email;
                         msg.Subject = "SEOP Application Received.";
-                        msg.Body = "<p>Dear Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this school year. The student is:<p>" + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + "</p><p> The student is limited to 5.0 online credits in the 2015-16 school year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary school of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p>";
+                        msg.Body = "<p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this school year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p> The student is limited to 5.0 online credits in the 2015-16 school year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary school of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p>";                    
 
                         EmailService emailService = new EmailService();
                         await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -398,11 +401,12 @@ namespace SEATS.Controllers
                 }
                 else // Email admin if no primary user found
                 {
+                    var initial = cca.Student.StudentFirstName[0];
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                     var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
                     var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
                     var school = await cactus.CactusSchools.Where(m => m.ID == cca.EnrollmentLocationSchoolNamesID).FirstAsync();
-                    await userManager.SendEmailAsync(admin.Id, "NO PRIMARY USER FOUND!", "EDONLINE, A new application for SOEP has been received from <p>" + cca.Student.StudentFirstName + " " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>But a primary user was not found for " + school + "</p>");
+                    await userManager.SendEmailAsync(admin.Id, "NO PRIMARY USER FOUND!", "EDONLINE, A new application for SOEP has been received from <p>" + initial  + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>But a primary user was not found for " + school + "</p>");
                 }
             }
             catch
