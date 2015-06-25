@@ -221,6 +221,7 @@
     <Compile Include="Controllers\CourseCreditsController.cs" />
     <Compile Include="Controllers\CourseFeesController.cs" />
     <Compile Include="Controllers\ExcessiveFEDReasonsController.cs" />
+    <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -257,6 +258,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
+    <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaViewModel.cs" />
@@ -680,6 +682,7 @@
     <Content Include="Views\CourseCompletionStatus\Edit.cshtml" />
     <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
     <Content Include="Views\CCAs\CounselorEdit.cshtml" />
+    <Content Include="Views\FileUpload\FileUpload.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -701,6 +704,7 @@
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

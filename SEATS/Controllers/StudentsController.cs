@@ -225,7 +225,7 @@ namespace SEATS.Controllers
                     }
 
                     // Find SSID using ssidFindingService
-                    student.SSID = await GetSSID(studentVm);
+                    student.SSID = await GetSSID(studentVm);            
 
                     student.UserId = User.Identity.GetUserId();
 
