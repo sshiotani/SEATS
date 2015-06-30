@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
 
 
 namespace SEATS.Models
@@ -113,7 +113,7 @@ namespace SEATS.Models
         }
 
 
-        public void ClearUserRoles(string userId)
+        public async Task ClearUserRoles(string userId)
         {
 
             var um = new UserManager<ApplicationUser>(
@@ -126,10 +126,14 @@ namespace SEATS.Models
 
             currentRoles.AddRange(user.Roles);
 
+            ApplicationDbContext db = new ApplicationDbContext();
+
+          
             foreach (var role in currentRoles)
             {
+                var roleName = db.Roles.Where(m => m.Id == role.RoleId).Select(m => m.Name).FirstOrDefault();
 
-               var idsuccess = um.RemoveFromRole(userId, role.RoleId);
+               var idsuccess = um.RemoveFromRole(userId, roleName);
 
             }
 

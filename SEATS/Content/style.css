@@ -344,7 +344,7 @@ hr {
 .intro .slogan h2 {
 	color: #FFF;
 	text-shadow: none;
-	font-size: 60px;
+	font-size: 40px;
 	line-height: 60px;
 	font-weight: 700;
 	font-family: Montserrat, sans-serif;
@@ -359,6 +359,8 @@ hr {
 
 .intro .slogan h4 {
 	color: #fff;
+    font-size: 30px;
+	line-height: 30px;
 	text-shadow: -1px 1px 1px #000;
 }
 
@@ -484,6 +486,21 @@ hr {
     background: #575757;
     
     border-radius:25px;
+}
+
+.service-box-xs{
+    padding-top:20px;
+    padding-left:10px;
+    padding-right:10px;
+    width: 350px;
+	height: 50px;
+    color:#fff;
+    font-weight: 600;
+
+    background: #575757;
+    border: 2px solid #71c6f3;
+    border-color: #71c6f3;
+    border-radius:10px;
 }
 
 /* ===========================

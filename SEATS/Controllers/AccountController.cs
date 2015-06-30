@@ -120,7 +120,7 @@ namespace SEATS.Controllers
         {
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.Id == id);
-            
+
             ViewBag.MessageId = Message;
             return View(user);
         }
@@ -143,22 +143,62 @@ namespace SEATS.Controllers
         }
 
 
-        //
-        // POST: Delete
+        ////
+        //// POST: Delete
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult DeleteConfirmed(string id)
+        //{
+        //    var Db = new ApplicationDbContext();
+        //    var user = Db.Users.First(u => u.Id == id);
+
+        //    Db.Users.Remove(user);
+        //    Db.SaveChanges();
+
+        //    return RedirectToAction("Index");
+        //}
+
+        // POST: /Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.Id == id);
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
 
-            Db.Users.Remove(user);
-            Db.SaveChanges();
+                var user = await _userManager.FindByIdAsync(id);
+                var logins = user.Logins;
 
-            return RedirectToAction("Index");
+                foreach (var login in logins.ToList())
+                {
+                    await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                }
+
+                var rolesForUser = await _userManager.GetRolesAsync(id);
+
+                if (rolesForUser.Count() > 0)
+                {
+                    foreach (var item in rolesForUser.ToList())
+                    {
+                        // item should be the name of the role
+                        var result = await _userManager.RemoveFromRoleAsync(user.Id, item);
+                    }
+                }
+
+                await _userManager.DeleteAsync(user);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View();
+            }
         }
-
 
         [Authorize(Roles = "Admin")]
         public ActionResult UserRoles(string id)
@@ -191,7 +231,7 @@ namespace SEATS.Controllers
                     {
                         idManager.AddUserToRole(user.Id, role.RoleName);
                     }
-                    
+
                 }
                 return RedirectToAction("index");
             }
@@ -223,7 +263,7 @@ namespace SEATS.Controllers
 
                 return RedirectToAction("index");
             }
-            catch( Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Message = "Unable to create role. Error:" + ex.Message;
                 return View("Error");
@@ -231,7 +271,7 @@ namespace SEATS.Controllers
 
         }
 
-       
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -346,8 +386,8 @@ namespace SEATS.Controllers
             return View();
         }
 
-        
-        
+
+
         // POST: /Account/Register
         /// <summary>
         /// Uncommented the email confirmation functionality
@@ -651,9 +691,9 @@ namespace SEATS.Controllers
 
                 var user = db.Users.Find(userId);
 
-                await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
+                await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm " + user.Email + " as a " + userType);
 
-                return RedirectToAction("RequestSent","Home");
+                return RedirectToAction("RequestSent", "Home");
             }
             catch
             {
@@ -661,6 +701,10 @@ namespace SEATS.Controllers
                 return View("Error");
             }
         }
+
+       
+
+       
 
         #region Helpers
 
