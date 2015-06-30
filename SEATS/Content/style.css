@@ -364,6 +364,12 @@ hr {
 	text-shadow: -1px 1px 1px #000;
 }
 
+.intro .slogan h5 {
+	color: #fff;
+    font-size: 20px;
+	line-height: 20px;
+	text-shadow: -1px 1px 1px #000;
+}
 /* ===========================
 --- Intro logged in
 ============================ */
