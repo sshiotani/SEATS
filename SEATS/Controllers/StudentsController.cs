@@ -30,10 +30,9 @@ namespace SEATS.Controllers
         private SEATSEntities cactus = new SEATSEntities();
         private ISsidFindingService ssidFindingService;
 
-        public StudentsController(ISsidFindingService ssidFindingService)
+        public StudentsController()
         {
-            this.ssidFindingService = ssidFindingService;
-           
+            this.ssidFindingService = new SsidFindingService();
         }
 
         // GET: Students
@@ -191,7 +190,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Method gets school names dynamically called from view. Matches the district id with
+        /// Method gets lea names dynamically called from view. Matches the district id with
         /// the selected district id.  Removes null and list entries with DISTRICT selections.
         /// </summary>
         /// <param name="district"></param>
@@ -247,6 +246,14 @@ namespace SEATS.Controllers
                     // Find SSID using ssidFindingService
                     student.SSID = await GetSSID(studentVm);
 
+                    var duplicate = await CheckSSID(student.SSID);
+
+                    if(duplicate)
+                    {
+                        ViewBag.Message = "A student with this SSID already exists in our system.  Please contact us.";
+                        return View("Error");
+                    }
+
                     student.UserId = User.Identity.GetUserId();
 
                     db.Students.Add(student);
@@ -281,6 +288,20 @@ namespace SEATS.Controllers
 
             studentVm.EnrollmentLocationID = 0;
             return View(await GetClientSelectLists(studentVm).ConfigureAwait(false));
+        }
+
+        private async Task<bool> CheckSSID(string ssid)
+        {
+            if (!(ssid.Contains("No") || ssid.Contains("Multiple") || ssid == null) )
+            {
+                var check = await db.Students.Where(m => m.SSID == ssid).FirstOrDefaultAsync();
+                if (check != null)
+                    return true;
+                else
+                    return false;
+            }
+
+            return false;
         }
 
 

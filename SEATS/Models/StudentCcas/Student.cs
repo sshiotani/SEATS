@@ -25,7 +25,7 @@ namespace SEATS.Models
         //Enrollment info
         public Nullable<int> EnrollmentLocationID { get; set; }
         public Nullable<int> EnrollmentLocationSchoolNamesID { get; set; }
-        public string SchoolOfRecord { get; set; } // For private school students
+        public string SchoolOfRecord { get; set; } // For private lea students
         public Nullable<System.DateTime> GraduationDate { get; set; }
         public bool HasHomeSchoolRelease { get; set; }
 

@@ -54,7 +54,7 @@ namespace SEATS.Models
         public Nullable<int> EnrollmentLocationSchoolNamesID { get; set; }
         public List<SelectListItem> EnrollmentLocationSchoolNames { get; set; }
 
-        [Display(Name = "Student has a home school release.")]
+        [Display(Name = "Student has a home lea release.")]
         public bool HasHomeSchoolRelease { get; set; }
 
         // Credit Exceptions

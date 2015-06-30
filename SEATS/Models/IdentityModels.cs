@@ -25,6 +25,15 @@ namespace SEATS.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+       public ApplicationDbContext()
+            : base("DefaultConnection", throwIfV1Schema: false)
+        {
+        }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
         public DbSet<Student> Students { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<OnlineCourse> Courses { get; set; }
@@ -40,17 +49,6 @@ namespace SEATS.Models
         public DbSet<Location> Locations { get; set; }
         public DbSet<ProviderUser> ProviderUsers { get; set; }
         public DbSet<PrimaryUser> PrimaryUsers { get; set; }
-
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
         public System.Data.Entity.DbSet<SEATS.Models.PrimaryRejectionReasons> PrimaryRejectionReasons { get; set; }
 
         public System.Data.Entity.DbSet<SEATS.Models.ProviderRejectionReasons> ProviderRejectionReasons { get; set; }
@@ -131,7 +129,7 @@ namespace SEATS.Models
             foreach (var role in currentRoles)
             {
 
-                um.RemoveFromRole(userId, role.RoleId);
+               var idsuccess = um.RemoveFromRole(userId, role.RoleId);
 
             }
 

@@ -191,6 +191,7 @@ namespace SEATS.Controllers
                     {
                         idManager.AddUserToRole(user.Id, role.RoleName);
                     }
+                    
                 }
                 return RedirectToAction("index");
             }
