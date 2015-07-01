@@ -34,6 +34,7 @@ namespace SEATS.Controllers
 
         }
 
+
         // GET: CCAs
         /// <summary>
         /// Redirects User to the correct CCA interface according to their role.  Otherwise it creates a view designed for the 
@@ -822,6 +823,8 @@ namespace SEATS.Controllers
             {
                 var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
                 ViewBag.CourseCompletionStatusID = status;
+
+                ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
 
                 var leaId = ccaVm.Student.EnrollmentLocationID;
                 var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace SEATS.Models
 {
@@ -16,6 +17,10 @@ namespace SEATS.Models
         public OnlineCourse OnlineCourse { get; set; }
         public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
+        public IEnumerable<SelectListItem> CourseCreditList { get; set; }
+        public string Primary { get; set; }
+        public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
 
         //Items to be input by USOE 
         public Nullable<decimal> CourseFee { get; set; }

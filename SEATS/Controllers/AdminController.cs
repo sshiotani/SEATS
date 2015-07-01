@@ -15,13 +15,16 @@ namespace SEATS.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        //private SeatsContext db { get; set; }
 
+        private const short HOMESCHOOLID = 1; //LEA ID of a HOMESCHOOL student
+        private const short PRIVATESCHOOLID = 2; // ... PRIVATESCHOOL
         private ApplicationDbContext db { get; set; }
+        private SEATSEntities cactus { get; set; }
 
         public AdminController()
         {
             this.db = new ApplicationDbContext();
+            this.cactus = new SEATSEntities();
         }
 
         // GET: Admin
@@ -47,6 +50,16 @@ namespace SEATS.Controllers
                 {
                     var ccaVm = Mapper.Map<CCA, UsoeCcaViewModel>(cca);
                     ccaVm.CcaID = cca.ID;
+                    if (cca.EnrollmentLocationID == HOMESCHOOLID)
+                        ccaVm.Primary = "Homeschool";
+                    else if (cca.EnrollmentLocationID == PRIVATESCHOOLID)
+                        ccaVm.Primary = "Private";
+                    else
+                    {
+                        var primary = await cactus.CactusInstitutions.FindAsync(cca.EnrollmentLocationID).ConfigureAwait(false);
+                        ccaVm.Primary = primary.Name;
+                    }
+
                     ccaList.Add(ccaVm);
                 }
 

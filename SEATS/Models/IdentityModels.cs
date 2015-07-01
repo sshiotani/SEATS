@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 
 namespace SEATS.Models
@@ -23,9 +24,12 @@ namespace SEATS.Models
         public bool IsSetup { get; set; }
     }
 
+   
+
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-       public ApplicationDbContext()
+        public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
@@ -55,8 +59,8 @@ namespace SEATS.Models
 
         public System.Data.Entity.DbSet<SEATS.Models.CourseCompletionStatus> CourseCompletionStatus { get; set; }
 
-      
-        
+
+
     }
 
     public class IdentityManager
@@ -128,12 +132,12 @@ namespace SEATS.Models
 
             ApplicationDbContext db = new ApplicationDbContext();
 
-          
+
             foreach (var role in currentRoles)
             {
                 var roleName = db.Roles.Where(m => m.Id == role.RoleId).Select(m => m.Name).FirstOrDefault();
 
-               var idsuccess = um.RemoveFromRole(userId, roleName);
+                var idsuccess = um.RemoveFromRole(userId, roleName);
 
             }
 
