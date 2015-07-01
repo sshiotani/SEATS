@@ -71,12 +71,12 @@ namespace SEATS.Controllers
                 Mapper.CreateMap<CCA, CounselorCcaViewModel>();
                 var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
 
-                ccaVm.Session = await db.Session.Where(m => m.ID == ccaVm.SessionID).FirstOrDefaultAsync().ConfigureAwait(false);
-                ccaVm.OnlineCourse = await db.Courses.Where(m => m.ID == ccaVm.OnlineCourseID).FirstOrDefaultAsync().ConfigureAwait(false);
-                ccaVm.Provider = await db.Providers.Where(m => m.ID == ccaVm.ProviderID).FirstOrDefaultAsync().ConfigureAwait(false);
-                ccaVm.Student = await db.Students.Where(m => m.ID == ccaVm.StudentID).FirstOrDefaultAsync().ConfigureAwait(false);
-                ccaVm.CourseCredit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).FirstOrDefaultAsync().ConfigureAwait(false);
-
+                ccaVm.Session = await db.Session.FindAsync(ccaVm.SessionID).ConfigureAwait(false);
+                ccaVm.OnlineCourse = await db.Courses.FindAsync(ccaVm.OnlineCourseID).ConfigureAwait(false);
+                ccaVm.Provider = await db.Providers.FindAsync(ccaVm.ProviderID).ConfigureAwait(false);
+                ccaVm.Student = await db.Students.FindAsync(ccaVm.StudentID).ConfigureAwait(false);
+                ccaVm.CourseCredit = await db.CourseCredits.FindAsync(ccaVm.CourseCreditID).ConfigureAwait(false);
+                ccaVm.CompletionStatus = await db.CourseCompletionStatus.FindAsync(cca.CourseCompletionStatusID).ConfigureAwait(false);
                 ccaVm.CcaID = cca.ID;
 
                 ccaVmList.Add(ccaVm);
