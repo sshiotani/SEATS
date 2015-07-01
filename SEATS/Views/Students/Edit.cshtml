@@ -1,0 +1,278 @@
+﻿@model SEATS.Models.StudentViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.UserId)
+    
+    <div class="form-horizontal">
+        <h4>StudentViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentDOB, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.StudentDOB,  new { @class = "form-control datepicker" } )
+                @Html.ValidationMessageFor(model => model.StudentDOB, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StudentEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StudentEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StudentFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StudentFirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StudentLastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StudentLastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.StudentNumber, new { @class = "form-control", id = "studentNumber" } )
+                @Html.ValidationMessageFor(model => model.StudentNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SSID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.SSID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SSID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GraduationDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.GraduationDate,  new { @class = "form-control datepicker" } )
+                @Html.ValidationMessageFor(model => model.GraduationDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("District", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("EnrollmentLocationID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
+                   
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("School", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("EnrollmentLocationSchoolNamesID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNamesID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Private School", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SchoolOfRecord, new { htmlAttributes = new { @class = "form-control", id = "CurrentPrivateSchool" } })
+                @Html.ValidationMessageFor(model => model.SchoolOfRecord, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HasHomeSchoolRelease, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.HasHomeSchoolRelease)
+                    @Html.ValidationMessageFor(model => model.HasHomeSchoolRelease, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsEarlyGraduate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsEarlyGraduate)
+                    @Html.ValidationMessageFor(model => model.IsEarlyGraduate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsFeeWaived, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsFeeWaived)
+                    @Html.ValidationMessageFor(model => model.IsFeeWaived, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsSection504, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsSection504)
+                    @Html.ValidationMessageFor(model => model.IsSection504, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsIEP, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsIEP)
+                    @Html.ValidationMessageFor(model => model.IsIEP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+        $(function () {
+
+            ////Datepicker
+            //// Make the default start date 15 years ago today for birthdays of secondary schoolers.
+            //var start = new Date();
+            //start.setFullYear(start.getFullYear() - 15);
+
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true
+               
+            });
+
+            //$("#graduationdatePicker").datepicker({
+            //    changeMonth: true,
+            //    changeYear: true
+            //});
+
+
+            //$('input:radio:first').prop("checked", true).trigger("click");
+
+
+            //Enrollment DropdownLists
+            // If District is Home School the EnrollmentLocationSchoolID=-1
+            // If District is Private School the EnrollmentLocationSchoolID=0
+
+            $('#EnrollmentLocation').change(function () {
+
+                $('#CurrentSchool').empty();
+                var items = '<option value="">Select School</option>';
+                $('#CurrentSchool').html(items);
+
+               // var lea = $("#EnrollmentLocation option:selected").text();
+                var district = $("#EnrollmentLocation option:selected").val();
+                var districtName = $("#EnrollmentLocation option:selected").text();
+
+                if (districtName.toLowerCase().indexOf("home school") >= 0) {
+                    $("#studentNumber").prop('disabled', true).prop('required', false);
+                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
+                    $("#CounselorSection :input").attr('disabled', true);
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
+                    $("#HomeSchoolRelease").removeClass('hide');
+                    $('#SchoolId').val('-1');
+                }
+                else if (districtName.toLowerCase().indexOf("private school") >= 0) {
+                    $("#studentNumber").prop('disabled', true).prop('required', false);
+                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
+                    $("#CounselorSection :input").removeAttr('disabled');
+                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                    $("#HomeSchoolRelease").addClass('hide');
+                    $('#SchoolId').val("0");
+                }
+                else {
+                    $("#studentNumber").prop('disabled', false).prop('required', true);
+                    $("#CounselorSection :input").removeAttr('disabled');
+                    $("#CurrentSchool").prop('disabled', false).prop('required',true);
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
+                    $("#HomeSchoolRelease").addClass('hide');
+
+
+
+
+
+                    if (district != "") {
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetSchoolNames", "Students")',
+                            data: { district: district },
+                            dataType: 'json',
+                            success: function (schoolList) {
+
+                                $.each(schoolList, function (i, school) {
+
+                                    $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
+
+                                });
+                            },
+                            error: function (result) {
+                                alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                            }
+                        });
+                    }
+                    else {
+                        var items = '<option value="">Select Enrollment Location First</option>';
+                        $('#Course').html(items);
+                    }
+                }
+            });
+
+
+            $(".phone").mask("(999) 999-9999");
+
+        });
+    </script>
+}
+
+

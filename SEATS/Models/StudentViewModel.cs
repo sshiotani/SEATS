@@ -13,6 +13,9 @@ namespace SEATS.Models
     /// </summary>
     public class StudentViewModel
     {
+        public int ID { get; set; }
+        public string UserId { get; set; }
+     
         [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
@@ -35,6 +38,9 @@ namespace SEATS.Models
 
         [Display(Name = "Student Number")]
         public Nullable<int> StudentNumber { get; set; }
+
+        [Display(Name = "SSID")]
+        public string SSID { get; set; }
 
         [Required]
         [Display(Name = "Graduation Date")]
