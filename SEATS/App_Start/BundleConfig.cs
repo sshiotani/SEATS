@@ -29,13 +29,14 @@ namespace SEATS
                       ));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
-                "~/Content/bootstrap.css",
+                "~/Content/bootstrap.min.css",
+                "~/Content/font-awesome/css/font-awesome.min.css",
+                 "~/Content/animate.css",
+                "~/Content/style.css",
+                 "~/Content/default.css",
                        "~/Content/jquery-ui.css",
                        "~/Content/jquery.bootgrid.css",
-                       "~/Content/style.css",
-                         "~/Content/Site.css",
-                        "~/Content/default.css",
-                       "~/Content/animate.css"
+                         "~/Content/Site.css"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootgrid").Include(

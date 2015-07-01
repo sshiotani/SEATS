@@ -24,7 +24,7 @@ namespace SEATS.Controllers
         private const short MAXAGE = 17; // Not currently enrolled students must be under 18
         // Sets custom CactusInstitution IDs for EnrollmentLocation list.
         private const short HOMESCHOOLID = 1;
-        private const short PRIVATESCHOOLID = 2; 
+        private const short PRIVATESCHOOLID = 2;
         private ApplicationDbContext db = new ApplicationDbContext();
         //private SeatsContext db { get; set; }
         private SEATSEntities cactus = new SEATSEntities();
@@ -71,7 +71,7 @@ namespace SEATS.Controllers
         }
 
         // GET: Students/Details/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -79,13 +79,13 @@ namespace SEATS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
-           
+
             if (student == null)
             {
                 return HttpNotFound();
             }
 
-            if(student.EnrollmentLocationID == HOMESCHOOLID)
+            if (student.EnrollmentLocationID == HOMESCHOOLID)
             {
                 ViewBag.Lea = "Home School";
                 ViewBag.School = "Home School";
@@ -99,7 +99,10 @@ namespace SEATS.Controllers
             else
             {
                 ViewBag.Lea = await cactus.CactusInstitutions.Where(m => m.ID == student.EnrollmentLocationID).Select(m => m.Name).FirstAsync();
-                ViewBag.School = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstAsync();
+                if (student.EnrollmentLocationSchoolNamesID != null)
+                    ViewBag.School = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstAsync();
+                else
+                    ViewBag.School = "UNKNOWN";
             }
 
             return View(student);
@@ -110,22 +113,18 @@ namespace SEATS.Controllers
         {
             try
             {
-                StudentViewModel model;
+
 
                 // Check to see if this information already exists.  If not then create one.
-                var UserIdentity = User.Identity.GetUserId();
-                var student = await db.Students.Where(u => u.UserId == UserIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
-                if (student == null)
+                var userIdentity = User.Identity.GetUserId();
+                var student = await db.Students.Where(u => u.UserId == userIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (student != null)
                 {
-                    model = new StudentViewModel();
-
-                }
-                else
-                {
-                    //Send to finish setting up account.
-                    return RedirectToAction("Create", "Parent");
+                    //Delete entry in table make student re-enter data.
+                    db.Students.Remove(student);
                 }
 
+                StudentViewModel model = new StudentViewModel();
                 model = await GetClientSelectLists(model).ConfigureAwait(false); // Create SelectLists for Enrollment and Credit Exceptions
                 return View(model);
             }
@@ -195,7 +194,7 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="district"></param>
         /// <returns>json list with selectlist</returns>
-        public async Task<JsonResult> GetSchoolNames(decimal district)
+        public async Task<JsonResult> GetSchoolNames(int district)
         {
             try
             {
@@ -248,7 +247,7 @@ namespace SEATS.Controllers
 
                     var duplicate = await CheckSSID(student.SSID);
 
-                    if(duplicate)
+                    if (duplicate)
                     {
                         ViewBag.Message = "A student with this SSID already exists in our system.  Please contact us.";
                         return View("Error");
@@ -292,7 +291,7 @@ namespace SEATS.Controllers
 
         private async Task<bool> CheckSSID(string ssid)
         {
-            if (!(ssid.Contains("No") || ssid.Contains("Multiple") || ssid == null) )
+            if (!(ssid.Contains("No") || ssid.Contains("Multiple") || ssid == null))
             {
                 var check = await db.Students.Where(m => m.SSID == ssid).FirstOrDefaultAsync();
                 if (check != null)
@@ -358,28 +357,55 @@ namespace SEATS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Student student = await db.Students.FindAsync(id).ConfigureAwait(false);
+
+            Mapper.CreateMap<Student, StudentViewModel>();
+            var model = Mapper.Map<Student, StudentViewModel>(student);
+
             if (student == null)
             {
                 return HttpNotFound();
             }
-            return View(student);
+
+            var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+
+            return View(model);
+
         }
 
         // POST: Students/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Did not bind properties since it is an admin only method.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "StudentNumber,StudentEmail,EnrollmentLocationID,EnrollmentLocationSchoolNamesID,GraduationDate,IsEarlyGraduate,IsFeeWaived,IsIEP,IsPrimaryEnrollmentVerified,IsSection504,HasHomeSchoolRelease,SchoolOfRecord")] Student student)
+        public async Task<ActionResult> Edit(StudentViewModel model)
         {
             if (ModelState.IsValid)
             {
+                Mapper.CreateMap<StudentViewModel, Student>();
+                Student student = await db.Students.FindAsync(model.ID).ConfigureAwait(false);
+                Mapper.Map<StudentViewModel, Student>(model, student);
+
                 db.Entry(student).State = EntityState.Modified;
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
-            return View(student);
+
+            var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            return View(model);
         }
 
         // GET: Students/Edit/5
@@ -415,6 +441,8 @@ namespace SEATS.Controllers
             }
             return View(student);
         }
+
+
         // GET: Students/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
