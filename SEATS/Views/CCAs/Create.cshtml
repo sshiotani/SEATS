@@ -512,7 +512,8 @@
             $("#GradeCheckBox input[name='StudentGradeLevel']").click(function () {
                 if ($(this).val() == 7 || $(this).val() == 8) {
                     $('#dialog-GradeLevel').dialog({
-                        width: 500,
+                        width: 'auto',
+                        maxwidth: 500,
                         dialogClass: "no-close",
                         buttons: [
                           {
@@ -533,8 +534,9 @@
             $("#CreditRadio input[name$='HasExcessiveFED']").click(function () {
                 if ($('#YesExcessCredit').is(':checked')) {
                     $('#dialog-ExcessiveFED').dialog({
-                        width: 500,
+                        width: 'auto',
                         dialogClass: "no-close",
+                        maxwidth: 500,
                         buttons: [
                           {
                               text: "OK",
