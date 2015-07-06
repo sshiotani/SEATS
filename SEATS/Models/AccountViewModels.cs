@@ -125,7 +125,7 @@ namespace SEATS.Models
         {
             this.Email = user.Email;
             this.UserName = user.UserName;
-            this.Id = user.Id;
+            this.Id = user.Id;          
         }
 
         [Required]
@@ -135,6 +135,8 @@ namespace SEATS.Models
         public string UserName { get; set; }
 
         public string Id { get; set; }
+
+        public string RoleName { get; set; }
 
     }
 

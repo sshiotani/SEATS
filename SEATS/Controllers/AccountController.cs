@@ -70,6 +70,13 @@ namespace SEATS.Controllers
             foreach (var user in users)
             {
                 var u = new EditUserViewModel(user);
+                var role = user.Roles.FirstOrDefault();
+
+                if(role != null)
+                {
+                    u.RoleName = Db.Roles.Where(m => m.Id == role.RoleId).Select(m=>m.Name).FirstOrDefault();
+                }
+
                 model.Add(u);
             }
 

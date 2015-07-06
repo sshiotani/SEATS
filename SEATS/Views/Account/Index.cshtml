@@ -19,7 +19,9 @@
             <th data-column-id="username">
                 User Name
             </th>
-           
+            <th data-column-id="role">
+                Role
+            </th>
 
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
                 @Html.DisplayName("Actions")
@@ -36,7 +38,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
-              
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
 
