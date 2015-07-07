@@ -23,8 +23,7 @@ namespace SEATS.Controllers
 
         private const short MAXAGE = 17; // Not currently enrolled students must be under 18
         // Sets custom CactusInstitution IDs for EnrollmentLocation list.
-        private const short HOMESCHOOLID = 1;
-        private const short PRIVATESCHOOLID = 2;
+        
         private ApplicationDbContext db = new ApplicationDbContext();
         //private SeatsContext db { get; set; }
         private SEATSEntities cactus = new SEATSEntities();
@@ -85,15 +84,15 @@ namespace SEATS.Controllers
                 return HttpNotFound();
             }
 
-            if (student.EnrollmentLocationID == HOMESCHOOLID)
+            if (student.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
             {
-                ViewBag.Lea = "Home School";
-                ViewBag.School = "Home School";
+                ViewBag.Lea = "HOME SCHOOL";
+                ViewBag.School = "HOME SCHOOL";
 
             }
-            else if (student.EnrollmentLocationID == PRIVATESCHOOLID)
+            else if (student.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
             {
-                ViewBag.Lea = "Private School";
+                ViewBag.Lea = "PRIVATE SCHOOL";
                 ViewBag.School = student.SchoolOfRecord;
             }
             else
@@ -165,8 +164,8 @@ namespace SEATS.Controllers
             {
                 var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
-                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
                 var locations = leaList.Select(f => new SelectListItem
                 {
@@ -368,8 +367,8 @@ namespace SEATS.Controllers
 
             var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
-            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
             ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
@@ -400,8 +399,8 @@ namespace SEATS.Controllers
 
             var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = HOMESCHOOLID });
-            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = PRIVATESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
             ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);

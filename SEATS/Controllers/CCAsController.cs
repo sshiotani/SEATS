@@ -19,8 +19,7 @@ namespace SEATS.Controllers
     [Authorize]
     public class CCAsController : Controller
     {
-        private const short HOMESCHOOLID = 1; //LEA ID of a HOMESCHOOL student
-        private const short PRIVATESCHOOLID = 2; // ... PRIVATESCHOOL
+       
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
         //private SeatsContext db;
@@ -286,7 +285,7 @@ namespace SEATS.Controllers
                 await EmailCounselor(cca);
 
                 //Email Primary
-                if(!(cca.EnrollmentLocationID == HOMESCHOOLID || cca.EnrollmentLocationID == PRIVATESCHOOLID))
+                if(!(cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID || cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID))
                     await EmailPrimary(cca);
 
                 //Email Provider 
@@ -448,7 +447,7 @@ namespace SEATS.Controllers
             // Homeschoolers will be assigned Counselor at the ID=0 entry (now Cory Kanth)
             try
             {
-                if (cca.EnrollmentLocationID == PRIVATESCHOOLID || (cca.EnrollmentLocationID != HOMESCHOOLID && cca.CounselorID == 0))
+                if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID || (cca.EnrollmentLocationID != GlobalVariables.HOMESCHOOLID && cca.CounselorID == 0))
                 {
                     int counselorId = 0;
                     // Check for existing counselor entry
@@ -467,7 +466,7 @@ namespace SEATS.Controllers
                             Phone = ccaVm.CounselorPhoneNumber
                         };
 
-                        if (cca.EnrollmentLocationID != PRIVATESCHOOLID)
+                        if (cca.EnrollmentLocationID != GlobalVariables.PRIVATESCHOOLID)
                         {
                             counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
                             counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;

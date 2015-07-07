@@ -400,8 +400,10 @@
                     // Message for concurrent enrollment
                     if (categoryName == "Concurrent Enrollment")
                         $('#dialog-ConcurrentEnrollment').dialog({
-                            width: 500,
+                            width: 'auto',
                             dialogClass: "no-close",
+                            maxWidth: 500,
+                            fluid: true,
                             buttons: [
                               {
                                   text: "OK",
@@ -512,8 +514,9 @@
             $("#GradeCheckBox input[name='StudentGradeLevel']").click(function () {
                 if ($(this).val() == 7 || $(this).val() == 8) {
                     $('#dialog-GradeLevel').dialog({
+                        maxWidth: 500,
                         width: 'auto',
-                        maxwidth: 500,
+                        fluid: true,
                         dialogClass: "no-close",
                         buttons: [
                           {
@@ -536,7 +539,8 @@
                     $('#dialog-ExcessiveFED').dialog({
                         width: 'auto',
                         dialogClass: "no-close",
-                        maxwidth: 500,
+                        maxWidth: 500,
+                        fluid: true,
                         buttons: [
                           {
                               text: "OK",
@@ -557,6 +561,40 @@
                 }
             });
 
+            // on window resize run function
+            $(window).resize(function () {
+                fluidDialog();
+            });
+
+            // catch dialog if opened within a viewport smaller than the dialog width
+            $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+                fluidDialog();
+            });
+
+            //This function makes the dialog responsive but still maintains the maxWidth parameter.
+            function fluidDialog() {
+                var $visible = $(".ui-dialog:visible");
+                // each open dialog
+                $visible.each(function () {
+                    var $this = $(this);
+                    var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
+                    // if fluid option == true
+                    if (dialog.options.fluid) {
+                        var wWidth = $(window).width();
+                        // check window width against dialog width
+                        if (wWidth < (parseInt(dialog.options.maxWidth) + 50)) {
+                            // keep dialog from filling entire screen
+                            $this.css("max-width", "90%");
+                        } else {
+                            // fix maxWidth bug
+                            $this.css("max-width", dialog.options.maxWidth + "px");
+                        }
+                        //reposition dialog
+                        dialog.option("position", dialog.options.position);
+                    }
+                });
+
+            }
 
             $(".phone").mask("(999) 999-9999");
 

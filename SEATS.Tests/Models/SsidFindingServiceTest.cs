@@ -1,13 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using SEATS.Models.Services;
-using SEATS.Models;
-using Newtonsoft.Json;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace SEATS.Tests.Models

@@ -19,6 +19,7 @@ namespace SEATS.Controllers
     {
         private ApplicationDbContext db;
         private SEATSEntities cactus;
+      
 
         //private SeatsContext db { get; set; }
        
@@ -56,9 +57,9 @@ namespace SEATS.Controllers
 
                 line.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                if (cca.EnrollmentLocationID == 1)
+                if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
                     line.EnrollmentLocation = "HOME SCHOOL";
-                else if (cca.EnrollmentLocationID == 2)
+                else if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     line.EnrollmentLocation = "PRIVATE SCHOOL";
                 else
                     line.EnrollmentLocation = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
@@ -72,6 +73,10 @@ namespace SEATS.Controllers
 
                 line.CourseCategory = cca.CourseCategory.Name;
                 line.OnlineCourse = cca.OnlineCourse.Name;
+                line.CourseCompletionStatus = cca.CourseCompletionStatus;
+                line.IsBusinessAdministratorAcceptRejectEnrollment = cca.IsBusinessAdministratorAcceptRejectEnrollment;
+                line.CourseStartDate = cca.CourseStartDate;
+
 
                 report.Add(line);
 
@@ -102,32 +107,25 @@ namespace SEATS.Controllers
             table.Columns.Add("Distribution", typeof(string));
             table.Columns.Add("Category", typeof(string));
             table.Columns.Add("Course", typeof(string));
-
+            table.Columns.Add("Counselor Email", typeof(string));
+            table.Columns.Add("Parent Email", typeof(string));
+            table.Columns.Add("Start Date", typeof(string));
+        
             var ccas = db.CCAs.ToList();
 
             foreach (var cca in ccas)
             {
    
                 string primaryName;
-                if (cca.EnrollmentLocationID == 1)
+                if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
                     primaryName = "HOME SCHOOL";
-                else if (cca.EnrollmentLocationID == 2)
+                else if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     primaryName = "PRIVATE SCHOOL";
                 else
                     primaryName = cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefault();
                 
-                string providerName = db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefault();
-
-                string creditValue = db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefault();
-            
-                var categoryItem = db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefault();
-                string categoryName = categoryItem.Name;
                
-                string courseName = db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefault();
-              
-                decimal courseFee = db.CourseFees.Where(m => m.ID == categoryItem.CourseFeeID).Select(m => m.Fee).FirstOrDefault();
-
-                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, creditValue, primaryName, providerName, courseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, categoryName, courseName);
+                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, cca.Provider.Name, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name ,cca.Student.Parent.GuardianEmail,cca.Counselor.Email,cca.CourseStartDate);
             }
 
             TempData["Table"] = table;
@@ -152,7 +150,7 @@ namespace SEATS.Controllers
                 sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
 
                 //Format the header
-                using (ExcelRange rng = sheet.Cells["A1:N1"])
+                using (ExcelRange rng = sheet.Cells["A1:Q1"])
                 {
                     rng.Style.Font.Bold = true;
                     rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid

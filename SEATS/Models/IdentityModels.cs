@@ -135,7 +135,7 @@ namespace SEATS.Models
 
             foreach (var role in currentRoles)
             {
-                var roleName = db.Roles.Where(m => m.Id == role.RoleId).Select(m => m.Name).FirstOrDefault();
+                var roleName = await db.Roles.Where(m => m.Id == role.RoleId).Select(m => m.Name).FirstOrDefaultAsync();
 
                 var idsuccess = um.RemoveFromRole(userId, roleName);
 

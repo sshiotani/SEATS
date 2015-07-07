@@ -224,14 +224,14 @@ namespace SEATS.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult UserRoles(SelectUserRolesViewModel model)
+        public async Task<ActionResult> UserRoles(SelectUserRolesViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var idManager = new IdentityManager();
                 var Db = new ApplicationDbContext();
                 var user = Db.Users.First(u => u.Id == model.Id);
-                idManager.ClearUserRoles(user.Id);
+                await idManager.ClearUserRoles(user.Id);
                 foreach (var role in model.Roles)
                 {
                     if (role.Selected)
@@ -408,22 +408,31 @@ namespace SEATS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (model.Username.All(Char.IsLetterOrDigit))
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
 
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
-                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                    return View("DisplayEmail");
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        return View("DisplayEmail");
+                    }
+
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Characters in Username");
+                }
+                
             }
 
             // If we got this far, something failed, redisplay form
