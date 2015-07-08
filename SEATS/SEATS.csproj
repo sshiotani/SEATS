@@ -301,6 +301,10 @@
     <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618_log.ldf">
       <DependentUpon>aspnet-CcaRegistrationDf-20150320080618.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\handsontable\handsontable.css" />
+    <Content Include="Content\handsontable\handsontable.full.css" />
+    <Content Include="Content\handsontable\handsontable.full.min.css" />
+    <Content Include="Content\handsontable\handsontable.min.css" />
     <Content Include="Content\img\mt1.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.bootgrid.css" />
@@ -435,6 +439,10 @@
     </Content>
     <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\handsontable.full.js" />
+    <Content Include="Scripts\handsontable.full.min.js" />
+    <Content Include="Scripts\handsontable.js" />
+    <Content Include="Scripts\handsontable.min.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery.bootgrid.fa.js" />
@@ -448,7 +456,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Icon.png" />
+    <Content Include="Views\Icon.png" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

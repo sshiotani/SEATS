@@ -2,10 +2,12 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Web;
 
 
 namespace SEATS.Models
@@ -70,7 +72,6 @@ namespace SEATS.Models
         {
 
             var rm = new RoleManager<IdentityRole>(
-
                 new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
             return rm.RoleExists(name);
@@ -93,9 +94,8 @@ namespace SEATS.Models
         public bool CreateUser(ApplicationUser user, string password)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var idResult = um.Create(user, password);
 
@@ -106,9 +106,8 @@ namespace SEATS.Models
         public bool AddUserToRole(string userId, string roleName)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var idResult = um.AddToRole(userId, roleName);
 
@@ -120,9 +119,8 @@ namespace SEATS.Models
         public async Task ClearUserRoles(string userId)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var user = um.FindById(userId);
 
