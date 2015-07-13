@@ -58,6 +58,29 @@ namespace SEATS.Controllers
 
         }
 
+        // GET: CCAs for Provider
+        [Authorize(Roles = "Admin,Provider")]
+        public async Task<ActionResult> EditGrid()
+        {
+            // Look up all ccas associated with this provider
+
+            // Send to form to edit these ccas
+            var userId = User.Identity.GetUserId();
+            var providerUser = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
+
+            // Create list of viewmodels populated from ccas
+            var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+
+            var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
+            ViewBag.SchoolName = provider.Name;
+
+            // Send to form to edit these ccas
+            return View(ccaVmList);
+
+        }
+
         private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
         {
             Mapper.CreateMap<CCA, ProviderCcaViewModel>();

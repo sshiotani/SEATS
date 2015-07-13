@@ -12,6 +12,7 @@ using SEATS.Models;
 using AutoMapper;
 
 using Microsoft.AspNet.Identity.Owin;
+using System.Collections;
 
 
 namespace SEATS.Controllers
@@ -1151,6 +1152,7 @@ namespace SEATS.Controllers
                 throw;
             }
         }
+
         // POST: CCAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -1198,6 +1200,26 @@ namespace SEATS.Controllers
 
 
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
+        }
+
+        public async Task<ActionResult> BulkEdit(int[] rowIds)
+        {
+            try
+            {
+                //Set up datatable for the HandsOnTable.
+
+                return RedirectToAction("BulkEditTable");
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+
+            }
+        }
+
+        public ActionResult BulkEditTable()
+        {
+            return View();
         }
 
         // GET: CCAs/Details/5

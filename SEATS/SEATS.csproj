@@ -437,6 +437,9 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
+    <None Include=".bin\bower.cmd" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
     <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\handsontable.full.js" />
@@ -670,6 +673,8 @@
     <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
     <Content Include="Views\CCAs\CounselorEdit.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
+    <Content Include="Views\CCAs\BulkEditTable.cshtml" />
+    <Content Include="Views\ProviderUsers\EditGrid.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
