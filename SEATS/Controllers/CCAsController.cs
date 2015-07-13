@@ -821,7 +821,7 @@ namespace SEATS.Controllers
 
             try
             {
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status",ccaVm.CourseCompletionStatusID);
                 ViewBag.CourseCompletionStatusID = status;
 
                 ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
@@ -1006,7 +1006,7 @@ namespace SEATS.Controllers
                 ccaVm.CcaID = cca.ID;
 
                 var reasons = await db.PrimaryRejectionReasons.ToListAsync().ConfigureAwait(false);
-                ViewBag.PrimaryRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
+                ViewBag.PrimaryRejectionReasonsID = new SelectList(reasons, "ID", "Reason",ccaVm.PrimaryRejectionReasonsID);
 
                 return View(ccaVm);
             }
@@ -1141,7 +1141,7 @@ namespace SEATS.Controllers
 
                 var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
                 ViewBag.ProviderRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status",ccaVm.CourseCompletionStatusID);
                 ViewBag.CourseCompletionStatusID = status;
 
                 return ccaVm;

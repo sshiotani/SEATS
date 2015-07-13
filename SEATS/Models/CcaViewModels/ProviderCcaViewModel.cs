@@ -44,7 +44,7 @@ namespace SEATS.Models
         public Nullable<System.DateTime> DateReportPassingGrade { get; set; }
         
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
-        public bool IsProviderEnrollmentVerified { get; set; }
+        //public bool IsProviderEnrollmentVerified { get; set; }
         public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
