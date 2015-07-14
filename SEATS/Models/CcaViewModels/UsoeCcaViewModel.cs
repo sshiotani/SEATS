@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -41,5 +42,11 @@ namespace SEATS.Models
         public Nullable<System.DateTime> WithdrawalDate { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
         public string Notes { get; set; }
+        
+        // Added for uploading of existing CCAs.
+        [Display(Name = "Teacher Cactus ID")]
+        public Nullable<int> TeacherCactusID { get; set; }
+        public string TeacherFirstName { get; set; }
+        public string TeacherLastName { get; set; }
     }
 }
