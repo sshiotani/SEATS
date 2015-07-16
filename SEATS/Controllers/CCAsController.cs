@@ -1202,19 +1202,66 @@ namespace SEATS.Controllers
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
 
+        [HttpPost]
         public async Task<ActionResult> BulkEdit(int[] rowIds)
         {
             try
             {
-                //Set up datatable for the HandsOnTable.
-
-                return RedirectToAction("BulkEditTable");
+                var editRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync().ConfigureAwait(false);
+                Mapper.CreateMap<CCA, BulkEditViewModel>();
+                List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
+                foreach (var row in editRows)
+                {
+                    modelList.Add(Mapper.Map<CCA, BulkEditViewModel>(row));
+                }
+                
+                return Json(modelList);
             }
             catch
             {
                 throw new HttpException(500, "Error processing course information request.");
 
             }
+        }
+
+        //[Authorize(Roles="Provider")]
+        public async Task<ActionResult> BulkEditDummy()
+        {
+            return View();
+        }
+
+        //[Authorize(Roles="Provider")]
+        public async Task<ActionResult> BulkEditRows()
+        {
+                var modelList = TempData["BulkEditRows"] as List<BulkEditViewModel>;
+
+                return View(modelList);
+        }
+
+ 
+        [HttpPost]
+        public async Task<ActionResult> BulkEditRows(List<BulkEditViewModel> editedRows)
+        {
+            if (ModelState.IsValid) 
+            {
+                Mapper.CreateMap<BulkEditViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
+                foreach(var row in editedRows)
+                {
+                    var cca = await db.CCAs.Where(m => m.ID.Equals(row.CcaId)).FirstOrDefaultAsync();
+                    if(cca != null)
+                    {
+                        Mapper.Map<BulkEditViewModel, CCA>(row, cca);
+                    }
+
+                }
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return RedirectToAction("CcaInterface","ProviderUsers");
+            }
+
+            return View(editedRows);
+           
+            
+           
         }
 
         public ActionResult BulkEditTable()

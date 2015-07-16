@@ -217,6 +217,7 @@
     <Compile Include="Migrations\201506221835016_counselorsig.Designer.cs">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -675,6 +676,9 @@
     <Content Include="Views\Students\Edit.cshtml" />
     <Content Include="Views\CCAs\BulkEditTable.cshtml" />
     <Content Include="Views\ProviderUsers\EditGrid.cshtml" />
+    <Content Include="Views\CCAs\BulkEditRows.cshtml" />
+    <Content Include="Views\CCAs\BulkEditList.cshtml" />
+    <Content Include="Views\CCAs\BulkEditDummy.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>

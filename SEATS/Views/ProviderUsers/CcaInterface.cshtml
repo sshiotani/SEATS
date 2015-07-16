@@ -96,8 +96,9 @@
             </tr>
         }
     </tbody>
-
+    
 </table>
+
 
 
 @section Scripts {
@@ -128,14 +129,14 @@
                 for (var i = 0; i < rows.length; i++) {
                     rowIds.push(rows[i].Actionlinks);
                 }
-                alert("Select: " + rowIds.join(","));
+                //alert("Select: " + rowIds.join(","));
             }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
                 
                 for (var i = 0; i < rows.length; i++) {
                     var index = rowIds.indexOf(rows[i].Actionlinks);
                     rowIds.splice(index,1);
                 }
-                alert("Deselect: " + rowIds.join(","));
+                //alert("Deselect: " + rowIds.join(","));
             });
 
 
@@ -146,18 +147,14 @@
                     type: "POST",
                     url: '@Url.Action("BulkEdit", "CCAs")',
                     data: { rowIds: rowIds },
-                    dataType: 'json'
-                    //success: function (editRows) {
-
-                    //    $.each(editRows, function (i, course) {
-
-                    //        $('#Course').append("<option value='" + course.Value + "'>" + course.Text + "</option>");
-
-                    //    });
-                    //},
-                    //error: function (result) {
-                    //    alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
-                    //}
+                    dataType: 'json',
+                    success: function (result) {
+                        var w = window.open();
+                        $(w.document.body).html(result);
+                    },
+                    error: function (result) {
+                        alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                    }
                 })
             });
 

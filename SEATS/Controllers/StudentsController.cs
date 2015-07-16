@@ -258,11 +258,11 @@ namespace SEATS.Controllers
 
                     var count = await db.SaveChangesAsync().ConfigureAwait(false);
 
-                    if (count == 0) // Set account setup to true if successfully added
-                    {
-                        ViewBag.Message = "Unable to save student!";
-                        return View("Error");
-                    }
+                    //if (count == 0) // Set account setup to true if successfully added
+                    //{
+                    //    ViewBag.Message = "Unable to save student!";
+                    //    return View("Error");
+                    //}
 
                     // Check for parent association
                     if (student.ParentID == null || student.ParentID == 0)
