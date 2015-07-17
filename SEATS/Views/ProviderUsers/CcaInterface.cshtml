@@ -75,11 +75,13 @@
     </tbody>
 </table>
 
+<pre id="example1console" class="console">Click checkboxes to bulk edit rows.</pre>
+<button name="edit" id="bulk-edit" class="intext-btn hide">Bulk Edit</button>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <pre id="example1console" class="console">Click checkboxes to bulk edit rows.</pre>
+    <hr />
 
     <div class="form-horizontal hide" id="EditForm">
         <div class="form-group" id="BulkEdit">
@@ -108,14 +110,14 @@
                 @Html.ValidationMessageFor(model => model.BulkEdit.RowIds, "", new { @class = "text-danger" })
             </div>
 
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
 
-            <div class="form-group">
-                <div class="col-md-offset-1 col-md-11">
-
-                    <input id="submit" type="submit" value="Submit" class="btn btn-default" />
-                </div>
+                <input id="submit" type="submit" value="Submit" class="btn btn-default" />
             </div>
         </div>
+
     </div>
 }
 
@@ -126,7 +128,7 @@
 
     <script>
 
-       
+
         var rowIds = [];
         // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
         $(function () {
@@ -171,7 +173,7 @@
 
             $("button").click(function (e) {
                 $("#EditForm").removeClass('hide');
-                $("editRows").val(rowIds);
+                
 
             });
 
