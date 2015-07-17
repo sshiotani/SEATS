@@ -47,14 +47,21 @@ namespace SEATS.Controllers
 
             var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
 
+            ProviderCcaVmList vmList = new ProviderCcaVmList();
+
             // Create list of viewmodels populated from ccas
-            var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+            vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+
+            vmList.BulkEdit = new BulkEditViewModel();
 
             var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
             ViewBag.SchoolName = provider.Name;
 
+            var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
+            ViewBag.CourseCompletionStatusID = status;
+
             // Send to form to edit these ccas
-            return View(ccaVmList);
+            return View(vmList);
 
         }
 

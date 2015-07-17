@@ -240,6 +240,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\ProviderCcaVmList.cs" />
     <Compile Include="Models\GlobalVariables.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
