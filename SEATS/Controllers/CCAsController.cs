@@ -1212,7 +1212,10 @@ namespace SEATS.Controllers
                 List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
                 foreach (var row in editRows)
                 {
-                    modelList.Add(Mapper.Map<CCA, BulkEditViewModel>(row));
+                    var model = Mapper.Map<CCA, BulkEditViewModel>(row);
+                    model.CcaId = row.ID;
+
+                    modelList.Add(model);
                 }
                 
                 return Json(modelList);
@@ -1224,6 +1227,30 @@ namespace SEATS.Controllers
             }
         }
 
+    
+        public async Task<ActionResult> BulkSave(Object[] rows)
+        {
+            try
+            {
+                //var editRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync().ConfigureAwait(false);
+                //Mapper.CreateMap<CCA, BulkEditViewModel>();
+                //List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
+                //foreach (var row in editRows)
+                //{
+                //    var model = Mapper.Map<CCA, BulkEditViewModel>(row);
+                //    model.CcaId = row.ID;
+
+                //    modelList.Add(model);
+                //}
+
+                return Json(rows);
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+
+            }
+        }
         //[Authorize(Roles="Provider")]
         public async Task<ActionResult> BulkEditDummy()
         {

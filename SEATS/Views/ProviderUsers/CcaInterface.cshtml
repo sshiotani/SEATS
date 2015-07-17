@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SEATS.Models.ProviderCcaViewModel>
+﻿@model List<SEATS.Models.ProviderCcaViewModel>
 
 @section AddToHead{
     <link href="@Url.Content("~/Content/handsontable/handsontable.full.css")" rel="stylesheet" type="text/css" />
@@ -12,29 +12,16 @@
 
 <p></p>
 
-<div class="form-group">
-    <div class=" col-md-12">
-
-        <button id="bulk-edit">Bulk Edit</button>
-    </div>
-</div>
-
 
 <table id="grid-basic" class="table table-hover table-striped bg-white">
-
-
     <thead>
         <tr>
-
-
             <th data-column-id="Submission Date">
                 @Html.DisplayName("Submission Date")
             </th>
-
             <th data-column-id="fiscalyear">
                 @Html.DisplayName("Fiscal Year")
             </th>
-
             <th data-column-id="Student">
                 @Html.DisplayName("Student")
             </th>
@@ -50,29 +37,22 @@
             <th data-column-id="status">
                 @Html.DisplayName("Status")
             </th>
-
-
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false" data-type="numeric" data-identifier="true">
                 @Html.DisplayName("Actions")
             </th>
-
         </tr>
     </thead>
 
     <tbody>
         @foreach (var item in Model)
         {
-
             <tr>
-
                 <td>
                     @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.FiscalYear)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.Student.StudentLastName),
                     @Html.DisplayFor(modelItem => item.Student.StudentFirstName)
@@ -83,7 +63,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CourseCredit.Value)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.Primary)
                 </td>
@@ -92,12 +71,24 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CcaID)
+
                 </td>
             </tr>
         }
     </tbody>
-    
 </table>
+
+
+
+<div class="form-group">
+    <div class=" col-md-12">
+        <pre id="example1console" class="console">Click checkboxes to bulk edit rows.</pre>
+        <button name="edit" id="bulk-edit" class="intext-btn hide">Bulk Edit</button>
+        <button name="save" id="save" class="intext-btn hide">Save</button>
+        <div id="table" class="form-group"></div>
+    </div>
+</div>
+
 
 
 
@@ -125,37 +116,80 @@
                     }
                 }
             }).on("selected.rs.jquery.bootgrid", function (e, rows) {
-               
+                $("#bulk-edit").removeClass('hide');
                 for (var i = 0; i < rows.length; i++) {
                     rowIds.push(rows[i].Actionlinks);
+
                 }
                 //alert("Select: " + rowIds.join(","));
             }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
-                
+
                 for (var i = 0; i < rows.length; i++) {
                     var index = rowIds.indexOf(rows[i].Actionlinks);
-                    rowIds.splice(index,1);
+                    rowIds.splice(index, 1);
+
                 }
                 //alert("Deselect: " + rowIds.join(","));
             });
 
 
             $("button").click(function (e) {
-                
+                $("#save").removeClass('hide');
+                // var w = window.open("Edit");
+                // var divTable = "<div id=\"table\"></div>";
+                // w.document.write(divTable);
+                var container = document.getElementById('table'),hot;
 
+                var data = [];
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("BulkEdit", "CCAs")',
                     data: { rowIds: rowIds },
-                    dataType: 'json',
+                    // dataType: 'json',
                     success: function (result) {
-                        var w = window.open();
-                        $(w.document.body).html(result);
+                        var header = [];
+                        header.push("First Name", "Last Name", "CCA", "Status", "Completion Date", "Start Date", "Date Active Participant");
+                        data.push(header);
+                        $.each(result, function (i, value) {
+
+                            var status = "None";
+                            if (value.CourseCompletionStatus != null)
+                                status = value.CourseCompletionStatus.Status;
+                            var row = [];
+                            row.push(value.Student.StudentFirstName, value.Student.StudentLastName, value.CcaId, status, value.CourseCompletionDate, value.CourseStartDate, value.DateConfirmationActiveParticipation);
+                            data.push(row);
+                        });
+
+                        var hot = new Handsontable(container, {
+                            data: data,
+                            minSpareRows: 1,
+                            rowHeaders: true,
+                            colHeaders: true,
+                            contextMenu: true
+                        });
+
+                        Handsontable.Dom.addEvent(save, 'click', function () {
+                            // save all cell's data
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("BulkSave", "CCAs")',
+                                data: { rows: hot.getData() },
+                                success: function (result) {
+                                    if (response.result === 'ok') {
+                                        exampleConsole.innerText = 'Data saved';
+                                    }
+                                    else {
+                                        exampleConsole.innerText = 'Save error';
+                                    }
+                                }
+                            });
+                        });
                     },
                     error: function (result) {
                         alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
                     }
                 })
+
             });
 
 
@@ -166,5 +200,4 @@
 
     </script>
 }
-
 

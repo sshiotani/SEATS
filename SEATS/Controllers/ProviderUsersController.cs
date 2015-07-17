@@ -58,6 +58,21 @@ namespace SEATS.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CcaInterface(List<ProviderCcaViewModel> rowsToEdit)
+        {
+            // Look up all ccas associated with this provider
+
+            var editRows = rowsToEdit.Where(m => m.IsInBulkEdit == true).Select(m => m.CcaID);
+
+            // Send to form to edit these ccas
+
+            return View(editRows);
+
+        }
+
         // GET: CCAs for Provider
         [Authorize(Roles = "Admin,Provider")]
         public async Task<ActionResult> EditGrid()
