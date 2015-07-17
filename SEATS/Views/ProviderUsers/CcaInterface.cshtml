@@ -172,8 +172,19 @@
 
 
             $("button").click(function (e) {
-                $("#EditForm").removeClass('hide');
-                
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RowSave", "ProviderUsers")',
+                    data: { rowIds: rowIds },
+                    dataType: 'json',
+                    success: function () {
+                        $("#EditForm").removeClass('hide');
+                    },
+                    error: function () {
+                        alert('Service call failed');
+                    }
+                });
 
             });
 

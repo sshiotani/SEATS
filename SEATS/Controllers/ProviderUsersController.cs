@@ -70,6 +70,7 @@ namespace SEATS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CcaInterface(ProviderCcaVmList rowsToEdit)
         {
+            var rowIds = TempData["RowIds"] as int[];
             // Look up all ccas associated with this provider
 
            
@@ -80,6 +81,19 @@ namespace SEATS.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]      
+        public async Task<ActionResult> RowSave(int[] rowIds)
+        {
+            // Look up all ccas associated with this provider
+            TempData["RowIds"] = rowIds;
+
+
+            // Send to form to edit these ccas
+
+            return Json(rowIds);
+
+        }
         // GET: CCAs for Provider
         [Authorize(Roles = "Admin,Provider")]
         public async Task<ActionResult> EditGrid()
