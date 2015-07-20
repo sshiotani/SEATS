@@ -1078,6 +1078,15 @@ namespace SEATS.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                if (cCA.OnlineCourseID != 0)
+                {
+                    var course = await db.Courses.FindAsync(cCA.OnlineCourseID).ConfigureAwait(false);
+                    ViewBag.CoreCode = course.Code;
+                }
+                else
+                    ViewBag.CoreCode = " ";
+
                 return View(cCA);
             }
             catch (Exception ex)

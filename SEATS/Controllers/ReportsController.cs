@@ -98,7 +98,9 @@ namespace SEATS.Controllers
             table.Columns.Add("SSID", typeof(string));
             table.Columns.Add("Credit", typeof(string));
             table.Columns.Add("Primary", typeof(string));
+            table.Columns.Add("Primary Rejection Reason", typeof(string));
             table.Columns.Add("Provider", typeof(string));
+            table.Columns.Add("Provider Rejection Reason", typeof(string));
             table.Columns.Add("Course Fee", typeof(string));
             table.Columns.Add("Budget", typeof(decimal));
             table.Columns.Add("Prior", typeof(decimal));
@@ -123,9 +125,16 @@ namespace SEATS.Controllers
                     primaryName = "PRIVATE SCHOOL";
                 else
                     primaryName = cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefault();
-                
-               
-                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, cca.Provider.Name, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name ,cca.Student.Parent.GuardianEmail,cca.Counselor.Email,cca.CourseStartDate);
+
+                string primaryRejectionReason = "";
+                if (cca.PrimaryRejectionReasons != null)
+                    primaryRejectionReason = cca.PrimaryRejectionReasons.Reason;
+
+                string providerRejectionReason = "";
+                if (cca.ProviderRejectionReasons != null)
+                    providerRejectionReason = cca.ProviderRejectionReasons.Reason;
+
+                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
             }
 
             TempData["Table"] = table;
