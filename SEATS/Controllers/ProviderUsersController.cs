@@ -53,12 +53,15 @@ namespace SEATS.Controllers
             vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
             vmList.BulkEdit = new BulkEditViewModel();
-
+            
             var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
             ViewBag.SchoolName = provider.Name;
 
-            var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status");
-            ViewBag.CourseCompletionStatusID = status;
+            vmList.BulkEdit.CourseCompletionStatusList = db.CourseCompletionStatus.Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.Status
+            });
 
             // Send to form to edit these ccas
             return View(vmList);
@@ -71,13 +74,16 @@ namespace SEATS.Controllers
         public async Task<ActionResult> CcaInterface(ProviderCcaVmList rowsToEdit)
         {
             var rowIds = TempData["RowIds"] as int[];
-            // Look up all ccas associated with this provider
+            
+            // Look up ccas to update and update them 
 
-           
+            var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
 
-            // Send to form to edit these ccas
 
-            return View(rowsToEdit);
+            // Send updated rows to cca controller 
+            TempData["UpdatedRows"] = updatedRows;
+
+            return RedirectToAction("SaveBulkUpdate","CCAs");
 
         }
 

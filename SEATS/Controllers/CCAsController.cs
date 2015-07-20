@@ -20,7 +20,7 @@ namespace SEATS.Controllers
     [Authorize]
     public class CCAsController : Controller
     {
-       
+
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
         //private SeatsContext db;
@@ -282,18 +282,18 @@ namespace SEATS.Controllers
                 await EmailAdmin(cca);
 
                 //Email Counselor
-                
+
                 await EmailCounselor(cca);
 
                 //Email Primary
-                if(!(cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID || cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID))
+                if (!(cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID || cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID))
                     await EmailPrimary(cca);
 
                 //Email Provider 
-                
+
                 await EmailProvider(cca);
             }
-            catch 
+            catch
             {
                 throw;
             }
@@ -313,7 +313,7 @@ namespace SEATS.Controllers
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
             }
-            catch 
+            catch
             {
                 throw;
             }
@@ -335,7 +335,7 @@ namespace SEATS.Controllers
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
             }
-            catch 
+            catch
             {
                 throw;
             }
@@ -351,7 +351,7 @@ namespace SEATS.Controllers
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 var initial = cca.Student.StudentFirstName[0];
-                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + initial  + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
+                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + initial + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
             }
             catch
             {
@@ -378,7 +378,7 @@ namespace SEATS.Controllers
             {
                 throw;
             }
-           
+
         }
 
         private async Task EmailPrimary(CCA cca)
@@ -394,7 +394,7 @@ namespace SEATS.Controllers
                         IdentityMessage msg = new IdentityMessage();
                         msg.Destination = user.Email;
                         msg.Subject = "SEOP Application Received.";
-                        msg.Body = "<p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p>";                    
+                        msg.Body = "<p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p>";
 
                         EmailService emailService = new EmailService();
                         await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -407,7 +407,7 @@ namespace SEATS.Controllers
                     var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
                     var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
                     var school = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).FirstAsync();
-                    await userManager.SendEmailAsync(admin.Id, "NO PRIMARY USER FOUND!", "EDONLINE, A new application for SOEP has been received from <p>" + initial  + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>But a Primary user was not found for " + school + "</p>");
+                    await userManager.SendEmailAsync(admin.Id, "NO PRIMARY USER FOUND!", "EDONLINE, A new application for SOEP has been received from <p>" + initial + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>But a Primary user was not found for " + school + "</p>");
                 }
             }
             catch
@@ -821,7 +821,7 @@ namespace SEATS.Controllers
 
             try
             {
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status",ccaVm.CourseCompletionStatusID);
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
                 ViewBag.CourseCompletionStatusID = status;
 
                 ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
@@ -953,8 +953,8 @@ namespace SEATS.Controllers
                 try
                 {
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
-                    cca.IsCounselorSigned= ccaVm.IsCounselorSigned;
-                    cca.IsCourseConsistentWithStudentSEOP = ccaVm.IsCourseConsistentWithStudentSEOP;                  
+                    cca.IsCounselorSigned = ccaVm.IsCounselorSigned;
+                    cca.IsCourseConsistentWithStudentSEOP = ccaVm.IsCourseConsistentWithStudentSEOP;
 
                     db.Entry(cca).State = EntityState.Modified;
 
@@ -1006,7 +1006,7 @@ namespace SEATS.Controllers
                 ccaVm.CcaID = cca.ID;
 
                 var reasons = await db.PrimaryRejectionReasons.ToListAsync().ConfigureAwait(false);
-                ViewBag.PrimaryRejectionReasonsID = new SelectList(reasons, "ID", "Reason",ccaVm.PrimaryRejectionReasonsID);
+                ViewBag.PrimaryRejectionReasonsID = new SelectList(reasons, "ID", "Reason", ccaVm.PrimaryRejectionReasonsID);
 
                 return View(ccaVm);
             }
@@ -1077,6 +1077,15 @@ namespace SEATS.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                if (cCA.OnlineCourseID != 0)
+                {
+                    var course = await db.Courses.FindAsync(cCA.OnlineCourseID).ConfigureAwait(false);
+                    ViewBag.CoreCode = course.Code;
+                }
+                else
+                    ViewBag.CoreCode = " ";
+
                 return View(cCA);
             }
             catch (Exception ex)
@@ -1141,7 +1150,7 @@ namespace SEATS.Controllers
 
                 var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
                 ViewBag.ProviderRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status",ccaVm.CourseCompletionStatusID);
+                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
                 ViewBag.CourseCompletionStatusID = status;
 
                 return ccaVm;
@@ -1217,7 +1226,7 @@ namespace SEATS.Controllers
 
                     modelList.Add(model);
                 }
-                
+
                 return Json(modelList);
             }
             catch
@@ -1227,7 +1236,7 @@ namespace SEATS.Controllers
             }
         }
 
-    
+
         public async Task<ActionResult> BulkSave(Object[] rows)
         {
             try
@@ -1260,35 +1269,35 @@ namespace SEATS.Controllers
         //[Authorize(Roles="Provider")]
         public async Task<ActionResult> BulkEditRows()
         {
-                var modelList = TempData["BulkEditRows"] as List<BulkEditViewModel>;
+            var modelList = TempData["BulkEditRows"] as List<BulkEditViewModel>;
 
-                return View(modelList);
+            return View(modelList);
         }
 
- 
+
         [HttpPost]
         public async Task<ActionResult> BulkEditRows(List<BulkEditViewModel> editedRows)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 Mapper.CreateMap<BulkEditViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
-                foreach(var row in editedRows)
+                foreach (var row in editedRows)
                 {
                     var cca = await db.CCAs.Where(m => m.ID.Equals(row.CcaId)).FirstOrDefaultAsync();
-                    if(cca != null)
+                    if (cca != null)
                     {
                         Mapper.Map<BulkEditViewModel, CCA>(row, cca);
                     }
 
                 }
                 await db.SaveChangesAsync().ConfigureAwait(false);
-                return RedirectToAction("CcaInterface","ProviderUsers");
+                return RedirectToAction("CcaInterface", "ProviderUsers");
             }
 
             return View(editedRows);
-           
-            
-           
+
+
+
         }
 
         public ActionResult BulkEditTable()
