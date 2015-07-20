@@ -92,7 +92,7 @@ namespace SEATS.Controllers
         public ActionResult MakeDataTable()
         {
             DataTable table = new DataTable();
-
+            table.Columns.Add("Application Date", typeof(string));
             table.Columns.Add("First Name", typeof(string));
             table.Columns.Add("Last Name", typeof(string));
             table.Columns.Add("SSID", typeof(string));
@@ -134,7 +134,7 @@ namespace SEATS.Controllers
                 if (cca.ProviderRejectionReasons != null)
                     providerRejectionReason = cca.ProviderRejectionReasons.Reason;
 
-                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
+                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate), cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
             }
 
             TempData["Table"] = table;
