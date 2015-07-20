@@ -75,7 +75,7 @@
     </tbody>
 </table>
 
-<pre id="example1console" class="console">Click checkboxes to bulk edit rows.</pre>
+<pre id="example1console" class="console">Click 2 or more checkboxes to bulk edit rows.</pre>
 <button name="edit" id="bulk-edit" class="intext-btn hide">Bulk Edit</button>
 
 @using (Html.BeginForm())
@@ -138,7 +138,7 @@
                 multiSelect: true,
                 keepSelection: true,
                 caseSensitive: false,
-                rowCount: [-1, 25, 50, 100],
+                rowCount: [-1,10, 25, 50, 100],
                 formatters: {
 
                     "actions": function (column, row) {
@@ -149,19 +149,27 @@
                 }
             }).on("selected.rs.jquery.bootgrid", function (e, rows) {
                 $("#EditForm").addClass('hide');
-                $("#bulk-edit").removeClass('hide');
+                
                 for (var i = 0; i < rows.length; i++) {
                     rowIds.push(rows[i].Actionlinks);
 
                 }
+
+                if(rowIds.length >= 2)
+                    $("#bulk-edit").removeClass('hide');
+
                 //alert("Select: " + rowIds.join(","));
             }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
                 $("#EditForm").addClass('hide');
+               
                 for (var i = 0; i < rows.length; i++) {
                     var index = rowIds.indexOf(rows[i].Actionlinks);
                     rowIds.splice(index, 1);
 
                 }
+
+                if (rowIds.length < 2)
+                    $("#bulk-edit").addClass('hide');
                 //alert("Deselect: " + rowIds.join(","));
             });
 
