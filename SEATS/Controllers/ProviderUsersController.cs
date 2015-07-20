@@ -73,20 +73,22 @@ namespace SEATS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CcaInterface(ProviderCcaVmList rowsToEdit)
         {
-            var rowIds = TempData["RowIds"] as int[];
-            
-            // Look up ccas to update and update them 
 
-            var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
-
+            TempData["RowsToEdit"] = rowsToEdit; 
+                
 
             // Send updated rows to cca controller 
-            TempData["UpdatedRows"] = updatedRows;
-
             return RedirectToAction("SaveBulkUpdate","CCAs");
 
         }
 
+
+        /// <summary>
+        /// This method is used to save the rowIds selected by the providerUser during the bulkEdit process.  We populate it with an Ajax call and place the 
+        /// ids in tempdata for the 
+        /// </summary>
+        /// <param name="rowIds"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin,Provider")]
         [HttpPost]      
         public async Task<ActionResult> RowSave(int[] rowIds)

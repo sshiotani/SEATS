@@ -1211,8 +1211,8 @@ namespace SEATS.Controllers
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
 
-        [HttpPost]
-        public async Task<ActionResult> BulkEdit(int[] rowIds)
+        
+        public async Task<ActionResult> SaveBulkEdit(int[] rowIds)
         {
             try
             {
@@ -1236,23 +1236,37 @@ namespace SEATS.Controllers
             }
         }
 
-
-        public async Task<ActionResult> BulkSave(Object[] rows)
+        /// <summary>
+        /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> SaveBulkUpdate()
         {
             try
             {
-                //var editRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync().ConfigureAwait(false);
-                //Mapper.CreateMap<CCA, BulkEditViewModel>();
-                //List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
-                //foreach (var row in editRows)
-                //{
-                //    var model = Mapper.Map<CCA, BulkEditViewModel>(row);
-                //    model.CcaId = row.ID;
+                // rowIds are the select rows
+                var rowIds = TempData["RowIds"] as int[];
 
-                //    modelList.Add(model);
-                //}
+                // rows to Edit contain the updated values for the bulk update
+                var rowsToEdit = TempData["RowsToEdit"] as ProviderCcaVmList;
+             
+                var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
 
-                return Json(rows);
+                if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
+                    rowsToEdit.BulkEdit.CourseCompletionStatus = await db.CourseCompletionStatus.FindAsync(rowsToEdit.BulkEdit.CourseCompletionStatusID).ConfigureAwait(false);
+
+                foreach (var row in updatedRows)
+                {
+                    if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
+                    if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
+                    if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
+                    if (rowsToEdit.BulkEdit.DateConfirmationActiveParticipation != null) row.DateConfirmationActiveParticipation = rowsToEdit.BulkEdit.DateConfirmationActiveParticipation;
+
+                }
+
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return RedirectToAction("CcaInterface", "ProviderUsers");
+                
             }
             catch
             {
@@ -1260,51 +1274,7 @@ namespace SEATS.Controllers
 
             }
         }
-        //[Authorize(Roles="Provider")]
-        public async Task<ActionResult> BulkEditDummy()
-        {
-            return View();
-        }
-
-        //[Authorize(Roles="Provider")]
-        public async Task<ActionResult> BulkEditRows()
-        {
-            var modelList = TempData["BulkEditRows"] as List<BulkEditViewModel>;
-
-            return View(modelList);
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult> BulkEditRows(List<BulkEditViewModel> editedRows)
-        {
-            if (ModelState.IsValid)
-            {
-                Mapper.CreateMap<BulkEditViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
-                foreach (var row in editedRows)
-                {
-                    var cca = await db.CCAs.Where(m => m.ID.Equals(row.CcaId)).FirstOrDefaultAsync();
-                    if (cca != null)
-                    {
-                        Mapper.Map<BulkEditViewModel, CCA>(row, cca);
-                    }
-
-                }
-                await db.SaveChangesAsync().ConfigureAwait(false);
-                return RedirectToAction("CcaInterface", "ProviderUsers");
-            }
-
-            return View(editedRows);
-
-
-
-        }
-
-        public ActionResult BulkEditTable()
-        {
-            return View();
-        }
-
+        
         // GET: CCAs/Details/5
         /// <summary>
         /// This method provides details of the CCA to the Provider .

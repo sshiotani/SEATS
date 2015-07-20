@@ -148,6 +148,7 @@
                     }
                 }
             }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+                $("#EditForm").addClass('hide');
                 $("#bulk-edit").removeClass('hide');
                 for (var i = 0; i < rows.length; i++) {
                     rowIds.push(rows[i].Actionlinks);
@@ -155,17 +156,17 @@
                 }
                 //alert("Select: " + rowIds.join(","));
             }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
-
+                $("#EditForm").addClass('hide');
                 for (var i = 0; i < rows.length; i++) {
                     var index = rowIds.indexOf(rows[i].Actionlinks);
-                    rowIds.val().splice(index, 1);
+                    rowIds.splice(index, 1);
 
                 }
                 //alert("Deselect: " + rowIds.join(","));
             });
 
 
-            $("button").click(function (e) {
+            $("#bulk-edit").click(function (e) {
 
                 $.ajax({
                     type: "POST",
