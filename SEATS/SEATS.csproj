@@ -206,7 +206,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ManualAddController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
     <Compile Include="Controllers\ProviderRejectionReasonsController.cs" />
@@ -218,6 +217,7 @@
     <Compile Include="Migrations\201506221835016_counselorsig.Designer.cs">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -240,6 +240,7 @@
       <DependentUpon>Cactus.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\ProviderCcaVmList.cs" />
     <Compile Include="Models\GlobalVariables.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />
@@ -302,6 +303,10 @@
     <Content Include="App_Data\aspnet-CcaRegistrationDf-20150320080618_log.ldf">
       <DependentUpon>aspnet-CcaRegistrationDf-20150320080618.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\handsontable\handsontable.css" />
+    <Content Include="Content\handsontable\handsontable.full.css" />
+    <Content Include="Content\handsontable\handsontable.full.min.css" />
+    <Content Include="Content\handsontable\handsontable.min.css" />
     <Content Include="Content\img\mt1.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.bootgrid.css" />
@@ -434,8 +439,15 @@
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
+    <None Include=".bin\bower.cmd" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
     <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\handsontable.full.js" />
+    <Content Include="Scripts\handsontable.full.min.js" />
+    <Content Include="Scripts\handsontable.js" />
+    <Content Include="Scripts\handsontable.min.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery.bootgrid.fa.js" />
@@ -449,7 +461,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Icon.png" />
+    <Content Include="Views\Icon.png" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -663,8 +675,11 @@
     <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
     <Content Include="Views\CCAs\CounselorEdit.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
-    <Content Include="Views\ManualAdd\Register.cshtml" />
-    <Content Include="Views\ManualAdd\Login.cshtml" />
+    <Content Include="Views\CCAs\BulkEditTable.cshtml" />
+    <Content Include="Views\ProviderUsers\EditGrid.cshtml" />
+    <Content Include="Views\CCAs\BulkEditRows.cshtml" />
+    <Content Include="Views\CCAs\BulkEditList.cshtml" />
+    <Content Include="Views\CCAs\BulkEditDummy.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -686,7 +701,6 @@
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

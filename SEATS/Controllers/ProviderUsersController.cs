@@ -47,6 +47,73 @@ namespace SEATS.Controllers
 
             var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
 
+            ProviderCcaVmList vmList = new ProviderCcaVmList();
+
+            // Create list of viewmodels populated from ccas
+            vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+
+            vmList.BulkEdit = new BulkEditViewModel();
+            
+            var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
+            ViewBag.SchoolName = provider.Name;
+
+            vmList.BulkEdit.CourseCompletionStatusList = db.CourseCompletionStatus.Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.Status
+            });
+
+            // Send to form to edit these ccas
+            return View(vmList);
+
+        }
+
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CcaInterface(ProviderCcaVmList rowsToEdit)
+        {
+
+            TempData["RowsToEdit"] = rowsToEdit; 
+                
+
+            // Send updated rows to cca controller 
+            return RedirectToAction("SaveBulkUpdate","CCAs");
+
+        }
+
+
+        /// <summary>
+        /// This method is used to save the rowIds selected by the providerUser during the bulkEdit process.  We populate it with an Ajax call and place the 
+        /// ids in tempdata for the 
+        /// </summary>
+        /// <param name="rowIds"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]      
+        public async Task<ActionResult> RowSave(int[] rowIds)
+        {
+            // Look up all ccas associated with this provider
+            TempData["RowIds"] = rowIds;
+
+
+            // Send to form to edit these ccas
+
+            return Json(rowIds);
+
+        }
+        // GET: CCAs for Provider
+        [Authorize(Roles = "Admin,Provider")]
+        public async Task<ActionResult> EditGrid()
+        {
+            // Look up all ccas associated with this provider
+
+            // Send to form to edit these ccas
+            var userId = User.Identity.GetUserId();
+            var providerUser = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
+
             // Create list of viewmodels populated from ccas
             var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 

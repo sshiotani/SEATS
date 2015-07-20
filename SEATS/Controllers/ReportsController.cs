@@ -19,10 +19,10 @@ namespace SEATS.Controllers
     {
         private ApplicationDbContext db;
         private SEATSEntities cactus;
-      
+
 
         //private SeatsContext db { get; set; }
-       
+
         public ReportsController()
         {
             this.db = new ApplicationDbContext();
@@ -41,7 +41,7 @@ namespace SEATS.Controllers
         private async Task<List<ReportViewModel>> DisplayReport()
         {
             var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
-            
+
             List<ReportViewModel> report = new List<ReportViewModel>();
 
             foreach (var cca in ccas)
@@ -69,7 +69,7 @@ namespace SEATS.Controllers
                 line.PriorDisbursementProvider = cca.PriorDisbursementProvider;
                 line.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
 
-               
+
 
                 line.CourseCategory = cca.CourseCategory.Name;
                 line.OnlineCourse = cca.OnlineCourse.Name;
@@ -92,7 +92,7 @@ namespace SEATS.Controllers
         public ActionResult MakeDataTable()
         {
             DataTable table = new DataTable();
-            table.Columns.Add("Application Date", typeof(string));
+            table.Columns.Add("Submission Date", typeof(string));
             table.Columns.Add("First Name", typeof(string));
             table.Columns.Add("Last Name", typeof(string));
             table.Columns.Add("SSID", typeof(string));
@@ -112,12 +112,12 @@ namespace SEATS.Controllers
             table.Columns.Add("Counselor Email", typeof(string));
             table.Columns.Add("Parent Email", typeof(string));
             table.Columns.Add("Start Date", typeof(string));
-        
+
             var ccas = db.CCAs.ToList();
 
             foreach (var cca in ccas)
             {
-   
+
                 string primaryName;
                 if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
                     primaryName = "HOME SCHOOL";
@@ -134,7 +134,12 @@ namespace SEATS.Controllers
                 if (cca.ProviderRejectionReasons != null)
                     providerRejectionReason = cca.ProviderRejectionReasons.Reason;
 
-                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate), cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
+
+
+
+
+
+                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate),cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
             }
 
             TempData["Table"] = table;
@@ -169,13 +174,13 @@ namespace SEATS.Controllers
 
                 //Write it back to the client
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;  filename=Monthly-" + String.Format("{0:MM-dd-yyyy}",DateTime.Now) +".xlsx");
+                Response.AddHeader("content-disposition", "attachment;  filename=Monthly-" + String.Format("{0:MM-dd-yyyy}", DateTime.Now) + ".xlsx");
                 Response.BinaryWrite(package.GetAsByteArray());
 
             }
         }
 
-       
+
 
     }
 }

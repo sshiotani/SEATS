@@ -50,5 +50,7 @@ namespace SEATS.Models
         public string ProviderExplanationRejection { get; set; }
         public Nullable<int> ProviderRejectionReasonsID { get; set; }
         public string ProviderNotes { get; set; }
+
+        public bool IsInBulkEdit { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using SEATS.Models;
 using AutoMapper;
 
 using Microsoft.AspNet.Identity.Owin;
+using System.Collections;
 
 
 namespace SEATS.Controllers
@@ -1162,6 +1163,7 @@ namespace SEATS.Controllers
                 throw;
             }
         }
+
         // POST: CCAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -1211,6 +1213,70 @@ namespace SEATS.Controllers
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
 
+        
+        public async Task<ActionResult> SaveBulkEdit(int[] rowIds)
+        {
+            try
+            {
+                var editRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync().ConfigureAwait(false);
+                Mapper.CreateMap<CCA, BulkEditViewModel>();
+                List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
+                foreach (var row in editRows)
+                {
+                    var model = Mapper.Map<CCA, BulkEditViewModel>(row);
+                    model.CcaId = row.ID;
+
+                    modelList.Add(model);
+                }
+
+                return Json(modelList);
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+
+            }
+        }
+
+        /// <summary>
+        /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> SaveBulkUpdate()
+        {
+            try
+            {
+                // rowIds are the select rows
+                var rowIds = TempData["RowIds"] as int[];
+
+                // rows to Edit contain the updated values for the bulk update
+                var rowsToEdit = TempData["RowsToEdit"] as ProviderCcaVmList;
+             
+                var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
+
+                if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
+                    rowsToEdit.BulkEdit.CourseCompletionStatus = await db.CourseCompletionStatus.FindAsync(rowsToEdit.BulkEdit.CourseCompletionStatusID).ConfigureAwait(false);
+
+                foreach (var row in updatedRows)
+                {
+                    if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
+                    if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
+                    if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
+                    if (rowsToEdit.BulkEdit.DateConfirmationActiveParticipation != null) row.DateConfirmationActiveParticipation = rowsToEdit.BulkEdit.DateConfirmationActiveParticipation;
+
+                }
+
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return RedirectToAction("CcaInterface", "ProviderUsers");
+                
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+
+            }
+        }
+        
         // GET: CCAs/Details/5
         /// <summary>
         /// This method provides details of the CCA to the Provider .

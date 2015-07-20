@@ -29,5 +29,6 @@ namespace SEATS.Models
   
         public string PrimaryNotes { get; set; }
         public int PrimaryRejectionReasonsID { get; set; }
+        
     }
 }

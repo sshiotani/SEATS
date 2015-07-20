@@ -21,6 +21,7 @@ namespace SEATS.Models
         public IEnumerable<SelectListItem> CourseCreditList { get; set; }
         public string Primary { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public int MyProperty { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
 
         //Items to be input by USOE 
