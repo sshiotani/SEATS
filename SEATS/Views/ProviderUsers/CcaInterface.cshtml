@@ -94,11 +94,11 @@
                 @Html.ValidationMessageFor(model => model.BulkEdit.CourseStartDate, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.BulkEdit.DateConfirmationActiveParticipation, new { @class = "form-control datepicker", id = "activeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Date Active Partipant" })
+                @Html.TextBoxFor(model => model.BulkEdit.DateConfirmationActiveParticipation, new { @class = "form-control datepicker", id = "activeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Date Active" })
                 @Html.ValidationMessageFor(model => model.BulkEdit.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-                @Html.TextBoxFor(model => model.BulkEdit.CourseCompletionDate, new { @class = "form-control datepicker", id = "completeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Completion Date" })
+                @Html.TextBoxFor(model => model.BulkEdit.CourseCompletionDate, new { @class = "form-control datepicker", id = "completeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Date Completed" })
                 @Html.ValidationMessageFor(model => model.BulkEdit.CourseCompletionDate, "", new { @class = "text-danger" })
             </div>
         </div>
