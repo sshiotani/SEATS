@@ -676,7 +676,6 @@
     <Content Include="Views\CCAs\CounselorEdit.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
     <Content Include="Views\CCAs\BulkEditTable.cshtml" />
-    <Content Include="Views\ProviderUsers\EditGrid.cshtml" />
     <Content Include="Views\CCAs\BulkEditRows.cshtml" />
     <Content Include="Views\CCAs\BulkEditList.cshtml" />
     <Content Include="Views\CCAs\BulkEditDummy.cshtml" />

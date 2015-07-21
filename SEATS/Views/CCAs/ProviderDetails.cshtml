@@ -242,6 +242,13 @@
         <dd>
             @Html.DisplayFor(model => model.OnlineCourse.Name)
         </dd>
+        <dt>
+            @Html.DisplayName("Course Code")
+        </dt>
+
+        <dd>
+            @ViewBag.CoreCode
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.CourseCategory)

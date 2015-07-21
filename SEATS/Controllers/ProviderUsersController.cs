@@ -57,7 +57,12 @@ namespace SEATS.Controllers
             var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
             ViewBag.SchoolName = provider.Name;
 
-            vmList.BulkEdit.CourseCompletionStatusList = db.CourseCompletionStatus.Select(f => new SelectListItem
+            
+            var statusList = await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false);;
+
+            statusList.Insert(0, new CourseCompletionStatus { ID=0, Status = "Select Status" });
+
+            vmList.BulkEdit.CourseCompletionStatusList = statusList.Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
                 Text = f.Status
@@ -102,29 +107,7 @@ namespace SEATS.Controllers
             return Json(rowIds);
 
         }
-        // GET: CCAs for Provider
-        [Authorize(Roles = "Admin,Provider")]
-        public async Task<ActionResult> EditGrid()
-        {
-            // Look up all ccas associated with this provider
-
-            // Send to form to edit these ccas
-            var userId = User.Identity.GetUserId();
-            var providerUser = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
-
-            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
-
-            // Create list of viewmodels populated from ccas
-            var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
-
-            var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
-            ViewBag.SchoolName = provider.Name;
-
-            // Send to form to edit these ccas
-            return View(ccaVmList);
-
-        }
-
+       
         private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
         {
             Mapper.CreateMap<CCA, ProviderCcaViewModel>();

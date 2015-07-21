@@ -1212,32 +1212,7 @@ namespace SEATS.Controllers
 
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
-
-        
-        public async Task<ActionResult> SaveBulkEdit(int[] rowIds)
-        {
-            try
-            {
-                var editRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync().ConfigureAwait(false);
-                Mapper.CreateMap<CCA, BulkEditViewModel>();
-                List<BulkEditViewModel> modelList = new List<BulkEditViewModel>();
-                foreach (var row in editRows)
-                {
-                    var model = Mapper.Map<CCA, BulkEditViewModel>(row);
-                    model.CcaId = row.ID;
-
-                    modelList.Add(model);
-                }
-
-                return Json(modelList);
-            }
-            catch
-            {
-                throw new HttpException(500, "Error processing course information request.");
-
-            }
-        }
-
+     
         /// <summary>
         /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
         /// </summary>
@@ -1297,6 +1272,15 @@ namespace SEATS.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                if (cCA.OnlineCourseID != 0)
+                {
+                    var course = await db.Courses.FindAsync(cCA.OnlineCourseID).ConfigureAwait(false);
+                    ViewBag.CoreCode = course.Code;
+                }
+                else
+                    ViewBag.CoreCode = " ";
+
                 return View(cCA);
             }
             catch (Exception ex)
