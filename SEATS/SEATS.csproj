@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -206,6 +207,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManualAddController.cs" />
     <Compile Include="Controllers\OnlineCoursesController.cs" />
     <Compile Include="Controllers\ParentsController.cs" />
     <Compile Include="Controllers\ProviderRejectionReasonsController.cs" />
@@ -679,6 +681,8 @@
     <Content Include="Views\CCAs\BulkEditRows.cshtml" />
     <Content Include="Views\CCAs\BulkEditList.cshtml" />
     <Content Include="Views\CCAs\BulkEditDummy.cshtml" />
+    <Content Include="Views\ManualAdd\Login.cshtml" />
+    <Content Include="Views\ManualAdd\Register.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
