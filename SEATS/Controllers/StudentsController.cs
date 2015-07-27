@@ -22,8 +22,8 @@ namespace SEATS.Controllers
     {
 
         private const short MAXAGE = 17; // Not currently enrolled students must be under 18
-        // Sets custom CactusInstitution IDs for EnrollmentLocation list.
-        
+                                         // Sets custom CactusInstitution IDs for EnrollmentLocation list.
+
         private ApplicationDbContext db = new ApplicationDbContext();
         //private SeatsContext db { get; set; }
         private SEATSEntities cactus = new SEATSEntities();
@@ -59,7 +59,7 @@ namespace SEATS.Controllers
                 return View(primaryStudents);
             }
 
-            var student = await db.Students.Where(u => u.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var student = await db.Students.FirstOrDefaultAsync(u => u.UserId == userId).ConfigureAwait(false);
 
             if (student != null)
             {
@@ -97,12 +97,17 @@ namespace SEATS.Controllers
             }
             else
             {
-                ViewBag.Lea = await cactus.CactusInstitutions.Where(m => m.ID == student.EnrollmentLocationID).Select(m => m.Name).FirstAsync();
+                if (student.EnrollmentLocationID != null)
+                    ViewBag.Lea = await cactus.CactusInstitutions.Where(m => m.ID == student.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync();
+                else
+                    ViewBag.Lea = "UNKNOWN";
+
                 if (student.EnrollmentLocationSchoolNamesID != null)
-                    ViewBag.School = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstAsync();
+                    ViewBag.School = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefaultAsync();
                 else
                     ViewBag.School = "UNKNOWN";
             }
+
 
             return View(student);
         }
@@ -116,7 +121,7 @@ namespace SEATS.Controllers
 
                 // Check to see if this information already exists.  If not then create one.
                 var userIdentity = User.Identity.GetUserId();
-                var student = await db.Students.Where(u => u.UserId == userIdentity).FirstOrDefaultAsync().ConfigureAwait(false);
+                var student = await db.Students.FirstOrDefaultAsync(u => u.UserId == userIdentity).ConfigureAwait(false);
                 if (student != null)
                 {
                     //Delete entry in table make student re-enter data.
@@ -199,10 +204,10 @@ namespace SEATS.Controllers
             {
 
                 IEnumerable<SelectListItem> schoolNameList;
-                var schoolList = await cactus.CactusSchools.OrderByDescending(m=>m.ID).ToListAsync().ConfigureAwait(false);
-                schoolList.RemoveAll(m => m.Name == null);           
+                var schoolList = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
+                schoolList.RemoveAll(m => m.Name == null);
                 var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
-               
+
                 schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
@@ -294,7 +299,7 @@ namespace SEATS.Controllers
         {
             if (!(ssid.Contains("No") || ssid.Contains("Multiple") || ssid == null))
             {
-                var check = await db.Students.Where(m => m.SSID == ssid).FirstOrDefaultAsync();
+                var check = await db.Students.FirstOrDefaultAsync(m => m.SSID == ssid);
                 if (check != null)
                     return true;
                 else

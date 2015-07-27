@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SEATS.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,7 +13,7 @@ namespace SEATS.Controllers
 {
     [Authorize]
     public class ManualAddController : Controller
-    {
+    {  
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -51,6 +52,8 @@ namespace SEATS.Controllers
                 _userManager = value;
             }
         }
+
+        
 
         //
         // GET: /Account/Register
@@ -93,7 +96,18 @@ namespace SEATS.Controllers
             return View(model);
         }
 
-      
+        //
+        // POST: /Account/LogOff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
+       
+
         #region Helpers
 
 
