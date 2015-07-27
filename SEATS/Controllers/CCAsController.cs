@@ -223,7 +223,7 @@ namespace SEATS.Controllers
                     ccaVm.UserId = userId;
 
                     //Get student associated with this user
-                    Student student = await db.Students.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
 
                     // Map ViewModel to CCA and student
                     CCA cca = MapModel(ccaVm, student);
@@ -405,8 +405,8 @@ namespace SEATS.Controllers
                     var initial = cca.Student.StudentFirstName[0];
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                     var adminRole = await db.Roles.Where(m => m.Name == "Admin").Select(m => m.Id).FirstOrDefaultAsync().ConfigureAwait(false);
-                    var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
-                    var school = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).FirstAsync();
+                    var admin = await db.Users.FirstOrDefaultAsync(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).ConfigureAwait(false);
+                    var school = await cactus.CactusInstitutions.FirstOrDefaultAsync(m => m.ID == cca.EnrollmentLocationID).ConfigureAwait(false);
                     await userManager.SendEmailAsync(admin.Id, "NO PRIMARY USER FOUND!", "EDONLINE, A new application for SOEP has been received from <p>" + initial + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>But a Primary user was not found for " + school + "</p>");
                 }
             }
@@ -471,7 +471,7 @@ namespace SEATS.Controllers
                         {
                             counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
                             counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
-                            var school = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).FirstOrDefaultAsync().ConfigureAwait(false);
+                            var school = await cactus.CactusSchools.FirstOrDefaultAsync(m => m.ID == student.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
 
                             counselor.School = school.Name;
 
@@ -1141,19 +1141,16 @@ namespace SEATS.Controllers
                 ccaVm.CcaID = cca.ID;
                 var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
                 var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
-                var providerCourses = db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID);
+                var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
-                var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync();
+                var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync().ConfigureAwait(false);
                 ccaVm.CourseCreditList = new SelectList(credit, "ID", "Value", ccaVm.CourseCreditID);
 
                 ViewBag.SessionID = sessionList;
                 ViewBag.CourseCategoryID = categoryList;
                 ViewBag.OnlineCourseID = courseList;
-
-                var reasons = await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false);
-                ViewBag.ProviderRejectionReasonsID = new SelectList(reasons, "ID", "Reason");
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
-                ViewBag.CourseCompletionStatusID = status;
+                ViewBag.ProviderRejectionReasonsID = new SelectList(await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason",ccaVm.ProviderRejectionReasonsID);
+                ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 return ccaVm;
 

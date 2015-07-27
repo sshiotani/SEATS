@@ -37,7 +37,7 @@ namespace SEATS.Controllers
             {
                 var userVm = new PrimaryUserViewModel();
                 userVm.PrimaryUser = user;
-                userVm.Lea = await cactus.CactusInstitutions.Where(m => m.ID == user.EnrollmentLocationID).Select(c => c.Name).FirstAsync();
+                userVm.Lea = await cactus.CactusInstitutions.Where(m => m.ID == user.EnrollmentLocationID).Select(c => c.Name).FirstOrDefaultAsync();
                 //userVm.School = await cactus.CactusSchools.Where(m => m.ID == user.EnrollmentLocationSchoolNameID).Select(c => c.Name).FirstAsync();
                 userList.Add(userVm);
             }
@@ -52,7 +52,7 @@ namespace SEATS.Controllers
         {
             // Look up all ccas associated with this primary
             var userId = User.Identity.GetUserId();
-            var lea = await db.PrimaryUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var lea = await db.PrimaryUsers.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
             var ccas = await db.CCAs.Where(m => m.EnrollmentLocationID == lea.EnrollmentLocationID).ToListAsync().ConfigureAwait(false);
 
