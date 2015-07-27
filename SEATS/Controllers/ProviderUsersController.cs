@@ -43,7 +43,7 @@ namespace SEATS.Controllers
 
             // Send to form to edit these ccas
             var userId = User.Identity.GetUserId();
-            var providerUser = await db.ProviderUsers.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var providerUser = await db.ProviderUsers.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
             var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
 

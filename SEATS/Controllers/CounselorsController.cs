@@ -42,7 +42,7 @@ namespace SEATS.Controllers
         {
             // Look up counselor associated with this user
             var userId = User.Identity.GetUserId();
-            var counselor = await db.Counselors.Where(m => m.UserId == userId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var counselor = await db.Counselors.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
             // Look up all ccas associated with this primary
             if (counselor != null)
@@ -218,7 +218,7 @@ namespace SEATS.Controllers
 
         public async Task<JsonResult> GetCounselorInformation(int counselorId)
         {
-            var counselor = await db.Counselors.Where(c => c.ID == counselorId).FirstOrDefaultAsync().ConfigureAwait(false);
+            var counselor = await db.Counselors.FirstOrDefaultAsync(c => c.ID == counselorId).ConfigureAwait(false);
 
             return Json(counselor);
         }
