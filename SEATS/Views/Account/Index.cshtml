@@ -19,7 +19,9 @@
             <th data-column-id="username">
                 User Name
             </th>
-           
+            <th data-column-id="role">
+                Role
+            </th>
 
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
                 @Html.DisplayName("Actions")
@@ -36,7 +38,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
-              
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
 
@@ -59,15 +63,9 @@
             var grid = $("#grid-basic").bootgrid({
                 caseSensitive: false
                     ,
+                rowCount: [-1, 25, 50, 100],
                 formatters: {
-                    "state": function (column, row) {
-                        var checkBox = "";
-                        if ($.trim(row.Active) == "check") checkBox = "checked=\"checked\"";
-
-                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
-
-                    },
-
+                   
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
                         return "<a href=\" /Account/Edit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> " +

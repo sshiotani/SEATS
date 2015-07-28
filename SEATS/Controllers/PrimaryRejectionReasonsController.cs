@@ -12,6 +12,7 @@ using SEATS.Models;
 
 namespace SEATS.Controllers
 {
+    [Authorize]
     public class PrimaryRejectionReasonsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -38,6 +39,7 @@ namespace SEATS.Controllers
         }
 
         // GET: PrimaryRejectionReasons/Create
+         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -61,6 +63,7 @@ namespace SEATS.Controllers
         }
 
         // GET: PrimaryRejectionReasons/Edit/5
+         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +95,7 @@ namespace SEATS.Controllers
         }
 
         // GET: PrimaryRejectionReasons/Delete/5
+         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

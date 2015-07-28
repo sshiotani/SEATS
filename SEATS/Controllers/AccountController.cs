@@ -70,6 +70,13 @@ namespace SEATS.Controllers
             foreach (var user in users)
             {
                 var u = new EditUserViewModel(user);
+                var role = user.Roles.FirstOrDefault();
+
+                if(role != null)
+                {
+                    u.RoleName = Db.Roles.Where(m => m.Id == role.RoleId).Select(m=>m.Name).FirstOrDefault();
+                }
+
                 model.Add(u);
             }
 
@@ -120,7 +127,7 @@ namespace SEATS.Controllers
         {
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.Id == id);
-            
+
             ViewBag.MessageId = Message;
             return View(user);
         }
@@ -143,22 +150,62 @@ namespace SEATS.Controllers
         }
 
 
-        //
-        // POST: Delete
+        ////
+        //// POST: Delete
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult DeleteConfirmed(string id)
+        //{
+        //    var Db = new ApplicationDbContext();
+        //    var user = Db.Users.First(u => u.Id == id);
+
+        //    Db.Users.Remove(user);
+        //    Db.SaveChanges();
+
+        //    return RedirectToAction("Index");
+        //}
+
+        // POST: /Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public ActionResult DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.Id == id);
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
 
-            Db.Users.Remove(user);
-            Db.SaveChanges();
+                var user = await _userManager.FindByIdAsync(id);
+                var logins = user.Logins;
 
-            return RedirectToAction("Index");
+                foreach (var login in logins.ToList())
+                {
+                    await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                }
+
+                var rolesForUser = await _userManager.GetRolesAsync(id);
+
+                if (rolesForUser.Count() > 0)
+                {
+                    foreach (var item in rolesForUser.ToList())
+                    {
+                        // item should be the name of the role
+                        var result = await _userManager.RemoveFromRoleAsync(user.Id, item);
+                    }
+                }
+
+                await _userManager.DeleteAsync(user);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View();
+            }
         }
-
 
         [Authorize(Roles = "Admin")]
         public ActionResult UserRoles(string id)
@@ -177,20 +224,21 @@ namespace SEATS.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult UserRoles(SelectUserRolesViewModel model)
+        public async Task<ActionResult> UserRoles(SelectUserRolesViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var idManager = new IdentityManager();
                 var Db = new ApplicationDbContext();
                 var user = Db.Users.First(u => u.Id == model.Id);
-                idManager.ClearUserRoles(user.Id);
+                await idManager.ClearUserRoles(user.Id);
                 foreach (var role in model.Roles)
                 {
                     if (role.Selected)
                     {
                         idManager.AddUserToRole(user.Id, role.RoleName);
                     }
+
                 }
                 return RedirectToAction("index");
             }
@@ -222,7 +270,7 @@ namespace SEATS.Controllers
 
                 return RedirectToAction("index");
             }
-            catch( Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Message = "Unable to create role. Error:" + ex.Message;
                 return View("Error");
@@ -230,7 +278,7 @@ namespace SEATS.Controllers
 
         }
 
-       
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -345,8 +393,8 @@ namespace SEATS.Controllers
             return View();
         }
 
-        
-        
+
+
         // POST: /Account/Register
         /// <summary>
         /// Uncommented the email confirmation functionality
@@ -360,22 +408,31 @@ namespace SEATS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (model.Username.All(Char.IsLetterOrDigit))
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
 
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
-                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                    return View("DisplayEmail");
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        return View("DisplayEmail");
+                    }
+
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Characters in Username");
+                }
+                
             }
 
             // If we got this far, something failed, redisplay form
@@ -650,9 +707,9 @@ namespace SEATS.Controllers
 
                 var user = db.Users.Find(userId);
 
-                await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm "  + user.Email + " as a " + userType);
+                await UserManager.SendEmailAsync(admin.Id, "Confirm User", "Please confirm " + user.Email + " as a " + userType);
 
-                return RedirectToAction("RequestSent","Home");
+                return RedirectToAction("RequestSent", "Home");
             }
             catch
             {
@@ -660,6 +717,10 @@ namespace SEATS.Controllers
                 return View("Error");
             }
         }
+
+       
+
+       
 
         #region Helpers
 

@@ -26,6 +26,11 @@ namespace SEATS.Models
         public Nullable<decimal> TotalDisbursementsProvider { get; set; }
         public string CourseCategory { get; set; }    
         public string OnlineCourse { get; set; }
-         
+        public Nullable<int> CourseCompletionStatusID { get; set; }
+        public CourseCompletionStatus CourseCompletionStatus { get; set; }
+        public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public Nullable<System.DateTime> CourseStartDate { get; set; }
+        public string ParentEmail { get; set; }
+        public string CounselorEmail { get; set; }
     }
 }

@@ -24,7 +24,9 @@ namespace SEATS.Models
         public int CourseCategoryID { get; set; }
         public  CourseCategory CourseCategory { get; set; }
         public int SessionID { get; set; }
-        public  Session Session { get; set; }
+        public Session Session { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
+        public CourseCompletionStatus CourseCompletionStatus { get; set; }
 
         public string Primary { get; set; }
 
@@ -32,7 +34,7 @@ namespace SEATS.Models
         public Nullable<int> TeacherCactusID { get; set; }
         public string TeacherFirstName { get; set; }
         public string TeacherLastName { get; set; }
-        public Nullable<int> CourseCompletionStatusID { get; set; }
+        
         //public Nullable<System.DateTime> CourseBegin { get; set; }
         public Nullable<System.DateTime> CourseStartDate { get; set; }
         public Nullable<System.DateTime> CourseCompletionDate { get; set; }
@@ -42,11 +44,13 @@ namespace SEATS.Models
         public Nullable<System.DateTime> DateReportPassingGrade { get; set; }
         
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
-        public bool IsProviderEnrollmentVerified { get; set; }
+        //public bool IsProviderEnrollmentVerified { get; set; }
         public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
         public Nullable<int> ProviderRejectionReasonsID { get; set; }
         public string ProviderNotes { get; set; }
+
+        public bool IsInBulkEdit { get; set; }
     }
 }

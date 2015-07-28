@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SEATS.Models.ProviderCcaViewModel>
+﻿@model SEATS.Models.ProviderCcaVmList
+
 
 @{
     ViewBag.Title = "CcaInterface";
@@ -6,107 +7,196 @@
 
 <h2>CCAs for @ViewBag.SchoolName </h2>
 
-    <p></p>
-    <table id="grid-basic" class="table table-hover table-striped bg-white">
+<p></p>
 
-        <thead>
+
+<table id="grid-basic" class="table table-hover table-striped bg-white">
+    <thead>
+        <tr>
+            <th data-column-id="Submission Date">
+                @Html.DisplayName("Submission Date")
+            </th>
+            <th data-column-id="fiscalyear">
+                @Html.DisplayName("Fiscal Year")
+            </th>
+            <th data-column-id="Student">
+                @Html.DisplayName("Student")
+            </th>
+            <th data-column-id="Course">
+                @Html.DisplayName("Course")
+            </th>
+            <th data-column-id="Credit">
+                @Html.DisplayName("Credit")
+            </th>
+            <th data-column-id="Primary">
+                @Html.DisplayName("Primary")
+            </th>
+            <th data-column-id="status">
+                @Html.DisplayName("Status")
+            </th>
+            <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false" data-type="numeric" data-identifier="true">
+                @Html.DisplayName("Actions")
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.CcaList)
+        {
             <tr>
-                <th data-column-id="Submission Date">
-                    @Html.DisplayName("Submission Date")
-                </th>
+                <td>
+                    @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FiscalYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.StudentLastName),
+                    @Html.DisplayFor(modelItem => item.Student.StudentFirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCredit.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Primary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CcaID)
 
-                <th data-column-id="fiscalyear">
-                    @Html.DisplayName("Fiscal Year")
-                </th>
-
-                <th data-column-id="Student">
-                    @Html.DisplayName("Student")
-                </th>
-                <th data-column-id="Course">
-                    @Html.DisplayName("Course")
-                </th>
-                <th data-column-id="Credit">
-                    @Html.DisplayName("Credit")
-                </th>
-                <th data-column-id="Primary">
-                    @Html.DisplayName("Primary")
-                </th>
-
-
-
-                <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
-                    @Html.DisplayName("Actions")
-                </th>
-                <th></th>
+                </td>
             </tr>
-        </thead>
+        }
+    </tbody>
+</table>
 
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @String.Format("{0:MM/dd/yyyy}", item.ApplicationSubmissionDate)
-                    </td>
+<pre id="example1console" class="console">Click 2 or more checkboxes to bulk edit rows.</pre>
+<button name="edit" id="bulk-edit" class="intext-btn hide">Bulk Edit</button>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FiscalYear)
-                    </td>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal hide" id="EditForm">
+        <div class="form-group" id="BulkEdit">
+            <div class="col-md-3">
+                @Html.DropDownListFor(model=>model.BulkEdit.CourseCompletionStatusID, Model.BulkEdit.CourseCompletionStatusList , htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Status" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.CourseCompletionStatusID, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.CourseStartDate, new { @class = "form-control datepicker", id = "startDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Start Date" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.CourseStartDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.DateConfirmationActiveParticipation, new { @class = "form-control datepicker", id = "activeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Date Active" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.CourseCompletionDate, new { @class = "form-control datepicker", id = "completeDate", title = "Date must be in mm/dd/yyyy format.", placeholder = "Date Completed" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.CourseCompletionDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Student.StudentLastName),
-                        @Html.DisplayFor(modelItem => item.Student.StudentFirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseCredit.Value)
-                    </td>
+        <hr />
+        
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Primary)
-                    </td>
+                <input id="submit" type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CcaID)
-                    </td>
-                </tr>
-            }
-        </tbody>
+    </div>
+}
 
-    </table>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/bootgrid")
 
-        <script>
-            // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
-            $(function () {
-                var grid = $("#grid-basic").bootgrid({
+@section Scripts {
+    @Scripts.Render("~/bundles/bootgrid")
 
-                    caseSensitive: false
-                    ,
-                    formatters: {
-                        "state": function (column, row) {
-                            var checkBox = "";
-                            if ($.trim(row.Consistent) == "check") checkBox = "checked=\"checked\"";
+    <script>
 
-                            return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
 
-                        },
+        var rowIds = [];
+        // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
+        $(function () {
 
-                        "actions": function (column, row) {
-                            var id = $.trim(row.Actionlinks);
-                            return "<a href=\" /CCAs/ProviderEdit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\" title = \"Edit\" ></span></button> " +
-                                 "<a href=\" /CCAs/ProviderDetails/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-list-alt\" title = \"Details\"></span></a>";
-                        }
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+
+            var grid = $("#grid-basic").bootgrid({
+
+                selection: true,
+                multiSelect: true,
+                keepSelection: true,
+                caseSensitive: false,
+                rowCount: [-1,10, 25, 50, 100],
+                formatters: {
+
+                    "actions": function (column, row) {
+                        var id = $.trim(row.Actionlinks);
+                        return "<a href=\" /CCAs/ProviderEdit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\" title = \"Edit\" ></span></button> " +
+                             "<a href=\" /CCAs/ProviderDetails/" + id + "\" class=\"btn btn-xs btn-default command-details\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-list-alt\" title = \"Details\"></span></a>";
+                    }
+                }
+            }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+                $("#EditForm").addClass('hide');
+                
+                for (var i = 0; i < rows.length; i++) {
+                    rowIds.push(rows[i].Actionlinks);
+
+                }
+
+                if(rowIds.length >= 2)
+                    $("#bulk-edit").removeClass('hide');
+
+                //alert("Select: " + rowIds.join(","));
+            }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
+                $("#EditForm").addClass('hide');
+               
+                for (var i = 0; i < rows.length; i++) {
+                    var index = rowIds.indexOf(rows[i].Actionlinks);
+                    rowIds.splice(index, 1);
+
+                }
+
+                if (rowIds.length < 2)
+                    $("#bulk-edit").addClass('hide');
+                //alert("Deselect: " + rowIds.join(","));
+            });
+
+
+            $("#bulk-edit").click(function (e) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RowSave", "ProviderUsers")',
+                    data: { rowIds: rowIds },
+                    dataType: 'json',
+                    success: function () {
+                        $("#EditForm").removeClass('hide');
+                    },
+                    error: function () {
+                        alert('Service call failed');
                     }
                 });
 
             });
 
-        </script>
-    }
 
+
+        });
+
+
+
+    </script>
+}
 

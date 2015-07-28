@@ -13,6 +13,9 @@ namespace SEATS.Models
     /// </summary>
     public class StudentViewModel
     {
+        public int ID { get; set; }
+        public string UserId { get; set; }
+     
         [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
@@ -36,6 +39,9 @@ namespace SEATS.Models
         [Display(Name = "Student Number")]
         public Nullable<int> StudentNumber { get; set; }
 
+        [Display(Name = "SSID")]
+        public string SSID { get; set; }
+
         [Required]
         [Display(Name = "Graduation Date")]
         [DataType(DataType.Date)]
@@ -54,7 +60,7 @@ namespace SEATS.Models
         public Nullable<int> EnrollmentLocationSchoolNamesID { get; set; }
         public List<SelectListItem> EnrollmentLocationSchoolNames { get; set; }
 
-        [Display(Name = "Student has a home school release.")]
+        [Display(Name = "Student has a home lea release.")]
         public bool HasHomeSchoolRelease { get; set; }
 
         // Credit Exceptions

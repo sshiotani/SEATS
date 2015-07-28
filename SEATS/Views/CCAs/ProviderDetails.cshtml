@@ -15,7 +15,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ApplicationSubmissionDate)
+            @String.Format("{0:MM/dd/yyyy}", Model.ApplicationSubmissionDate)
         </dd>
 
 
@@ -24,11 +24,11 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Student.StudentFirstName),
-            @Html.DisplayFor(model => model.Student.StudentLastName),
-            @Html.DisplayFor(model => model.Student.StudentDOB),
-            @Html.DisplayFor(model => model.Student.SSID),
-            @Html.DisplayFor(model => model.Student.StudentEmail)
+            @Html.DisplayFor(model => model.Student.StudentFirstName), 
+            @Html.DisplayFor(model => model.Student.StudentLastName), 
+            DOB: @String.Format("{0:MM/dd/yyyy}", Model.Student.StudentDOB), 
+            SSID: @Html.DisplayFor(model => model.Student.SSID), 
+            EMAIL: @Html.DisplayFor(model => model.Student.StudentEmail)
         </dd>
 
         <dt>
@@ -46,8 +46,8 @@
         <dd>
             @Html.DisplayFor(model => model.Student.Parent.GuardianFirstName),
             @Html.DisplayFor(model => model.Student.Parent.GuardianLastName),
-            @Html.DisplayFor(model => model.Student.Parent.GuardianEmail),
-            @Html.DisplayFor(model => model.Student.Parent.GuardianPhone1)
+            EMAIL: @Html.DisplayFor(model => model.Student.Parent.GuardianEmail),
+            PHONE: @Html.DisplayFor(model => model.Student.Parent.GuardianPhone1)
         </dd>
        
 
@@ -74,8 +74,9 @@
 
         <dd>
             @Html.DisplayFor(model => model.Counselor.LastName),
-            @Html.DisplayFor(model => model.Counselor.FirstName),
-            @Html.DisplayFor(model => model.Counselor.Email)
+            @Html.DisplayFor(model => model.Counselor.FirstName), 
+            EMAIL: @Html.DisplayFor(model => model.Counselor.Email), 
+            PHONE: @Html.DisplayFor(model => model.Counselor.Phone)
         </dd>
 
         <dt>
@@ -148,7 +149,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CourseStartDate)
+           
+            @String.Format("{0:MM/dd/yyyy}", Model.CourseStartDate)
         </dd>
 
         <dt>
@@ -156,7 +158,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CourseCompletionDate)
+            
+            @String.Format("{0:MM/dd/yyyy}", Model.CourseCompletionDate)
         </dd>
 
         <dt>
@@ -164,16 +167,17 @@
         </dt>
 
 
-        <dd>
-            @Html.DisplayFor(model => model.DateConfirmationActiveParticipation)
+        <dd>           
+            @String.Format("{0:MM/dd/yyyy}", Model.DateConfirmationActiveParticipation)
         </dd>
 
         <dt>
             @Html.DisplayName("Continued Participation")
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateContinuationActiveParticipation)
+        <dd>          
+            @String.Format("{0:MM/dd/yyyy}", Model.DateContinuationActiveParticipation)
+
         </dd>
 
         <dt>
@@ -181,7 +185,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DateReportPassingGrade)
+            @String.Format("{0:MM/dd/yyyy}", Model.DateReportPassingGrade)
         </dd>
 
         <dt>
@@ -237,6 +241,13 @@
 
         <dd>
             @Html.DisplayFor(model => model.OnlineCourse.Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Course Code")
+        </dt>
+
+        <dd>
+            @ViewBag.CoreCode
         </dd>
 
         <dt>

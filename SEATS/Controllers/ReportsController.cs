@@ -20,8 +20,9 @@ namespace SEATS.Controllers
         private ApplicationDbContext db;
         private SEATSEntities cactus;
 
+
         //private SeatsContext db { get; set; }
-       
+
         public ReportsController()
         {
             this.db = new ApplicationDbContext();
@@ -40,7 +41,7 @@ namespace SEATS.Controllers
         private async Task<List<ReportViewModel>> DisplayReport()
         {
             var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
-            
+
             List<ReportViewModel> report = new List<ReportViewModel>();
 
             foreach (var cca in ccas)
@@ -56,9 +57,9 @@ namespace SEATS.Controllers
 
                 line.Provider = await db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                if (cca.EnrollmentLocationID == 1)
+                if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
                     line.EnrollmentLocation = "HOME SCHOOL";
-                else if (cca.EnrollmentLocationID == 2)
+                else if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     line.EnrollmentLocation = "PRIVATE SCHOOL";
                 else
                     line.EnrollmentLocation = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
@@ -68,10 +69,14 @@ namespace SEATS.Controllers
                 line.PriorDisbursementProvider = cca.PriorDisbursementProvider;
                 line.TotalDisbursementsProvider = cca.TotalDisbursementsProvider;
 
-               
+
 
                 line.CourseCategory = cca.CourseCategory.Name;
                 line.OnlineCourse = cca.OnlineCourse.Name;
+                line.CourseCompletionStatus = cca.CourseCompletionStatus;
+                line.IsBusinessAdministratorAcceptRejectEnrollment = cca.IsBusinessAdministratorAcceptRejectEnrollment;
+                line.CourseStartDate = cca.CourseStartDate;
+
 
                 report.Add(line);
 
@@ -87,13 +92,15 @@ namespace SEATS.Controllers
         public ActionResult MakeDataTable()
         {
             DataTable table = new DataTable();
-
+            table.Columns.Add("Submission Date", typeof(string));
             table.Columns.Add("First Name", typeof(string));
             table.Columns.Add("Last Name", typeof(string));
             table.Columns.Add("SSID", typeof(string));
             table.Columns.Add("Credit", typeof(string));
             table.Columns.Add("Primary", typeof(string));
+            table.Columns.Add("Primary Rejection Reason", typeof(string));
             table.Columns.Add("Provider", typeof(string));
+            table.Columns.Add("Provider Rejection Reason", typeof(string));
             table.Columns.Add("Course Fee", typeof(string));
             table.Columns.Add("Budget", typeof(decimal));
             table.Columns.Add("Prior", typeof(decimal));
@@ -102,32 +109,37 @@ namespace SEATS.Controllers
             table.Columns.Add("Distribution", typeof(string));
             table.Columns.Add("Category", typeof(string));
             table.Columns.Add("Course", typeof(string));
+            table.Columns.Add("Counselor Email", typeof(string));
+            table.Columns.Add("Parent Email", typeof(string));
+            table.Columns.Add("Start Date", typeof(string));
 
             var ccas = db.CCAs.ToList();
 
             foreach (var cca in ccas)
             {
-   
+
                 string primaryName;
-                if (cca.EnrollmentLocationID == 1)
+                if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
                     primaryName = "HOME SCHOOL";
-                else if (cca.EnrollmentLocationID == 2)
+                else if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     primaryName = "PRIVATE SCHOOL";
                 else
                     primaryName = cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefault();
-                
-                string providerName = db.Providers.Where(m => m.ID == cca.ProviderID).Select(m => m.Name).FirstOrDefault();
 
-                string creditValue = db.CourseCredits.Where(m => m.ID == cca.CourseCreditID).Select(m => m.Value).FirstOrDefault();
-            
-                var categoryItem = db.CourseCategories.Where(m => m.ID == cca.CourseCategoryID).FirstOrDefault();
-                string categoryName = categoryItem.Name;
-               
-                string courseName = db.Courses.Where(m => m.ID == cca.OnlineCourseID).Select(m => m.Name).FirstOrDefault();
-              
-                decimal courseFee = db.CourseFees.Where(m => m.ID == categoryItem.CourseFeeID).Select(m => m.Fee).FirstOrDefault();
+                string primaryRejectionReason = "";
+                if (cca.PrimaryRejectionReasons != null)
+                    primaryRejectionReason = cca.PrimaryRejectionReasons.Reason;
 
-                table.Rows.Add(cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, creditValue, primaryName, providerName, courseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, categoryName, courseName);
+                string providerRejectionReason = "";
+                if (cca.ProviderRejectionReasons != null)
+                    providerRejectionReason = cca.ProviderRejectionReasons.Reason;
+
+
+
+
+
+
+                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate),cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
             }
 
             TempData["Table"] = table;
@@ -152,7 +164,7 @@ namespace SEATS.Controllers
                 sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
 
                 //Format the header
-                using (ExcelRange rng = sheet.Cells["A1:N1"])
+                using (ExcelRange rng = sheet.Cells["A1:Q1"])
                 {
                     rng.Style.Font.Bold = true;
                     rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
@@ -162,13 +174,13 @@ namespace SEATS.Controllers
 
                 //Write it back to the client
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;  filename=Monthly-" + String.Format("{0:MM-dd-yyyy}",DateTime.Now) +".xlsx");
+                Response.AddHeader("content-disposition", "attachment;  filename=Monthly-" + String.Format("{0:MM-dd-yyyy}", DateTime.Now) + ".xlsx");
                 Response.BinaryWrite(package.GetAsByteArray());
 
             }
         }
 
-       
+
 
     }
 }

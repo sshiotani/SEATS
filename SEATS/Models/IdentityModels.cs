@@ -2,9 +2,12 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using System.Threading;
+using System.Web;
 
 
 namespace SEATS.Models
@@ -23,8 +26,20 @@ namespace SEATS.Models
         public bool IsSetup { get; set; }
     }
 
+   
+
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public ApplicationDbContext()
+            : base("DefaultConnection", throwIfV1Schema: false)
+        {
+        }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
         public DbSet<Student> Students { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<OnlineCourse> Courses { get; set; }
@@ -40,25 +55,14 @@ namespace SEATS.Models
         public DbSet<Location> Locations { get; set; }
         public DbSet<ProviderUser> ProviderUsers { get; set; }
         public DbSet<PrimaryUser> PrimaryUsers { get; set; }
-
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
         public System.Data.Entity.DbSet<SEATS.Models.PrimaryRejectionReasons> PrimaryRejectionReasons { get; set; }
 
         public System.Data.Entity.DbSet<SEATS.Models.ProviderRejectionReasons> ProviderRejectionReasons { get; set; }
 
         public System.Data.Entity.DbSet<SEATS.Models.CourseCompletionStatus> CourseCompletionStatus { get; set; }
 
-      
-        
+
+
     }
 
     public class IdentityManager
@@ -68,7 +72,6 @@ namespace SEATS.Models
         {
 
             var rm = new RoleManager<IdentityRole>(
-
                 new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
             return rm.RoleExists(name);
@@ -91,9 +94,8 @@ namespace SEATS.Models
         public bool CreateUser(ApplicationUser user, string password)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var idResult = um.Create(user, password);
 
@@ -104,9 +106,8 @@ namespace SEATS.Models
         public bool AddUserToRole(string userId, string roleName)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var idResult = um.AddToRole(userId, roleName);
 
@@ -115,12 +116,11 @@ namespace SEATS.Models
         }
 
 
-        public void ClearUserRoles(string userId)
+        public async Task ClearUserRoles(string userId)
         {
 
-            var um = new UserManager<ApplicationUser>(
-
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var um = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
             var user = um.FindById(userId);
 
@@ -128,10 +128,14 @@ namespace SEATS.Models
 
             currentRoles.AddRange(user.Roles);
 
+            ApplicationDbContext db = new ApplicationDbContext();
+
+
             foreach (var role in currentRoles)
             {
+                var roleName = await db.Roles.Where(m => m.Id == role.RoleId).Select(m => m.Name).FirstOrDefaultAsync();
 
-                um.RemoveFromRole(userId, role.RoleId);
+                var idsuccess = um.RemoveFromRole(userId, roleName);
 
             }
 

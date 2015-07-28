@@ -65,7 +65,7 @@ namespace SEATS.Controllers
                 int parentID = await db.Parents.Where(m => m.GuardianEmail == parent.GuardianEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 //If not add them
-                if (parentID == 0 || parentID == null)
+                if (parentID == 0)
                 {
                     db.Parents.Add(parent);
                     await db.SaveChangesAsync().ConfigureAwait(false);

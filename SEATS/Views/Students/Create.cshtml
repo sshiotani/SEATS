@@ -76,7 +76,7 @@
                 @Html.ValidationMessageFor(model => model.StudentEmail, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.StudentNumber, new { @class = "form-control", id = "ssid", title = "Private/Home School leave blank", placeholder = "Student Number(Public/Charter Only)" })
+                @Html.TextBoxFor(model => model.StudentNumber, new { @class = "form-control", id = "ssid", title = "Invalid Student Numbers may result in credit not being applied to transcripts.", placeholder = "Student Number(Public/Charter Only)" })
                 @Html.ValidationMessageFor(model => model.StudentNumber, "", new { @class = "text-danger" })
             </div>
 
@@ -195,26 +195,27 @@
 
                 if (districtName.toLowerCase().indexOf("home school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
-                    $("#CurrentSchool").prop('disabled', true);
+                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
                     $("#CounselorSection :input").attr('disabled', true);
-                    $("#CurrentPrivateSchool").addClass('hide');
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
                     $("#HomeSchoolRelease").removeClass('hide');
                     $('#SchoolId').val('-1');
                 }
                 else if (districtName.toLowerCase().indexOf("private school") >= 0) {
                     $("#ssid").prop('disabled', true).prop('required', false);
-                    $("#CurrentSchool").prop('disabled', true);
+                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
                     $("#CounselorSection :input").removeAttr('disabled');
-                    $("#CurrentPrivateSchool").removeClass('hide');
+                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
                     $("#HomeSchoolRelease").addClass('hide');
                     $('#SchoolId').val("0");
                 }
                 else {
                     $("#ssid").prop('disabled', false).prop('required', true);
                     $("#CounselorSection :input").removeAttr('disabled');
-                    $("#CurrentSchool").prop('disabled', false);
-                    $("#CurrentPrivateSchool").addClass('hide');
+                    $("#CurrentSchool").prop('disabled', false).prop('required',true);
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
                     $("#HomeSchoolRelease").addClass('hide');
+                    
 
 
 
