@@ -250,7 +250,6 @@
     <Compile Include="Models\PrimaryUserViewModel.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
-    <Compile Include="Controllers\StudentBudgetsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -612,11 +611,6 @@
     <Content Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsc">
       <DependentUpon>_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd</DependentUpon>
     </Content>
-    <Content Include="Views\StudentBudgets\Create.cshtml" />
-    <Content Include="Views\StudentBudgets\Delete.cshtml" />
-    <Content Include="Views\StudentBudgets\Details.cshtml" />
-    <Content Include="Views\StudentBudgets\Edit.cshtml" />
-    <Content Include="Views\StudentBudgets\Index.cshtml" />
     <Content Include="Views\CourseFees\Create.cshtml" />
     <Content Include="Views\CourseFees\Delete.cshtml" />
     <Content Include="Views\CourseFees\Details.cshtml" />

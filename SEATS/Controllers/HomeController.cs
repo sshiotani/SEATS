@@ -5,8 +5,6 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using SEATS.Models;
 using System;
-using System.Collections.Generic;
-using AutoMapper;
 
 
 namespace SEATS.Controllers

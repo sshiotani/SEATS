@@ -23,7 +23,6 @@ namespace SEATS.Controllers
 
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
-        //private SeatsContext db;
         private SEATSEntities cactus;
         private ApplicationDbContext db;
 
@@ -221,11 +220,10 @@ namespace SEATS.Controllers
             {
                 try
                 {
-                    var userId = User.Identity.GetUserId();
-                    ccaVm.UserId = userId;
+                    ccaVm.UserId = User.Identity.GetUserId();
 
                     //Get student associated with this user
-                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
+                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == ccaVm.UserId);
 
                     // Map ViewModel to CCA and student
                     CCA cca = MapModel(ccaVm, student);
@@ -453,14 +451,19 @@ namespace SEATS.Controllers
                 if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID || (cca.EnrollmentLocationID != GlobalVariables.HOMESCHOOLID && cca.CounselorID == 0))
                 {
                     int counselorId = 0;
-                    // Check for existing counselor entry
+                    // Check for existing counselor entry by email address
                     if (ccaVm.CounselorEmail != null)
                     {
                         counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                     }
 
-                    if (counselorId == 0)
+                    if (counselorId != 0)
                     {
+                        cca.CounselorID = counselorId;
+                    }
+                    else // Create a counselor entry in the table.
+                    {
+
                         var counselor = new Counselor()
                         {
                             Email = ccaVm.CounselorEmail,
@@ -468,6 +471,8 @@ namespace SEATS.Controllers
                             LastName = ccaVm.CounselorLastName,
                             Phone = ccaVm.CounselorPhoneNumber
                         };
+
+                        // Find school name for display purposes 
 
                         if (cca.EnrollmentLocationID != GlobalVariables.PRIVATESCHOOLID)
                         {
@@ -486,11 +491,9 @@ namespace SEATS.Controllers
                         db.Counselors.Add(counselor);
 
                         await db.SaveChangesAsync().ConfigureAwait(false);
+
+                        // Lookup counselor in updated table to assign new ID to CCA
                         cca.CounselorID = await db.Counselors.Where(m => m.Email == ccaVm.CounselorEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        cca.CounselorID = counselorId;
                     }
                 }
             }
@@ -504,7 +507,6 @@ namespace SEATS.Controllers
         /// Maps the model from the View Model for saving a new CCA to the database.
         /// </summary>
         /// <param name="ccaVm"></param>
-        /// <param name="cca"></param>
         /// <param name="student"></param>
         private CCA MapModel(CCAViewModel ccaVm, Student student)
         {
@@ -553,10 +555,10 @@ namespace SEATS.Controllers
                 }
 
                 var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
-                    {
-                        Value = f.ID.ToString(),
-                        Text = f.Name
-                    });
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
             }
@@ -832,25 +834,49 @@ namespace SEATS.Controllers
 
                 var leaId = ccaVm.Student.EnrollmentLocationID;
                 var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
-                if (leaId == 1) // HomeSchool
-                {
-                    ViewBag.Lea = "HOMESCHOOL";
-                    ViewBag.School = "HOMESCHOOL";
-                }
-                else if (leaId == 2) //PrivateSchool
-                {
-                    ViewBag.Lea = "PRIVATESCHOOL";
-                    ViewBag.School = ccaVm.Student.SchoolOfRecord;
-                }
-                else
-                {
-                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                    if (schoolId != null)
-                        ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                    else
-                        ViewBag.School = "UNKNOWN";
+                switch (leaId)
+                {
+                    case GlobalVariables.HOMESCHOOLID:
+                        ViewBag.Lea = "HOMESCHOOL";
+                        ViewBag.School = "HOMESCHOOL";
+                        break;
+                    case GlobalVariables.PRIVATESCHOOLID:
+                        ViewBag.Lea = "PRIVATESCHOOL";
+                        ViewBag.School = ccaVm.Student.SchoolOfRecord;
+                        break;
+                    default:
+                        if (leaId != null)
+                            ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                        else
+                            ViewBag.Lea = "UNKNOWN";
+
+                        if (schoolId != null)
+                            ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                        else
+                            ViewBag.School = "UNKNOWN";
+                        break;
                 }
+
+                //if (leaId == 1) // HomeSchool
+                //{
+                //    ViewBag.Lea = "HOMESCHOOL";
+                //    ViewBag.School = "HOMESCHOOL";
+                //}
+                //else if (leaId == 2) //PrivateSchool
+                //{
+                //    ViewBag.Lea = "PRIVATESCHOOL";
+                //    ViewBag.School = ccaVm.Student.SchoolOfRecord;
+                //}
+                //else
+                //{
+                //    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                //    if (schoolId != null)
+                //        ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                //    else
+                //        ViewBag.School = "UNKNOWN";
+                //}
 
             }
             catch
@@ -1141,17 +1167,14 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
-                var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
-                var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
-                var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
-                var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
-                var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync().ConfigureAwait(false);
-                ccaVm.CourseCreditList = new SelectList(credit, "ID", "Value", ccaVm.CourseCreditID);
 
-                ViewBag.SessionID = sessionList;
-                ViewBag.CourseCategoryID = categoryList;
-                ViewBag.OnlineCourseID = courseList;
-                ViewBag.ProviderRejectionReasonsID = new SelectList(await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason",ccaVm.ProviderRejectionReasonsID);
+                // Set up dropdownlists
+              
+                ccaVm.CourseCreditList = new SelectList(await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync().ConfigureAwait(false), "ID", "Value", ccaVm.CourseCreditID);
+                ViewBag.SessionID = new SelectList(await db.Session.ToListAsync(), "ID", "Name", ccaVm.SessionID);
+                ViewBag.CourseCategoryID = new SelectList(await db.CourseCategories.ToListAsync(), "ID", "Name", ccaVm.CourseCategoryID);
+                ViewBag.OnlineCourseID = new SelectList(await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.OnlineCourseID);
+                ViewBag.ProviderRejectionReasonsID = new SelectList(await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason", ccaVm.ProviderRejectionReasonsID);
                 ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 return ccaVm;
@@ -1211,7 +1234,7 @@ namespace SEATS.Controllers
 
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
-     
+
         /// <summary>
         /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
         /// </summary>
@@ -1225,7 +1248,7 @@ namespace SEATS.Controllers
 
                 // rows to Edit contain the updated values for the bulk update
                 var rowsToEdit = TempData["RowsToEdit"] as ProviderCcaVmList;
-             
+
                 var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
 
                 if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
@@ -1242,15 +1265,15 @@ namespace SEATS.Controllers
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("CcaInterface", "ProviderUsers");
-                
+
             }
             catch
             {
-                throw new HttpException(500, "Error processing course information request.");
+                throw new HttpException(500, "Error processing bulk update request.");
 
             }
         }
-        
+
         // GET: CCAs/Details/5
         /// <summary>
         /// This method provides details of the CCA to the Provider .
