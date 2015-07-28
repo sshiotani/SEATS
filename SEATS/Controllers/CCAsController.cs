@@ -43,6 +43,7 @@ namespace SEATS.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+
             if (User.IsInRole("Admin"))
             {
                 return RedirectToAction("CcaInterface", "Admin");
@@ -107,6 +108,7 @@ namespace SEATS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             try
             {
                 CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
