@@ -220,6 +220,7 @@
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
+    <Compile Include="Models\BulkUploadViewModel.cs" />
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -677,10 +678,7 @@
     <Content Include="Views\CourseCompletionStatus\Index.cshtml" />
     <Content Include="Views\CCAs\CounselorEdit.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
-    <Content Include="Views\CCAs\BulkEditTable.cshtml" />
-    <Content Include="Views\CCAs\BulkEditRows.cshtml" />
-    <Content Include="Views\CCAs\BulkEditList.cshtml" />
-    <Content Include="Views\CCAs\BulkEditDummy.cshtml" />
+    <Content Include="Views\CCAs\BulkUpload.cshtml" />
     <Content Include="Views\ManualAdd\Login.cshtml" />
     <Content Include="Views\ManualAdd\Register.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
