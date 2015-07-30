@@ -240,7 +240,7 @@ namespace SEATS.Controllers
                     Mapper.CreateMap<StudentViewModel, Student>();
                     Student student = Mapper.Map<StudentViewModel, Student>(studentVm);
 
-                    //Age check for not enrolled applicants
+                    //Age check for home or private school applicants
 
                     if ((studentVm.EnrollmentLocationID == 1 || studentVm.EnrollmentLocationID == 2) && AgeCheck(studentVm.StudentDOB))
                     {
@@ -249,14 +249,23 @@ namespace SEATS.Controllers
                     }
 
                     // Find SSID using ssidFindingService
-                    student.SSID = await GetSSID(studentVm);
+                    student.SSID = await GetSSID(studentVm);            
 
                     var duplicate = await CheckSSID(student.SSID);
 
                     if (duplicate)
                     {
-                        ViewBag.Message = "A student with this SSID already exists in our system.  Please contact us.";
-                        return View("Error");
+                        // If parent not assigned assume registration wasn't finished and send them to parent setup.
+                        if (student.ParentID == null)
+                        {
+                            return RedirectToAction("Create", "Parents");
+                        }
+                        // Otherwise a duplicate is found and this registration cannot be completed.
+                        else
+                        {
+                            ViewBag.Message = "A student with this SSID already exists in our system.  Please contact us.";
+                            return View("Error");
+                        }
                     }
 
                     student.UserId = User.Identity.GetUserId();
@@ -278,7 +287,7 @@ namespace SEATS.Controllers
                     }
                     else
                     {
-                        // In the case where the student filled out the parent information but the Setup status was not saved.
+                        // In the case where the parents were assigned but the Setup status was not saved.
                         var user = db.Users.Find(student.UserId);
                         user.IsSetup = true;
                         await db.SaveChangesAsync().ConfigureAwait(false);

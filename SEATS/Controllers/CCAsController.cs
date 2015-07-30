@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
 using SEATS.Models;
 using AutoMapper;
 
 using Microsoft.AspNet.Identity.Owin;
-using System.Collections;
-
+using OfficeOpenXml;
+using System.Data;
 
 namespace SEATS.Controllers
 {
@@ -553,10 +552,10 @@ namespace SEATS.Controllers
                 }
 
                 var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
-                    {
-                        Value = f.ID.ToString(),
-                        Text = f.Name
-                    });
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
             }
@@ -1151,7 +1150,7 @@ namespace SEATS.Controllers
                 ViewBag.SessionID = sessionList;
                 ViewBag.CourseCategoryID = categoryList;
                 ViewBag.OnlineCourseID = courseList;
-                ViewBag.ProviderRejectionReasonsID = new SelectList(await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason",ccaVm.ProviderRejectionReasonsID);
+                ViewBag.ProviderRejectionReasonsID = new SelectList(await db.ProviderRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason", ccaVm.ProviderRejectionReasonsID);
                 ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 return ccaVm;
@@ -1211,7 +1210,7 @@ namespace SEATS.Controllers
 
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
-     
+
         /// <summary>
         /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
         /// </summary>
@@ -1225,7 +1224,7 @@ namespace SEATS.Controllers
 
                 // rows to Edit contain the updated values for the bulk update
                 var rowsToEdit = TempData["RowsToEdit"] as ProviderCcaVmList;
-             
+
                 var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
 
                 if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
@@ -1242,7 +1241,7 @@ namespace SEATS.Controllers
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("CcaInterface", "ProviderUsers");
-                
+
             }
             catch
             {
@@ -1250,7 +1249,124 @@ namespace SEATS.Controllers
 
             }
         }
-        
+
+        /// <summary>
+        /// This method 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult BulkUpload()
+        {
+            return View(new BulkUploadViewModel());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> BulkUpload(BulkUploadViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            using (var dataTable = GetDataFromExcel(model))
+            {
+
+                // Foreach record
+                foreach (DataRow row in dataTable.Rows)
+                {
+
+
+
+                    // Find or create a student record
+                    Student student = new Student();
+                    student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
+                    student.StudentFirstName = row["Student First Name"].ToString();
+                    student.StudentLastName = row["Student Last Name"].ToString();
+                    student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+                    student.SSID = row["SSID"].ToString();
+
+                    // Lookup Primary and School
+
+                    var primaryName = row["PRIMARY LEA"].ToString().ToUpper();
+                    if (primaryName.Contains("PRIVATE"))
+                    {
+                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                        student.SchoolOfRecord = row["PRIMARY SCHOOL"].ToString();
+                    }
+                    else if (primaryName.Contains("HOME"))
+                    {
+                        student.EnrollmentLocationID = GlobalVariables.HOMESCHOOLID;
+                    }
+                    else
+                    {
+                        var primary = await cactus.CactusInstitutions.Where(m => m.Name.Contains(primaryName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                        if (primary != null)
+                            student.EnrollmentLocationID = primary.ID;
+
+                        var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper();
+                        var school = await cactus.CactusSchools.Where(m => m.Name.Contains(schoolName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                        if (school != null)
+                            student.EnrollmentLocationSchoolNamesID = school.ID;
+
+                    }
+
+                    student.GraduationDate = Convert.ToDateTime(row["Graduation Date"]);
+
+                   
+                    student.StudentEmail = row["Email"].ToString();
+                    student.IsFeeWaived = row["Email"].ToString().ToLower().Equals("yes") ? true : false;
+                    student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
+                    student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
+                    student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
+
+
+
+                    // Find or create a parent record
+                    // Find or create a counselor record
+                    // Find the Provider                
+                    // Find the session
+                    // Find the category
+                    // Find the course
+                }
+            }
+
+            //byte[] uploadedFile = new byte[model.File.InputStream.Length];
+            //model.File.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
+
+            // now you could pass the byte array to your model and store wherever 
+            // you intended to store it
+
+            ViewBag.Message = "Thanks for uploading the file";
+            return View();
+        }
+
+        public static DataTable GetDataFromExcel(BulkUploadViewModel model)
+        {
+            using (var package = new ExcelPackage(model.File.InputStream))
+            {
+                // get the first worksheet in the workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                DataTable tbl = new DataTable();
+                bool hasHeader = true;
+                foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
+                {
+                    tbl.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
+                }
+                var startRow = hasHeader ? 2 : 1;
+                for (var rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
+                {
+                    var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
+                    var row = tbl.NewRow();
+                    foreach (var cell in wsRow)
+                    {
+                        row[cell.Start.Column - 1] = cell.Text;
+                    }
+                    tbl.Rows.Add(row);
+                }
+                return tbl;
+            }
+        }
+
+
         // GET: CCAs/Details/5
         /// <summary>
         /// This method provides details of the CCA to the Provider .
