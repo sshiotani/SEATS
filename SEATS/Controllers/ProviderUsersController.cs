@@ -76,7 +76,7 @@ namespace SEATS.Controllers
         [Authorize(Roles = "Admin,Provider")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CcaInterface(ProviderCcaVmList rowsToEdit)
+        public ActionResult CcaInterface(ProviderCcaVmList rowsToEdit)
         {
 
             TempData["RowsToEdit"] = rowsToEdit; 
@@ -96,7 +96,7 @@ namespace SEATS.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Admin,Provider")]
         [HttpPost]      
-        public async Task<ActionResult> RowSave(int[] rowIds)
+        public ActionResult RowSave(int[] rowIds)
         {
             // Look up all ccas associated with this provider
             TempData["RowIds"] = rowIds;
