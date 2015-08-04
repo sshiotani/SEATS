@@ -424,27 +424,27 @@
     <Content Include="Content\img\icons\weather-main.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\spinner.gif" />
-    <Content Include="Scripts\custom.js" />
-    <EntityDeploy Include="Models\Cactus.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Cactus.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Models\Cactus.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\Cactus.edmx.diagram">
-      <DependentUpon>Cactus.edmx</DependentUpon>
     </Content>
     <Content Include="Models\Cactus.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Cactus.edmx</DependentUpon>
       <LastGenOutput>Cactus.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\custom.js" />
     <None Include=".bin\bower.cmd" />
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
+    <EntityDeploy Include="Models\Cactus.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Cactus.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Cactus.edmx.diagram">
+      <DependentUpon>Cactus.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\handsontable.full.js" />

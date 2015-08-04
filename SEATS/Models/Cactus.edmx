@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SEATSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SEATS.dbo.CactusInstitution' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CactusInstitution">
@@ -25,7 +25,7 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
           <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="District" Type="int" />
         </EntityType>
-        <EntityContainer Name="ModelStoreContainer">
+        <EntityContainer Name="SEATSModelStoreContainer">
           <EntitySet Name="CactusInstitution" EntityType="Self.CactusInstitution" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [CactusInstitution].[ID] AS [ID], 
@@ -45,7 +45,7 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="SEATSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="CactusInstitution">
           <Key>
             <PropertyRef Name="ID" />
@@ -71,9 +71,9 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="SEATSEntities">
+        <EntityContainerMapping StorageEntityContainer="SEATSModelStoreContainer" CdmEntityContainer="SEATSEntities">
           <EntitySetMapping Name="CactusInstitutions">
-            <EntityTypeMapping TypeName="Model.CactusInstitution">
+            <EntityTypeMapping TypeName="SEATSModel.CactusInstitution">
               <MappingFragment StoreEntitySet="CactusInstitution">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -82,7 +82,7 @@ warning 6002: The table/view 'SEATS.dbo.CactusSchool' does not have a primary ke
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CactusSchools">
-            <EntityTypeMapping TypeName="Model.CactusSchool">
+            <EntityTypeMapping TypeName="SEATSModel.CactusSchool">
               <MappingFragment StoreEntitySet="CactusSchool">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
