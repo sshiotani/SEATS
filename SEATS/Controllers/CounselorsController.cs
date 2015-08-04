@@ -43,11 +43,19 @@ namespace SEATS.Controllers
             // Look up counselor associated with this user
             var userId = User.Identity.GetUserId();
             var counselor = await db.Counselors.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
-
+            List<CCA> ccas;
             // Look up all ccas associated with this primary
             if (counselor != null)
             {
-                var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                if (counselor.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                {
+                    var studentIds = db.Students.Where(m => m.SchoolOfRecord.ToUpper() == counselor.School.ToUpper()).Select(m=>m.UserId);
+                    ccas = await db.CCAs.Where(m => studentIds.Contains(m.UserId)).ToListAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                     ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                }
 
                 // Create list of viewmodels populated from 
                 var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);

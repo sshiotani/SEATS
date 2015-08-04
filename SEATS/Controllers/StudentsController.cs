@@ -204,23 +204,26 @@ namespace SEATS.Controllers
             {
                 IEnumerable<SelectListItem> schoolNameList;
                 var schoolList = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
+                schoolList.RemoveAll(m => m.Name == null);
+                var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
 
                 if (district == GlobalVariables.PRIVATESCHOOLID)
                 {
-                   
+                    schoolNameList = schoolList.Where(m=>m.Type=="PVSEC").OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name
+                    }); ;
                 }
-               
-                                 
-                schoolList.RemoveAll(m => m.Name == null);
-                 
-
-                var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
-                schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+               else
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.Name
-                });
-
+                    schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name
+                    });
+                }
+                                 
                 return Json(new SelectList(schoolNameList, "Value", "Text"));
 
             }
