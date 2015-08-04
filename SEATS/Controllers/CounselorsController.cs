@@ -108,14 +108,21 @@ namespace SEATS.Controllers
         {
             var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
+            SetUpCreateView(leas);
+
+            return View();
+        }
+
+        private void SetUpCreateView(List<CactusInstitution> leas)
+        {
+            leas.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
+
 
             ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
 
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
-
-            return View();
         }
 
         // POST: Counselors/Create
@@ -186,12 +193,7 @@ namespace SEATS.Controllers
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
             var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
-
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
-
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
-            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
-            ViewBag.CounselorID = new List<SelectListItem>();
+            SetUpCreateView(leas);
             return View(counselorVm);
         }
 
@@ -199,6 +201,26 @@ namespace SEATS.Controllers
         public JsonResult GetCounselors(int schoolId)
         {
             var counselors = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolId).Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.FirstName + " " + f.LastName
+            });
+
+            // Add a item to add new counselor to list.
+
+            var counselorList = counselors.AsEnumerable().Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "Counselor Not Listed."
+                    }
+                    });
+
+            return Json(new SelectList(counselorList, "Value", "Text"));
+        }
+
+        public JsonResult GetPrivateSchoolCounselors(string schoolName)
+        {
+            var counselors = db.Counselors.Where(m => m.School.Equals(schoolName)).Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
                 Text = f.FirstName + " " + f.LastName

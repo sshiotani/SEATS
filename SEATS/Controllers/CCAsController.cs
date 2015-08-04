@@ -1273,52 +1273,8 @@ namespace SEATS.Controllers
                 // Foreach record
                 foreach (DataRow row in dataTable.Rows)
                 {
-
-
-
                     // Find or create a student record
-                    Student student = new Student();
-                    student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
-                    student.StudentFirstName = row["Student First Name"].ToString();
-                    student.StudentLastName = row["Student Last Name"].ToString();
-                    student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
-                    student.SSID = row["SSID"].ToString();
-
-                    // Lookup Primary and School
-
-                    var primaryName = row["PRIMARY LEA"].ToString().ToUpper();
-                    if (primaryName.Contains("PRIVATE"))
-                    {
-                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
-                        student.SchoolOfRecord = row["PRIMARY SCHOOL"].ToString();
-                    }
-                    else if (primaryName.Contains("HOME"))
-                    {
-                        student.EnrollmentLocationID = GlobalVariables.HOMESCHOOLID;
-                    }
-                    else
-                    {
-                        var primary = await cactus.CactusInstitutions.Where(m => m.Name.Contains(primaryName)).FirstOrDefaultAsync().ConfigureAwait(false);
-                        if (primary != null)
-                            student.EnrollmentLocationID = primary.ID;
-
-                        var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper();
-                        var school = await cactus.CactusSchools.Where(m => m.Name.Contains(schoolName)).FirstOrDefaultAsync().ConfigureAwait(false);
-                        if (school != null)
-                            student.EnrollmentLocationSchoolNamesID = school.ID;
-
-                    }
-
-                    student.GraduationDate = Convert.ToDateTime(row["Graduation Date"]);
-
-                   
-                    student.StudentEmail = row["Email"].ToString();
-                    student.IsFeeWaived = row["Email"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
-
-
+                    await ExtractStudent(row);
 
                     // Find or create a parent record
                     // Find or create a counselor record
@@ -1337,6 +1293,55 @@ namespace SEATS.Controllers
 
             ViewBag.Message = "Thanks for uploading the file";
             return View();
+        }
+
+        private async Task ExtractStudent(DataRow row)
+        {
+            Student student = new Student();
+            student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
+            student.StudentFirstName = row["Student First Name"].ToString();
+            student.StudentLastName = row["Student Last Name"].ToString();
+            student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+            student.SSID = row["SSID"].ToString();
+
+            // Look for existing student
+
+            // Lookup Primary and School
+
+            var primaryName = row["PRIMARY LEA"].ToString().ToUpper();
+            if (primaryName.Contains("PRIVATE"))
+            {
+                student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                student.SchoolOfRecord = row["PRIMARY SCHOOL"].ToString();
+            }
+            else if (primaryName.Contains("HOME"))
+            {
+                student.EnrollmentLocationID = GlobalVariables.HOMESCHOOLID;
+            }
+            else
+            {
+                var primary = await cactus.CactusInstitutions.Where(m => m.Name.Contains(primaryName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (primary != null)
+                    student.EnrollmentLocationID = primary.ID;
+
+                var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper();
+                var school = await cactus.CactusSchools.Where(m => m.Name.Contains(schoolName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (school != null)
+                    student.EnrollmentLocationSchoolNamesID = school.ID;
+
+            }
+
+            student.GraduationDate = Convert.ToDateTime(row["Graduation Date"]);
+
+
+            student.StudentEmail = row["Email"].ToString();
+            student.IsFeeWaived = row["Email"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
+
+            
+            
         }
 
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)
