@@ -195,6 +195,7 @@ namespace SEATS.Controllers
         /// <summary>
         /// Method gets lea names dynamically called from view. Matches the district id with
         /// the selected district id.  Removes null and list entries with DISTRICT selections.
+        /// Update: 8/4/2015 - Added test for Private schools for use with Private school counselors.
         /// </summary>
         /// <param name="district"></param>
         /// <returns>json list with selectlist</returns>
@@ -209,13 +210,15 @@ namespace SEATS.Controllers
 
                 if (district == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    schoolNameList = schoolList.Where(m=>m.Type=="PVSEC").OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                    //Look for Private Schools in the list using school_type_code from Cactus.  If this code ever changes we will need to update this method.
+
+                    schoolNameList = schoolList.Where(m => m.SchoolType == "PVSEC").OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
                         Text = f.Name
-                    }); ;
+                    }); 
                 }
-               else
+                else
                 {
                     schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                     {
@@ -223,7 +226,7 @@ namespace SEATS.Controllers
                         Text = f.Name
                     });
                 }
-                                 
+
                 return Json(new SelectList(schoolNameList, "Value", "Text"));
 
             }
@@ -259,7 +262,7 @@ namespace SEATS.Controllers
                     }
 
                     // Find SSID using ssidFindingService
-                    student.SSID = await GetSSID(studentVm);            
+                    student.SSID = await GetSSID(studentVm);
 
                     var duplicate = await CheckSSID(student.SSID);
 

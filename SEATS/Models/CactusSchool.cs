@@ -17,6 +17,6 @@ namespace SEATS.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public Nullable<int> District { get; set; }
-        public string Type { get; set; }
+        public string SchoolType { get; set; }
     }
 }
