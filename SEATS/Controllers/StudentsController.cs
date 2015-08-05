@@ -44,7 +44,24 @@ namespace SEATS.Controllers
             if (User.IsInRole("Admin"))
             {
                 var students = await db.Students.ToListAsync().ConfigureAwait(false);
-                return View(students);
+                var studentVmList = new List<StudentViewModel>();
+
+                Mapper.CreateMap<Student,StudentViewModel > ();
+
+                foreach (var item in students)
+                {
+                    var model = Mapper.Map<Student, StudentViewModel>(item);
+                    int ssid;
+                    if (int.TryParse(item.SSID,out ssid))
+                    {
+                        model.SSIDNumber = ssid;
+                    }
+
+                   studentVmList.Add(model);
+
+                }
+
+                return View(studentVmList);
             }
             else if (User.IsInRole("Primary"))
             {
