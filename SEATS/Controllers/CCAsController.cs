@@ -554,7 +554,7 @@ namespace SEATS.Controllers
                 var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
-                    Text = f.Name
+                    Text = f.Name + "- $" + f.CourseFee.Fee.ToString()
                 });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
@@ -824,8 +824,12 @@ namespace SEATS.Controllers
 
             try
             {
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
-                ViewBag.CourseCompletionStatusID = status;
+                ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
+
+                ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+                ViewBag.CourseCategoryID = new SelectList(await db.CourseCategories.ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.CourseCategoryID);
+                var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
+                ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
 
                 ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
 
@@ -868,10 +872,11 @@ namespace SEATS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UsoeEdit(UsoeCcaViewModel ccaVm)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
+
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
 
                     Mapper.CreateMap<UsoeCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
@@ -887,23 +892,24 @@ namespace SEATS.Controllers
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "Admin");
+
                 }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
-                    return View("Error");
-                }
+
+                //Capture errors from Modelstate and return to user.
+
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                foreach (var error in errors)
+                    ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
+                await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
+
+                return View(ccaVm);
             }
-
-            //Capture errors from Modelstate and return to user.
-
-            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
-            foreach (var error in errors)
-                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
-
-            await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
-
-            return View(ccaVm);
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+                return View("Error");
+            }
         }
 
         // GET: CCAs/Edit/5
@@ -1140,8 +1146,8 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
-                var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
-                var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
+                var sessionList = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+                var categoryList = new SelectList(await db.CourseCategories.ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.CourseCategoryID);
                 var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
                 var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync().ConfigureAwait(false);
@@ -1340,8 +1346,8 @@ namespace SEATS.Controllers
             student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
             student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
 
-            
-            
+
+
         }
 
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)

@@ -12,8 +12,14 @@ namespace SEATS.Models
         // Items pulled from CCA
         public DateTime ApplicationSubmissionDate { get; set; }
         public int CcaID { get; set; }
+        public int ProviderID { get; set; }
+        public Provider Provider { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }
+        public int SessionID { get; set; }
+        public Session Session { get; set; }
+        public int CourseCategoryID { get; set; }
+        public CourseCategory CourseCategory { get; set; }
         public int OnlineCourseID { get; set; }
         public OnlineCourse OnlineCourse { get; set; }
         public int CourseCreditID { get; set; }
