@@ -554,7 +554,50 @@ namespace SEATS.Controllers
                 var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
-                    Text = f.Name + "- $" + f.CourseFee.Fee.ToString()
+                    Text = f.Name
+                });
+
+                return Json(new SelectList(categoryList, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing category list request.");
+            }
+
+        }
+
+        /// <summary>
+        /// Gets Categories from database using the sessionID.
+        /// Check courses that are associated with the session and only return categories
+        /// that have courses in that session.
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns>select list in json format</returns>
+        public async Task<JsonResult> GetCategoriesAndPrice(int sessionId)
+        {
+            try
+            {
+                IEnumerable<int> categorySelected;
+
+                var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
+
+                var session = await db.Session.FindAsync(sessionId).ConfigureAwait(false);
+                var selected = session.Name;
+
+                // If session is a summer session only show categories that have classes for summer
+                if (selected.ToLower().Contains("sum"))
+                {
+                    categorySelected = courses.Where(x => x.SessionID == sessionId).Select(x => x.CourseCategoryID).Distinct();
+                }
+                else // Show all non summer categories 0 is All Sessions
+                {
+                    categorySelected = courses.Where(x => x.SessionID == sessionId || x.SessionID == 0).Select(x => x.CourseCategoryID).Distinct();
+                }
+
+                var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name +" -$" + f.CourseFee.Fee
                 });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
@@ -827,7 +870,13 @@ namespace SEATS.Controllers
                 ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
-                ViewBag.CourseCategoryID = new SelectList(await db.CourseCategories.ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.CourseCategoryID);
+                var categories = await db.CourseCategories.Where(s=>s.IsActive == true).Select(s => new SelectListItem
+                {
+                    Value = s.ID.ToString(),
+                    Text =  s.Name + " -$" + s.CourseFee.Fee
+                }).ToListAsync().ConfigureAwait(false);
+
+                ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
                 var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
                 ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
 
