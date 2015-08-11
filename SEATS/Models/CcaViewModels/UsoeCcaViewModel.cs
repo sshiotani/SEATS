@@ -30,6 +30,8 @@ namespace SEATS.Models
         public int MyProperty { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
 
+        public int? StudentGradeLevel { get; set; }
+
         //Items to be input by USOE 
         public Nullable<decimal> CourseFee { get; set; }
         public Nullable<int> CourseCompletionStatusID { get; set; }
