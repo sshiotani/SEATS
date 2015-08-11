@@ -110,6 +110,8 @@ namespace SEATS.Controllers
                 // Update the user data:
 
                 user.Email = model.Email;
+                user.EmailConfirmed = model.EmailConfirmed;
+                user.UserName = model.UserName;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 await Db.SaveChangesAsync();
                 return RedirectToAction("Index");
