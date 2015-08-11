@@ -512,6 +512,7 @@ namespace SEATS.Controllers
                 Mapper.CreateMap<CCAViewModel, CCA>();
                 var cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                 cca.ApplicationSubmissionDate = DateTime.Now;
+                cca.PrimaryNotificationDate = DateTime.Now;
                 cca.StudentID = student.ID;
                 cca.EnrollmentLocationID = student.EnrollmentLocationID;
                 cca.EnrollmentLocationSchoolNamesID = student.EnrollmentLocationSchoolNamesID;
