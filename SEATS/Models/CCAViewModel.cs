@@ -21,11 +21,12 @@ namespace SEATS.Models
 		public Nullable<int> ExcessiveFEDReasonID { get; set; }
 		public IEnumerable<SelectListItem> ExcessiveFEDReasonList { get; set; }
 		public int EnrollmentLocationID { get; set; }
-		
+        public string SchoolOfRecord { get; set; }
 
-		//Counselor
-		public Nullable<int> CounselorID { get; set; }
-		public virtual Counselor Counselor { get; set; }
+
+        //Counselor
+        public Nullable<int> CounselorID { get; set; }
+		public Counselor Counselor { get; set; }
 		public IEnumerable<SelectListItem> CounselorList { get; set; }
 		public Nullable<int> CactusID { get; set; }
 		public bool IsCounselorSigned { get; set; }
@@ -54,13 +55,13 @@ namespace SEATS.Models
 
 		//Course
 		public int OnlineCourseID { get; set; }
-		public IEnumerable<SelectListItem> OnlineCourse { get; set; }
+		public IEnumerable<SelectListItem> OnlineCourseList { get; set; }
 		public int CourseCategoryID { get; set; }
-		public IEnumerable<SelectListItem> CourseCategory { get; set; }
+		public IEnumerable<SelectListItem> CourseCategoryList { get; set; }
 		public int CourseCreditID { get; set; }
-		public IEnumerable<SelectListItem> CourseCredit { get; set; }
+		public IEnumerable<SelectListItem> CourseCreditList { get; set; }
 		public int SessionID { get; set; }
-		public IEnumerable<SelectListItem> Session { get; set; }
+		public IEnumerable<SelectListItem> SessionList { get; set; }
         public Nullable<decimal> CourseFee { get; set; }
 
 		//Misc

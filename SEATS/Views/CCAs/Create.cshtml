@@ -155,18 +155,18 @@
         <p class="text-info">Please choose Session first.</p>
         <div class="form-group">
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.SessionID, Model.Session, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
+                @Html.DropDownListFor(model => model.SessionID, Model.SessionList, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
 
                 @Html.ValidationMessageFor(model => model.SessionID, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
+                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategoryList, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
 
                 @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.OnlineCourseID, Model.OnlineCourse, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.DropDownListFor(model => model.OnlineCourseID, Model.OnlineCourseList, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
 
                 @Html.ValidationMessageFor(model => model.OnlineCourseID, "", new { @class = "text-danger" })
             </div>
@@ -192,7 +192,7 @@
         <div class="form-group">
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
+                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCreditList, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
 
                 @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
             </div>

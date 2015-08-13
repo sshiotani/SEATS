@@ -46,18 +46,18 @@ namespace SEATS.Controllers
                 var students = await db.Students.ToListAsync().ConfigureAwait(false);
                 var studentVmList = new List<StudentViewModel>();
 
-                Mapper.CreateMap<Student,StudentViewModel > ();
+                Mapper.CreateMap<Student, StudentViewModel>();
 
                 foreach (var item in students)
                 {
                     var model = Mapper.Map<Student, StudentViewModel>(item);
                     int ssid;
-                    if (int.TryParse(item.SSID,out ssid))
+                    if (int.TryParse(item.SSID, out ssid))
                     {
                         model.SSIDNumber = ssid;
                     }
 
-                   studentVmList.Add(model);
+                    studentVmList.Add(model);
 
                 }
 
@@ -229,11 +229,20 @@ namespace SEATS.Controllers
                 {
                     //Look for Private Schools in the list using school_type_code from Cactus.  If this code ever changes we will need to update this method.
 
-                    schoolNameList = schoolList.Where(m => m.SchoolType == "PVSEC").OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                    schoolList = schoolList.Where(m => m.SchoolType == "PVSEC").OrderBy(m => m.Name).Distinct().ToList();
+
+                    schoolNameList = schoolList.Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
                         Text = f.Name
-                    }); 
+                    });
+
+                    schoolNameList = schoolNameList.Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "SCHOOL NOT LISTED"
+                    }
+                    });
                 }
                 else
                 {

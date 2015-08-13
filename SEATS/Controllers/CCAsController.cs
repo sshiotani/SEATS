@@ -189,17 +189,17 @@ namespace SEATS.Controllers
                     Text = f.Reason
                 });
 
-                model.Session = db.Session.Where(x => x.Name != "All" && x.IsActive).Select(f => new SelectListItem
+                model.SessionList = db.Session.Where(x => x.Name != "All" && x.IsActive).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
                     Text = f.Name
                 });
 
-                model.CourseCategory = new List<SelectListItem>();
+                model.CourseCategoryList = new List<SelectListItem>();
 
-                model.OnlineCourse = new List<SelectListItem>();
+                model.OnlineCourseList = new List<SelectListItem>();
 
-                model.CourseCredit = new List<SelectListItem>();
+                model.CourseCreditList = new List<SelectListItem>();
 
                 return model;
             }
@@ -226,11 +226,16 @@ namespace SEATS.Controllers
                     //Get student associated with this user
                     Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
 
+                    if(ccaVm.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                    {
+                        ccaVm.SchoolOfRecord = student.SchoolOfRecord;
+                    }
+
                     // Map ViewModel to CCA and student
                     CCA cca = MapModel(ccaVm, student);
 
                     //Assign Counselor
-                    await CounselorCreate(ccaVm, cca, student).ConfigureAwait(false);
+                    await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
 
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
                     var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
@@ -395,7 +400,7 @@ namespace SEATS.Controllers
                         IdentityMessage msg = new IdentityMessage();
                         msg.Destination = user.Email;
                         msg.Subject = "SEOP Application Received.";
-                        msg.Body = "<html><p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p>The designated counselor is: "+ cca.Counselor.FirstName +" " +cca.Counselor.LastName +", " + cca.Counselor.Email +"</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p></html>";
+                        msg.Body = "<html><p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p>The designated counselor is: " + cca.Counselor.FirstName + " " + cca.Counselor.LastName + ", " + cca.Counselor.Email + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p></html>";
 
                         EmailService emailService = new EmailService();
                         await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -444,7 +449,7 @@ namespace SEATS.Controllers
         /// <param name="cca"></param>
         /// <param name="student"></param>
         /// <returns></returns>
-        private async Task CounselorCreate(CCAViewModel ccaVm, CCA cca, Student student)
+        private async Task CounselorCreate(CCAViewModel ccaVm, CCA cca)
         {
             // Homeschoolers will be assigned Counselor at the ID=0 entry (now Cory Kanth)
             try
@@ -468,19 +473,19 @@ namespace SEATS.Controllers
                             Phone = ccaVm.CounselorPhoneNumber
                         };
 
-                        if (cca.EnrollmentLocationID != GlobalVariables.PRIVATESCHOOLID)
-                        {
-                            counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
-                            counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
-                            var school = await cactus.CactusSchools.FirstOrDefaultAsync(m => m.ID == student.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
 
+                        counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
+                        counselor.EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID;
+                        CactusSchool school = null;
+                        if (cca.EnrollmentLocationSchoolNamesID != null)
+                        {
+                            school = await cactus.CactusSchools.FirstOrDefaultAsync(m => m.ID == cca.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
+                        }
+
+                        if (school != null)
                             counselor.School = school.Name;
-
-                        }
                         else
-                        {
-                            counselor.School = student.SchoolOfRecord;
-                        }
+                            counselor.School = ccaVm.SchoolOfRecord;
 
                         db.Counselors.Add(counselor);
 
@@ -598,7 +603,7 @@ namespace SEATS.Controllers
                 var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
-                    Text = f.Name +" -$" + f.CourseFee.Fee
+                    Text = f.Name + " -$" + f.CourseFee.Fee
                 });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
@@ -683,6 +688,33 @@ namespace SEATS.Controllers
                 throw new HttpException(500, "Error processing course information request.");
 
             }
+        }
+
+        public async Task<JsonResult> GetCounselors(string schoolName)
+        {
+            try
+            {
+
+                var counselors = await db.Counselors.Where(y => y.School == schoolName).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                }).ToListAsync().ConfigureAwait(false);
+
+                counselors = counselors.Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "Counselor Not Listed."
+                    }
+                    }).ToList();
+
+                return Json(new SelectList(counselors, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing category list request.");
+            }
+
         }
 
         /// <summary>
@@ -871,10 +903,10 @@ namespace SEATS.Controllers
                 ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
-                var categories = await db.CourseCategories.Where(s=>s.IsActive == true).Select(s => new SelectListItem
+                var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
                 {
                     Value = s.ID.ToString(),
-                    Text =  s.Name + " -$" + s.CourseFee.Fee
+                    Text = s.Name + " -$" + s.CourseFee.Fee
                 }).ToListAsync().ConfigureAwait(false);
 
                 ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
@@ -883,14 +915,37 @@ namespace SEATS.Controllers
 
                 ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
 
-                var leaId = ccaVm.Student.EnrollmentLocationID;
-                var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
-                if (leaId == 1) // HomeSchool
+                var leaId = ccaVm.EnrollmentLocationID;
+                if (leaId == 0)
+                    leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
+
+
+                var schoolId = ccaVm.EnrollmentLocationSchoolNamesID;
+                if (schoolId == null)
+                    schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
+
+                var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+
+                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+
+                ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
+                if (leaId == 0 || leaId == 1)
+                {
+                    ccaVm.CounselorList = new List<SelectListItem>();
+                }
+                else
+                {
+
+                }
+                if (leaId == GlobalVariables.HOMESCHOOLID) // HomeSchool
                 {
                     ViewBag.Lea = "HOMESCHOOL";
                     ViewBag.School = "HOMESCHOOL";
+                    ccaVm.CounselorList = new List<SelectListItem>();
                 }
-                else if (leaId == 2) //PrivateSchool
+                else if (leaId == GlobalVariables.PRIVATESCHOOLID) //PrivateSchool
                 {
                     ViewBag.Lea = "PRIVATESCHOOL";
                     ViewBag.School = ccaVm.Student.SchoolOfRecord;
@@ -900,9 +955,26 @@ namespace SEATS.Controllers
                     ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                     if (schoolId != null)
+                    {
                         ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                        ccaVm.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolId).Select(f => new SelectListItem
+                        {
+                            Value = f.ID.ToString(),
+                            Text = f.FirstName + " " + f.LastName
+                        });
+
+                        ccaVm.CounselorList.Where(m => m.Value == ccaVm.CounselorID.ToString()).Select(m => m.Selected = true);
+
+                    }
+
                     else
                         ViewBag.School = "UNKNOWN";
+
+
+
+
+
+
                 }
 
             }
@@ -932,6 +1004,10 @@ namespace SEATS.Controllers
                     Mapper.CreateMap<UsoeCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
 
                     cca = Mapper.Map<UsoeCcaViewModel, CCA>(ccaVm, cca);
+
+                    //Assign Counselor
+
+                    await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
 
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
 
