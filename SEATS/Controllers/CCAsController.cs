@@ -22,7 +22,6 @@ namespace SEATS.Controllers
 
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
-        //private SeatsContext db;
         private SEATSEntities cactus;
         private ApplicationDbContext db;
 
@@ -226,7 +225,7 @@ namespace SEATS.Controllers
                     //Get student associated with this user
                     Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
 
-                    if(ccaVm.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                    if (ccaVm.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     {
                         ccaVm.SchoolOfRecord = student.SchoolOfRecord;
                     }
@@ -456,45 +455,42 @@ namespace SEATS.Controllers
             {
                 if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID || (cca.EnrollmentLocationID != GlobalVariables.HOMESCHOOLID && cca.CounselorID == 0))
                 {
-                    int counselorId = 0;
-                    // Check for existing counselor entry
-                    if (ccaVm.CounselorEmail != null)
+                    // Either EnrollmentLocationSchoolNameID or SchoolOfRecord (Private School) must be set to assign counselor
+                    CactusSchool school = cca.EnrollmentLocationSchoolNamesID == null ? await cactus.CactusSchools.FindAsync(cca.EnrollmentLocationSchoolNamesID).ConfigureAwait(false) : null;
+
+                    if (school == null)
                     {
-                        counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                        school = new CactusSchool
+                        {
+                            Name = ccaVm.SchoolOfRecord
+                        };
                     }
 
-                    if (counselorId == 0)
+                    // Check for existing counselor entry, Counselor must be assigned to one school only.  (If counselor covers multiple schools each school will need a counselor record.)
+
+                    Counselor counselor = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                    if (counselor == null)
                     {
-                        var counselor = new Counselor()
+                        counselor = new Counselor()
                         {
                             Email = ccaVm.CounselorEmail,
                             FirstName = ccaVm.CounselorFirstName,
                             LastName = ccaVm.CounselorLastName,
-                            Phone = ccaVm.CounselorPhoneNumber
+                            Phone = ccaVm.CounselorPhoneNumber,
+                            EnrollmentLocationID = cca.EnrollmentLocationID,
+                            EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
+                            School = school.Name
                         };
-
-
-                        counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
-                        counselor.EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID;
-                        CactusSchool school = null;
-                        if (cca.EnrollmentLocationSchoolNamesID != null)
-                        {
-                            school = await cactus.CactusSchools.FirstOrDefaultAsync(m => m.ID == cca.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
-                        }
-
-                        if (school != null)
-                            counselor.School = school.Name;
-                        else
-                            counselor.School = ccaVm.SchoolOfRecord;
 
                         db.Counselors.Add(counselor);
 
                         await db.SaveChangesAsync().ConfigureAwait(false);
-                        cca.CounselorID = await db.Counselors.Where(m => m.Email == ccaVm.CounselorEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                        cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                     }
                     else
                     {
-                        cca.CounselorID = counselorId;
+                        cca.CounselorID = counselor.ID;
                     }
                 }
             }
@@ -530,6 +526,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
+        /// 
         /// Gets Categories from database using the sessionID.
         /// Check courses that are associated with the session and only return categories
         /// that have courses in that session.
@@ -930,50 +927,84 @@ namespace SEATS.Controllers
                 leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
                 ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
-                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
-                if (leaId == 0 || leaId == 1)
+
+                if (leaId == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    ccaVm.CounselorList = new List<SelectListItem>();
-                }
-                else
-                {
+                    var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+                    privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+                    ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
+                    ViewBag.Lea = "PRIVATESCHOOL";
+
+                    string schoolName;
+                    if (ccaVm.EnrollmentLocationSchoolNamesID != null)
+                    {
+                        schoolName = privateSchoolList.Where(m => m.ID == ccaVm.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefault();
+                    }
+
+                    else if (ccaVm.Student.SchoolOfRecord != null)
+                    {
+                        schoolName = ccaVm.Student.SchoolOfRecord;
+
+                    }
+                    else
+                    {
+                        schoolName = "SCHOOL NOT LISTED";
+                    }
+
+                    ViewBag.School = schoolName;
+                    if (!schoolName.Contains("SCHOOL NOT LISTED"))
+                    {
+                        ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                        {
+                            Value = f.ID.ToString(),
+                            Text = f.FirstName + " " + f.LastName
+                        });
+                    }
+
+                    if (ccaVm.CounselorList != null)
+                        ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+                    else
+                    {
+                        var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
+                        {
+                            Value = f.ID.ToString(),
+                            Text = f.FirstName + " " + f.LastName
+                        }).ToListAsync().ConfigureAwait(false);
+
+                        ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
+                    }
 
                 }
-                if (leaId == GlobalVariables.HOMESCHOOLID) // HomeSchool
+                else if (leaId == GlobalVariables.HOMESCHOOLID)
                 {
+                    ViewBag.EnrollmentLocationSchoolNamesID = new List<SelectListItem>();
                     ViewBag.Lea = "HOMESCHOOL";
                     ViewBag.School = "HOMESCHOOL";
-                    ccaVm.CounselorList = new List<SelectListItem>();
-                }
-                else if (leaId == GlobalVariables.PRIVATESCHOOLID) //PrivateSchool
-                {
-                    ViewBag.Lea = "PRIVATESCHOOL";
-                    ViewBag.School = ccaVm.Student.SchoolOfRecord;
+                    ViewBag.CounselorID = new List<SelectListItem>();
                 }
                 else
                 {
+                    ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
+
+
                     ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
                     if (schoolId != null)
                     {
-                        ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                        ccaVm.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolId).Select(f => new SelectListItem
+                        var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                        ViewBag.School = schoolName;
+
+                        ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
                         {
                             Value = f.ID.ToString(),
                             Text = f.FirstName + " " + f.LastName
                         });
 
-                        ccaVm.CounselorList.Where(m => m.Value == ccaVm.CounselorID.ToString()).Select(m => m.Selected = true);
-
+                        ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
                     }
 
                     else
                         ViewBag.School = "UNKNOWN";
-
-
-
-
-
 
                 }
 

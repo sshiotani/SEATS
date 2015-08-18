@@ -189,7 +189,7 @@
                 var items = '<option value="">Select School</option>';
                 $('#CurrentSchool').html(items);
 
-               // var lea = $("#EnrollmentLocation option:selected").text();
+                // var lea = $("#EnrollmentLocation option:selected").text();
                 var district = $("#EnrollmentLocation option:selected").val();
                 var districtName = $("#EnrollmentLocation option:selected").text();
 
@@ -201,25 +201,26 @@
                     $("#HomeSchoolRelease").removeClass('hide');
                     $('#SchoolId').val('-1');
                 }
-                else if (districtName.toLowerCase().indexOf("private school") >= 0) {
-                    $("#ssid").prop('disabled', true).prop('required', false);
-                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
-                    $("#CounselorSection :input").removeAttr('disabled');
-                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
-                    $("#HomeSchoolRelease").addClass('hide');
-                    $('#SchoolId').val("0");
-                }
+                    //else if (districtName.toLowerCase().indexOf("private school") >= 0) {
+                    //    $("#ssid").prop('disabled', true).prop('required', false);
+                    //    $("#CurrentSchool").prop('disabled', true).prop('required', false);
+                    //    $("#CounselorSection :input").removeAttr('disabled');
+                    //    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                    //    $("#HomeSchoolRelease").addClass('hide');
+                    //    $('#SchoolId').val("0");
+                    //}
                 else {
-                    $("#ssid").prop('disabled', false).prop('required', true);
+                    if (districtName.toLowerCase().indexOf("private school") >= 0) {
+                        $("#ssid").prop('disabled', true).prop('required', false);
+                    }
+                    else {
+                        $("#ssid").prop('disabled', false).prop('required', true);
+                    }
                     $("#CounselorSection :input").removeAttr('disabled');
                     $("#CurrentSchool").prop('disabled', false).prop('required',true);
                     $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
                     $("#HomeSchoolRelease").addClass('hide');
-                    
 
-
-
-                   
                     if (district != "") {
 
 
@@ -248,6 +249,16 @@
                 }
             });
 
+            $('#CurrentSchool').change(function () {
+                var schoolId = $("#CurrentSchool option:selected").val();
+                var schoolName = $("#CurrentSchool option:selected").text();
+                if (schoolName.toLowerCase().indexOf('school not listed') >= 0) {
+                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                }
+                else {
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required', true);
+                }
+            });
 
             $(".phone").mask("(999) 999-9999");
 

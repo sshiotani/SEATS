@@ -229,7 +229,7 @@ namespace SEATS.Controllers
                 {
                     //Look for Private Schools in the list using school_type_code from Cactus.  If this code ever changes we will need to update this method.
 
-                    schoolList = schoolList.Where(m => m.SchoolType == "PVSEC").OrderBy(m => m.Name).Distinct().ToList();
+                    schoolList = schoolList.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).OrderBy(m => m.Name).Distinct().ToList();
 
                     schoolNameList = schoolList.Select(f => new SelectListItem
                     {
@@ -426,7 +426,16 @@ namespace SEATS.Controllers
             leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+      
+            if (model.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                var privateSchools = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+                privateSchools = privateSchools.OrderBy(m => m.Name).Distinct().ToList();
+                privateSchools.Insert(privateSchools.Count, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchools, "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            }
+            else
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.ID == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
 
             return View(model);
 
@@ -458,7 +467,13 @@ namespace SEATS.Controllers
             leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            if (model.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            }
+            else
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.ID == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+
             return View(model);
         }
 
