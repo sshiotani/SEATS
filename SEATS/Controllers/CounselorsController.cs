@@ -49,14 +49,14 @@ namespace SEATS.Controllers
             {
                 if (counselor.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    if (counselor.EnrollmentLocationSchoolNameID != null)
-                    {
-                        ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
-                    }
-                    else
+                    if (counselor.EnrollmentLocationSchoolNameID == null || counselor.EnrollmentLocationSchoolNameID == 0)
                     {
                         var studentIds = db.Students.Where(m => m.SchoolOfRecord.ToUpper() == counselor.School.ToUpper()).Select(m => m.UserId);
                         ccas = await db.CCAs.Where(m => studentIds.Contains(m.UserId)).ToListAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
                     }
                 }
                 else
