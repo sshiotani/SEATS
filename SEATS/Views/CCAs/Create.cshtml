@@ -112,7 +112,7 @@
         @* Drop Down List for counselor Goes here *@
 
         <div class="form-group hide" id="CounselorPublic">
-            
+
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Please Choose a Counselor", new { @class = "form-control", id = "Counselors", required = false })
 
@@ -212,26 +212,26 @@
 
         <br />
         @*<div id="ProviderSection">
-            <h4>Provider Information</h4>
-            <hr />
+                <h4>Provider Information</h4>
+                <hr />
 
-            <div class="form-group">
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative First Name", placeholder = "Teacher First Name" } })
-                    @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative Last Name", placeholder = "Teacher Last Name" } })
-                    @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
-                    @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative First Name", placeholder = "Teacher First Name" } })
+                        @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative Last Name", placeholder = "Teacher Last Name" } })
+                        @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
+                        @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <hr />*@
+            <hr />*@
 
         <div class="form-group">
             <div class=" col-md-12">
@@ -258,9 +258,16 @@
                 $("#HomeSchool").removeClass('hide');
             }
             else if (location == 2) {
+                var schoolID = '@ViewBag.SchoolID';
+                if (schoolID == 0 || schoolID == null) {
+                    $("#CounselorPrivate").removeClass('hide');
+                    $("#CounselorPublic").addClass('hide');
+                }
+                else {
+                    $("#CounselorPrivate").addClass('hide');
+                    $("#CounselorPublic").removeClass('hide');
+                }
 
-                $("#CounselorPrivate").removeClass('hide');
-                $("#CounselorPublic").addClass('hide');
                 $("#HomeSchool").addClass('hide');
             }
             else {

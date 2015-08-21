@@ -134,10 +134,8 @@ namespace SEATS.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var model = new CCAViewModel();
-                var leaId = await db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationID).FirstOrDefaultAsync().ConfigureAwait(false);
-                model.EnrollmentLocationID = (int)leaId;
                 model.UserId = userId;
-                model = GetSelectLists(model);
+                model = await GetSelectLists(model);
 
                 return View(model);
             }
@@ -153,19 +151,21 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private CCAViewModel GetSelectLists(CCAViewModel model)
+        private async Task<CCAViewModel> GetSelectLists(CCAViewModel model)
         {
             try
             {
-                var leaId = model.EnrollmentLocationID;
+                var student = await db.Students.Where(m => m.UserId == model.UserId).FirstOrDefaultAsync();
+                var leaId = student.EnrollmentLocationID;
+                var schoolID = student.EnrollmentLocationSchoolNamesID;
                 if (leaId == 0 || leaId == 1)
                 {
                     model.CounselorList = new List<SelectListItem>();
                 }
                 else
-                {
-                    var schoolID = db.Students.Where(m => m.UserId == model.UserId).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
-
+                {                  
+                    model.EnrollmentLocationID = (int)student.EnrollmentLocationID;
+                    ViewBag.SchoolID = schoolID;
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
@@ -225,13 +225,13 @@ namespace SEATS.Controllers
                     //Get student associated with this user
                     Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
 
-                    if (ccaVm.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                    // Map ViewModel to CCA and student
+                    CCA cca = MapModel(ccaVm, student);
+
+                    if (student.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
                     {
                         ccaVm.SchoolOfRecord = student.SchoolOfRecord;
                     }
-
-                    // Map ViewModel to CCA and student
-                    CCA cca = MapModel(ccaVm, student);
 
                     //Assign Counselor
                     await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
@@ -264,7 +264,7 @@ namespace SEATS.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            ccaVm = GetSelectLists(ccaVm);
+            ccaVm = await GetSelectLists(ccaVm);
 
             return View(ccaVm);
 
@@ -456,41 +456,34 @@ namespace SEATS.Controllers
                 if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID || (cca.EnrollmentLocationID != GlobalVariables.HOMESCHOOLID && cca.CounselorID == 0))
                 {
                     // Either EnrollmentLocationSchoolNameID or SchoolOfRecord (Private School) must be set to assign counselor
-                    CactusSchool school = cca.EnrollmentLocationSchoolNamesID == null ? await cactus.CactusSchools.FindAsync(cca.EnrollmentLocationSchoolNamesID).ConfigureAwait(false) : null;
-
-                    if (school == null)
+                    if (cca.EnrollmentLocationSchoolNamesID == 0 && ccaVm.SchoolOfRecord == null)
                     {
-                        school = new CactusSchool
-                        {
-                            Name = ccaVm.SchoolOfRecord
-                        };
+                        throw new NullReferenceException("Private school name must be set in Student record to create Counselor.");
                     }
 
-                    // Check for existing counselor entry, Counselor must be assigned to one school only.  (If counselor covers multiple schools each school will need a counselor record.)
+                    var schoolNameId = (int)cca.EnrollmentLocationSchoolNamesID;
+                    CactusSchool school = schoolNameId != 0  ? await cactus.CactusSchools.Where(m => m.ID == cca.EnrollmentLocationSchoolNamesID).FirstOrDefaultAsync().ConfigureAwait(false) : new CactusSchool { Name = ccaVm.SchoolOfRecord };
 
-                    Counselor counselor = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).FirstOrDefaultAsync().ConfigureAwait(false);
+                    cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                    if (counselor == null)
+                    // If there is no record of this counselor create one.
+
+                    if (cca.CounselorID == 0)
                     {
-                        counselor = new Counselor()
-                        {
-                            Email = ccaVm.CounselorEmail,
-                            FirstName = ccaVm.CounselorFirstName,
-                            LastName = ccaVm.CounselorLastName,
-                            Phone = ccaVm.CounselorPhoneNumber,
-                            EnrollmentLocationID = cca.EnrollmentLocationID,
-                            EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
-                            School = school.Name
-                        };
+                        Counselor counselor = new Counselor()
+                          {
+                              Email = ccaVm.CounselorEmail,
+                              FirstName = ccaVm.CounselorFirstName,
+                              LastName = ccaVm.CounselorLastName,
+                              Phone = ccaVm.CounselorPhoneNumber,
+                              EnrollmentLocationID = cca.EnrollmentLocationID,
+                              EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
+                              School = school.Name
+                          };
 
                         db.Counselors.Add(counselor);
-
                         await db.SaveChangesAsync().ConfigureAwait(false);
                         cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        cca.CounselorID = counselor.ID;
                     }
                 }
             }

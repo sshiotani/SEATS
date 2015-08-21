@@ -287,6 +287,13 @@ namespace SEATS.Controllers
                         return View("Error");
                     }
 
+
+                    // Set Student School of Record for Private schools
+                    if(student.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID && student.EnrollmentLocationSchoolNamesID != null)
+                    {
+                        student.SchoolOfRecord = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    }
+
                     // Find SSID using ssidFindingService
                     student.SSID = await GetSSID(studentVm);
 
