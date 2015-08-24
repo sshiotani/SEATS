@@ -160,8 +160,8 @@
                 }
                 else if(schoolId != "")
                 {
-                    $('#CurrentPrivateSchool').removeAttr('hide').prop('required', true);
-                    $('#Counselors').addAttr('hide').prop('required', false);
+                    $('#CurrentPrivateSchool').addClass('hide').prop('required', true);
+                    $('#Counselors').removeClass('hide').prop('required', false);
 
                     $.ajax({
                         type: "POST",
