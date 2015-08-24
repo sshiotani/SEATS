@@ -89,10 +89,8 @@
         <h4>Counselor Information </h4>
         <hr />
 
-
-
-
         @Html.HiddenFor(x => x.EnrollmentLocationID, new { id = "EnrollmentLocationId" })
+        @Html.HiddenFor(x => x.UserId)
 
         <div class="form-group hide" id="CactusID">
             @Html.LabelFor(model => model.CactusID, htmlAttributes: new { @class = "control-label col-md-3" })

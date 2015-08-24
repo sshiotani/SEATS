@@ -128,11 +128,15 @@ namespace SEATS.Controllers
         /// Set up lists and viewmodel for creation of student CCA
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int? id = null)
         {
             try
             {
-                var userId = User.Identity.GetUserId();
+                // Added ability for admin to add CCA to student 8/24/2015
+                // If id is set admin method to create cca is activated.
+                string userId = id == null ? User.Identity.GetUserId() : 
+                    await db.Students.Where(m=>m.ID == id).Select(m=>m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+
                 var model = new CCAViewModel();
                 model.UserId = userId;
                 model = await GetSelectLists(model);
@@ -163,7 +167,7 @@ namespace SEATS.Controllers
                     model.CounselorList = new List<SelectListItem>();
                 }
                 else
-                {                  
+                {
                     model.EnrollmentLocationID = (int)student.EnrollmentLocationID;
                     ViewBag.SchoolID = schoolID;
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
@@ -213,17 +217,15 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,Phone,ProviderID,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        public async Task<ActionResult> Create([Bind(Include = "UserId,SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,Phone,ProviderID,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var userId = User.Identity.GetUserId();
-                    ccaVm.UserId = userId;
-
+                   
                     //Get student associated with this user
-                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
+                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == ccaVm.UserId);
 
                     // Map ViewModel to CCA and student
                     CCA cca = MapModel(ccaVm, student);
@@ -462,7 +464,7 @@ namespace SEATS.Controllers
                     }
 
                     var schoolNameId = (int)cca.EnrollmentLocationSchoolNamesID;
-                    CactusSchool school = schoolNameId != 0  ? await cactus.CactusSchools.Where(m => m.ID == cca.EnrollmentLocationSchoolNamesID).FirstOrDefaultAsync().ConfigureAwait(false) : new CactusSchool { Name = ccaVm.SchoolOfRecord };
+                    CactusSchool school = schoolNameId != 0 ? await cactus.CactusSchools.Where(m => m.ID == cca.EnrollmentLocationSchoolNamesID).FirstOrDefaultAsync().ConfigureAwait(false) : new CactusSchool { Name = ccaVm.SchoolOfRecord };
 
                     cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
 
@@ -471,15 +473,15 @@ namespace SEATS.Controllers
                     if (cca.CounselorID == 0)
                     {
                         Counselor counselor = new Counselor()
-                          {
-                              Email = ccaVm.CounselorEmail,
-                              FirstName = ccaVm.CounselorFirstName,
-                              LastName = ccaVm.CounselorLastName,
-                              Phone = ccaVm.CounselorPhoneNumber,
-                              EnrollmentLocationID = cca.EnrollmentLocationID,
-                              EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
-                              School = school.Name
-                          };
+                        {
+                            Email = ccaVm.CounselorEmail,
+                            FirstName = ccaVm.CounselorFirstName,
+                            LastName = ccaVm.CounselorLastName,
+                            Phone = ccaVm.CounselorPhoneNumber,
+                            EnrollmentLocationID = cca.EnrollmentLocationID,
+                            EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
+                            School = school.Name
+                        };
 
                         db.Counselors.Add(counselor);
                         await db.SaveChangesAsync().ConfigureAwait(false);
