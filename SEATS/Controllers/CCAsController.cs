@@ -931,7 +931,7 @@ namespace SEATS.Controllers
                     ViewBag.Lea = "PRIVATESCHOOL";
 
                     string schoolName;
-                    if (ccaVm.EnrollmentLocationSchoolNamesID != null)
+                    if (ccaVm.EnrollmentLocationSchoolNamesID != 0)
                     {
                         schoolName = privateSchoolList.Where(m => m.ID == ccaVm.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefault();
                     }
@@ -946,10 +946,11 @@ namespace SEATS.Controllers
                         schoolName = "SCHOOL NOT LISTED";
                     }
 
-                    ViewBag.School = schoolName;
+                    
+                    ccaVm.SchoolOfRecord = schoolName;
                     if (!schoolName.Contains("SCHOOL NOT LISTED"))
                     {
-                        ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                        ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
                         {
                             Value = f.ID.ToString(),
                             Text = f.FirstName + " " + f.LastName
