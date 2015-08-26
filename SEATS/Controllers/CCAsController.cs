@@ -1092,6 +1092,7 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
+                ViewBag.CounselorRejectionReasonsID = new SelectList(await db.CounselorRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason", ccaVm.CounselorRejectionReasonsID);
 
                 return View(ccaVm);
             }
@@ -1117,6 +1118,9 @@ namespace SEATS.Controllers
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
                     cca.IsCounselorSigned = ccaVm.IsCounselorSigned;
                     cca.IsCourseConsistentWithStudentSEOP = ccaVm.IsCourseConsistentWithStudentSEOP;
+                    cca.CounselorRejectionReasonsID = ccaVm.CounselorRejectionReasonsID;
+                    cca.IsCounselorRejecting = ccaVm.IsCounselorRejecting;
+                    cca.CounselorRejectionExplantion = ccaVm.CounselorRejectionExplantion;
 
                     db.Entry(cca).State = EntityState.Modified;
 

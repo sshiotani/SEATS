@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CCAsController.cs" />
+    <Compile Include="Controllers\CounselorRejectionReasonsController.cs" />
     <Compile Include="Controllers\CounselorsController.cs" />
     <Compile Include="Controllers\CourseCategoriesController.cs" />
     <Compile Include="Controllers\CourseCompletionStatusController.cs" />
@@ -218,6 +219,14 @@
     <Compile Include="Migrations\201506221835016_counselorsig.cs" />
     <Compile Include="Migrations\201506221835016_counselorsig.Designer.cs">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508261609431_CounselorRejection.cs" />
+    <Compile Include="Migrations\201508261609431_CounselorRejection.Designer.cs">
+      <DependentUpon>201508261609431_CounselorRejection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508261807098_GradeLevel.cs" />
+    <Compile Include="Migrations\201508261807098_GradeLevel.Designer.cs">
+      <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\BulkUploadViewModel.cs" />
@@ -261,13 +270,15 @@
     <Compile Include="Models\CounselorViewModel.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
+    <Compile Include="Models\StudentCcas\CounselorRejectionReasons.cs" />
     <Compile Include="Models\StudentCcas\CourseCompletionStatus.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />
     <Compile Include="Models\StudentCcas\PrimaryRejectionReasons.cs" />
     <Compile Include="Models\StudentCcas\ProviderRejectionReasons.cs" />
+    <Compile Include="Models\StudentCcas\RejectionReasons.cs" />
     <Compile Include="Models\WebApiConfiguration.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
-    <Compile Include="Models\CCAViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
     <Compile Include="Models\StudentCcas\CourseCategory.cs" />
     <Compile Include="Models\CourseResultModel.cs" />
@@ -676,6 +687,11 @@
     <Content Include="Views\CCAs\BulkUpload.cshtml" />
     <Content Include="Views\ManualAdd\Login.cshtml" />
     <Content Include="Views\ManualAdd\Register.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Create.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Delete.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Details.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Edit.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Index.cshtml" />
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -695,6 +711,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201506221835016_counselorsig.resx">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508261609431_CounselorRejection.resx">
+      <DependentUpon>201508261609431_CounselorRejection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508261807098_GradeLevel.resx">
+      <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

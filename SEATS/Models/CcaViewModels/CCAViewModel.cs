@@ -13,9 +13,8 @@ namespace SEATS.Models
 		public int SubmitterTypeID { get; set; }
         public string UserId { get; set; }
 
-		// Student
-		[Required]
-		public Nullable<int> StudentGradeLevel { get; set; }
+		// Student		
+		public int StudentGradeLevel { get; set; }
 		public bool HasExcessiveFED { get; set; }
 		public string ExcessiveFEDExplanation { get; set; }
 		public Nullable<int> ExcessiveFEDReasonID { get; set; }
@@ -30,9 +29,13 @@ namespace SEATS.Models
 		public IEnumerable<SelectListItem> CounselorList { get; set; }
 		public Nullable<int> CactusID { get; set; }
 		public bool IsCounselorSigned { get; set; }
+        public bool IsCounselorRejecting { get; set; }
+        public Nullable<int> CounselorRejectionReasonsID { get; set; }
+        public CounselorRejectionReasons CounselorRejectionReasons { get; set; }
+        public string CounselorRejectionExplantion { get; set; }
 
-		
-		[EmailAddress]
+
+        [EmailAddress]
 		[Display(Name = "Counselor Email")]
 		public string CounselorEmail { get; set; }
 

@@ -19,7 +19,7 @@ namespace SEATS.Models
         //Student
         public int StudentID { get; set; }
         public virtual Student Student { get; set; }
-        public Nullable<int> StudentGradeLevel { get; set; }
+        public int StudentGradeLevel { get; set; }
         public bool HasExcessiveFED { get; set; }
         public string ExcessiveFEDExplanation { get; set; }
         public Nullable<int> ExcessiveFEDReasonID { get; set; }
@@ -30,6 +30,10 @@ namespace SEATS.Models
         public int CounselorID { get; set; }
         public virtual Counselor Counselor { get; set; }
         public bool IsCounselorSigned { get; set; }
+        public bool IsCounselorRejecting { get; set; }
+        public Nullable<int> CounselorRejectionReasonsID { get; set; }
+        public virtual CounselorRejectionReasons CounselorRejectionReasons { get; set; }
+        public string CounselorRejectionExplantion { get; set; }
 
         //Primary Section
         public Nullable<int> EnrollmentLocationID { get; set; }

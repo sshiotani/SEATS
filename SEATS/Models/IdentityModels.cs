@@ -61,8 +61,7 @@ namespace SEATS.Models
 
         public System.Data.Entity.DbSet<SEATS.Models.CourseCompletionStatus> CourseCompletionStatus { get; set; }
 
-
-
+        public System.Data.Entity.DbSet<SEATS.Models.CounselorRejectionReasons> CounselorRejectionReasons { get; set; }
     }
 
     public class IdentityManager
