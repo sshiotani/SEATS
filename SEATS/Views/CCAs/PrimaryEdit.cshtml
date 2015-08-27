@@ -54,6 +54,42 @@
 
             </div>
         </div>
+        <div class="form-group">
+            @Html.Label("Counselor Accepts", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 form-control-static">
+                @Html.DisplayFor(model => model.IsCounselorSigned)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Counselor Rejects", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 form-control-static">
+                @Html.DisplayFor(model => model.IsCounselorRejecting)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @if (Model.CounselorRejectionReasonsID != null)
+                {
+                <p class="form-control-static">@Model.CounselorRejectionReasons.Reason</p>
+                }
+                else
+                {
+                    <p class="form-control-static">Counselor has not reviewed CCA.</p>
+                }
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Model.CounselorRejectionExplantion</p>
+
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.Label("Accept", htmlAttributes: new { @class = "control-label col-md-2" })
