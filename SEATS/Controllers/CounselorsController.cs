@@ -273,7 +273,38 @@ namespace SEATS.Controllers
             {
                 return HttpNotFound();
             }
+
+            await SetUpCounselorEdit(counselor);
             return View(counselor);
+        }
+
+        private async Task SetUpCounselorEdit(Counselor counselor)
+        {
+            var leas = await cactus.CactusInstitutions.ToListAsync();
+            var schools = await cactus.CactusSchools.ToListAsync();
+
+            leas.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
+
+            if (counselor.EnrollmentLocationID == null)
+            {
+                counselor.EnrollmentLocationID = schools.Where(m => m.ID == counselor.EnrollmentLocationSchoolNameID).Select(m => m.District).FirstOrDefault();
+            }
+
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name", counselor.EnrollmentLocationID);
+
+            if (counselor.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                schools = schools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToList();
+            }
+            else
+            {
+                schools = schools.Where(m => m.District == counselor.EnrollmentLocationID).ToList();
+            }
+
+            schools.Insert(0, new CactusSchool() { Name = "NOT LISTED", ID = 0 });
+            ViewBag.EnrollmentLocationSchoolNameID = new SelectList(schools, "ID", "Name", counselor.EnrollmentLocationSchoolNameID);
         }
 
         // POST: Counselors/Edit/5
@@ -292,6 +323,8 @@ namespace SEATS.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
+            await SetUpCounselorEdit(counselor);
             return View(counselor);
         }
 
