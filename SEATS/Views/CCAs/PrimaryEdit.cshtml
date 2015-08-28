@@ -91,7 +91,19 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="CreditRadio">
+            @*@Html.Label("Will the student be registered for more than full day credit equivalent?", new { @class = "col-md-6  control-radio" })*@
+            @Html.Label("Accept/Reject", htmlAttributes: new { @class = "control-label col-md-2 control-radio" })
+            <div class="col-md-10">
+                @Html.Label("Accept", "Accept", new { @class = "control-radio form-control-static" })
+                @Html.RadioButtonFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment, true, new { htmlAttributes = new { title = "Accept this CCA" } })
+                @Html.Label("Reject", "Reject", new { @class = "control-radio form-control-static" })
+                @Html.RadioButtonFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment, false, new { htmlAttributes = new { title = "Reject CCA" } })
+
+                @Html.ValidationMessageFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
             @Html.Label("Accept", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
@@ -99,7 +111,7 @@
                     @Html.ValidationMessageFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment, "", new { @class = "text-danger" })
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="form-group">
             @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

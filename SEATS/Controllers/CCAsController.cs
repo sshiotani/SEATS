@@ -1122,9 +1122,6 @@ namespace SEATS.Controllers
                     cca.IsCounselorRejecting = ccaVm.IsCounselorRejecting;
                     cca.CounselorRejectionExplantion = ccaVm.CounselorRejectionExplantion;
 
-                    //Sets Status to Rejected Primary if counselor rejects.
-                    cca.CourseCompletionStatusID = cca.IsCounselorRejecting ? await db.CourseCompletionStatus.Where(m => m.Status.Contains("Rejected Primary")).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false) : cca.CourseCompletionStatusID;
-
                     db.Entry(cca).State = EntityState.Modified;
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
@@ -1204,6 +1201,9 @@ namespace SEATS.Controllers
                     cca.PrimaryRejectionReasonsID = ccaVm.PrimaryRejectionReasonsID;
                     cca.PrimaryNotes = ccaVm.PrimaryNotes;
                     cca.BusinessAdministratorSignature = ccaVm.BusinessAdministratorSignature;
+
+                    //Sets Status to Rejected Primary if rejects. (true = accept false = reject)
+                    cca.CourseCompletionStatusID = !cca.IsBusinessAdministratorAcceptRejectEnrollment ? await db.CourseCompletionStatus.Where(m => m.Status.Contains("Rejected Primary")).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false) : cca.CourseCompletionStatusID;
 
                     db.Entry(cca).State = EntityState.Modified;
 
