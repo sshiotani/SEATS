@@ -80,6 +80,37 @@
         </dd>
 
         <dt>
+            @Html.DisplayName("Counselor Accepts")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCounselorSigned)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Counselor Rejects")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCounselorRejecting)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Rejection Reason")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorRejectionReasons.Reason)
+        </dd>
+    
+        <dt>
+            @Html.DisplayName("Rejection Explanation")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorRejectionExplantion)
+        </dd>
+        <dt>
             @Html.DisplayName("Primary Accepts")
         </dt>
 
