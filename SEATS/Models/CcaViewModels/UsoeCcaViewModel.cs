@@ -25,8 +25,9 @@ namespace SEATS.Models
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
         public int? EnrollmentLocationSchoolNamesID { get; set; }
 
+
         //Items to be input by USOE 
-       
+
         public Nullable<int> CourseCompletionStatusID { get; set; }
         public CourseCompletionStatus CourseCompletionStatus { get; set; }
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }

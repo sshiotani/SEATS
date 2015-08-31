@@ -442,7 +442,7 @@ namespace SEATS.Controllers
                 ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchools, "ID", "Name", model.EnrollmentLocationSchoolNamesID);
             }
             else
-                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.ID == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
 
             return View(model);
 

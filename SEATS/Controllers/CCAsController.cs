@@ -25,10 +25,14 @@ namespace SEATS.Controllers
         private SEATSEntities cactus;
         private ApplicationDbContext db;
 
+        public Func<string> GetUserId; //For testing
+
         public CCAsController()
         {
             this.db = new ApplicationDbContext();
             this.cactus = new SEATSEntities();
+
+            GetUserId = () => User.Identity.GetUserId();
 
         }
 
@@ -72,7 +76,7 @@ namespace SEATS.Controllers
         public async Task<ActionResult> StudentCcaView()
         {
             List<CourseStatusViewModel> courses = new List<CourseStatusViewModel>();
-            var userId = User.Identity.GetUserId();
+            var userId = GetUserId();
             try
             {
                 courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new CourseStatusViewModel
@@ -134,7 +138,7 @@ namespace SEATS.Controllers
             {
                 // Added ability for admin to add CCA to student 8/24/2015
                 // If id is set admin method to create cca is activated.
-                string userId = id == null ? User.Identity.GetUserId() : 
+                string userId = id == null ? GetUserId() : 
                     await db.Students.Where(m=>m.ID == id).Select(m=>m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 var model = new CCAViewModel();
@@ -160,6 +164,7 @@ namespace SEATS.Controllers
             try
             {
                 var student = await db.Students.Where(m => m.UserId == model.UserId).FirstOrDefaultAsync();
+                model.EnrollmentLocationID = (int)student.EnrollmentLocationID;
                 var leaId = student.EnrollmentLocationID;
                 var schoolID = student.EnrollmentLocationSchoolNamesID;
                 if (leaId == 0 || leaId == 1)
@@ -168,7 +173,6 @@ namespace SEATS.Controllers
                 }
                 else
                 {
-                    model.EnrollmentLocationID = (int)student.EnrollmentLocationID;
                     ViewBag.SchoolID = schoolID;
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
@@ -756,68 +760,68 @@ namespace SEATS.Controllers
 
         // GET: CCAs/Edit/5
 
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
 
-            try
-            {
-                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
-                if (cCA == null)
-                {
-                    return HttpNotFound();
-                }
-                ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", cCA.CounselorID);
-                ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
-                ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
+        //    try
+        //    {
+        //        CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+        //        if (cCA == null)
+        //        {
+        //            return HttpNotFound();
+        //        }
+        //        ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", cCA.CounselorID);
+        //        ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
+        //        ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
 
-                return View(cCA);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
-                return View("Error");
-            }
-        }
+        //        return View(cCA);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
+        //        return View("Error");
+        //    }
+        //}
 
-        // POST: CCAs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
-        {
+        //// POST: CCAs/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        //{
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Mapper.CreateMap<CCAViewModel, CCA>();
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            Mapper.CreateMap<CCAViewModel, CCA>();
 
-                    CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
-                    db.Entry(cca).State = EntityState.Modified;
+        //            CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
+        //            db.Entry(cca).State = EntityState.Modified;
 
-                    await db.SaveChangesAsync().ConfigureAwait(false);
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
-                    return View("Error");
-                }
-            }
+        //            await db.SaveChangesAsync().ConfigureAwait(false);
+        //            return RedirectToAction("Index");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+        //            return View("Error");
+        //        }
+        //    }
 
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", ccaVm.CounselorID);
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
-            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
+        //    ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", ccaVm.CounselorID);
+        //    ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
+        //    ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
 
-            return View(ccaVm);
-        }
+        //    return View(ccaVm);
+        //}
 
         // GET: CCAs/Details/5
         /// <summary>
