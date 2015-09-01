@@ -280,9 +280,10 @@ namespace SEATS.Controllers
 
         private async Task SetUpCounselorEdit(Counselor counselor)
         {
+            
             var leas = await cactus.CactusInstitutions.ToListAsync();
-            var schools = await cactus.CactusSchools.ToListAsync();
-
+            var schools = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
+           
             leas.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
 
@@ -300,7 +301,11 @@ namespace SEATS.Controllers
             }
             else
             {
-                schools = schools.Where(m => m.District == counselor.EnrollmentLocationID).ToList();
+                //schools = schools.Where(m => m.District == counselor.EnrollmentLocationID).ToList();
+                schools.RemoveAll(m => m.Name == null);
+                var distinctSchoolList = schools.GroupBy(x => x.Name).Select(group => group.First());
+                schools = distinctSchoolList.Where(m => m.District == counselor.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().ToList();
+                
             }
 
             schools.Insert(0, new CactusSchool() { Name = "NOT LISTED", ID = 0 });

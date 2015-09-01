@@ -15,13 +15,13 @@ namespace SEATS.Models
 
 		// Student		
 		public int? StudentGradeLevel { get; set; }
-		public bool HasExcessiveFED { get; set; }
+		public bool? HasExcessiveFED { get; set; }
 		public string ExcessiveFEDExplanation { get; set; }
 		public Nullable<int> ExcessiveFEDReasonID { get; set; }
 		public IEnumerable<SelectListItem> ExcessiveFEDReasonList { get; set; }
 		public int? EnrollmentLocationID { get; set; }
         public string SchoolOfRecord { get; set; }
-
+        public bool EarlyGraduate { get; set; }
 
         //Counselor
         public Nullable<int> CounselorID { get; set; }

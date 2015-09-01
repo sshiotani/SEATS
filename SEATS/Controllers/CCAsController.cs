@@ -1096,6 +1096,12 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
+                Student student = await db.Students.FindAsync(cca.StudentID).ConfigureAwait(false);
+
+                ccaVm.IsEarlyGraduate = student.IsEarlyGraduate;
+                ccaVm.IsIEP = student.IsIEP;
+                ccaVm.IsSection504 = student.IsSection504;
+
                 ViewBag.CounselorRejectionReasonsID = new SelectList(await db.CounselorRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason", ccaVm.CounselorRejectionReasonsID);
 
                 return View(ccaVm);
@@ -1127,6 +1133,17 @@ namespace SEATS.Controllers
                     cca.CounselorRejectionExplantion = ccaVm.CounselorRejectionExplantion;
 
                     db.Entry(cca).State = EntityState.Modified;
+
+                    Student student = await db.Students.FindAsync(cca.StudentID).ConfigureAwait(false);
+
+                    if(student.IsEarlyGraduate != ccaVm.IsEarlyGraduate || student.IsIEP != ccaVm.IsIEP || student.IsSection504 != ccaVm.IsSection504)
+                    {
+                        student.IsEarlyGraduate = (bool)ccaVm.IsEarlyGraduate;
+                        student.IsIEP = ccaVm.IsIEP;
+                        student.IsSection504 = ccaVm.IsSection504;
+                        db.Entry(student).State = EntityState.Modified;
+                    }
+
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "Counselors");
