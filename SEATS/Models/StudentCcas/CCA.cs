@@ -11,6 +11,7 @@ namespace SEATS.Models
         
         public int ID { get; set; }
 
+        public int SubmitterTypeID { get; set; }
         public DateTime ApplicationSubmissionDate { get; set; }
         public int FiscalYear { get; set; }
 

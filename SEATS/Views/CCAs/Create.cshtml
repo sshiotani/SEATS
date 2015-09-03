@@ -17,15 +17,15 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group hide" id="SubmitterTypeCheckBox">
-            @Html.Label("Which of the following are you?", new { @class = "col-md-4  control-radio" })
+            @Html.Label("Submitter Type", new { @class = "col-md-4  control-radio" })
 
             <div class="col-md-8">
                 @Html.Label("Student", "Student or Parent/Guardian", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Student/Parent" }, id = "studentSubmitter" })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 0, new { htmlAttributes = new { title = "Student/Parent" }, id = "studentSubmitter" })
                 @Html.Label("Counselor", "| Counselor", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Counselor" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Counselor" } })
                 @Html.Label("Provider", "| Provider", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 3, new { htmlAttributes = new { title = "Provider" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Provider" } })
 
                 @Html.ValidationMessageFor(model => model.SubmitterTypeID, "", new { @class = "text-danger" })
             </div>
@@ -249,6 +249,12 @@
 
     <script>
         $(function () {
+            var isSubmittedByProxy = '@Model.IsSubmittedByProxy';
+            if (isSubmittedByProxy == 'True')
+            {
+                $('#SubmitterTypeCheckBox').removeClass('hide');
+            }
+
             var location = $('#EnrollmentLocationId').val();
             if (location == 1) {
                 $("#CounselorPrivate").addClass('hide');
@@ -293,19 +299,19 @@
 
             //Add/hide fields according to user type.
 
-            $("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
-                if ($(this).val() == 3) {
-                    $("#ProviderSection").removeClass('hide');
-                    $("#CactusID").addClass('hide');
-                }
-                else if ($(this).val() == 2) {
-                    $("#CactusID").removeClass('hide');
-                    $("#ProviderSection").addClass('hide');
-                } else if ($(this).val() == 1) {
-                    $("#ProviderSection").addClass('hide');
-                    $("#CactusID").addClass('hide');
-                }
-            });
+            //$("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
+            //    if ($(this).val() == 2) {
+            //        $("#ProviderSection").removeClass('hide');
+            //        $("#CactusID").addClass('hide');
+            //    }
+            //    else if ($(this).val() == 1) {
+            //        $("#CactusID").removeClass('hide');
+            //        $("#ProviderSection").addClass('hide');
+            //    } else if ($(this).val() == 0) {
+            //        $("#ProviderSection").addClass('hide');
+            //        $("#CactusID").addClass('hide');
+            //    }
+            //});
 
             $('input:radio:first').prop("checked", true).trigger("click");
 

@@ -446,8 +446,8 @@ namespace SEATS.Controllers
                 IEnumerable<SelectListItem> schoolNameList;
                 var schoolList = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
                 schoolList.RemoveAll(m => m.Name == null);
-                var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
-                schoolNameList = distinctSchoolList.Where(m => m.District == model.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                //var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
+                schoolNameList = schoolList.Where(m => m.District == model.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
                     Text = f.Name

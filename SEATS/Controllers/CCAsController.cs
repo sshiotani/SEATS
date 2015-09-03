@@ -136,13 +136,20 @@ namespace SEATS.Controllers
         {
             try
             {
+                var model = new CCAViewModel();
+
                 // Added ability for admin to add CCA to student 8/24/2015
                 // If id is set admin method to create cca is activated.
-                string userId = id == null ? GetUserId() : 
-                    await db.Students.Where(m=>m.ID == id).Select(m=>m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
-
-                var model = new CCAViewModel();
-                model.UserId = userId;
+                if(id == null)
+                {
+                    model.UserId = GetUserId();
+                }
+                else
+                {
+                    model.IsSubmittedByProxy = true;
+                    model.UserId= await db.Students.Where(m => m.ID == id).Select(m => m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                }
+          
                 model = await GetSelectLists(model);
 
                 return View(model);
@@ -911,11 +918,12 @@ namespace SEATS.Controllers
 
                 ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
 
+                // If cca Lea is not set set to student Lea
                 var leaId = ccaVm.EnrollmentLocationID;
                 if (leaId == 0)
                     leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
 
-
+                //If school is not set, set to student school
                 var schoolId = ccaVm.EnrollmentLocationSchoolNamesID;
                 if (schoolId == null)
                     schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
@@ -934,16 +942,15 @@ namespace SEATS.Controllers
                     ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
                     ViewBag.Lea = "PRIVATESCHOOL";
 
+                    //Set Private School Name
                     string schoolName;
-                    if (ccaVm.EnrollmentLocationSchoolNamesID != 0)
+                    if (schoolId != 0)
                     {
-                        schoolName = privateSchoolList.Where(m => m.ID == ccaVm.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefault();
+                        schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
                     }
-
                     else if (ccaVm.Student.SchoolOfRecord != null)
                     {
                         schoolName = ccaVm.Student.SchoolOfRecord;
-
                     }
                     else
                     {

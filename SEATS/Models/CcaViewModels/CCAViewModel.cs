@@ -13,8 +13,10 @@ namespace SEATS.Models
 		public int SubmitterTypeID { get; set; }
         public string UserId { get; set; }
 
-		// Student		
-		public int? StudentGradeLevel { get; set; }
+        public bool IsSubmittedByProxy { get; set; }
+
+        // Student		
+        public int? StudentGradeLevel { get; set; }
 		public bool? HasExcessiveFED { get; set; }
 		public string ExcessiveFEDExplanation { get; set; }
 		public Nullable<int> ExcessiveFEDReasonID { get; set; }

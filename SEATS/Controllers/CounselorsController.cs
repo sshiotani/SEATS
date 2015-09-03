@@ -303,8 +303,8 @@ namespace SEATS.Controllers
             {
                 //schools = schools.Where(m => m.District == counselor.EnrollmentLocationID).ToList();
                 schools.RemoveAll(m => m.Name == null);
-                var distinctSchoolList = schools.GroupBy(x => x.Name).Select(group => group.First());
-                schools = distinctSchoolList.Where(m => m.District == counselor.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().ToList();
+                //var distinctSchoolList = schools.GroupBy(x => x.Name).Select(group => group.First());
+                schools = schools.Where(m => m.District == counselor.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().ToList();
                 
             }
 

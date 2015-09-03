@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201508261807098_GradeLevel.Designer.cs">
       <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509031436403_SubmitterType.cs" />
+    <Compile Include="Migrations\201509031436403_SubmitterType.Designer.cs">
+      <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\BulkUploadViewModel.cs" />
     <Compile Include="Models\Cactus.Context.cs">
@@ -717,6 +721,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508261807098_GradeLevel.resx">
       <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509031436403_SubmitterType.resx">
+      <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
