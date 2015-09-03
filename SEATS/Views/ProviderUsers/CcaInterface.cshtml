@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th data-column-id="Submission Date">
-                @Html.DisplayName("Submission Date")
+                @Html.DisplayName("Date(Submission)")
             </th>
             <th data-column-id="fiscalyear">
                 @Html.DisplayName("Fiscal Year")
@@ -33,6 +33,21 @@
             </th>
             <th data-column-id="status">
                 @Html.DisplayName("Status")
+            </th>
+            <th data-column-id="accepts" data-formatter="ProviderAccepts">
+                @Html.DisplayName("Accepted")
+            </th>
+            <th data-column-id="filedBy">
+                @Html.DisplayName("Filed By")
+            </th>
+            <th data-column-id="started">
+                @Html.DisplayName("Start Date")
+            </th>
+            <th data-column-id="teacherLastName">
+                @Html.DisplayName("Teacher Last Name")
+            </th>
+            <th data-column-id="Semester">
+                @Html.DisplayName("Semester")
             </th>
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false" data-type="numeric" data-identifier="true">
                 @Html.DisplayName("Actions")
@@ -66,6 +81,33 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
                 </td>
+                <td>
+                    
+                    @if (item.IsProviderAcceptsRejectsCourseRequest == true)
+                    { <p>check</p> }
+
+                    else
+                    { <p>not</p> }
+
+                </td>
+                <td>         
+                    @if (item.SubmitterTypeID == 0)
+                    { <p>S</p> }
+                    else if(item.SubmitterTypeID == 1)
+                    { <p>C</p> }
+                    else if (item.SubmitterTypeID == 2)
+                    { <p>P</p> }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Session.Name)
+                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.CcaID)
 
@@ -140,6 +182,13 @@
                 caseSensitive: false,
                 rowCount: [-1,10, 25, 50, 100],
                 formatters: {
+                    "ProviderAccepts": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.accepts) == "check") checkBox = "checked=\"checked\"";
+
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+
+                    },
 
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
