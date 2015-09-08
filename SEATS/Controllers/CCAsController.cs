@@ -147,7 +147,11 @@ namespace SEATS.Controllers
                 else
                 {
                     model.IsSubmittedByProxy = true;
-                    model.UserId= await db.Students.Where(m => m.ID == id).Select(m => m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    model.UserId = await db.Students.Where(m => m.ID == id).Select(m => m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    if(model.UserId == null)
+                    {
+                        throw new NullReferenceException("No student found for this ID.");
+                    }
                 }
           
                 model = await GetSelectLists(model);
@@ -903,115 +907,32 @@ namespace SEATS.Controllers
 
             try
             {
-                ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
+                // Setup Course Selection Lists
 
-                ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
-                var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
-                {
-                    Value = s.ID.ToString(),
-                    Text = s.Name + " -$" + s.CourseFee.Fee
-                }).ToListAsync().ConfigureAwait(false);
+                await SetUpCourseSectionofUsoeEditVm(ccaVm);
 
-                ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
-                var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
-                ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
-
-                ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
+                // District and School Lists
 
                 // If cca Lea is not set set to student Lea
-                var leaId = ccaVm.EnrollmentLocationID;
-                if (leaId == 0)
-                    leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
+                int? leaId = await SetUpEnrollmentIDList(ccaVm);
 
                 //If school is not set, set to student school
                 var schoolId = ccaVm.EnrollmentLocationSchoolNamesID;
                 if (schoolId == null)
                     schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
 
-                var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
-
-                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
-                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
-
-                ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
-
                 if (leaId == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
-                    privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
-                    ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
-                    ViewBag.Lea = "PRIVATESCHOOL";
-
-                    //Set Private School Name
-                    string schoolName;
-                    if (schoolId != 0)
-                    {
-                        schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
-                    }
-                    else if (ccaVm.Student.SchoolOfRecord != null)
-                    {
-                        schoolName = ccaVm.Student.SchoolOfRecord;
-                    }
-                    else
-                    {
-                        schoolName = "SCHOOL NOT LISTED";
-                    }
-
-                    
-                    ccaVm.SchoolOfRecord = schoolName;
-                    if (!schoolName.Contains("SCHOOL NOT LISTED"))
-                    {
-                        ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
-                        {
-                            Value = f.ID.ToString(),
-                            Text = f.FirstName + " " + f.LastName
-                        });
-                    }
-
-                    if (ccaVm.CounselorList != null)
-                        ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
-                    else
-                    {
-                        var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
-                        {
-                            Value = f.ID.ToString(),
-                            Text = f.FirstName + " " + f.LastName
-                        }).ToListAsync().ConfigureAwait(false);
-
-                        ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
-                    }
+                    await SetUpForPrivateSchool(ccaVm, schoolId);
 
                 }
                 else if (leaId == GlobalVariables.HOMESCHOOLID)
                 {
-                    ViewBag.EnrollmentLocationSchoolNamesID = new List<SelectListItem>();
-                    ViewBag.Lea = "HOMESCHOOL";
-                    ViewBag.School = "HOMESCHOOL";
-                    ViewBag.CounselorID = new List<SelectListItem>();
+                    SetUpForHomeSchool();
                 }
                 else
                 {
-                    ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
-
-
-                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-
-                    if (schoolId != null)
-                    {
-                        var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                        ViewBag.School = schoolName;
-
-                        ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
-                        {
-                            Value = f.ID.ToString(),
-                            Text = f.FirstName + " " + f.LastName
-                        });
-
-                        ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
-                    }
-
-                    else
-                        ViewBag.School = "UNKNOWN";
+                    await SetUpForDistrictSchool(ccaVm, leaId, schoolId);
 
                 }
 
@@ -1020,6 +941,143 @@ namespace SEATS.Controllers
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// This method Sets Up the ViewModel for Students who are not Private or Home School.
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <param name="leaId"></param>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
+        private async Task SetUpForDistrictSchool(UsoeCcaViewModel ccaVm, int? leaId, int? schoolId)
+        {
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
+            ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            if (schoolId != null)
+            {
+                var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                ViewBag.School = schoolName;
+
+                ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                });
+
+                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+            }
+
+            else
+                ViewBag.School = "UNKNOWN";
+        }
+
+        /// <summary>
+        /// Thie method sets up the ViewModel for Homeschool students.
+        /// </summary>
+        private void SetUpForHomeSchool()
+        {
+            ViewBag.EnrollmentLocationSchoolNamesID = new List<SelectListItem>();
+            ViewBag.Lea = "HOMESCHOOL";
+            ViewBag.School = "HOMESCHOOL";
+            ViewBag.CounselorID = new List<SelectListItem>();
+        }
+
+        /// <summary>
+        /// This method sets up the UsoeCcaViewModel for a PrivateSchool student.
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
+        private async Task SetUpForPrivateSchool(UsoeCcaViewModel ccaVm, int? schoolId)
+        {
+            var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+            privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
+            ViewBag.Lea = "PRIVATESCHOOL";
+
+            //Set Private School Name
+            string schoolName;
+            if (schoolId != 0)
+            {
+                schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
+            }
+            else if (ccaVm.Student.SchoolOfRecord != null)
+            {
+                schoolName = ccaVm.Student.SchoolOfRecord;
+            }
+            else
+            {
+                schoolName = "SCHOOL NOT LISTED";
+            }
+
+            
+            ccaVm.SchoolOfRecord = schoolName;
+            if (!schoolName.Contains("SCHOOL NOT LISTED"))
+            {
+                ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                });
+            }
+
+            if (ccaVm.CounselorList != null)
+                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+            else
+            {
+                var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                }).ToListAsync().ConfigureAwait(false);
+
+                ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
+            }
+        }
+
+        /// <summary>
+        /// This method sets up the Lea DropdownList portion of the ViewModel 
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <returns></returns>
+        private async Task<int?> SetUpEnrollmentIDList(UsoeCcaViewModel ccaVm)
+        {
+            var leaId = ccaVm.EnrollmentLocationID;
+            if (leaId == 0)
+                leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
+
+            var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
+            return leaId;
+        }
+
+        /// <summary>
+        /// This method 
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <returns></returns>
+        private async Task SetUpCourseSectionofUsoeEditVm(UsoeCcaViewModel ccaVm)
+        {
+            ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
+
+            ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+            var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
+            {
+                Value = s.ID.ToString(),
+                Text = s.Name + " -$" + s.CourseFee.Fee
+            }).ToListAsync().ConfigureAwait(false);
+
+            ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
+            var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
+            ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
+
+            ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
         }
 
 
