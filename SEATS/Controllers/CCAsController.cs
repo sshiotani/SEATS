@@ -1465,6 +1465,7 @@ namespace SEATS.Controllers
 
         /// <summary>
         /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// If an item is not set it will not be updated.
         /// </summary>
         /// <returns></returns>
         public async Task<ActionResult> SaveBulkUpdate()
@@ -1488,7 +1489,12 @@ namespace SEATS.Controllers
                     if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
                     if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
                     if (rowsToEdit.BulkEdit.DateConfirmationActiveParticipation != null) row.DateConfirmationActiveParticipation = rowsToEdit.BulkEdit.DateConfirmationActiveParticipation;
-
+                    if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
+                    if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
+                    if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
+                    if (rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest != null) row.IsProviderAcceptsRejectsCourseRequest = (bool)rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest;
+                    if (rowsToEdit.BulkEdit.ProviderRejectionReasonsID != null) row.ProviderRejectionReasonsID = rowsToEdit.BulkEdit.ProviderRejectionReasonsID;
+                    if (rowsToEdit.BulkEdit.ProviderExplanationRejection != null) row.ProviderExplanationRejection = rowsToEdit.BulkEdit.ProviderExplanationRejection;
                 }
 
                 await db.SaveChangesAsync().ConfigureAwait(false);

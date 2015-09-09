@@ -68,6 +68,7 @@ namespace SEATS.Controllers
                 Text = f.Status
             });
 
+            vmList.BulkEdit.ProviderRejectionReasonsList = new List<SelectListItem>();
             // Send to form to edit these ccas
             return View(vmList);
 
@@ -101,13 +102,29 @@ namespace SEATS.Controllers
             // Look up all ccas associated with this provider
             TempData["RowIds"] = rowIds;
 
+           
 
             // Send to form to edit these ccas
 
             return Json(rowIds);
 
         }
-       
+
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]
+        public ActionResult GetReasons()
+        {
+           
+            // Setup Rejection Reasons DropdownList
+
+            var reasons = db.PrimaryRejectionReasons;
+
+            // Send reasons to dropdownlist
+
+            return Json(new SelectList(reasons, "ID", "Reason"));
+
+        }
+
         private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
         {
             Mapper.CreateMap<CCA, ProviderCcaViewModel>();

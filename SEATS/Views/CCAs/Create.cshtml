@@ -78,7 +78,7 @@
 
 
             <div class="col-md-7">
-                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation, new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" })
+                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation, new { cols = 40, rows = 10, @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDExplanation, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -203,7 +203,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-12">
-                @Html.TextAreaFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Comments,  new { cols = 40, rows = 10, @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
             </div>
         </div>
