@@ -134,7 +134,7 @@
         <div class="form-group">
             @Html.Label("Record Notes", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.PrimaryNotes,  new { cols = 40, rows = 10, @class = "form-control" } )
+                @Html.TextAreaFor(model => model.PrimaryNotes,  new { cols = 40, rows = 10,  @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.PrimaryNotes, "", new { @class = "text-danger" })
             </div>
         </div>
