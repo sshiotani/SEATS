@@ -147,7 +147,8 @@ namespace SEATS.Controllers
                 else
                 {
                     model.IsSubmittedByProxy = true;
-                    model.UserId = await db.Students.Where(m => m.ID == id).Select(m => m.UserId).FirstOrDefaultAsync().ConfigureAwait(false);
+                    var student = await db.Students.FindAsync(id).ConfigureAwait(false);
+                    model.UserId = student.UserId;
                     if(model.UserId == null)
                     {
                         throw new NullReferenceException("No student found for this ID.");

@@ -182,7 +182,8 @@
         <div class="form-group hide" id="RejectionExplanationSection">
             @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2",  })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BulkEdit.ProviderExplanationRejection, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.BulkEdit.ProviderExplanationRejection, new { cols = 40, rows = 4, @class = "form-control" })
+                
                 @Html.ValidationMessageFor(model => model.BulkEdit.ProviderExplanationRejection, "", new { @class = "text-danger" })
             </div>
         </div>
