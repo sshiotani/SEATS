@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Web.Mvc;
-
+using System.Linq;
 
 namespace SEATS.Controllers
 {
@@ -44,50 +44,23 @@ namespace SEATS.Controllers
 
                 var ccas = await db.CCAs.ToListAsync();
 
-                foreach (var cca in ccas)
+                UsoeCcaVmList vmList = new UsoeCcaVmList();
+
+                vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+                vmList.BulkEdit = new BulkEditViewModelUsoe();
+
+                var statusList = await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false); ;
+
+                statusList.Insert(0, new CourseCompletionStatus { ID = 0, Status = "Select Status" });
+
+                vmList.BulkEdit.CourseCompletionStatusList = statusList.Select(f => new SelectListItem
                 {
-                    var ccaVm = Mapper.Map<CCA, UsoeCcaViewModel>(cca);
-                    ccaVm.CcaID = cca.ID;
-
-                    // Switch is slightly faster than if-else at this time.
-
-                    switch (cca.EnrollmentLocationID)
-                    {
-                        case null:
-                            break;
-                        case GlobalVariables.HOMESCHOOLID:
-                            ccaVm.Primary = "HOMESCHOOL";
-                            break;
-                        case GlobalVariables.PRIVATESCHOOLID:
-                            ccaVm.Primary = "PRIVATESCHOOL";
-                            break;
-                        default:
-                            var primary = await cactus.CactusInstitutions.FirstOrDefaultAsync(c => c.ID == cca.EnrollmentLocationID).ConfigureAwait(false);
-                            if (primary != null)
-                                ccaVm.Primary = primary.Name;
-                            else
-                                ccaVm.Primary = "UNKNOWN";
-                            break;
-                    }
-
-                    //if (cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID)
-                    //    ccaVm.Primary = "HOMESCHOOL";
-                    //else if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
-                    //    ccaVm.Primary = "PRIVATESCHOOL";
-                    //else
-                    //{
-                    //    var primary = await cactus.CactusInstitutions.FirstOrDefaultAsync(c=>c.ID == cca.EnrollmentLocationID).ConfigureAwait(false);
-                    //    if (primary != null)
-                    //        ccaVm.Primary = primary.Name;
-                    //    else
-                    //        ccaVm.Primary = "UNKNOWN";
-                    //}
-
-                    ccaList.Add(ccaVm);
-                }
+                    Value = f.ID.ToString(),
+                    Text = f.Status
+                });
 
                 // Send list of ccas to display
-                return View(ccaList);
+                return View(vmList);
 
             }
             catch (Exception ex)
@@ -95,6 +68,64 @@ namespace SEATS.Controllers
                 ViewBag.Message = "Unable to retrieve list of CCAs from database. Error:" + ex.Message;
                 return View("Error");
             }
+
+        }
+
+        /// <summary>
+        /// Sets up ViewModel List for Bulk Edit
+        /// </summary>
+        /// <param name="ccas"></param>
+        /// <returns></returns>
+        private async Task<List<UsoeCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
+        {
+            Mapper.CreateMap<CCA, UsoeCcaViewModel>();
+
+            var ccaVmList = new List<UsoeCcaViewModel>();
+
+
+            foreach (var cca in ccas)
+            {
+                var ccaVm = Mapper.Map<CCA, UsoeCcaViewModel>(cca);
+                ccaVm.CcaID = cca.ID;
+
+                switch (cca.EnrollmentLocationID)
+                {
+                    case null:
+                        break;
+                    case GlobalVariables.HOMESCHOOLID:
+                        ccaVm.Primary = "HOMESCHOOL";
+                        break;
+                    case GlobalVariables.PRIVATESCHOOLID:
+                        ccaVm.Primary = "PRIVATESCHOOL";
+                        break;
+                    default:
+                        var primary = await cactus.CactusInstitutions.FirstOrDefaultAsync(c => c.ID == cca.EnrollmentLocationID).ConfigureAwait(false);
+
+                        if (primary != null)
+                            ccaVm.Primary = primary.Name;
+                        else
+                            ccaVm.Primary = "UNKNOWN";
+                        break;
+                }
+
+                ccaVmList.Add(ccaVm);
+            }
+
+            return ccaVmList;
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CcaInterface(UsoeCcaVmList rowsToEdit)
+        {
+
+            TempData["RowsToEdit"] = rowsToEdit;
+
+
+            // Send updated rows to cca controller 
+            return RedirectToAction("SaveBulkUpdateUsoe", "CCAs");
 
         }
 
