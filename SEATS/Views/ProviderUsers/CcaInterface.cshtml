@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th data-column-id="Submission Date">
-                @Html.DisplayName("Submission Date")
+                @Html.DisplayName("Date(Submission)")
             </th>
             <th data-column-id="fiscalyear">
                 @Html.DisplayName("Fiscal Year")
@@ -33,6 +33,21 @@
             </th>
             <th data-column-id="status">
                 @Html.DisplayName("Status")
+            </th>
+            <th data-column-id="accepts" data-formatter="ProviderAccepts">
+                @Html.DisplayName("Accepted")
+            </th>
+            <th data-column-id="filedBy">
+                @Html.DisplayName("Filed By")
+            </th>
+            <th data-column-id="started">
+                @Html.DisplayName("Start Date")
+            </th>
+            <th data-column-id="teacherLastName">
+                @Html.DisplayName("Teacher Last Name")
+            </th>
+            <th data-column-id="Semester">
+                @Html.DisplayName("Semester")
             </th>
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false" data-type="numeric" data-identifier="true">
                 @Html.DisplayName("Actions")
@@ -67,6 +82,33 @@
                     @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
                 </td>
                 <td>
+
+                    @if (item.IsProviderAcceptsRejectsCourseRequest == true)
+                    { <p>check</p> }
+
+                    else
+                    { <p>not</p> }
+
+                </td>
+                <td>
+                    @if (item.SubmitterTypeID == 0)
+                    { <p>S</p> }
+                    else if (item.SubmitterTypeID == 1)
+                    { <p>C</p> }
+                    else if (item.SubmitterTypeID == 2)
+                    { <p>P</p> }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Session.Name)
+                </td>
+
+                <td>
                     @Html.DisplayFor(modelItem => item.CcaID)
 
                 </td>
@@ -86,7 +128,7 @@
     <div class="form-horizontal hide" id="EditForm">
         <div class="form-group" id="BulkEdit">
             <div class="col-md-3">
-                @Html.DropDownListFor(model=>model.BulkEdit.CourseCompletionStatusID, Model.BulkEdit.CourseCompletionStatusList , htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Status" })
+                @Html.DropDownListFor(model => model.BulkEdit.CourseCompletionStatusID, Model.BulkEdit.CourseCompletionStatusList, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Status" })
                 @Html.ValidationMessageFor(model => model.BulkEdit.CourseCompletionStatusID, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
@@ -104,7 +146,47 @@
         </div>
 
         <hr />
-        
+        <div class="form-group" id="BulkEdit">
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.TeacherCactusID, new { @class = "form-control", id = "TeacherCactus", placeholder = "Teacher Cactus ID" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.TeacherCactusID, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.TeacherFirstName, new { @class = "form-control", id = "TeacherFirstName", title = "FirstName", placeholder = "Teacher First Name" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.CourseStartDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.TeacherLastName, new { @class = "form-control", id = "TeacherLastName", title = "LastName.", placeholder = "Teacher Last Name" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group" id="AcceptRadio">
+            @Html.Label("Accept CCAs?", htmlAttributes: new { @class = "col-md-2  control-radio" })
+            <div class="col-md-10">
+                @Html.Label("Yes", "Yes", new { @class = "control-radio" })
+                @Html.RadioButtonFor(model => model.BulkEdit.IsProviderAcceptsRejectsCourseRequest, true, new { htmlAttributes = new { title = "Yes." }, id = "Accept" })
+                @Html.Label("No", "No", new { @class = "control-radio" })
+                @Html.RadioButtonFor(model => model.BulkEdit.IsProviderAcceptsRejectsCourseRequest, false, new { htmlAttributes = new { title = "No." }, id = "Reject" })
+
+                @Html.ValidationMessageFor(model => model.BulkEdit.IsProviderAcceptsRejectsCourseRequest, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group hide" id="RejectionReasonSection">
+            @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BulkEdit.ProviderRejectionReasonsID, Model.BulkEdit.ProviderRejectionReasonsList, null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "RejectReasons" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.ProviderRejectionReasonsID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group hide" id="RejectionExplanationSection">
+            @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2",  })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.BulkEdit.ProviderExplanationRejection, new { cols = 40, rows = 4, @class = "form-control" })
+                
+                @Html.ValidationMessageFor(model => model.BulkEdit.ProviderExplanationRejection, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-1 col-md-11">
 
@@ -138,8 +220,15 @@
                 multiSelect: true,
                 keepSelection: true,
                 caseSensitive: false,
-                rowCount: [-1,10, 25, 50, 100],
+                rowCount: [-1, 10, 25, 50, 100],
                 formatters: {
+                    "ProviderAccepts": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.accepts) == "check") checkBox = "checked=\"checked\"";
+
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+
+                    },
 
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
@@ -149,19 +238,19 @@
                 }
             }).on("selected.rs.jquery.bootgrid", function (e, rows) {
                 $("#EditForm").addClass('hide');
-                
+
                 for (var i = 0; i < rows.length; i++) {
                     rowIds.push(rows[i].Actionlinks);
 
                 }
 
-                if(rowIds.length >= 2)
+                if (rowIds.length >= 2)
                     $("#bulk-edit").removeClass('hide');
 
                 //alert("Select: " + rowIds.join(","));
             }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
                 $("#EditForm").addClass('hide');
-               
+
                 for (var i = 0; i < rows.length; i++) {
                     var index = rowIds.indexOf(rows[i].Actionlinks);
                     rowIds.splice(index, 1);
@@ -181,8 +270,12 @@
                     url: '@Url.Action("RowSave", "ProviderUsers")',
                     data: { rowIds: rowIds },
                     dataType: 'json',
-                    success: function () {
+                    success: function (rejectReasonsList) {
                         $("#EditForm").removeClass('hide');
+
+                        //$.each(rejectReasonsList, function (i, reason) {
+                        //    $('#RejectReasons').append("<option value='" + reason.Value + "'>" + reason.Text + "</option>");
+                        //});
                     },
                     error: function () {
                         alert('Service call failed');
@@ -191,7 +284,32 @@
 
             });
 
+            $("#AcceptRadio input[name$='IsProviderAcceptsRejectsCourseRequest']").click(function () {
+                if ($('#Reject').is(':checked')) {
 
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetReasons", "ProviderUsers")',
+                        
+                        dataType: 'json',
+                        success: function (rejectReasonsList) {
+                            $("#EditForm").removeClass('hide');
+
+                            $.each(rejectReasonsList, function (i, reason) {
+                                $('#RejectReasons').append("<option value='" + reason.Value + "'>" + reason.Text + "</option>");
+                            });
+                        },
+                        error: function () {
+                            alert('Service call failed');
+                        }
+                    });
+                    $("#RejectionReasonSection, #RejectionExplanationSection").removeClass('hide').prop('disabled', false).prop('required', true);
+                }
+                else {
+                    $('#RejectReasons').empty();
+                    $("#RejectionReasonSection, #RejectionExplanationSection").addClass('hide').prop('disabled', true).prop('required', false);
+                }
+            });
 
         });
 

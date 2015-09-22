@@ -18,13 +18,16 @@ namespace SEATS.Controllers
     {
         private ApplicationDbContext db;
         private SEATSEntities cactus;
-        
-         //private SeatsContext db { get; set; }
-       
+        public Func<string> GetUserId; //For testing
+
+        //private SeatsContext db { get; set; }
+
         public ProviderUsersController()
         {
             this.db = new ApplicationDbContext();
             this.cactus = new SEATSEntities();
+
+            GetUserId = () => User.Identity.GetUserId();
         }
 
         // GET: ProviderUsers
@@ -42,7 +45,7 @@ namespace SEATS.Controllers
             // Look up all ccas associated with this provider
 
             // Send to form to edit these ccas
-            var userId = User.Identity.GetUserId();
+            var userId = GetUserId();
             var providerUser = await db.ProviderUsers.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
             var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
@@ -68,6 +71,7 @@ namespace SEATS.Controllers
                 Text = f.Status
             });
 
+            vmList.BulkEdit.ProviderRejectionReasonsList = new List<SelectListItem>();
             // Send to form to edit these ccas
             return View(vmList);
 
@@ -101,13 +105,29 @@ namespace SEATS.Controllers
             // Look up all ccas associated with this provider
             TempData["RowIds"] = rowIds;
 
+           
 
             // Send to form to edit these ccas
 
             return Json(rowIds);
 
         }
-       
+
+        [Authorize(Roles = "Admin,Provider")]
+        [HttpPost]
+        public ActionResult GetReasons()
+        {
+           
+            // Setup Rejection Reasons DropdownList
+
+            var reasons = db.PrimaryRejectionReasons;
+
+            // Send reasons to dropdownlist
+
+            return Json(new SelectList(reasons, "ID", "Reason"));
+
+        }
+
         private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
         {
             Mapper.CreateMap<CCA, ProviderCcaViewModel>();
@@ -174,7 +194,7 @@ namespace SEATS.Controllers
         {
             if (ModelState.IsValid)
             {
-                providerUser.UserId = User.Identity.GetUserId();
+                providerUser.UserId = GetUserId();
                 var identityUser = db.Users.Find(providerUser.UserId);
                 providerUser.Email = identityUser.Email;
                 db.ProviderUsers.Add(providerUser);

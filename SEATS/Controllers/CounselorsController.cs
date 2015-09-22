@@ -43,11 +43,26 @@ namespace SEATS.Controllers
             // Look up counselor associated with this user
             var userId = User.Identity.GetUserId();
             var counselor = await db.Counselors.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
-
+            List<CCA> ccas;
             // Look up all ccas associated with this primary
             if (counselor != null)
             {
-                var ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                if (counselor.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                {
+                    if (counselor.EnrollmentLocationSchoolNameID == null || counselor.EnrollmentLocationSchoolNameID == 0)
+                    {
+                        var studentIds = db.Students.Where(m => m.SchoolOfRecord.ToUpper() == counselor.School.ToUpper()).Select(m => m.UserId);
+                        ccas = await db.CCAs.Where(m => studentIds.Contains(m.UserId)).ToListAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                    }
+                }
+                else
+                {
+                     ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                }
 
                 // Create list of viewmodels populated from 
                 var ccaVmList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
@@ -108,14 +123,21 @@ namespace SEATS.Controllers
         {
             var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
 
+            SetUpCreateView(leas);
+
+            return View();
+        }
+
+        private void SetUpCreateView(List<CactusInstitution> leas)
+        {
+            leas.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
             leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
+
 
             ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
 
             ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
             ViewBag.CounselorID = new List<SelectListItem>();
-
-            return View();
         }
 
         // POST: Counselors/Create
@@ -186,12 +208,7 @@ namespace SEATS.Controllers
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
             var leas = await cactus.CactusInstitutions.ToListAsync().ConfigureAwait(false);
-
-            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
-
-            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name");
-            ViewBag.EnrollmentLocationSchoolNameID = new List<SelectListItem>();
-            ViewBag.CounselorID = new List<SelectListItem>();
+            SetUpCreateView(leas);
             return View(counselorVm);
         }
 
@@ -199,6 +216,26 @@ namespace SEATS.Controllers
         public JsonResult GetCounselors(int schoolId)
         {
             var counselors = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolId).Select(f => new SelectListItem
+            {
+                Value = f.ID.ToString(),
+                Text = f.FirstName + " " + f.LastName
+            });
+
+            // Add a item to add new counselor to list.
+
+            var counselorList = counselors.AsEnumerable().Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "Counselor Not Listed."
+                    }
+                    });
+
+            return Json(new SelectList(counselorList, "Value", "Text"));
+        }
+
+        public JsonResult GetPrivateSchoolCounselors(string schoolName)
+        {
+            var counselors = db.Counselors.Where(m => m.School.Equals(schoolName)).Select(f => new SelectListItem
             {
                 Value = f.ID.ToString(),
                 Text = f.FirstName + " " + f.LastName
@@ -236,7 +273,43 @@ namespace SEATS.Controllers
             {
                 return HttpNotFound();
             }
+
+            await SetUpCounselorEdit(counselor);
             return View(counselor);
+        }
+
+        private async Task SetUpCounselorEdit(Counselor counselor)
+        {
+            
+            var leas = await cactus.CactusInstitutions.ToListAsync();
+            var schools = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
+           
+            leas.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+            leas.Insert(0, new CactusInstitution() { Code = "", Name = "District", ID = 0 });
+
+            if (counselor.EnrollmentLocationID == null)
+            {
+                counselor.EnrollmentLocationID = schools.Where(m => m.ID == counselor.EnrollmentLocationSchoolNameID).Select(m => m.District).FirstOrDefault();
+            }
+
+
+            ViewBag.EnrollmentLocationID = new SelectList(leas, "ID", "Name", counselor.EnrollmentLocationID);
+
+            if (counselor.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                schools = schools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToList();
+            }
+            else
+            {
+                //schools = schools.Where(m => m.District == counselor.EnrollmentLocationID).ToList();
+                schools.RemoveAll(m => m.Name == null);
+                //var distinctSchoolList = schools.GroupBy(x => x.Name).Select(group => group.First());
+                schools = schools.Where(m => m.District == counselor.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().ToList();
+                
+            }
+
+            schools.Insert(0, new CactusSchool() { Name = "NOT LISTED", ID = 0 });
+            ViewBag.EnrollmentLocationSchoolNameID = new SelectList(schools, "ID", "Name", counselor.EnrollmentLocationSchoolNameID);
         }
 
         // POST: Counselors/Edit/5
@@ -255,6 +328,8 @@ namespace SEATS.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
+            await SetUpCounselorEdit(counselor);
             return View(counselor);
         }
 

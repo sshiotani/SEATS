@@ -49,30 +49,54 @@
                 @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
             </div>
         </div>
-  
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CactusID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CactusID, new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.CactusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.School, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.School, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.School, new { htmlAttributes = new { @class = "form-control" , id = "School" } })
                 @Html.ValidationMessageFor(model => model.School, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group">
+            @Html.Label("District", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("EnrollmentLocationID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "EnrollmentLocation" })
+                @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
+
+
+            </div>
+        </div>
 
         <div class="form-group">
-            @Html.Label("Cactus School ID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EnrollmentLocationSchoolNameID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.Label("School", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("EnrollmentLocationSchoolNameID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
                 @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNameID, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.Label("Cactus LEA ID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EnrollmentLocationID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+                @Html.Label("Cactus School ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EnrollmentLocationSchoolNameID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNameID, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
+
+            <div class="form-group">
+                @Html.Label("Cactus LEA ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EnrollmentLocationID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EnrollmentLocationID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -91,6 +115,81 @@
 
             $(".phone").mask("(999) 999-9999");
 
+            $('#EnrollmentLocation').change(function () {
+
+                $('#CurrentSchool').empty();
+                var items = '<option value="">Select School</option>';
+                $('#CurrentSchool').html(items);
+
+                // var lea = $("#EnrollmentLocation option:selected").text();
+                var district = $("#EnrollmentLocation option:selected").val();
+                var districtName = $("#EnrollmentLocation option:selected").text();
+
+                if (districtName.toLowerCase().indexOf("home school") >= 0) {
+                    $("#studentNumber").prop('disabled', true).prop('required', false);
+                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
+                    $('#Counselors').empty();
+                    $("#Counselors").prop('disabled', true).prop('required', false);
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required', false);
+                    $("#HomeSchoolRelease").removeClass('hide');
+                    $('#SchoolId').val('-1');
+                    district = "";
+                }
+                    //else if (districtName.toLowerCase().indexOf("private school") >= 0) {
+                    //    $("#studentNumber").prop('disabled', true).prop('required', false);
+                    //    //$("#CurrentSchool").prop('disabled', true).prop('required', false);
+                    //    $("#CounselorSection :input").removeAttr('disabled');
+                    //    //$("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                    //    $("#HomeSchoolRelease").addClass('hide');
+                    //    $('#SchoolId').val("0");
+                    //}
+                else {
+                    $("#studentNumber").prop('disabled', false).prop('required', true);
+                    $("#CounselorSection :input").removeAttr('disabled');
+                    $("#CurrentSchool").prop('disabled', false).prop('required', true);
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required', false);
+                    $("#HomeSchoolRelease").addClass('hide');
+                }
+
+                if (district != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetSchoolNames", "Students")',
+                        data: { district: district },
+                        dataType: 'json',
+                        success: function (schoolList) {
+
+                            $.each(schoolList, function (i, school) {
+
+                                $('#CurrentSchool').append("<option value='" + school.Value + "'>" + school.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select Enrollment Location First</option>';
+                    $('#CurrentSchool').html(items);
+                }
+
+            });
+
+
+            $('#CurrentSchool').change(function () {
+               
+                var schoolName = $("#CurrentSchool option:selected").text();
+
+                if (schoolName == 'NOT LISTED') {
+                    $('#School').val("PLEASE INPUT SCHOOL NAME");
+                }
+                else {
+                    $('#School').val(schoolName);
+                }
+
+            });
         });
     </script>
 }

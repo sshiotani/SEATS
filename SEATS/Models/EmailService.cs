@@ -16,19 +16,22 @@ namespace SEATS.Models
             {
                 MailMessage mail = new MailMessage();
                 mail.To.Add(message.Destination);
-                mail.From = new MailAddress("noreply@noreply.schools.utah.gov","SEATS");
+                mail.From = new MailAddress("noreply@barracuda.schools.utah.gov","SEATS");
                 mail.Subject = message.Subject;
                 mail.Body = message.Body;
                 mail.IsBodyHtml = true;
+                mail.ReplyToList.Add(new MailAddress("edonline@schools.utah.gov", "EdOnline"));
 
                 using (SmtpClient smtp = new SmtpClient())
                 {
                     smtp.Host = "198.60.12.9";
                     smtp.Port = 25;
+ 
                     //smtp.UseDefaultCredentials = true;
 
                     await smtp.SendMailAsync(mail);
                 }
+
                 mail.Dispose();
 
                 

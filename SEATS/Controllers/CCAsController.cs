@@ -22,14 +22,17 @@ namespace SEATS.Controllers
 
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
-        //private SeatsContext db;
         private SEATSEntities cactus;
         private ApplicationDbContext db;
+
+        public Func<string> GetUserId; //For testing
 
         public CCAsController()
         {
             this.db = new ApplicationDbContext();
             this.cactus = new SEATSEntities();
+
+            GetUserId = () => User.Identity.GetUserId();
 
         }
 
@@ -73,7 +76,7 @@ namespace SEATS.Controllers
         public async Task<ActionResult> StudentCcaView()
         {
             List<CourseStatusViewModel> courses = new List<CourseStatusViewModel>();
-            var userId = User.Identity.GetUserId();
+            var userId = GetUserId();
             try
             {
                 courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new CourseStatusViewModel
@@ -129,16 +132,30 @@ namespace SEATS.Controllers
         /// Set up lists and viewmodel for creation of student CCA
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int? id = null)
         {
             try
             {
-                var userId = User.Identity.GetUserId();
                 var model = new CCAViewModel();
-                var leaId = await db.Students.Where(m => m.UserId == userId).Select(m => m.EnrollmentLocationID).FirstOrDefaultAsync().ConfigureAwait(false);
-                model.EnrollmentLocationID = (int)leaId;
-                model.UserId = userId;
-                model = GetSelectLists(model);
+
+                // Added ability for admin to add CCA to student 8/24/2015
+                // If id is set admin method to create cca is activated.
+                if(id == null)
+                {
+                    model.UserId = GetUserId();
+                }
+                else
+                {
+                    model.IsSubmittedByProxy = true;
+                    var student = await db.Students.FindAsync(id).ConfigureAwait(false);
+                    model.UserId = student.UserId;
+                    if(model.UserId == null)
+                    {
+                        throw new NullReferenceException("No student found for this ID.");
+                    }
+                }
+          
+                model = await GetSelectLists(model);
 
                 return View(model);
             }
@@ -154,19 +171,21 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        private CCAViewModel GetSelectLists(CCAViewModel model)
+        private async Task<CCAViewModel> GetSelectLists(CCAViewModel model)
         {
             try
             {
-                var leaId = model.EnrollmentLocationID;
+                var student = await db.Students.Where(m => m.UserId == model.UserId).FirstOrDefaultAsync();
+                model.EnrollmentLocationID = (int)student.EnrollmentLocationID;
+                var leaId = student.EnrollmentLocationID;
+                var schoolID = student.EnrollmentLocationSchoolNamesID;
                 if (leaId == 0 || leaId == 1)
                 {
                     model.CounselorList = new List<SelectListItem>();
                 }
                 else
                 {
-                    var schoolID = db.Students.Where(m => m.UserId == model.UserId).Select(m => m.EnrollmentLocationSchoolNamesID).FirstOrDefault();
-
+                    ViewBag.SchoolID = schoolID;
                     model.CounselorList = db.Counselors.Where(m => m.EnrollmentLocationSchoolNameID == schoolID).Select(f => new SelectListItem
                     {
                         Value = f.ID.ToString(),
@@ -189,17 +208,17 @@ namespace SEATS.Controllers
                     Text = f.Reason
                 });
 
-                model.Session = db.Session.Where(x => x.Name != "All" && x.IsActive).Select(f => new SelectListItem
+                model.SessionList = db.Session.Where(x => x.Name != "All" && x.IsActive).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
                     Text = f.Name
                 });
 
-                model.CourseCategory = new List<SelectListItem>();
+                model.CourseCategoryList = new List<SelectListItem>();
 
-                model.OnlineCourse = new List<SelectListItem>();
+                model.OnlineCourseList = new List<SelectListItem>();
 
-                model.CourseCredit = new List<SelectListItem>();
+                model.CourseCreditList = new List<SelectListItem>();
 
                 return model;
             }
@@ -214,23 +233,26 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,Phone,ProviderID,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        public async Task<ActionResult> Create([Bind(Include = "UserId,SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,CactusID,CounselorEmail,CounselorFirstName,CounselorLastName,CounselorPhoneNumber,Phone,ProviderID,OnlineCourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var userId = User.Identity.GetUserId();
-                    ccaVm.UserId = userId;
-
+                   
                     //Get student associated with this user
-                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == userId);
+                    Student student = await db.Students.FirstOrDefaultAsync(x => x.UserId == ccaVm.UserId);
 
                     // Map ViewModel to CCA and student
                     CCA cca = MapModel(ccaVm, student);
 
+                    if (student.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+                    {
+                        ccaVm.SchoolOfRecord = student.SchoolOfRecord;
+                    }
+
                     //Assign Counselor
-                    await CounselorCreate(ccaVm, cca, student).ConfigureAwait(false);
+                    await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
 
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
                     var session = await db.Session.FindAsync(cca.SessionID).ConfigureAwait(false);
@@ -260,7 +282,7 @@ namespace SEATS.Controllers
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
 
-            ccaVm = GetSelectLists(ccaVm);
+            ccaVm = await GetSelectLists(ccaVm);
 
             return View(ccaVm);
 
@@ -309,7 +331,7 @@ namespace SEATS.Controllers
                 msg.Destination = provider.Email;
                 msg.Subject = "Enrollment Request for Provider Review";
                 var initial = cca.Student.StudentFirstName[0];
-                msg.Body = "<p>USOE has received a CCA for " + initial + ". " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p>";
+                msg.Body = "<html><p>USOE has received a CCA for " + initial + ". " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -330,8 +352,8 @@ namespace SEATS.Controllers
                 var parent = await db.Parents.FindAsync(cca.Student.ParentID).ConfigureAwait(false);
 
                 msg.Destination = parent.GuardianEmail;
-                msg.Subject = "SEOP Application Received.";
-                msg.Body = "<p>Dear Parent or Guardian,</p> <p>An \"Enrollment Request\" for online enrollment in a course taught by a lea district or charter lea outside of your primary lea district or charter lea has been filed with the Utah State Office of Education (USOE) for your child.  WITHIN APPROXIMATELY 72 BUSINESS HOURS (approximately 10 business days), YOU CAN EXPECT TO RECEIVE A NOTICE OF ENROLLMENT or REJECTION THIS STUDENT. If you have any questions in this period, please feel free to contact USOE as below.</p> <p>Please call us at 801.538.7660 with any questions.</p>On behalf of the Utah State Office of Education, we thank you for your assistance. </p><p>E-Mail:				edonline@schools.utah.gov </p><p>Tel.: 801.538.7660.</p><p>More information can be found at https://seats.schools.utah.gov/ </p>";
+                msg.Subject = "SOEP Application Received.";
+                msg.Body = "<html><p>Dear Parent or Guardian,</p> <p>An \"Enrollment Request\" for online enrollment in a course taught by a lea district or charter lea outside of your primary lea district or charter lea has been filed with the Utah State Office of Education (USOE) for your child.  WITHIN APPROXIMATELY 72 BUSINESS HOURS (approximately 10 business days), YOU CAN EXPECT TO RECEIVE A NOTICE OF ENROLLMENT or REJECTION THIS STUDENT. If you have any questions in this period, please feel free to contact USOE as below.</p> <p>Please call us at 801.538.7660 with any questions.</p>On behalf of the Utah State Office of Education, we thank you for your assistance. </p><p>E-Mail:				edonline@schools.utah.gov </p><p>Tel.: 801.538.7660.</p><p>More information can be found at https://seats.schools.utah.gov/ </p></html>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -352,7 +374,7 @@ namespace SEATS.Controllers
                 var admin = await db.Users.Where(m => m.Roles.Select(r => r.RoleId).Contains(adminRole)).FirstOrDefaultAsync().ConfigureAwait(false);
 
                 var initial = cca.Student.StudentFirstName[0];
-                await userManager.SendEmailAsync(admin.Id, "Admin Notification:New SEOP Application", "EDONLINE, A new application for SOEP has been received from <p>" + initial + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p>");
+                await userManager.SendEmailAsync(admin.Id, "<html>Admin Notification:New SOEP Application", "EDONLINE, A new application for SOEP has been received from <p>" + initial + ". " + cca.Student.StudentLastName + " Email:" + cca.Student.StudentEmail + "</p><p>This email was also sent to:</p><p>Parent:" + cca.Student.Parent.GuardianEmail + "</p></html>");
             }
             catch
             {
@@ -369,8 +391,8 @@ namespace SEATS.Controllers
                 var counselor = await db.Counselors.FindAsync(cca.CounselorID);
                 var initial = cca.Student.StudentFirstName[0];
                 msg.Destination = counselor.Email;
-                msg.Subject = "SEOP Application Received.";
-                msg.Body = "<p>Dear Counselor,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>First Name: " + initial + ".</p><p> Last Name: " + cca.Student.StudentLastName + "</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable.</p><p>To facilitate Counselor review, the Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid your LEA’s approving official (usually the Business Administrator) in their acceptance of this Acknowledgement.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Counselor\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline. http://www.schools.utah.gov/edonline/default.aspx </p>";
+                msg.Subject = "SOEP Application Received.";
+                msg.Body = "<html><p>Dear Counselor,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>First Name: " + initial + ".</p><p> Last Name: " + cca.Student.StudentLastName + "</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable.</p><p>To facilitate Counselor review, the Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid your LEA’s approving official (usually the Business Administrator) in their acceptance of this Acknowledgement.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Counselor\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline. http://www.schools.utah.gov/edonline/default.aspx </p></html>";
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -394,8 +416,8 @@ namespace SEATS.Controllers
                         var initial = cca.Student.StudentFirstName[0];
                         IdentityMessage msg = new IdentityMessage();
                         msg.Destination = user.Email;
-                        msg.Subject = "SEOP Application Received.";
-                        msg.Body = "<p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SEOP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p>";
+                        msg.Subject = "SOEP Application Received.";
+                        msg.Body = "<html><p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p>The designated counselor is: " + cca.Counselor.FirstName + " " + cca.Counselor.LastName + ", " + cca.Counselor.Email + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p></html>";
 
                         EmailService emailService = new EmailService();
                         await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -444,52 +466,42 @@ namespace SEATS.Controllers
         /// <param name="cca"></param>
         /// <param name="student"></param>
         /// <returns></returns>
-        private async Task CounselorCreate(CCAViewModel ccaVm, CCA cca, Student student)
+        private async Task CounselorCreate(CCAViewModel ccaVm, CCA cca)
         {
             // Homeschoolers will be assigned Counselor at the ID=0 entry (now Cory Kanth)
             try
             {
                 if (cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID || (cca.EnrollmentLocationID != GlobalVariables.HOMESCHOOLID && cca.CounselorID == 0))
                 {
-                    int counselorId = 0;
-                    // Check for existing counselor entry
-                    if (ccaVm.CounselorEmail != null)
+                    // Either EnrollmentLocationSchoolNameID or SchoolOfRecord (Private School) must be set to assign counselor
+                    if (cca.EnrollmentLocationSchoolNamesID == 0 && ccaVm.SchoolOfRecord == null)
                     {
-                        counselorId = await db.Counselors.Where(x => x.Email == ccaVm.CounselorEmail).Select(x => x.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+                        throw new NullReferenceException("Private school name must be set in Student record to create Counselor.");
                     }
 
-                    if (counselorId == 0)
+                    var schoolNameId = (int)cca.EnrollmentLocationSchoolNamesID;
+                    CactusSchool school = schoolNameId != 0 ? await cactus.CactusSchools.Where(m => m.ID == cca.EnrollmentLocationSchoolNamesID).FirstOrDefaultAsync().ConfigureAwait(false) : new CactusSchool { Name = ccaVm.SchoolOfRecord };
+
+                    cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
+
+                    // If there is no record of this counselor create one.
+
+                    if (cca.CounselorID == 0)
                     {
-                        var counselor = new Counselor()
+                        Counselor counselor = new Counselor()
                         {
                             Email = ccaVm.CounselorEmail,
                             FirstName = ccaVm.CounselorFirstName,
                             LastName = ccaVm.CounselorLastName,
-                            Phone = ccaVm.CounselorPhoneNumber
+                            Phone = ccaVm.CounselorPhoneNumber,
+                            EnrollmentLocationID = cca.EnrollmentLocationID,
+                            EnrollmentLocationSchoolNameID = cca.EnrollmentLocationSchoolNamesID,
+                            School = school.Name
                         };
 
-                        if (cca.EnrollmentLocationID != GlobalVariables.PRIVATESCHOOLID)
-                        {
-                            counselor.EnrollmentLocationID = cca.EnrollmentLocationID;
-                            counselor.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
-                            var school = await cactus.CactusSchools.FirstOrDefaultAsync(m => m.ID == student.EnrollmentLocationSchoolNamesID).ConfigureAwait(false);
-
-                            counselor.School = school.Name;
-
-                        }
-                        else
-                        {
-                            counselor.School = student.SchoolOfRecord;
-                        }
-
                         db.Counselors.Add(counselor);
-
                         await db.SaveChangesAsync().ConfigureAwait(false);
-                        cca.CounselorID = await db.Counselors.Where(m => m.Email == ccaVm.CounselorEmail).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        cca.CounselorID = counselorId;
+                        cca.CounselorID = await db.Counselors.Where(x => x.FirstName.ToLower() == ccaVm.CounselorFirstName.ToLower() && x.LastName.ToLower() == ccaVm.CounselorLastName.ToLower() && x.School.ToUpper() == school.Name.ToUpper()).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false);
                     }
                 }
             }
@@ -512,6 +524,7 @@ namespace SEATS.Controllers
                 Mapper.CreateMap<CCAViewModel, CCA>();
                 var cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
                 cca.ApplicationSubmissionDate = DateTime.Now;
+                cca.PrimaryNotificationDate = DateTime.Now;
                 cca.StudentID = student.ID;
                 cca.EnrollmentLocationID = student.EnrollmentLocationID;
                 cca.EnrollmentLocationSchoolNamesID = student.EnrollmentLocationSchoolNamesID;
@@ -524,6 +537,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
+        /// 
         /// Gets Categories from database using the sessionID.
         /// Check courses that are associated with the session and only return categories
         /// that have courses in that session.
@@ -555,6 +569,49 @@ namespace SEATS.Controllers
                 {
                     Value = f.ID.ToString(),
                     Text = f.Name
+                });
+
+                return Json(new SelectList(categoryList, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing category list request.");
+            }
+
+        }
+
+        /// <summary>
+        /// Gets Categories from database using the sessionID.
+        /// Check courses that are associated with the session and only return categories
+        /// that have courses in that session.
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns>select list in json format</returns>
+        public async Task<JsonResult> GetCategoriesAndPrice(int sessionId)
+        {
+            try
+            {
+                IEnumerable<int> categorySelected;
+
+                var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
+
+                var session = await db.Session.FindAsync(sessionId).ConfigureAwait(false);
+                var selected = session.Name;
+
+                // If session is a summer session only show categories that have classes for summer
+                if (selected.ToLower().Contains("sum"))
+                {
+                    categorySelected = courses.Where(x => x.SessionID == sessionId).Select(x => x.CourseCategoryID).Distinct();
+                }
+                else // Show all non summer categories 0 is All Sessions
+                {
+                    categorySelected = courses.Where(x => x.SessionID == sessionId || x.SessionID == 0).Select(x => x.CourseCategoryID).Distinct();
+                }
+
+                var categoryList = db.CourseCategories.Where(y => categorySelected.Contains(y.ID) && y.IsActive).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name + " -$" + f.CourseFee.Fee
                 });
 
                 return Json(new SelectList(categoryList, "Value", "Text"));
@@ -641,6 +698,33 @@ namespace SEATS.Controllers
             }
         }
 
+        public async Task<JsonResult> GetCounselors(string schoolName)
+        {
+            try
+            {
+
+                var counselors = await db.Counselors.Where(y => y.School == schoolName).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                }).ToListAsync().ConfigureAwait(false);
+
+                counselors = counselors.Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "Counselor Not Listed."
+                    }
+                    }).ToList();
+
+                return Json(new SelectList(counselors, "Value", "Text"));
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing category list request.");
+            }
+
+        }
+
         /// <summary>
         /// Gets course credit list from 4 char credit string in courses.  Populates list with credit options
         /// as follows; position 0: 0.25, postion 1: 0.50, position 2: 0.75, position 3: 1.00.
@@ -688,68 +772,68 @@ namespace SEATS.Controllers
 
         // GET: CCAs/Edit/5
 
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
 
-            try
-            {
-                CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
-                if (cCA == null)
-                {
-                    return HttpNotFound();
-                }
-                ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", cCA.CounselorID);
-                ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
-                ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
+        //    try
+        //    {
+        //        CCA cCA = await db.CCAs.FindAsync(id).ConfigureAwait(false);
+        //        if (cCA == null)
+        //        {
+        //            return HttpNotFound();
+        //        }
+        //        ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", cCA.CounselorID);
+        //        ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", cCA.OnlineCourseID);
+        //        ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", cCA.CourseCreditID);
 
-                return View(cCA);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
-                return View("Error");
-            }
-        }
+        //        return View(cCA);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Message = "Error retrieving CCA List to Edit!  Error: " + ex.Message;
+        //        return View("Error");
+        //    }
+        //}
 
-        // POST: CCAs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
-        {
+        //// POST: CCAs/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<ActionResult> Edit([Bind(Include = "SubmitterTypeID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,CounselorID,IsCounselorSigned,ProviderID,CourseID,CourseCategoryID,CourseCreditID,SessionID,Comments")] CCAViewModel ccaVm)
+        //{
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Mapper.CreateMap<CCAViewModel, CCA>();
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            Mapper.CreateMap<CCAViewModel, CCA>();
 
-                    CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
-                    db.Entry(cca).State = EntityState.Modified;
+        //            CCA cca = Mapper.Map<CCAViewModel, CCA>(ccaVm);
+        //            db.Entry(cca).State = EntityState.Modified;
 
-                    await db.SaveChangesAsync().ConfigureAwait(false);
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
-                    return View("Error");
-                }
-            }
+        //            await db.SaveChangesAsync().ConfigureAwait(false);
+        //            return RedirectToAction("Index");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+        //            return View("Error");
+        //        }
+        //    }
 
-            ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", ccaVm.CounselorID);
-            ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
-            ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
+        //    ViewBag.CounselorID = new SelectList(db.Counselors, "ID", "Email", ccaVm.CounselorID);
+        //    ViewBag.CourseID = new SelectList(db.Courses, "ID", "Name", ccaVm.OnlineCourseID);
+        //    ViewBag.CourseCreditID = new SelectList(db.CourseCredits, "ID", "ID", ccaVm.CourseCreditID);
 
-            return View(ccaVm);
-        }
+        //    return View(ccaVm);
+        //}
 
         // GET: CCAs/Details/5
         /// <summary>
@@ -824,31 +908,33 @@ namespace SEATS.Controllers
 
             try
             {
-                var status = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
-                ViewBag.CourseCompletionStatusID = status;
+                // Setup Course Selection Lists
 
-                ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
+                await SetUpCourseSectionofUsoeEditVm(ccaVm);
 
-                var leaId = ccaVm.Student.EnrollmentLocationID;
-                var schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
-                if (leaId == 1) // HomeSchool
+                // District and School Lists
+
+                // If cca Lea is not set set to student Lea
+                int? leaId = await SetUpEnrollmentIDList(ccaVm);
+
+                //If school is not set, set to student school
+                var schoolId = ccaVm.EnrollmentLocationSchoolNamesID;
+                if (schoolId == null)
+                    schoolId = ccaVm.Student.EnrollmentLocationSchoolNamesID;
+
+                if (leaId == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    ViewBag.Lea = "HOMESCHOOL";
-                    ViewBag.School = "HOMESCHOOL";
+                    await SetUpForPrivateSchool(ccaVm, schoolId);
+
                 }
-                else if (leaId == 2) //PrivateSchool
+                else if (leaId == GlobalVariables.HOMESCHOOLID)
                 {
-                    ViewBag.Lea = "PRIVATESCHOOL";
-                    ViewBag.School = ccaVm.Student.SchoolOfRecord;
+                    SetUpForHomeSchool();
                 }
                 else
                 {
-                    ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    await SetUpForDistrictSchool(ccaVm, leaId, schoolId);
 
-                    if (schoolId != null)
-                        ViewBag.School = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                    else
-                        ViewBag.School = "UNKNOWN";
                 }
 
             }
@@ -856,6 +942,143 @@ namespace SEATS.Controllers
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// This method Sets Up the ViewModel for Students who are not Private or Home School.
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <param name="leaId"></param>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
+        private async Task SetUpForDistrictSchool(UsoeCcaViewModel ccaVm, int? leaId, int? schoolId)
+        {
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
+            ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            if (schoolId != null)
+            {
+                var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                ViewBag.School = schoolName;
+
+                ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                });
+
+                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+            }
+
+            else
+                ViewBag.School = "UNKNOWN";
+        }
+
+        /// <summary>
+        /// Thie method sets up the ViewModel for Homeschool students.
+        /// </summary>
+        private void SetUpForHomeSchool()
+        {
+            ViewBag.EnrollmentLocationSchoolNamesID = new List<SelectListItem>();
+            ViewBag.Lea = "HOMESCHOOL";
+            ViewBag.School = "HOMESCHOOL";
+            ViewBag.CounselorID = new List<SelectListItem>();
+        }
+
+        /// <summary>
+        /// This method sets up the UsoeCcaViewModel for a PrivateSchool student.
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
+        private async Task SetUpForPrivateSchool(UsoeCcaViewModel ccaVm, int? schoolId)
+        {
+            var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+            privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
+            ViewBag.Lea = "PRIVATESCHOOL";
+
+            //Set Private School Name
+            string schoolName;
+            if (schoolId != 0)
+            {
+                schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
+            }
+            else if (ccaVm.Student.SchoolOfRecord != null)
+            {
+                schoolName = ccaVm.Student.SchoolOfRecord;
+            }
+            else
+            {
+                schoolName = "SCHOOL NOT LISTED";
+            }
+
+            
+            ccaVm.SchoolOfRecord = schoolName;
+            if (!schoolName.Contains("SCHOOL NOT LISTED"))
+            {
+                ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                });
+            }
+
+            if (ccaVm.CounselorList != null)
+                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+            else
+            {
+                var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.FirstName + " " + f.LastName
+                }).ToListAsync().ConfigureAwait(false);
+
+                ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
+            }
+        }
+
+        /// <summary>
+        /// This method sets up the Lea DropdownList portion of the ViewModel 
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <returns></returns>
+        private async Task<int?> SetUpEnrollmentIDList(UsoeCcaViewModel ccaVm)
+        {
+            var leaId = ccaVm.EnrollmentLocationID;
+            if (leaId == 0)
+                leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
+
+            var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+
+            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+
+            ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
+            return leaId;
+        }
+
+        /// <summary>
+        /// This method 
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <returns></returns>
+        private async Task SetUpCourseSectionofUsoeEditVm(UsoeCcaViewModel ccaVm)
+        {
+            ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
+
+            ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+            var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
+            {
+                Value = s.ID.ToString(),
+                Text = s.Name + " -$" + s.CourseFee.Fee
+            }).ToListAsync().ConfigureAwait(false);
+
+            ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
+            var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
+            ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
+
+            ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
         }
 
 
@@ -868,15 +1091,20 @@ namespace SEATS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UsoeEdit(UsoeCcaViewModel ccaVm)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
+
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
 
                     Mapper.CreateMap<UsoeCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
 
                     cca = Mapper.Map<UsoeCcaViewModel, CCA>(ccaVm, cca);
+
+                    //Assign Counselor
+
+                    await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
 
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
 
@@ -887,23 +1115,24 @@ namespace SEATS.Controllers
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "Admin");
+
                 }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
-                    return View("Error");
-                }
+
+                //Capture errors from Modelstate and return to user.
+
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                foreach (var error in errors)
+                    ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
+
+                await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
+
+                return View(ccaVm);
             }
-
-            //Capture errors from Modelstate and return to user.
-
-            var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
-            foreach (var error in errors)
-                ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
-
-            await SetUpUsoeEditViewModel(ccaVm).ConfigureAwait(false);
-
-            return View(ccaVm);
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error processing CCA save! Error: " + ex.Message;
+                return View("Error");
+            }
         }
 
         // GET: CCAs/Edit/5
@@ -933,6 +1162,13 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, CounselorCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
+                Student student = await db.Students.FindAsync(cca.StudentID).ConfigureAwait(false);
+
+                ccaVm.IsEarlyGraduate = student.IsEarlyGraduate;
+                ccaVm.IsIEP = student.IsIEP;
+                ccaVm.IsSection504 = student.IsSection504;
+
+                ViewBag.CounselorRejectionReasonsID = new SelectList(await db.CounselorRejectionReasons.ToListAsync().ConfigureAwait(false), "ID", "Reason", ccaVm.CounselorRejectionReasonsID);
 
                 return View(ccaVm);
             }
@@ -958,8 +1194,22 @@ namespace SEATS.Controllers
                     CCA cca = await db.CCAs.FindAsync(ccaVm.CcaID).ConfigureAwait(false);
                     cca.IsCounselorSigned = ccaVm.IsCounselorSigned;
                     cca.IsCourseConsistentWithStudentSEOP = ccaVm.IsCourseConsistentWithStudentSEOP;
+                    cca.CounselorRejectionReasonsID = ccaVm.CounselorRejectionReasonsID;
+                    cca.IsCounselorRejecting = ccaVm.IsCounselorRejecting;
+                    cca.CounselorRejectionExplantion = ccaVm.CounselorRejectionExplantion;
 
                     db.Entry(cca).State = EntityState.Modified;
+
+                    Student student = await db.Students.FindAsync(cca.StudentID).ConfigureAwait(false);
+
+                    if(student.IsEarlyGraduate != ccaVm.IsEarlyGraduate || student.IsIEP != ccaVm.IsIEP || student.IsSection504 != ccaVm.IsSection504)
+                    {
+                        student.IsEarlyGraduate = (bool)ccaVm.IsEarlyGraduate;
+                        student.IsIEP = ccaVm.IsIEP;
+                        student.IsSection504 = ccaVm.IsSection504;
+                        db.Entry(student).State = EntityState.Modified;
+                    }
+
 
                     await db.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction("CcaInterface", "Counselors");
@@ -1038,6 +1288,9 @@ namespace SEATS.Controllers
                     cca.PrimaryRejectionReasonsID = ccaVm.PrimaryRejectionReasonsID;
                     cca.PrimaryNotes = ccaVm.PrimaryNotes;
                     cca.BusinessAdministratorSignature = ccaVm.BusinessAdministratorSignature;
+
+                    //Sets Status to Rejected Primary if rejects. (true = accept false = reject)
+                    cca.CourseCompletionStatusID = !cca.IsBusinessAdministratorAcceptRejectEnrollment ? await db.CourseCompletionStatus.Where(m => m.Status.Contains("Rejected Primary")).Select(m => m.ID).FirstOrDefaultAsync().ConfigureAwait(false) : cca.CourseCompletionStatusID;
 
                     db.Entry(cca).State = EntityState.Modified;
 
@@ -1140,8 +1393,8 @@ namespace SEATS.Controllers
                 var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
-                var sessionList = new SelectList(db.Session, "ID", "Name", ccaVm.SessionID);
-                var categoryList = new SelectList(db.CourseCategories, "ID", "Name", ccaVm.CourseCategoryID);
+                var sessionList = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+                var categoryList = new SelectList(await db.CourseCategories.ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.CourseCategoryID);
                 var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
                 var courseList = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
                 var credit = await db.CourseCredits.Where(m => m.ID == ccaVm.CourseCreditID).ToListAsync().ConfigureAwait(false);
@@ -1213,6 +1466,7 @@ namespace SEATS.Controllers
 
         /// <summary>
         /// This method is called from the ProviderUser to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// If an item is not set it will not be updated.
         /// </summary>
         /// <returns></returns>
         public async Task<ActionResult> SaveBulkUpdate()
@@ -1236,7 +1490,12 @@ namespace SEATS.Controllers
                     if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
                     if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
                     if (rowsToEdit.BulkEdit.DateConfirmationActiveParticipation != null) row.DateConfirmationActiveParticipation = rowsToEdit.BulkEdit.DateConfirmationActiveParticipation;
-
+                    if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
+                    if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
+                    if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
+                    if (rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest != null) row.IsProviderAcceptsRejectsCourseRequest = (bool)rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest;
+                    if (rowsToEdit.BulkEdit.ProviderRejectionReasonsID != null) row.ProviderRejectionReasonsID = rowsToEdit.BulkEdit.ProviderRejectionReasonsID;
+                    if (rowsToEdit.BulkEdit.ProviderExplanationRejection != null) row.ProviderExplanationRejection = rowsToEdit.BulkEdit.ProviderExplanationRejection;
                 }
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
@@ -1273,19 +1532,16 @@ namespace SEATS.Controllers
                 // Foreach record
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    Student student = await GetStudent(row);
-
+                    // Find or create a student record
+                    await ExtractStudent(row);
 
                     // Find or create a parent record
-
                     // Find or create a counselor record
-
                     // Find the Provider                
                     // Find the session
                     // Find the category
                     // Find the course
                 }
-
             }
 
             //byte[] uploadedFile = new byte[model.File.InputStream.Length];
@@ -1298,72 +1554,53 @@ namespace SEATS.Controllers
             return View();
         }
 
-        private async Task<Student> GetStudent(DataRow row)
+        private async Task ExtractStudent(DataRow row)
         {
-            bool assigned = false;
-            // Find or create a student record
             Student student = new Student();
             student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
             student.StudentFirstName = row["Student First Name"].ToString();
             student.StudentLastName = row["Student Last Name"].ToString();
-            //student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+            student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
             student.SSID = row["SSID"].ToString();
 
-            var studentLookup = await db.Students.Where(m => m.SSID.Trim() == student.SSID.Trim()).FirstOrDefaultAsync().ConfigureAwait(false);
-            if (studentLookup != null)
+            // Look for existing student
+
+            // Lookup Primary and School
+
+            var primaryName = row["PRIMARY LEA"].ToString().ToUpper();
+            if (primaryName.Contains("PRIVATE"))
             {
-                student = studentLookup;
-                assigned = true;
+                student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                student.SchoolOfRecord = row["PRIMARY SCHOOL"].ToString();
+            }
+            else if (primaryName.Contains("HOME"))
+            {
+                student.EnrollmentLocationID = GlobalVariables.HOMESCHOOLID;
             }
             else
             {
-                var studentLookupList = await db.Students.Where(m => m.StudentLastName.Trim() == student.StudentLastName.Trim() && m.StudentFirstName.Trim() == student.StudentFirstName.Trim()).ToListAsync().ConfigureAwait(false);
+                var primary = await cactus.CactusInstitutions.Where(m => m.Name.Contains(primaryName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (primary != null)
+                    student.EnrollmentLocationID = primary.ID;
 
-                DateTime studentDob2 = student.StudentDOB ?? DateTime.Now;
-                foreach (var studentToTest in studentLookupList)
-                {
-                    DateTime studentDob1 = studentToTest.StudentDOB ?? DateTime.Now;
-
-                    if (!studentDob1.Equals(DateTime.Now) && studentDob1.Date.Equals(studentDob2.Date))
-                    {
-                        student = studentToTest;
-                        assigned = true;
-                        break;
-                    }
-                }
-            }
-
-
-            // Lookup Primary and School if student not found in current 
-            if (!assigned)
-            {
-
-                var primaryName = row["PRIMARY LEA"].ToString().ToUpper();
-                if (primaryName.Contains("PRIVATE"))
-                {
-                    student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
-                    //student.SchoolOfRecord = row["PRIMARY SCHOOL"].ToString();
-                }
-                else if (primaryName.Contains("HOME"))
-                {
-                    student.EnrollmentLocationID = GlobalVariables.HOMESCHOOLID;
-                }
-                else
-                {
-                    // Lookup Primary and if not found assigned to private school.
-                    var primary = await cactus.CactusInstitutions.Where(m => m.Name.Contains(primaryName.ToUpper())).FirstOrDefaultAsync().ConfigureAwait(false);
-                    if (primary != null)
-                        student.EnrollmentLocationID = primary.ID;
-                    else
-                    {
-                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
-                        student.SchoolOfRecord = primaryName.ToUpper();
-                    }
-                }
+                var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper();
+                var school = await cactus.CactusSchools.Where(m => m.Name.Contains(schoolName)).FirstOrDefaultAsync().ConfigureAwait(false);
+                if (school != null)
+                    student.EnrollmentLocationSchoolNamesID = school.ID;
 
             }
-              
-            return student;
+
+            student.GraduationDate = Convert.ToDateTime(row["Graduation Date"]);
+
+
+            student.StudentEmail = row["Email"].ToString();
+            student.IsFeeWaived = row["Email"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
+
+
+
         }
 
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)

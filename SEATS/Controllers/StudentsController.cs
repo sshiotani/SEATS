@@ -44,7 +44,24 @@ namespace SEATS.Controllers
             if (User.IsInRole("Admin"))
             {
                 var students = await db.Students.ToListAsync().ConfigureAwait(false);
-                return View(students);
+                var studentVmList = new List<StudentViewModel>();
+
+                Mapper.CreateMap<Student, StudentViewModel>();
+
+                foreach (var item in students)
+                {
+                    var model = Mapper.Map<Student, StudentViewModel>(item);
+                    int ssid;
+                    if (int.TryParse(item.SSID, out ssid))
+                    {
+                        model.SSIDNumber = ssid;
+                    }
+
+                    studentVmList.Add(model);
+
+                }
+
+                return View(studentVmList);
             }
             else if (User.IsInRole("Primary"))
             {
@@ -195,6 +212,7 @@ namespace SEATS.Controllers
         /// <summary>
         /// Method gets lea names dynamically called from view. Matches the district id with
         /// the selected district id.  Removes null and list entries with DISTRICT selections.
+        /// Update: 8/4/2015 - Added test for Private schools for use with Private school counselors.
         /// </summary>
         /// <param name="district"></param>
         /// <returns>json list with selectlist</returns>
@@ -202,17 +220,38 @@ namespace SEATS.Controllers
         {
             try
             {
-
                 IEnumerable<SelectListItem> schoolNameList;
                 var schoolList = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
                 schoolList.RemoveAll(m => m.Name == null);
                 var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
 
-                schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                if (district == GlobalVariables.PRIVATESCHOOLID)
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.Name
-                });
+                    //Look for Private Schools in the list using school_type_code from Cactus.  If this code ever changes we will need to update this method.
+
+                    schoolList = schoolList.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).OrderBy(m => m.Name).Distinct().ToList();
+
+                    schoolNameList = schoolList.Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name
+                    });
+
+                    schoolNameList = schoolNameList.Concat(new[] {new SelectListItem
+                    {
+                        Value = "0",
+                        Text = "SCHOOL NOT LISTED"
+                    }
+                    });
+                }
+                else
+                {
+                    schoolNameList = distinctSchoolList.Where(m => m.District == district && !m.Name.ToLower().Contains("district")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.Name
+                    });
+                }
 
                 return Json(new SelectList(schoolNameList, "Value", "Text"));
 
@@ -248,8 +287,15 @@ namespace SEATS.Controllers
                         return View("Error");
                     }
 
+
+                    // Set Student School of Record for Private schools
+                    if(student.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID && student.EnrollmentLocationSchoolNamesID != null)
+                    {
+                        student.SchoolOfRecord = await cactus.CactusSchools.Where(m => m.ID == student.EnrollmentLocationSchoolNamesID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    }
+
                     // Find SSID using ssidFindingService
-                    student.SSID = await GetSSID(studentVm);            
+                    student.SSID = await GetSSID(studentVm);
 
                     var duplicate = await CheckSSID(student.SSID);
 
@@ -387,7 +433,28 @@ namespace SEATS.Controllers
             leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+
+            if (model.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                var privateSchools = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+                privateSchools = privateSchools.OrderBy(m => m.Name).Distinct().ToList();
+                privateSchools.Insert(privateSchools.Count, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchools, "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            }
+            else
+            {
+                IEnumerable<SelectListItem> schoolNameList;
+                var schoolList = await cactus.CactusSchools.OrderByDescending(m => m.ID).ToListAsync().ConfigureAwait(false);
+                schoolList.RemoveAll(m => m.Name == null);
+                //var distinctSchoolList = schoolList.GroupBy(x => x.Name).Select(group => group.First());
+                schoolNameList = schoolList.Where(m => m.District == model.EnrollmentLocationID && !m.SchoolType.ToLower().Contains("dist")).OrderBy(m => m.Name).Distinct().Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Name
+                });
+
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(schoolNameList, "Value", "Text", model.EnrollmentLocationSchoolNamesID);
+            }
 
             return View(model);
 
@@ -419,7 +486,13 @@ namespace SEATS.Controllers
             leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
             ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", model.EnrollmentLocationID);
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            if (model.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID)
+            {
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+            }
+            else
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.ID == model.EnrollmentLocationID), "ID", "Name", model.EnrollmentLocationSchoolNamesID);
+
             return View(model);
         }
 

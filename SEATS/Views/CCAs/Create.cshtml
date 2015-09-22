@@ -17,15 +17,15 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group hide" id="SubmitterTypeCheckBox">
-            @Html.Label("Which of the following are you?", new { @class = "col-md-4  control-radio" })
+            @Html.Label("Submitter Type", new { @class = "col-md-4  control-radio" })
 
             <div class="col-md-8">
                 @Html.Label("Student", "Student or Parent/Guardian", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Student/Parent" }, id = "studentSubmitter" })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 0, new { htmlAttributes = new { title = "Student/Parent" }, id = "studentSubmitter" })
                 @Html.Label("Counselor", "| Counselor", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Counselor" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 1, new { htmlAttributes = new { title = "Counselor" } })
                 @Html.Label("Provider", "| Provider", new { @class = "control-radio" })
-                @Html.RadioButtonFor(model => model.SubmitterTypeID, 3, new { htmlAttributes = new { title = "Provider" } })
+                @Html.RadioButtonFor(model => model.SubmitterTypeID, 2, new { htmlAttributes = new { title = "Provider" } })
 
                 @Html.ValidationMessageFor(model => model.SubmitterTypeID, "", new { @class = "text-danger" })
             </div>
@@ -78,7 +78,7 @@
 
 
             <div class="col-md-7">
-                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation, new { @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" })
+                @Html.TextAreaFor(model => model.ExcessiveFEDExplanation, new { cols = 40, rows = 10,  @class = "form-control hide", title = "Explanation of request to exceed allowable online credits(5.0)", placeholder = "Excessive Credit Explanation", id = "ExcessiveCreditExplanation" })
                 @Html.ValidationMessageFor(model => model.ExcessiveFEDExplanation, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -89,10 +89,8 @@
         <h4>Counselor Information </h4>
         <hr />
 
-
-
-
         @Html.HiddenFor(x => x.EnrollmentLocationID, new { id = "EnrollmentLocationId" })
+        @Html.HiddenFor(x => x.UserId)
 
         <div class="form-group hide" id="CactusID">
             @Html.LabelFor(model => model.CactusID, htmlAttributes: new { @class = "control-label col-md-3" })
@@ -112,7 +110,7 @@
         @* Drop Down List for counselor Goes here *@
 
         <div class="form-group hide" id="CounselorPublic">
-            
+
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.CounselorID, Model.CounselorList, "Please Choose a Counselor", new { @class = "form-control", id = "Counselors", required = false })
 
@@ -155,18 +153,18 @@
         <p class="text-info">Please choose Session first.</p>
         <div class="form-group">
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.SessionID, Model.Session, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
+                @Html.DropDownListFor(model => model.SessionID, Model.SessionList, "*Session", new { @class = "form-control dropdown-wrapper", id = "Session" })
 
                 @Html.ValidationMessageFor(model => model.SessionID, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategory, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
+                @Html.DropDownListFor(model => model.CourseCategoryID, Model.CourseCategoryList, "*Course Categories", new { @class = "form-control dropdown-wrapper", id = "Category" })
 
                 @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.OnlineCourseID, Model.OnlineCourse, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.DropDownListFor(model => model.OnlineCourseID, Model.OnlineCourseList, "*Courses", new { @class = "form-control dropdown-wrapper", id = "Course" })
 
                 @Html.ValidationMessageFor(model => model.OnlineCourseID, "", new { @class = "text-danger" })
             </div>
@@ -192,7 +190,7 @@
         <div class="form-group">
 
             <div class="col-md-4">
-                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCredit, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
+                @Html.DropDownListFor(model => model.CourseCreditID, Model.CourseCreditList, "Credit", new { @class = "form-control hide dropdown-wrapper", id = "CreditOptions" })
 
                 @Html.ValidationMessageFor(model => model.CourseCreditID, "", new { @class = "text-danger" })
             </div>
@@ -205,33 +203,33 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-12">
-                @Html.TextAreaFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Comments,  new { cols = 40, rows = 10,  @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <br />
         @*<div id="ProviderSection">
-            <h4>Provider Information</h4>
-            <hr />
+                <h4>Provider Information</h4>
+                <hr />
 
-            <div class="form-group">
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative First Name", placeholder = "Teacher First Name" } })
-                    @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative Last Name", placeholder = "Teacher Last Name" } })
-                    @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
-                    @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative First Name", placeholder = "Teacher First Name" } })
+                        @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control", title = "Provider Representative Last Name", placeholder = "Teacher Last Name" } })
+                        @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control", id = "ProviderCactusId", title = "Acts as Provider Signature", placeholder = "Teacher Cactus ID" })
+                        @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <hr />*@
+            <hr />*@
 
         <div class="form-group">
             <div class=" col-md-12">
@@ -251,6 +249,12 @@
 
     <script>
         $(function () {
+            var isSubmittedByProxy = '@Model.IsSubmittedByProxy';
+            if (isSubmittedByProxy == 'True')
+            {
+                $('#SubmitterTypeCheckBox').removeClass('hide');
+            }
+
             var location = $('#EnrollmentLocationId').val();
             if (location == 1) {
                 $("#CounselorPrivate").addClass('hide');
@@ -258,9 +262,16 @@
                 $("#HomeSchool").removeClass('hide');
             }
             else if (location == 2) {
+                var schoolID = '@ViewBag.SchoolID';
+                if (schoolID == 0 || schoolID == null) {
+                    $("#CounselorPrivate").removeClass('hide');
+                    $("#CounselorPublic").addClass('hide');
+                }
+                else {
+                    $("#CounselorPrivate").addClass('hide');
+                    $("#CounselorPublic").removeClass('hide');
+                }
 
-                $("#CounselorPrivate").removeClass('hide');
-                $("#CounselorPublic").addClass('hide');
                 $("#HomeSchool").addClass('hide');
             }
             else {
@@ -288,19 +299,19 @@
 
             //Add/hide fields according to user type.
 
-            $("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
-                if ($(this).val() == 3) {
-                    $("#ProviderSection").removeClass('hide');
-                    $("#CactusID").addClass('hide');
-                }
-                else if ($(this).val() == 2) {
-                    $("#CactusID").removeClass('hide');
-                    $("#ProviderSection").addClass('hide');
-                } else if ($(this).val() == 1) {
-                    $("#ProviderSection").addClass('hide');
-                    $("#CactusID").addClass('hide');
-                }
-            });
+            //$("#SubmitterTypeCheckBox input[name='SubmitterTypeID']").click(function () {
+            //    if ($(this).val() == 2) {
+            //        $("#ProviderSection").removeClass('hide');
+            //        $("#CactusID").addClass('hide');
+            //    }
+            //    else if ($(this).val() == 1) {
+            //        $("#CactusID").removeClass('hide');
+            //        $("#ProviderSection").addClass('hide');
+            //    } else if ($(this).val() == 0) {
+            //        $("#ProviderSection").addClass('hide');
+            //        $("#CactusID").addClass('hide');
+            //    }
+            //});
 
             $('input:radio:first').prop("checked", true).trigger("click");
 
@@ -610,7 +621,7 @@
         (1) During any academic year, total enrolled credits may exceed a "Full Day Equivalent” only if school district or charter school board policy allows this, or the student has a signed SEOP on file providing for Early Graduation.
     </p>
     <p>
-        (2) For current enrollment credit limits please visit <a href="http://www.schools.utah.gov/edonline/" target="_blank">credit information</a>.
+        (2) For current enrollment credit limits please visit <a href="http://le.utah.gov/xcode/Title53A/Chapter15/53A-15-S1204.html?v=C53A-15-S1204_1800010118000101" target="_blank">credit information</a>.
     </p>
     <p>
         (3) Electronic High School courses and Release Time are not to be considered when figuring course or credit "counts" as required in this application.

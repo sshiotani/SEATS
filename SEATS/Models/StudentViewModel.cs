@@ -42,6 +42,8 @@ namespace SEATS.Models
         [Display(Name = "SSID")]
         public string SSID { get; set; }
 
+        public int SSIDNumber { get; set; } // SSID as an int for sorting
+
         [Required]
         [Display(Name = "Graduation Date")]
         [DataType(DataType.Date)]

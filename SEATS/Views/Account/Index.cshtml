@@ -22,7 +22,9 @@
             <th data-column-id="role">
                 Role
             </th>
-
+            <th data-column-id="confirmed" data-formatter="emailconfirmedstate">
+                Email Confirmed
+            </th>
             <th data-column-id="Actionlinks" data-formatter="actions" data-sortable="false">
                 @Html.DisplayName("Actions")
             </th>
@@ -41,12 +43,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.RoleName)
                 </td>
+
+                <td>
+                    @if (item.EmailConfirmed == true)
+                    { <p>check</p> }
+
+                    else
+                    { <p>not</p> }
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
 
                     @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Roles", "UserRoles", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details",new { id = item.Id})*@
+                        @Html.ActionLink("Roles", "UserRoles", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details",new { id = item.Id})*@
                 </td>
             </tr>
         }
@@ -65,7 +75,13 @@
                     ,
                 rowCount: [-1, 25, 50, 100],
                 formatters: {
-                   
+                    "emailconfirmedstate": function (column, row) {
+                        var checkBox = "";
+                        if ($.trim(row.confirmed) == "check") checkBox = "checked=\"checked\"";
+
+                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+                    },
+
                     "actions": function (column, row) {
                         var id = $.trim(row.Actionlinks);
                         return "<a href=\" /Account/Edit/" + id + "\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + id + "\"><span class=\"glyphicon glyphicon-edit\"></span></button> " +

@@ -7,25 +7,27 @@ using System.Web.Mvc;
 
 namespace SEATS.Models
 {
-    public class UsoeCcaViewModel
+    public class UsoeCcaViewModel : CCAViewModel
     {
         // Items pulled from CCA
         public DateTime ApplicationSubmissionDate { get; set; }
         public int CcaID { get; set; }
+        public Provider Provider { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }
-        public int OnlineCourseID { get; set; }
+        public Session Session { get; set; }
+        public CourseCategory CourseCategory { get; set; }
         public OnlineCourse OnlineCourse { get; set; }
-        public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
-        public IEnumerable<SelectListItem> CourseCreditList { get; set; }
         public string Primary { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public int MyProperty { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
+        public int? EnrollmentLocationSchoolNamesID { get; set; }
+
 
         //Items to be input by USOE 
-        public Nullable<decimal> CourseFee { get; set; }
+
         public Nullable<int> CourseCompletionStatusID { get; set; }
         public CourseCompletionStatus CourseCompletionStatus { get; set; }
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }

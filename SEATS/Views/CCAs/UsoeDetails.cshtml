@@ -67,7 +67,12 @@
         <dd>
             @Html.DisplayFor(model => model.Comments)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.EnrollmentLocationID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EnrollmentLocationID)
+        </dd>
         <dt>
             @Html.DisplayName("School ID")
         </dt>
@@ -87,7 +92,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.IsCounselorSigned)
+            @Html.DisplayName("Counselor Accepts")
         </dt>
 
         <dd>
@@ -95,12 +100,30 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EnrollmentLocationID)
+            @Html.DisplayName("Counselor Rejects")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EnrollmentLocationID)
+            @Html.DisplayFor(model => model.IsCounselorRejecting)
         </dd>
+
+        <dt>
+            @Html.DisplayName("Rejection Reason")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorRejectionReasons.Reason)
+        </dd>
+     
+        <dt>
+            @Html.DisplayName("Rejection Explanation")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CounselorRejectionExplantion)
+        </dd>
+
+       
       
 
         <dt>

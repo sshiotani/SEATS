@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CCAsController.cs" />
+    <Compile Include="Controllers\CounselorRejectionReasonsController.cs" />
     <Compile Include="Controllers\CounselorsController.cs" />
     <Compile Include="Controllers\CourseCategoriesController.cs" />
     <Compile Include="Controllers\CourseCompletionStatusController.cs" />
@@ -218,6 +219,18 @@
     <Compile Include="Migrations\201506221835016_counselorsig.cs" />
     <Compile Include="Migrations\201506221835016_counselorsig.Designer.cs">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508261609431_CounselorRejection.cs" />
+    <Compile Include="Migrations\201508261609431_CounselorRejection.Designer.cs">
+      <DependentUpon>201508261609431_CounselorRejection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508261807098_GradeLevel.cs" />
+    <Compile Include="Migrations\201508261807098_GradeLevel.Designer.cs">
+      <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509031436403_SubmitterType.cs" />
+    <Compile Include="Migrations\201509031436403_SubmitterType.Designer.cs">
+      <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\BulkUploadViewModel.cs" />
@@ -260,13 +273,15 @@
     <Compile Include="Models\CounselorViewModel.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
+    <Compile Include="Models\StudentCcas\CounselorRejectionReasons.cs" />
     <Compile Include="Models\StudentCcas\CourseCompletionStatus.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />
     <Compile Include="Models\StudentCcas\PrimaryRejectionReasons.cs" />
     <Compile Include="Models\StudentCcas\ProviderRejectionReasons.cs" />
+    <Compile Include="Models\StudentCcas\RejectionReasons.cs" />
     <Compile Include="Models\WebApiConfiguration.cs" />
     <Compile Include="Models\StudentCcas\CCA.cs" />
-    <Compile Include="Models\CCAViewModel.cs" />
+    <Compile Include="Models\CcaViewModels\CCAViewModel.cs" />
     <Compile Include="Models\StudentCcas\Counselor.cs" />
     <Compile Include="Models\StudentCcas\CourseCategory.cs" />
     <Compile Include="Models\CourseResultModel.cs" />
@@ -444,7 +459,9 @@
     <Content Include="Models\Cactus.edmx.diagram">
       <DependentUpon>Cactus.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\production.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\handsontable.full.js" />
     <Content Include="Scripts\handsontable.full.min.js" />
@@ -524,12 +541,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -675,6 +686,15 @@
     <Content Include="Views\CCAs\BulkUpload.cshtml" />
     <Content Include="Views\ManualAdd\Login.cshtml" />
     <Content Include="Views\ManualAdd\Register.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Create.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Delete.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Details.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Edit.cshtml" />
+    <Content Include="Views\CounselorRejectionReasons\Index.cshtml" />
+    <None Include="Web.Local.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_aspnet_CcaRegistrationDf_20150320080618DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>_aspnet_CcaRegistrationDf_20150320080618DataSet.Designer.cs</LastGenOutput>
@@ -695,11 +715,38 @@
     <EmbeddedResource Include="Migrations\201506221835016_counselorsig.resx">
       <DependentUpon>201506221835016_counselorsig.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508261609431_CounselorRejection.resx">
+      <DependentUpon>201508261609431_CounselorRejection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508261807098_GradeLevel.resx">
+      <DependentUpon>201508261807098_GradeLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509031436403_SubmitterType.resx">
+      <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'debugTrue|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

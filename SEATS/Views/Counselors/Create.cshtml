@@ -25,7 +25,10 @@
                 @Html.DropDownList("EnrollmentLocationSchoolNameID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "CurrentSchool" })
                 @Html.ValidationMessageFor(model => model.EnrollmentLocationSchoolNameID, "", new { @class = "text-danger" })
             </div>
-
+            <div class="col-md-4">
+                    @Html.EditorFor(model => model.School, new { htmlAttributes = new { @class = "form-control hide", id = "CurrentPrivateSchool", title = "Full Private School Name.", placeholder = "*Full School Name" } })
+                    @Html.ValidationMessageFor(model => model.School, "", new { @class = "text-danger" })
+                </div>
             <div class="col-md-4">
                 @Html.DropDownList("CounselorID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Counselors" })
                 @Html.ValidationMessageFor(model => model.CounselorID, "", new { @class = "text-danger" })
@@ -37,7 +40,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" ,id ="Email"} })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", id = "Email" } })
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -45,7 +48,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control",id ="FirstName" } })
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", id = "FirstName" } })
                     @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -53,7 +56,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" ,id ="LastName"} })
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", id = "LastName" } })
                     @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -61,7 +64,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control phone" ,id ="Phone"} })
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control phone", id = "Phone" } })
                     @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -105,6 +108,8 @@
                 var district = $("#EnrollmentLocation option:selected").val();
                 var districtName = $("#EnrollmentLocation option:selected").text();
 
+
+
                 if (district != "") {
 
                     $.ajax({
@@ -130,7 +135,10 @@
                     $('#Course').html(items);
                 }
 
+
             });
+
+           
 
             $('#CurrentSchool').change(function () {
 
@@ -144,7 +152,16 @@
 
                 $('#SchoolName').val(schoolName);
 
-                if (schoolId != "") {
+                if (schoolId == 0)
+                {
+                    $('#CurrentPrivateSchool').removeClass('hide').prop('required', true);
+                    $('#Counselors').addClass('hide').prop('required', false).val('0');
+                    $('#CounselorInfo').removeClass('hide');
+                }
+                else if(schoolId != "")
+                {
+                    $('#CurrentPrivateSchool').addClass('hide').prop('required', true);
+                    $('#Counselors').removeClass('hide').prop('required', false);
 
                     $.ajax({
                         type: "POST",
@@ -163,8 +180,9 @@
                             alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
                         }
                     });
-                }
-                else {
+                }         
+                else
+                {
                     var items = '<option value="">Select</option>';
                     $('#Counselors').html(items);
                 }
@@ -176,10 +194,9 @@
                 $('#CounselorInfo').removeClass('hide');
 
                 var counselorId = $("#Counselors option:selected").val();
-             
 
-                if (counselorId != "0")
-                {
+
+                if (counselorId != "0") {
 
                     $.ajax({
                         type: "POST",
@@ -194,17 +211,16 @@
                             $('#Email').val(counselor.Email);
 
 
-                            
+
                         },
                         error: function (result) {
                             alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
                         }
                     });
                 }
-                else
-                {
+                else {
                     $('#FirstName, #LastName, #Phone, #Email, #CactusID').val('');
-                   
+
                 }
 
             });

@@ -110,6 +110,8 @@ namespace SEATS.Controllers
                 // Update the user data:
 
                 user.Email = model.Email;
+                user.EmailConfirmed = model.EmailConfirmed;
+                user.UserName = model.UserName;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 await Db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -421,7 +423,7 @@ namespace SEATS.Controllers
 
                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p>");
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your SEATS account", "<html><body><p>Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a></p><p>Do not reply to this email.  Please direct questions to edonline@schools.utah.gov.</p></body></html>");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                         return View("DisplayEmail");
                     }

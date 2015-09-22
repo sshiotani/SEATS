@@ -49,9 +49,9 @@
                     @Html.ValidationMessageFor(model => model.SessionID, "", new { @class = "text-danger" })
 
                     <p class="form-control-static">Category</p>
-                        @Html.DropDownList("CourseCategoryID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Category" })
+                    @Html.DropDownList("CourseCategoryID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Category" })
 
-                        @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "text-danger" })
                     <p class="form-control-static">Course</p>
                     @Html.DropDownList("OnlineCourseID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
 
@@ -64,178 +64,179 @@
 
 
 
-</div>
+                </div>
 
-</div>
-</div>
+            </div>
+        </div>
 
-<div class="form-group">
-    @Html.Label("Credit", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        <p class="form-control-static">@Model.CourseCredit.Value</p>
+        <div class="form-group">
+            @Html.Label("Credit", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Model.CourseCredit.Value</p>
 
-    </div>
-</div>
+            </div>
+        </div>
 
 
-<div class="form-group">
-    @Html.Label("Accept Student", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        <div class="checkbox">
-            @Html.EditorFor(model => model.IsProviderAcceptsRejectsCourseRequest)
-            @Html.ValidationMessageFor(model => model.IsProviderAcceptsRejectsCourseRequest, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Accept Student", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+                    @Html.ValidationMessageFor(model => model.IsProviderAcceptsRejectsCourseRequest, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+
+            @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProviderRejectionReasonsID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.ValidationMessageFor(model => model.ProviderRejectionReasonsID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ProviderExplanationRejection, new { cols = 40, rows = 5, @class = "form-control" })
+               
+                @Html.ValidationMessageFor(model => model.ProviderExplanationRejection, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherCactusID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeacherLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CourseCompletionStatusID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+                @Html.ValidationMessageFor(model => model.CourseCompletionStatusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.Label("Course Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CourseStartDate, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.CourseStartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Date Active", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateConfirmationActiveParticipation, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Credit Completed To Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CreditCompletedToDate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CreditCompletedToDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Completion Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CourseCompletionDate, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.CourseCompletionDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Passing Grade Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateReportPassingGrade, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateReportPassingGrade, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CourseBegin, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.CourseBegin, new { @class = "form-control datepicker" })
+                    @Html.ValidationMessageFor(model => model.CourseBegin, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+
+        <div class="form-group">
+            @Html.Label("Continued Participation Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateContinuationActiveParticipation, new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.DateContinuationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="form-group">
+            @Html.Label("Provider Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ProviderNotes, new { cols = 40, rows = 10,  @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.ProviderNotes, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Signature", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProviderSignature, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProviderSignature, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Provider Signed", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsProviderSignature)
+                    @Html.ValidationMessageFor(model => model.IsProviderSignature, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
-<div class="form-group">
-
-    @Html.Label("Rejection Reason", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.DropDownList("ProviderRejectionReasonsID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
-        @Html.ValidationMessageFor(model => model.ProviderRejectionReasonsID, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.Label("Rejection Explanation", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.ProviderExplanationRejection, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProviderExplanationRejection, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-
-<div class="form-group">
-    @Html.LabelFor(model => model.TeacherCactusID, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.TeacherCactusID, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.TeacherCactusID, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.TeacherFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.TeacherFirstName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.TeacherFirstName, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.TeacherLastName, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.TeacherLastName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.TeacherLastName, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.DropDownList("CourseCompletionStatusID", null, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
-        @Html.ValidationMessageFor(model => model.CourseCompletionStatusID, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-
-
-<div class="form-group">
-    @Html.Label("Course Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.CourseStartDate, new { @class = "form-control datepicker" })
-        @Html.ValidationMessageFor(model => model.CourseStartDate, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Date Active", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.DateConfirmationActiveParticipation, new { @class = "form-control datepicker" })
-        @Html.ValidationMessageFor(model => model.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.Label("Credit Completed To Date", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.CreditCompletedToDate, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.CreditCompletedToDate, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Completion Date", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.CourseCompletionDate, new { @class = "form-control datepicker" })
-        @Html.ValidationMessageFor(model => model.CourseCompletionDate, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Passing Grade Date", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.DateReportPassingGrade, new { @class = "form-control datepicker" })
-        @Html.ValidationMessageFor(model => model.DateReportPassingGrade, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-
-@*<div class="form-group">
-        @Html.LabelFor(model => model.CourseBegin, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.CourseBegin, new { @class = "form-control datepicker" })
-            @Html.ValidationMessageFor(model => model.CourseBegin, "", new { @class = "text-danger" })
-        </div>
-    </div>*@
-
-
-
-<div class="form-group">
-    @Html.Label("Continued Participation Date", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.DateContinuationActiveParticipation, new { @class = "form-control datepicker" })
-        @Html.ValidationMessageFor(model => model.DateContinuationActiveParticipation, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-
-
-
-
-
-
-<div class="form-group">
-    @Html.Label("Provider Notes", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.TextAreaFor(model => model.ProviderNotes, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProviderNotes, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Signature", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.ProviderSignature, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProviderSignature, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.Label("Provider Signed", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        <div class="checkbox">
-            @Html.EditorFor(model => model.IsProviderSignature)
-            @Html.ValidationMessageFor(model => model.IsProviderSignature, "", new { @class = "text-danger" })
-        </div>
-    </div>
-</div>
-
-
-
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Save" class="btn btn-default" />
-    </div>
-</div>
-</div>
 }
 
 <div>

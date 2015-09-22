@@ -217,33 +217,38 @@
                     $("#studentNumber").prop('disabled', true).prop('required', false);
                     $("#CurrentSchool").prop('disabled', true).prop('required', false);
                     $("#CounselorSection :input").attr('disabled', true);
-                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
+                    //$("#CurrentPrivateSchool").addClass('hide').prop('required',false);
                     $("#HomeSchoolRelease").removeClass('hide');
                     $('#SchoolId').val('-1');
                 }
-                else if (districtName.toLowerCase().indexOf("private school") >= 0) {
-                    $("#studentNumber").prop('disabled', true).prop('required', false);
-                    $("#CurrentSchool").prop('disabled', true).prop('required', false);
-                    $("#CounselorSection :input").removeAttr('disabled');
-                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
-                    $("#HomeSchoolRelease").addClass('hide');
-                    $('#SchoolId').val("0");
-                }
+                //else if (districtName.toLowerCase().indexOf("private school") >= 0) {
+                //    $("#studentNumber").prop('disabled', true).prop('required', false);
+                //    //$("#CurrentSchool").prop('disabled', true).prop('required', false);
+                //    $("#CounselorSection :input").removeAttr('disabled');
+                //    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                //    $("#HomeSchoolRelease").addClass('hide');
+                //    //$('#SchoolId').val("0");
+                //}
                 else {
-                    $("#studentNumber").prop('disabled', false).prop('required', true);
+                    if (districtName.toLowerCase().indexOf("private school") >= 0)
+                    {
+                        $("#studentNumber").prop('disabled', true).prop('required', false);
+                    }
+                    else
+                    {
+                        $("#studentNumber").prop('disabled', false).prop('required', true);
+                    }
+
+                    
                     $("#CounselorSection :input").removeAttr('disabled');
                     $("#CurrentSchool").prop('disabled', false).prop('required',true);
-                    $("#CurrentPrivateSchool").addClass('hide').prop('required',false);
+                    //$("#CurrentPrivateSchool").addClass('hide').prop('required',false);
                     $("#HomeSchoolRelease").addClass('hide');
-
-
-
 
 
                     if (district != "") {
 
-
-                        $.ajax({
+                      $.ajax({
                             type: "POST",
                             url: '@Url.Action("GetSchoolNames", "Students")',
                             data: { district: district },
@@ -268,6 +273,16 @@
                 }
             });
 
+            $('#CurrentSchool').change(function () {
+                var schoolId = $("#CurrentSchool option:selected").val();
+                var schoolName = $("#CurrentSchool option:selected").text();
+                if (schoolName.toLowerCase().indexOf('school not listed') >= 0) {
+                    $("#CurrentPrivateSchool").removeClass('hide').prop('required', true);
+                }
+                else {
+                    $("#CurrentPrivateSchool").addClass('hide').prop('required', true);
+                }
+            });
 
             $(".phone").mask("(999) 999-9999");
 

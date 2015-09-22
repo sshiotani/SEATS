@@ -5,7 +5,9 @@ using System.Web;
 
 namespace SEATS.Models
 {
-    public class PrimaryRejectionReasons : RejectionReasons
+    public abstract class RejectionReasons
     {
+        public int ID { get; set; }
+        public string Reason { get; set; }
     }
 }

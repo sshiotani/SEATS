@@ -13,25 +13,31 @@ namespace SEATS.Models
 		public int SubmitterTypeID { get; set; }
         public string UserId { get; set; }
 
-		// Student
-		[Required]
-		public Nullable<int> StudentGradeLevel { get; set; }
-		public bool HasExcessiveFED { get; set; }
+        public bool IsSubmittedByProxy { get; set; }
+
+        // Student		
+        public int? StudentGradeLevel { get; set; }
+		public bool? HasExcessiveFED { get; set; }
 		public string ExcessiveFEDExplanation { get; set; }
 		public Nullable<int> ExcessiveFEDReasonID { get; set; }
 		public IEnumerable<SelectListItem> ExcessiveFEDReasonList { get; set; }
-		public int EnrollmentLocationID { get; set; }
-		
+		public int? EnrollmentLocationID { get; set; }
+        public string SchoolOfRecord { get; set; }
+        public bool EarlyGraduate { get; set; }
 
-		//Counselor
-		public Nullable<int> CounselorID { get; set; }
-		public virtual Counselor Counselor { get; set; }
+        //Counselor
+        public Nullable<int> CounselorID { get; set; }
+		public Counselor Counselor { get; set; }
 		public IEnumerable<SelectListItem> CounselorList { get; set; }
 		public Nullable<int> CactusID { get; set; }
 		public bool IsCounselorSigned { get; set; }
+        public bool IsCounselorRejecting { get; set; }
+        public Nullable<int> CounselorRejectionReasonsID { get; set; }
+        public CounselorRejectionReasons CounselorRejectionReasons { get; set; }
+        public string CounselorRejectionExplantion { get; set; }
 
-		
-		[EmailAddress]
+
+        [EmailAddress]
 		[Display(Name = "Counselor Email")]
 		public string CounselorEmail { get; set; }
 
@@ -54,13 +60,13 @@ namespace SEATS.Models
 
 		//Course
 		public int OnlineCourseID { get; set; }
-		public IEnumerable<SelectListItem> OnlineCourse { get; set; }
+		public IEnumerable<SelectListItem> OnlineCourseList { get; set; }
 		public int CourseCategoryID { get; set; }
-		public IEnumerable<SelectListItem> CourseCategory { get; set; }
+		public IEnumerable<SelectListItem> CourseCategoryList { get; set; }
 		public int CourseCreditID { get; set; }
-		public IEnumerable<SelectListItem> CourseCredit { get; set; }
+		public IEnumerable<SelectListItem> CourseCreditList { get; set; }
 		public int SessionID { get; set; }
-		public IEnumerable<SelectListItem> Session { get; set; }
+		public IEnumerable<SelectListItem> SessionList { get; set; }
         public Nullable<decimal> CourseFee { get; set; }
 
 		//Misc

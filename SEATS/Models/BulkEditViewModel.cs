@@ -19,5 +19,16 @@ namespace SEATS.Models
         public Nullable<System.DateTime> DateConfirmationActiveParticipation { get; set; }
         public Nullable<System.DateTime> CourseCompletionDate { get; set; }
         public int[] RowIds { get; set; }
+
+        //Added per SEATS-39
+        public Nullable<int> TeacherCactusID { get; set; }
+        public string TeacherFirstName { get; set; }
+        public string TeacherLastName { get; set; }
+        public bool? IsProviderAcceptsRejectsCourseRequest { get; set; }
+        public string ProviderExplanationRejection { get; set; }
+        public Nullable<int> ProviderRejectionReasonsID { get; set; }
+        public ProviderRejectionReasons ProviderRejectionReasons { get; set; }
+        public IEnumerable<SelectListItem> ProviderRejectionReasonsList { get; set; }
+        public string ProviderNotes { get; set; }
     }
 }

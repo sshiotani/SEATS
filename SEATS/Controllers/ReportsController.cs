@@ -94,11 +94,14 @@ namespace SEATS.Controllers
             DataTable table = new DataTable();
             table.Columns.Add("Submission Date", typeof(string));
             table.Columns.Add("Notification Date", typeof(string));
+            table.Columns.Add("Filed by", typeof(string));
             table.Columns.Add("First Name", typeof(string));
             table.Columns.Add("Last Name", typeof(string));
             table.Columns.Add("SSID", typeof(string));
+            table.Columns.Add("Status", typeof(string));
             table.Columns.Add("Credit", typeof(string));
             table.Columns.Add("Primary", typeof(string));
+            table.Columns.Add("Primary Notification Date", typeof(string));
             table.Columns.Add("Primary Approval", typeof(string));
             table.Columns.Add("Primary Rejection Reason", typeof(string));
             table.Columns.Add("Provider", typeof(string));
@@ -136,12 +139,11 @@ namespace SEATS.Controllers
                 if (cca.ProviderRejectionReasons != null)
                     providerRejectionReason = cca.ProviderRejectionReasons.Reason;
 
+                string status = "";
+                if (cca.CourseCompletionStatus != null)
+                    status = cca.CourseCompletionStatus.Status;
 
-
-
-
-
-                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate), String.Format("{0:MM/dd/yyyy}", cca.NotificationDate),cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, cca.CourseCredit.Value, primaryName, cca.IsBusinessAdministratorAcceptRejectEnrollment, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
+                table.Rows.Add(String.Format("{0:MM/dd/yyyy}", cca.ApplicationSubmissionDate), String.Format("{0:MM/dd/yyyy}", cca.NotificationDate),cca.SubmitterTypeID,cca.Student.StudentFirstName, cca.Student.StudentLastName, cca.Student.SSID, status ,cca.CourseCredit.Value, primaryName, String.Format("{0:MM/dd/yyyy}", cca.PrimaryNotificationDate), cca.IsBusinessAdministratorAcceptRejectEnrollment, primaryRejectionReason, cca.Provider.Name, providerRejectionReason, cca.CourseFee, cca.BudgetPrimaryProvider, cca.PriorDisbursementProvider, cca.TotalDisbursementsProvider, cca.Offset, cca.Distribution, cca.CourseCategory.Name, cca.OnlineCourse.Name, cca.Student.Parent.GuardianEmail, cca.Counselor.Email, cca.CourseStartDate);
             }
 
             TempData["Table"] = table;

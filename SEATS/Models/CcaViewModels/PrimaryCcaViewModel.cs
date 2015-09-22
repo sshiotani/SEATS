@@ -5,22 +5,24 @@ using System.Web;
 
 namespace SEATS.Models
 {
-    public class PrimaryCcaViewModel
+    public class PrimaryCcaViewModel : CCAViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
        
         public int CcaID { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }
-        public int OnlineCourseID { get; set; }
+        //public int OnlineCourseID { get; set; }
         public OnlineCourse OnlineCourse { get; set; }
-        public int CourseCreditID { get; set; }
+        //public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
+        public CourseCompletionStatus CourseCompletionStatus { get; set; }
 
-        public Nullable<int> EnrollmentLocationID { get; set; }
+        //public Nullable<int> EnrollmentLocationID { get; set; }
 
 
-        public Nullable<int> ProviderID { get; set; }
+        //public Nullable<int> ProviderID { get; set; }
         public Provider Provider { get; set; }
 
         public string BusinessAdministratorSignature { get; set; }
