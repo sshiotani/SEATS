@@ -1510,6 +1510,55 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
+        /// This method is called from the Admin to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// If an item is not set it will not be updated.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> SaveBulkUpdateUsoe()
+        {
+            try
+            {
+                // rowIds are the select rows
+                var rowIds = TempData["RowIds"] as int[];
+
+                // rows to Edit contain the updated values for the bulk update
+                var rowsToEdit = TempData["RowsToEdit"] as UsoeCcaVmList;
+
+                var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
+
+                if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
+                    rowsToEdit.BulkEdit.CourseCompletionStatus = await db.CourseCompletionStatus.FindAsync(rowsToEdit.BulkEdit.CourseCompletionStatusID).ConfigureAwait(false);
+
+                foreach (var row in updatedRows)
+                {
+                    if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
+                    if (rowsToEdit.BulkEdit.NotificationDate != null) row.NotificationDate = rowsToEdit.BulkEdit.NotificationDate;
+                    if (rowsToEdit.BulkEdit.IsEnrollmentNoticeSent == true) row.IsEnrollmentNoticeSent = rowsToEdit.BulkEdit.IsEnrollmentNoticeSent;
+                   
+                    if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
+                    if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
+                    if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
+                    if (rowsToEdit.BulkEdit.BudgetPrimaryProvider != null) row.BudgetPrimaryProvider = rowsToEdit.BulkEdit.BudgetPrimaryProvider;
+                    if (rowsToEdit.BulkEdit.PriorDisbursementProvider != null) row.PriorDisbursementProvider = rowsToEdit.BulkEdit.PriorDisbursementProvider;
+                    if (rowsToEdit.BulkEdit.TotalDisbursementsProvider != null) row.TotalDisbursementsProvider = rowsToEdit.BulkEdit.TotalDisbursementsProvider;
+                    if (rowsToEdit.BulkEdit.Offset != null) row.Offset = rowsToEdit.BulkEdit.Offset;
+                    if (rowsToEdit.BulkEdit.Distribution != null) row.Distribution = rowsToEdit.BulkEdit.Distribution;
+                    if (rowsToEdit.BulkEdit.Grand_Total != null) row.Grand_Total= rowsToEdit.BulkEdit.Grand_Total;
+                    if (rowsToEdit.BulkEdit.Notes != null) row.Notes = rowsToEdit.BulkEdit.Notes;
+                }
+
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return RedirectToAction("CcaInterface", "Admin");
+
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+
+            }
+        }
+
+        /// <summary>
         /// This method 
         /// </summary>
         /// <returns></returns>

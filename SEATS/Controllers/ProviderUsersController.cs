@@ -91,6 +91,40 @@ namespace SEATS.Controllers
 
         }
 
+        /// <summary>
+        /// Sets up ViewModel List for Bulk Edit
+        /// </summary>
+        /// <param name="ccas"></param>
+        /// <returns></returns>
+        private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
+        {
+            Mapper.CreateMap<CCA, ProviderCcaViewModel>();
+
+            var ccaVmList = new List<ProviderCcaViewModel>();
+
+
+            foreach (var cca in ccas)
+            {
+                var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
+
+                ccaVm.CcaID = cca.ID;
+
+                if (cca.EnrollmentLocationID < 3)
+                {
+                    ccaVm.Primary = "HOME/PRIVATE SCHOOL";
+                }
+                else
+                {
+                    ccaVm.Primary = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                }
+
+                ccaVmList.Add(ccaVm);
+
+            }
+
+            return ccaVmList;
+
+        }
 
         /// <summary>
         /// This method is used to save the rowIds selected by the providerUser during the bulkEdit process.  We populate it with an Ajax call and place the 
@@ -128,35 +162,7 @@ namespace SEATS.Controllers
 
         }
 
-        private async Task<List<ProviderCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
-        {
-            Mapper.CreateMap<CCA, ProviderCcaViewModel>();
-
-            var ccaVmList = new List<ProviderCcaViewModel>();
-
-           
-                foreach (var cca in ccas)
-                {
-                    var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
-
-                    ccaVm.CcaID = cca.ID;
-
-                    if (cca.EnrollmentLocationID < 3)
-                    {
-                        ccaVm.Primary = "HOME/PRIVATE SCHOOL";
-                    }
-                    else
-                    {
-                        ccaVm.Primary = await cactus.CactusInstitutions.Where(m => m.ID == cca.EnrollmentLocationID).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                    }
-
-                    ccaVmList.Add(ccaVm);
-
-                }
-
-                return ccaVmList;
-            
-        }
+       
 
         // GET: ProviderUsers/Details/5
         [Authorize(Roles = "Admin,Provider")]

@@ -233,6 +233,7 @@
       <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
+    <Compile Include="Models\BulkEditViewModelUsoe.cs" />
     <Compile Include="Models\BulkUploadViewModel.cs" />
     <Compile Include="Models\Cactus.Context.cs">
       <AutoGen>True</AutoGen>
@@ -257,6 +258,7 @@
     </Compile>
     <Compile Include="Models\CcaViewModels\CounselorCcaViewModel.cs" />
     <Compile Include="Models\CcaViewModels\ProviderCcaVmList.cs" />
+    <Compile Include="Models\CcaViewModels\UsoeCcaVmList.cs" />
     <Compile Include="Models\GlobalVariables.cs" />
     <Compile Include="Models\Interfaces\ISsidFindingService.cs" />
     <Compile Include="Models\CcaViewModels\PrimaryCcaViewModel.cs" />

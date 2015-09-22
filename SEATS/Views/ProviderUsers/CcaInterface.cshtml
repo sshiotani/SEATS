@@ -153,11 +153,11 @@
             </div>
             <div class="col-md-3">
                 @Html.TextBoxFor(model => model.BulkEdit.TeacherFirstName, new { @class = "form-control", id = "TeacherFirstName", title = "FirstName", placeholder = "Teacher First Name" })
-                @Html.ValidationMessageFor(model => model.BulkEdit.CourseStartDate, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.TeacherFirstName, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
                 @Html.TextBoxFor(model => model.BulkEdit.TeacherLastName, new { @class = "form-control", id = "TeacherLastName", title = "LastName.", placeholder = "Teacher Last Name" })
-                @Html.ValidationMessageFor(model => model.BulkEdit.DateConfirmationActiveParticipation, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.TeacherLastName, "", new { @class = "text-danger" })
             </div>
         </div>
         <hr />
