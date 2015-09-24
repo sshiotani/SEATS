@@ -1031,7 +1031,7 @@ namespace SEATS {
                 this.columnPrimaryLEAExplantionRejection = base.Columns["PrimaryLEAExplantionRejection"];
                 this.columnPrimaryLEAReasonRejectingCCA = base.Columns["PrimaryLEAReasonRejectingCCA"];
                 this.columnProviderID = base.Columns["ProviderID"];
-                this.columnCompletionStatus = base.Columns["CompletionStatus"];
+                this.columnCompletionStatus = base.Columns["CourseCompletionStatus"];
                 this.columnCourseBegin = base.Columns["CourseBegin"];
                 this.columnCourseStartDate = base.Columns["CourseStartDate"];
                 this.columnCourseCompletionDate = base.Columns["CourseCompletionDate"];
@@ -1104,7 +1104,7 @@ namespace SEATS {
                 base.Columns.Add(this.columnPrimaryLEAReasonRejectingCCA);
                 this.columnProviderID = new global::System.Data.DataColumn("ProviderID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnProviderID);
-                this.columnCompletionStatus = new global::System.Data.DataColumn("CompletionStatus", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnCompletionStatus = new global::System.Data.DataColumn("CourseCompletionStatus", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCompletionStatus);
                 this.columnCourseBegin = new global::System.Data.DataColumn("CourseBegin", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCourseBegin);
@@ -1564,7 +1564,7 @@ namespace SEATS {
                         return ((string)(this[this.tableCCAs.CompletionStatusColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'CompletionStatus\' in table \'CCAs\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'CourseCompletionStatus\' in table \'CCAs\' is DBNull.", e);
                     }
                 }
                 set {
@@ -2712,7 +2712,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
             tableMapping.ColumnMappings.Add("PrimaryLEAExplantionRejection", "PrimaryLEAExplantionRejection");
             tableMapping.ColumnMappings.Add("PrimaryLEAReasonRejectingCCA", "PrimaryLEAReasonRejectingCCA");
             tableMapping.ColumnMappings.Add("ProviderID", "ProviderID");
-            tableMapping.ColumnMappings.Add("CompletionStatus", "CompletionStatus");
+            tableMapping.ColumnMappings.Add("CourseCompletionStatus", "CourseCompletionStatus");
             tableMapping.ColumnMappings.Add("CourseBegin", "CourseBegin");
             tableMapping.ColumnMappings.Add("CourseStartDate", "CourseStartDate");
             tableMapping.ColumnMappings.Add("CourseCompletionDate", "CourseCompletionDate");
@@ -2762,7 +2762,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
                 "udentGradeLevel], [HasExcessiveFED], [ExcessiveFEDExplanation], [Comments], [Cou" +
                 "nselorID], [IsCounselorSigned], [PrimaryID], [IsBusinessAdministratorAcceptRejec" +
                 "tEnrollment], [PrimaryLEAExplantionRejection], [PrimaryLEAReasonRejectingCCA], [" +
-                "ProviderID], [CompletionStatus], [CourseBegin], [CourseStartDate], [CourseComple" +
+                "ProviderID], [CourseCompletionStatus], [CourseBegin], [CourseStartDate], [CourseComple" +
                 "tionDate], [CreditCompletedToDate], [DateConfirmationActiveParticipation], [Date" +
                 "ContinuationActiveParticipation], [DateReportPassingGrade], [IsEnrollmentNoticeS" +
                 "ent], [IsProviderAcceptsRejectsCourseRequest], [IsProviderEnrollmentVerified], [" +
@@ -2777,7 +2777,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
                 "cationSubmissionDate, @StudentID, @StudentGradeLevel, @HasExcessiveFED, @Excessi" +
                 "veFEDExplanation, @Comments, @CounselorID, @IsCounselorSigned, @PrimaryID, @IsBu" +
                 "sinessAdministratorAcceptRejectEnrollment, @PrimaryLEAExplantionRejection, @Prim" +
-                "aryLEAReasonRejectingCCA, @ProviderID, @CompletionStatus, @CourseBegin, @CourseS" +
+                "aryLEAReasonRejectingCCA, @ProviderID, @CourseCompletionStatus, @CourseBegin, @CourseS" +
                 "tartDate, @CourseCompletionDate, @CreditCompletedToDate, @DateConfirmationActive" +
                 "Participation, @DateContinuationActiveParticipation, @DateReportPassingGrade, @I" +
                 "sEnrollmentNoticeSent, @IsProviderAcceptsRejectsCourseRequest, @IsProviderEnroll" +
@@ -2804,7 +2804,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrimaryLEAExplantionRejection", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrimaryLEAExplantionRejection", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrimaryLEAReasonRejectingCCA", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrimaryLEAReasonRejectingCCA", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ProviderID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ProviderID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CompletionStatus", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CompletionStatus", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseCompletionStatus", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseCompletionStatus", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseBegin", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseBegin", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseStartDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseStartDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseCompletionDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseCompletionDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2852,7 +2852,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
                 "stratorAcceptRejectEnrollment] = @IsBusinessAdministratorAcceptRejectEnrollment," +
                 " [PrimaryLEAExplantionRejection] = @PrimaryLEAExplantionRejection, [PrimaryLEARe" +
                 "asonRejectingCCA] = @PrimaryLEAReasonRejectingCCA, [ProviderID] = @ProviderID, [" +
-                "CompletionStatus] = @CompletionStatus, [CourseBegin] = @CourseBegin, [CourseStar" +
+                "CourseCompletionStatus] = @CourseCompletionStatus, [CourseBegin] = @CourseBegin, [CourseStar" +
                 "tDate] = @CourseStartDate, [CourseCompletionDate] = @CourseCompletionDate, [Cred" +
                 "itCompletedToDate] = @CreditCompletedToDate, [DateConfirmationActiveParticipatio" +
                 "n] = @DateConfirmationActiveParticipation, [DateContinuationActiveParticipation]" +
@@ -2891,7 +2891,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrimaryLEAExplantionRejection", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrimaryLEAExplantionRejection", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PrimaryLEAReasonRejectingCCA", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "PrimaryLEAReasonRejectingCCA", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ProviderID", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ProviderID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CompletionStatus", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CompletionStatus", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseCompletionStatus", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseCompletionStatus", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseBegin", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseBegin", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseStartDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseStartDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CourseCompletionDate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "CourseCompletionDate", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2945,7 +2945,7 @@ namespace SEATS._aspnet_CcaRegistrationDf_20150320080618DataSetTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFEDExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, Unallocated, UnallocatedReduction, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFEDReasonID, EnrollmentLocationID FROM dbo.CCAs";
+            this._commandCollection[0].CommandText = @"SELECT ID, UserId, ApplicationSubmissionDate, StudentID, StudentGradeLevel, HasExcessiveFED, ExcessiveFEDExplanation, Comments, CounselorID, IsCounselorSigned, PrimaryID, IsBusinessAdministratorAcceptRejectEnrollment, PrimaryLEAExplantionRejection, PrimaryLEAReasonRejectingCCA, ProviderID, CourseCompletionStatus, CourseBegin, CourseStartDate, CourseCompletionDate, CreditCompletedToDate, DateConfirmationActiveParticipation, DateContinuationActiveParticipation, DateReportPassingGrade, IsEnrollmentNoticeSent, IsProviderAcceptsRejectsCourseRequest, IsProviderEnrollmentVerified, IsProviderSignature, ProviderExplanationRejection, ProviderReasonRejection, OnlineCourseID, CourseCategoryID, CourseCreditID, CourseName2ndSemesterID, IsCourseConsistentWithStudentSEOP, SessionID, BudgetPrimaryProvider, IsRemediation, NotificationDate, PrimaryNotificationDate, PriorDisbursementProvider, RecordNotes, RemediationPeriodBegins, TotalDisbursementsProvider, TwentyDaysPastSemesterStartDate, Unallocated, UnallocatedReduction, WithdrawalDate, Grand_Total, TeacherCactusID, TeacherFirstName, TeacherLastName, ExcessiveFEDReasonID, EnrollmentLocationID FROM dbo.CCAs";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

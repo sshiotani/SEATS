@@ -91,7 +91,7 @@ namespace SEATS.Controllers
                 ccaVm.Provider = await db.Providers.FindAsync(ccaVm.ProviderID).ConfigureAwait(false);
                 ccaVm.Student = await db.Students.FindAsync(ccaVm.StudentID).ConfigureAwait(false);
                 ccaVm.CourseCredit = await db.CourseCredits.FindAsync(ccaVm.CourseCreditID).ConfigureAwait(false);
-                ccaVm.CompletionStatus = await db.CourseCompletionStatus.FindAsync(cca.CourseCompletionStatusID).ConfigureAwait(false);
+                ccaVm.CourseCompletionStatus = await db.CourseCompletionStatus.FindAsync(cca.CourseCompletionStatusID).ConfigureAwait(false);
                 ccaVm.CcaID = cca.ID;
 
                 ccaVmList.Add(ccaVm);

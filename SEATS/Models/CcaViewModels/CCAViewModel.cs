@@ -9,10 +9,22 @@ namespace SEATS.Models
 {
 	public class CCAViewModel
 	{
+        //public DateTime ApplicationSubmissionDate { get; set; }
+        //public int FiscalYear { get; set; }
+        //public int CcaID { get; set; }
+        //public int StudentID { get; set; }
+        //public Student Student { get; set; }
+        //public Provider Provider { get; set; }
+        //public OnlineCourse OnlineCourse { get; set; }
+        //public CourseCredit CourseCredit { get; set; }
+        //public CourseCategory CourseCategory { get; set; }
+        //public Session Session { get; set; }
+        //public Nullable<int> CourseCompletionStatusID { get; set; }
+        //public CourseCompletionStatus CourseCompletionStatus { get; set; }
 
-		public int SubmitterTypeID { get; set; }
+        public int SubmitterTypeID { get; set; }
         public string UserId { get; set; }
-
+        
         public bool IsSubmittedByProxy { get; set; }
 
         // Student		

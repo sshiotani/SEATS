@@ -694,6 +694,7 @@
     <Content Include="Views\CounselorRejectionReasons\Details.cshtml" />
     <Content Include="Views\CounselorRejectionReasons\Edit.cshtml" />
     <Content Include="Views\CounselorRejectionReasons\Index.cshtml" />
+    <Content Include="Views\Admin\CcaBudget.cshtml" />
     <None Include="Web.Local.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

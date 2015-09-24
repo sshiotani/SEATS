@@ -8,7 +8,6 @@ namespace SEATS.Models
     public class PrimaryCcaViewModel : CCAViewModel
     {
         public DateTime ApplicationSubmissionDate { get; set; }
-       
         public int CcaID { get; set; }
         public int StudentID { get; set; }
         public Student Student { get; set; }
@@ -16,19 +15,15 @@ namespace SEATS.Models
         public OnlineCourse OnlineCourse { get; set; }
         //public int CourseCreditID { get; set; }
         public CourseCredit CourseCredit { get; set; }
-        public Nullable<int> CourseCompletionStatusID { get; set; }
+        //public Nullable<int> CourseCompletionStatusID { get; set; }
         public CourseCompletionStatus CourseCompletionStatus { get; set; }
-
         //public Nullable<int> EnrollmentLocationID { get; set; }
-
-
         //public Nullable<int> ProviderID { get; set; }
         public Provider Provider { get; set; }
 
         public string BusinessAdministratorSignature { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
-  
         public string PrimaryNotes { get; set; }
         public int PrimaryRejectionReasonsID { get; set; }
         
