@@ -22,11 +22,26 @@ namespace SEATS.Controllers
 
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
+        // These are the notification emails used to let the responsible party know when a new application has been submitted.
+        // Some will contain personal information such as name and email, (i.e. {0}) that will be set in the method.
+
+        private string PROVIDEREMAIL = "<html><p>USOE has received a CCA for {0}.{1}, who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
+
+        private string GUARDIANEMAIL = "<html><p>Dear Parent or Guardian,</p> <p>An \"Enrollment Request\" for online enrollment in a course taught by a lea district or charter lea outside of your primary lea district or charter lea has been filed with the Utah State Office of Education (USOE) for your child.  WITHIN APPROXIMATELY 72 BUSINESS HOURS (approximately 10 business days), YOU CAN EXPECT TO RECEIVE A NOTICE OF ENROLLMENT or REJECTION THIS STUDENT. If you have any questions in this period, please feel free to contact USOE as below.</p> <p>Please call us at 801.538.7660 with any questions.</p>On behalf of the Utah State Office of Education, we thank you for your assistance. </p><p>E-Mail:				edonline@schools.utah.gov </p><p>Tel.: 801.538.7660.</p><p>More information can be found at https://seats.schools.utah.gov/ </p></html>";
+
+        private string COUNSELOREMAIL = "<html><p>Dear Counselor,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>First Name: {0}.</p><p> Last Name:{1}</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable.</p><p>To facilitate Counselor review, the Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid your LEA’s approving official (usually the Business Administrator) in their acceptance of this Acknowledgement.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Counselor\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline. http://www.schools.utah.gov/edonline/default.aspx </p></html>";
+
+        private string PRIMARYEMAIL = "<html><p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>{0}. {1}</p><p>The designated counselor is: {2} {3}, {4}</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p></html>";
+
         private SEATSEntities cactus;
         private ApplicationDbContext db;
 
         public Func<string> GetUserId; //For testing
 
+        /// <summary>
+        /// This constructor is used to set the database and GetUserId method. The method is declared this way in order to allow
+        /// unit testing on methods that call User.Identity.GetUserId().
+        /// </summary>
         public CCAsController()
         {
             this.db = new ApplicationDbContext();
@@ -297,24 +312,12 @@ namespace SEATS.Controllers
         {
             try
             {
-                //Email Parent
-
                 await EmailParent(cca);
-
-                //Email Admin
                 await EmailAdmin(cca);
-
-                //Email Counselor
-
                 await EmailCounselor(cca);
-
-                //Email Primary
+                await EmailProvider(cca);
                 if (!(cca.EnrollmentLocationID == GlobalVariables.HOMESCHOOLID || cca.EnrollmentLocationID == GlobalVariables.PRIVATESCHOOLID))
                     await EmailPrimary(cca);
-
-                //Email Provider 
-
-                await EmailProvider(cca);
             }
             catch
             {
@@ -322,6 +325,11 @@ namespace SEATS.Controllers
             }
         }
 
+        /// <summary>
+        /// Methods to notify users using the EmailService.  The text of the emails are at the top of this file.
+        /// </summary>
+        /// <param name="cca"></param>
+        /// <returns></returns>
         private async Task EmailProvider(CCA cca)
         {
             try
@@ -331,7 +339,7 @@ namespace SEATS.Controllers
                 msg.Destination = provider.Email;
                 msg.Subject = "Enrollment Request for Provider Review";
                 var initial = cca.Student.StudentFirstName[0];
-                msg.Body = "<html><p>USOE has received a CCA for " + initial + ". " + cca.Student.StudentLastName + ", who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
+                msg.Body = string.Format(PROVIDEREMAIL, initial, cca.Student.StudentLastName);
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -353,7 +361,7 @@ namespace SEATS.Controllers
 
                 msg.Destination = parent.GuardianEmail;
                 msg.Subject = "SOEP Application Received.";
-                msg.Body = "<html><p>Dear Parent or Guardian,</p> <p>An \"Enrollment Request\" for online enrollment in a course taught by a lea district or charter lea outside of your primary lea district or charter lea has been filed with the Utah State Office of Education (USOE) for your child.  WITHIN APPROXIMATELY 72 BUSINESS HOURS (approximately 10 business days), YOU CAN EXPECT TO RECEIVE A NOTICE OF ENROLLMENT or REJECTION THIS STUDENT. If you have any questions in this period, please feel free to contact USOE as below.</p> <p>Please call us at 801.538.7660 with any questions.</p>On behalf of the Utah State Office of Education, we thank you for your assistance. </p><p>E-Mail:				edonline@schools.utah.gov </p><p>Tel.: 801.538.7660.</p><p>More information can be found at https://seats.schools.utah.gov/ </p></html>";
+                msg.Body = GUARDIANEMAIL;
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -392,7 +400,8 @@ namespace SEATS.Controllers
                 var initial = cca.Student.StudentFirstName[0];
                 msg.Destination = counselor.Email;
                 msg.Subject = "SOEP Application Received.";
-                msg.Body = "<html><p>Dear Counselor,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>First Name: " + initial + ".</p><p> Last Name: " + cca.Student.StudentLastName + "</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable.</p><p>To facilitate Counselor review, the Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid your LEA’s approving official (usually the Business Administrator) in their acceptance of this Acknowledgement.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Counselor\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline. http://www.schools.utah.gov/edonline/default.aspx </p></html>";
+                msg.Body = String.Format(COUNSELOREMAIL, initial, cca.Student.StudentLastName);
+                
 
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -417,7 +426,7 @@ namespace SEATS.Controllers
                         IdentityMessage msg = new IdentityMessage();
                         msg.Destination = user.Email;
                         msg.Subject = "SOEP Application Received.";
-                        msg.Body = "<html><p>Dear Primary Representative or Business Administrator,</p> <p>One or more enrollment requests have been submitted on behalf of a student enrolled in your district for this lea year. The student is:<p>" + initial + ". " + cca.Student.StudentLastName + "</p><p>The designated counselor is: " + cca.Counselor.FirstName + " " + cca.Counselor.LastName + ", " + cca.Counselor.Email + "</p><p> The student is limited to 5.0 online credits in the 2015-16 lea year, and 6.0 credits thereafter, unless you wish to allow the student to exceed this value.</p><p>State Board of Education Administrative Rule requires that a counselor designated by the primary lea of enrollment shall review the CCA to ensure consistency with graduation requirements, IEP and IB program participation, if applicable. Statute allows 72 business hours from sending of this notice by USOE that an enrollment request is pending for your review, prior to execution of an enrollment request by USOE. At that point, the student is considered to be enrolled if they have been accepted by the Provider, and you have either approved the enrollment, or failed to disapprove the enrollment on statutory bases.</p><p>To facilitate Counselor review, the student’s assigned Counselor has been similarly notified that an enrollment request is pending.  The Counselor is expected to log in to certify that the course is consistent with the student’s College and Career Ready Planning (SEOP/CCRP), IEP, and IB participation, which will aid in your own evaluation of the request.</p><p>Please go to https://seats.schools.utah.gov/ and log in to see the application.  If you do not have an account please register as a \"Primary\" and wait for approval from the SOEP administrator.</p><p>For questions you are welcome to contact us at 801.538.7660 or edonline@schools.utah.gov.</p><p> Thank you for your assistance.</p><p>With Best Wishes,</p><p>EdOnline.</p></html>";
+                        msg.Body = String.Format(PRIMARYEMAIL, initial, cca.Student.StudentLastName, cca.Counselor.FirstName, cca.Counselor.LastName, cca.Counselor.Email);
 
                         EmailService emailService = new EmailService();
                         await emailService.SendAsync(msg).ConfigureAwait(false);
@@ -698,11 +707,15 @@ namespace SEATS.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a list of Counselors for AJAX call from views.
+        /// </summary>
+        /// <param name="schoolName"></param>
+        /// <returns></returns>
         public async Task<JsonResult> GetCounselors(string schoolName)
         {
             try
             {
-
                 var counselors = await db.Counselors.Where(y => y.School == schoolName).Select(f => new SelectListItem
                 {
                     Value = f.ID.ToString(),
