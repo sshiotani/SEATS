@@ -9,8 +9,11 @@ namespace SEATS.Models
 {
     public class UsoeCcaViewModel : CCAViewModel
     {
+        
+
         // Items pulled from CCA
         public DateTime ApplicationSubmissionDate { get; set; }
+        public int FiscalYear { get; set; }
         public int CcaID { get; set; }
         public Provider Provider { get; set; }
         public int StudentID { get; set; }
@@ -19,17 +22,17 @@ namespace SEATS.Models
         public CourseCategory CourseCategory { get; set; }
         public OnlineCourse OnlineCourse { get; set; }
         public CourseCredit CourseCredit { get; set; }
+        public Nullable<int> CourseCompletionStatusID { get; set; }
+        public CourseCompletionStatus CourseCompletionStatus { get; set; }
+
+
         public string Primary { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
-        public int MyProperty { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
         public int? EnrollmentLocationSchoolNamesID { get; set; }
 
-
         //Items to be input by USOE 
-
-        public Nullable<int> CourseCompletionStatusID { get; set; }
-        public CourseCompletionStatus CourseCompletionStatus { get; set; }
+       
         public Nullable<decimal> BudgetPrimaryProvider { get; set; }
         public bool IsRemediation { get; set; }
         public bool IsEnrollmentNoticeSent { get; set; }

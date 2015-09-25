@@ -71,6 +71,74 @@ namespace SEATS.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CcaInterface(UsoeCcaVmList rowsToEdit)
+        {
+
+            TempData["RowsToEdit"] = rowsToEdit;
+
+
+            // Send updated rows to cca controller 
+            return RedirectToAction("SaveBulkUpdateUsoe", "CCAs");
+
+        }
+
+        // GET: CCAs for Admin
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CcaBudget()
+        {
+            try
+            {
+                // Look up all CCAs and map them to viewmodel
+                var ccaList = new List<UsoeCcaViewModel>();
+
+                Mapper.CreateMap<CCA, UsoeCcaViewModel>();
+
+                var ccas = await db.CCAs.ToListAsync();
+
+                UsoeCcaVmList vmList = new UsoeCcaVmList();
+
+                vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+                vmList.BulkEdit = new BulkEditViewModelUsoe();
+
+                var statusList = await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false); ;
+
+                statusList.Insert(0, new CourseCompletionStatus { ID = 0, Status = "Select Status" });
+
+                vmList.BulkEdit.CourseCompletionStatusList = statusList.Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Status
+                });
+
+                // Send list of ccas to display
+                return View(vmList);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Unable to retrieve list of CCAs from database. Error:" + ex.Message;
+                return View("Error");
+            }
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CcaBudget(UsoeCcaVmList rowsToEdit)
+        {
+
+            TempData["RowsToEdit"] = rowsToEdit;
+
+
+            // Send updated rows to cca controller 
+            return RedirectToAction("SaveBudgetUpdate", "CCAs");
+
+        }
+
         /// <summary>
         /// Sets up ViewModel List for Bulk Edit
         /// </summary>
@@ -115,19 +183,7 @@ namespace SEATS.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CcaInterface(UsoeCcaVmList rowsToEdit)
-        {
-
-            TempData["RowsToEdit"] = rowsToEdit;
-
-
-            // Send updated rows to cca controller 
-            return RedirectToAction("SaveBulkUpdateUsoe", "CCAs");
-
-        }
+       
 
     }
 }
