@@ -13,7 +13,7 @@ namespace SEATS.Controllers
 {
     [Authorize]
     public class ManualAddController : Controller
-    {  
+    {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -53,7 +53,7 @@ namespace SEATS.Controllers
             }
         }
 
-        
+
 
         //
         // GET: /Account/Register
@@ -96,6 +96,8 @@ namespace SEATS.Controllers
             return View(model);
         }
 
+       
+
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -106,7 +108,7 @@ namespace SEATS.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-       
+
 
         #region Helpers
 
