@@ -114,8 +114,8 @@ namespace SEATS.Controllers
             table.Columns.Add("Distribution", typeof(string));
             table.Columns.Add("Category", typeof(string));
             table.Columns.Add("Course", typeof(string));
-            table.Columns.Add("Counselor Email", typeof(string));
             table.Columns.Add("Parent Email", typeof(string));
+            table.Columns.Add("Counselor Email", typeof(string));
             table.Columns.Add("Start Date", typeof(string));
 
             var ccas = db.CCAs.ToList();
@@ -168,7 +168,7 @@ namespace SEATS.Controllers
                 sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
 
                 //Format the header
-                using (ExcelRange rng = sheet.Cells["A1:Q1"])
+                using (ExcelRange rng = sheet.Cells["A1:Y1"])
                 {
                     rng.Style.Font.Bold = true;
                     rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
