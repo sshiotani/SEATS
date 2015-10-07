@@ -9,6 +9,7 @@ namespace SEATS.Models
     public class BulkUploadViewModel
     {
         [Required]
+        [Display(Name = "Excel File Name")]
         public HttpPostedFileBase File { get; set; }
     }
 }

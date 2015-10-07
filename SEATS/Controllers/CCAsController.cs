@@ -963,7 +963,9 @@ namespace SEATS.Controllers
         private async Task SetUpForDistrictSchool(UsoeCcaViewModel ccaVm, int? leaId, int? schoolId)
         {
             ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
-            ViewBag.Lea = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+            var leaName = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            ViewBag.Lea = leaName != null ? leaName : "PRIVATE SCHOOL";
 
             if (schoolId != null)
             {
@@ -2016,13 +2018,17 @@ namespace SEATS.Controllers
             {
                 Student student = new Student();
 
-                //student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+                if (row["LEA Student Number"].ToString() != "")
+                {
+                    student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+                }
+                
                 student.SSID = row["SSID"].ToString();
 
                 // Look for existing ssid
                 var studentLookup = student.SSID != null ? await db.Students.Where(m => m.SSID.Trim() != "No Records Found" && m.SSID.Trim() == student.SSID.Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
-                // ssid does not exist or student table does not reflect it correctly
+                // if student not found by ssid create a table entry
                 if (studentLookup != null)
                 {
                     student = studentLookup;
@@ -2054,17 +2060,8 @@ namespace SEATS.Controllers
                     student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
                     student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
 
-                    RegisterViewModel user = new RegisterViewModel();
-                    user.Username = student.StudentFirstName + student.StudentLastName;
-                    if (student.StudentEmail != "")
-                        user.Email = student.StudentEmail;
-                    else if (student.Parent.GuardianEmail != "")
-                        user.Email = student.Parent.GuardianEmail;
-                    else
-                        throw new NullReferenceException("Unable to find contact email");
-
-                    user.Password = "!Changeme1";
-                    student.UserId = await AutoRegister(user);
+                    // Create ASP.Net User for this student
+                    await CreateAspNetUser(student);
 
                     // add student to database
                     db.Students.Add(student);
@@ -2077,6 +2074,21 @@ namespace SEATS.Controllers
             {
                 throw new NullReferenceException("Unable to find or create this student.", ex);
             }
+        }
+
+        private async Task CreateAspNetUser(Student student)
+        {
+            RegisterViewModel user = new RegisterViewModel();
+            user.Username = student.StudentFirstName + student.StudentLastName;
+            if (student.StudentEmail != "")
+                user.Email = student.StudentEmail;
+            else if (student.Parent.GuardianEmail != "")
+                user.Email = student.Parent.GuardianEmail;
+            else
+                throw new NullReferenceException("Unable to find contact email");
+
+            user.Password = "!Changeme1";
+            student.UserId = await AutoRegister(user);
         }
 
         /// <summary>
@@ -2167,7 +2179,11 @@ namespace SEATS.Controllers
 
                 if (school != null)
                 {
-                    student.EnrollmentLocationID = school.District;
+                    if (school.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE)
+                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                    else
+                        student.EnrollmentLocationID = school.District;
+
                     student.EnrollmentLocationSchoolNamesID = school.ID;
                 }
                 else // school lookup failed plan b.
