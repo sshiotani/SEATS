@@ -401,8 +401,6 @@ namespace SEATS.Controllers
                 msg.Destination = counselor.Email;
                 msg.Subject = "SOEP Application Received.";
                 msg.Body = String.Format(COUNSELOREMAIL, initial, cca.Student.StudentLastName);
-
-
                 EmailService emailService = new EmailService();
                 await emailService.SendAsync(msg).ConfigureAwait(false);
             }
@@ -410,7 +408,6 @@ namespace SEATS.Controllers
             {
                 throw;
             }
-
         }
 
         private async Task EmailPrimary(CCA cca)
@@ -560,7 +557,6 @@ namespace SEATS.Controllers
                 IEnumerable<int> categorySelected;
 
                 var courses = await db.Courses.ToListAsync().ConfigureAwait(false);
-
                 var session = await db.Session.FindAsync(sessionId).ConfigureAwait(false);
                 var selected = session.Name;
 
@@ -984,7 +980,10 @@ namespace SEATS.Controllers
             }
 
             else
+            {
                 ViewBag.School = "UNKNOWN";
+                ViewBag.CounselorID = new List<SelectListItem>();
+            }
         }
 
         /// <summary>
@@ -1382,9 +1381,7 @@ namespace SEATS.Controllers
 
             try
             {
-
                 var ccaVm = await SetUpProviderEditViewModel(id);
-
                 return View(ccaVm);
             }
             catch (Exception ex)
@@ -1396,13 +1393,10 @@ namespace SEATS.Controllers
 
         private async Task<ProviderCcaViewModel> SetUpProviderEditViewModel(int? id)
         {
-
             try
             {
                 CCA cca = await db.CCAs.FindAsync(id).ConfigureAwait(false);
-
                 Mapper.CreateMap<CCA, ProviderCcaViewModel>();
-
                 var ccaVm = Mapper.Map<CCA, ProviderCcaViewModel>(cca);
 
                 ccaVm.CcaID = cca.ID;
@@ -1420,7 +1414,6 @@ namespace SEATS.Controllers
                 ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
                 return ccaVm;
-
             }
             catch
             {
@@ -1445,7 +1438,6 @@ namespace SEATS.Controllers
                     // Map viewmodel to cca
 
                     Mapper.CreateMap<ProviderCcaViewModel, CCA>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
-
                     Mapper.Map<ProviderCcaViewModel, CCA>(ccaVm, cca);
 
                     // In case the session changed we need to change FiscalYear
@@ -1471,8 +1463,6 @@ namespace SEATS.Controllers
             var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
             foreach (var error in errors)
                 ModelState.AddModelError("", error.Select(x => x.ErrorMessage).First());
-
-
 
             return View(await SetUpProviderEditViewModel(ccaVm.CcaID));
         }
@@ -1513,7 +1503,6 @@ namespace SEATS.Controllers
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("CcaInterface", "ProviderUsers");
-
             }
             catch
             {
@@ -1547,7 +1536,6 @@ namespace SEATS.Controllers
                     if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
                     if (rowsToEdit.BulkEdit.NotificationDate != null) row.NotificationDate = rowsToEdit.BulkEdit.NotificationDate;
                     if (rowsToEdit.BulkEdit.IsEnrollmentNoticeSent == true) row.IsEnrollmentNoticeSent = rowsToEdit.BulkEdit.IsEnrollmentNoticeSent;
-
                     if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
                     if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
                     if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
@@ -1561,7 +1549,6 @@ namespace SEATS.Controllers
             catch
             {
                 throw new HttpException(500, "Error processing course information request.");
-
             }
         }
 
@@ -1599,12 +1586,10 @@ namespace SEATS.Controllers
 
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return RedirectToAction("CcaBudget", "Admin");
-
             }
             catch
             {
                 throw new HttpException(500, "Error processing course information request.");
-
             }
         }
 
@@ -1629,7 +1614,6 @@ namespace SEATS.Controllers
             List<String> errorList = new List<String>();
             using (var dataTable = GetDataFromExcel(model))
             {
-
                 // Foreach record
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -1647,7 +1631,6 @@ namespace SEATS.Controllers
                             await CheckTables(row, status, cca);
 
                             db.CCAs.Add(cca);
-
                             await db.SaveChangesAsync().ConfigureAwait(false);
                         }
                     }
@@ -1746,7 +1729,6 @@ namespace SEATS.Controllers
                 if (row["Course Completion Date"].ToString() != "")
                     cca.CourseCompletionDate = Convert.ToDateTime(row["Course Completion Date"]);
 
-
                 if (row["Withdrawal Date"].ToString() != "")
                     cca.WithdrawalDate = Convert.ToDateTime(row["Withdrawal Date"]);
 
@@ -1830,7 +1812,6 @@ namespace SEATS.Controllers
             {
                 var credit = row["Credit"].ToString();
                 var creditLookup = await db.CourseCredits.Where(m => m.Value.Trim().Contains(credit.Trim())).FirstOrDefaultAsync();
-
                 if (creditLookup != null)
                     return creditLookup;
                 else
@@ -1910,8 +1891,6 @@ namespace SEATS.Controllers
             {
                 throw new Exception("Error in assigning category", ex);
             }
-
-
         }
 
         /// <summary>
@@ -1997,7 +1976,6 @@ namespace SEATS.Controllers
                 if (counselorLookup == null)
                 {
                     counselorLookup = new Counselor();
-
                     counselorLookup.Email = counselorEmail;
                     counselorLookup.FirstName = row["Counselor First Name"].ToString().Trim();
                     counselorLookup.LastName = row["Counselor Last Name"].ToString().Trim();
@@ -2016,7 +1994,10 @@ namespace SEATS.Controllers
                     await db.SaveChangesAsync().ConfigureAwait(false);
                 }
 
-                return counselorLookup;
+                if (counselorLookup != null)
+                    return counselorLookup;
+                else
+                    throw new NullReferenceException("Counselor creation failed.");
             }
             catch (Exception ex)
             {
@@ -2033,16 +2014,13 @@ namespace SEATS.Controllers
         {
             try
             {
-
                 Student student = new Student();
 
                 //student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
                 student.SSID = row["SSID"].ToString();
 
                 // Look for existing ssid
-
                 var studentLookup = student.SSID != null ? await db.Students.Where(m => m.SSID.Trim() != "No Records Found" && m.SSID.Trim() == student.SSID.Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
-
 
                 // ssid does not exist or student table does not reflect it correctly
                 if (studentLookup != null)
@@ -2109,7 +2087,6 @@ namespace SEATS.Controllers
 
         private async Task<String> AutoRegister(RegisterViewModel model)
         {
-
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email, EmailConfirmed = true, IsSetup = true };
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var result = await userManager.CreateAsync(user, model.Password);
@@ -2203,56 +2180,75 @@ namespace SEATS.Controllers
                     }
                     else
                     {
-                        var leaBreakdown = primaryName.Split();
-                        var leaCode = leaBreakdown[0];
-                        var leaName = leaBreakdown[1];
-                        var lea = await cactus.CactusInstitutions.Where(m => m.Code == leaCode.Trim()).FirstOrDefaultAsync();
-                        student.EnrollmentLocationID = lea.ID;
-                        // Try to find school in district. Use first 2 terms in name.  If not found by then give up.
-                        if (schoolName != null)
+                        try
                         {
-                            var schoolNameBreakdown = schoolName.ToUpper().Split();
-
-                            var schools = await cactus.CactusSchools.Where(m => m.District == lea.ID).ToListAsync();
-                            if (schoolNameBreakdown.Count() > 1)
-                            {
-                                var term1 = schoolNameBreakdown[0] + " " + schoolNameBreakdown[1];
-                                var schoolList = schools.Where(m => m.Name.Contains(term1)).ToList();
-
-                                if (schoolList.Count == 1)
-                                {
-                                    student.EnrollmentLocationSchoolNamesID = schoolList[0].ID;
-                                }
-                                else if (schoolNameBreakdown[2] != null && schoolList.Count != 0)
-                                {
-                                    var term2 = term1 + " " + schoolNameBreakdown[2];
-                                    var schoolList2 = schoolList.Where(m => m.Name.Contains(term2)).ToList();
-                                    if (schoolList2.Count == 1)
-                                    {
-
-                                        student.EnrollmentLocationSchoolNamesID = schoolList2[0].ID;
-                                    }
-                                } // endif schoolList.Count == 0
-                            }// endif schoolNameBreakdown.Count() > 1
-                            else if (schoolNameBreakdown.Count() == 1 && schoolNameBreakdown[0] != "")
-                            {
-                                var term1 = schoolNameBreakdown[0];
-                                var schoolList = schools.Where(m => m.Name.Contains(term1)).ToList();
-
-                                if (schoolList.Count == 1)
-                                {
-                                    student.EnrollmentLocationSchoolNamesID = schoolList[0].ID;
-                                }
-                            }
-                            else // No match found set student school to district
-                            {
-                                student.EnrollmentLocationSchoolNamesID = lea.ID;
-                            }
-
-                        } // endif schoolName != null
+                            await FindSchool(student, primaryName, schoolName);
+                        }
+                        catch
+                        {
+                            throw;
+                        }
                     } // endif primaryName.Contains("PRIVATE")
                 } // endif school != null
             }// endif primaryName.Contains("HOME")
+        }
+
+        private async Task FindSchool(Student student, string primaryName, string schoolName)
+        {
+            var leaBreakdown = primaryName.Split();
+            var leaCode = leaBreakdown[0];
+            var leaName = leaBreakdown[1];
+            var lea = await cactus.CactusInstitutions.Where(m => m.Code.Trim() == leaCode.Trim()).FirstOrDefaultAsync();
+            if(lea == null && leaName != null)
+            {
+                lea = await cactus.CactusInstitutions.Where(m => m.Name.Trim() == leaName.Trim()).FirstOrDefaultAsync();
+            }
+            
+            // Try to find school in district. Use first 2 terms in name.  If not found by then give up.
+            if (schoolName != null && lea != null)
+            {
+                student.EnrollmentLocationID = lea.ID;
+                var schoolNameBreakdown = schoolName.ToUpper().Split();
+
+                var schools = await cactus.CactusSchools.Where(m => m.District == lea.ID).ToListAsync();
+                if (schoolNameBreakdown.Count() > 1)
+                {
+                    var term1 = schoolNameBreakdown[0] + " " + schoolNameBreakdown[1];
+                    var schoolList = schools.Where(m => m.Name.Contains(term1)).ToList();
+
+                    if (schoolList.Count == 1)
+                    {
+                        student.EnrollmentLocationSchoolNamesID = schoolList[0].ID;
+                    }
+                    else if (schoolNameBreakdown[2] != null && schoolList.Count != 0)
+                    {
+                        var term2 = term1 + " " + schoolNameBreakdown[2];
+                        var schoolList2 = schoolList.Where(m => m.Name.Contains(term2)).ToList();
+                        if (schoolList2.Count == 1)
+                        {
+                            student.EnrollmentLocationSchoolNamesID = schoolList2[0].ID;
+                        }
+                    } // endif schoolList.Count == 0
+                }// endif schoolNameBreakdown.Count() > 1
+                else if (schoolNameBreakdown.Count() == 1 && schoolNameBreakdown[0] != "")
+                {
+                    var term1 = schoolNameBreakdown[0];
+                    var schoolList = schools.Where(m => m.Name.Contains(term1)).ToList();
+
+                    if (schoolList.Count == 1)
+                    {
+                        student.EnrollmentLocationSchoolNamesID = schoolList[0].ID;
+                    }
+                }
+
+                // No match found throw exception.
+
+                if (student.EnrollmentLocationSchoolNamesID == null)
+                {
+                    throw new NullReferenceException("Unable to find match for school.");
+                }
+
+            } // endif schoolName != null
         }
 
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)
