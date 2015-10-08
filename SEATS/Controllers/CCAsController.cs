@@ -16,6 +16,12 @@ using System.Data;
 
 namespace SEATS.Controllers
 {
+    /// <summary>
+    /// This controller handles all transactions concerning CCAs.  Creation, editing, updating, importing, etc. To separate the model from the 
+    /// controller we really move all class functionality to the class, which will require some major refactoring.  We can leverage dependency injection,
+    /// however a conflict with Unity and Identity 2.2 prevented that implementation.  ASP.Net 5 will have DI baked in so a migration to that framework will 
+    /// enable a simplified transition to DI.
+    /// </summary>
     [Authorize]
     public class CCAsController : Controller
     {
