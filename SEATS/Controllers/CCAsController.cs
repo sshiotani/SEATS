@@ -462,7 +462,7 @@ namespace SEATS.Controllers
                 return Convert.ToInt32(fiscalYear);
             }
 
-            throw new NullReferenceException();
+            throw new NullReferenceException("Session Object is null.");
         }
 
         /// <summary>
@@ -729,7 +729,7 @@ namespace SEATS.Controllers
             }
             catch
             {
-                throw new HttpException(500, "Error processing category list request.");
+                throw new HttpException(500, "Error processing counselor list request.");
             }
 
         }
@@ -960,29 +960,36 @@ namespace SEATS.Controllers
         /// <returns></returns>
         private async Task SetUpForDistrictSchool(UsoeCcaViewModel ccaVm, int? leaId, int? schoolId)
         {
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
-            var leaName = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-
-            ViewBag.Lea = leaName != null ? leaName : "PRIVATE SCHOOL";
-
-            if (schoolId != null)
+            try
             {
-                var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
-                ViewBag.School = schoolName;
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(cactus.CactusSchools.Where(m => m.District == ccaVm.EnrollmentLocationID), "ID", "Name", schoolId);
+                var leaName = await cactus.CactusInstitutions.Where(c => c.ID == leaId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                ViewBag.Lea = leaName != null ? leaName : "PRIVATE SCHOOL";
+
+                if (schoolId != null)
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.FirstName + " " + f.LastName
-                });
+                    var schoolName = await cactus.CactusSchools.Where(c => c.ID == schoolId).Select(m => m.Name).FirstOrDefaultAsync().ConfigureAwait(false);
+                    ViewBag.School = schoolName;
 
-                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+                    ccaVm.CounselorList = db.Counselors.Where(m => m.School == schoolName).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.FirstName + " " + f.LastName
+                    });
+
+                    ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+                }
+
+                else
+                {
+                    ViewBag.School = "UNKNOWN";
+                    ViewBag.CounselorID = new List<SelectListItem>();
+                }
             }
-
-            else
+            catch
             {
-                ViewBag.School = "UNKNOWN";
-                ViewBag.CounselorID = new List<SelectListItem>();
+                throw;
             }
         }
 
@@ -1005,48 +1012,55 @@ namespace SEATS.Controllers
         /// <returns></returns>
         private async Task SetUpForPrivateSchool(UsoeCcaViewModel ccaVm, int? schoolId)
         {
-            var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
-            privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
-            ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
-            ViewBag.Lea = "PRIVATESCHOOL";
+            try
+            {
+                var privateSchoolList = await cactus.CactusSchools.Where(m => m.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE).ToListAsync().ConfigureAwait(false);
+                privateSchoolList.Insert(0, new CactusSchool() { Name = "SCHOOL NOT LISTED", ID = 0 });
+                ViewBag.EnrollmentLocationSchoolNamesID = new SelectList(privateSchoolList, "ID", "Name", schoolId);
+                ViewBag.Lea = "PRIVATESCHOOL";
 
-            //Set Private School Name
-            string schoolName;
-            if (schoolId != 0)
-            {
-                schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
-            }
-            else if (ccaVm.Student.SchoolOfRecord != null)
-            {
-                schoolName = ccaVm.Student.SchoolOfRecord;
-            }
-            else
-            {
-                schoolName = "SCHOOL NOT LISTED";
-            }
-
-
-            ccaVm.SchoolOfRecord = schoolName;
-            if (!schoolName.Contains("SCHOOL NOT LISTED"))
-            {
-                ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
+                //Set Private School Name
+                string schoolName;
+                if (schoolId != 0)
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.FirstName + " " + f.LastName
-                });
-            }
-
-            if (ccaVm.CounselorList != null)
-                ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
-            else
-            {
-                var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
+                    schoolName = privateSchoolList.Where(m => m.ID == schoolId).Select(m => m.Name).FirstOrDefault();
+                }
+                else if (ccaVm.Student.SchoolOfRecord != null)
                 {
-                    Value = f.ID.ToString(),
-                    Text = f.FirstName + " " + f.LastName
-                }).ToListAsync().ConfigureAwait(false);
+                    schoolName = ccaVm.Student.SchoolOfRecord;
+                }
+                else
+                {
+                    schoolName = "SCHOOL NOT LISTED";
+                }
 
-                ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
+
+                ccaVm.SchoolOfRecord = schoolName;
+                if (!schoolName.Contains("SCHOOL NOT LISTED"))
+                {
+                    ccaVm.CounselorList = db.Counselors.Where(m => m.School.ToUpper() == schoolName.ToUpper()).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.FirstName + " " + f.LastName
+                    });
+                }
+
+                if (ccaVm.CounselorList != null)
+                    ViewBag.CounselorID = new SelectList(ccaVm.CounselorList, "Value", "Text", ccaVm.CounselorID);
+                else
+                {
+                    var counselors = await db.Counselors.Where(y => y.ID == ccaVm.CounselorID).Select(f => new SelectListItem
+                    {
+                        Value = f.ID.ToString(),
+                        Text = f.FirstName + " " + f.LastName
+                    }).ToListAsync().ConfigureAwait(false);
+
+                    ViewBag.CounselorID = new SelectList(counselors, "Value", "Text");
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -1057,17 +1071,24 @@ namespace SEATS.Controllers
         /// <returns></returns>
         private async Task<int?> SetUpEnrollmentIDList(UsoeCcaViewModel ccaVm)
         {
-            var leaId = ccaVm.EnrollmentLocationID;
-            if (leaId == 0)
-                leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
+            try
+            {
+                var leaId = ccaVm.EnrollmentLocationID;
+                if (leaId == 0)
+                    leaId = ccaVm.Student.EnrollmentLocationID ?? 0;
 
-            var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
+                var leaList = await cactus.CactusInstitutions.OrderBy(m => m.Name).ToListAsync().ConfigureAwait(false);
 
-            leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
-            leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "HOME SCHOOL", ID = GlobalVariables.HOMESCHOOLID });
+                leaList.Insert(0, new CactusInstitution() { Name = "PRIVATE SCHOOL", ID = GlobalVariables.PRIVATESCHOOLID });
 
-            ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
-            return leaId;
+                ViewBag.EnrollmentLocationID = new SelectList(leaList, "ID", "Name", leaId);
+                return leaId;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -1077,20 +1098,27 @@ namespace SEATS.Controllers
         /// <returns></returns>
         private async Task SetUpCourseSectionofUsoeEditVm(UsoeCcaViewModel ccaVm)
         {
-            ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
-
-            ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
-            var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
+            try
             {
-                Value = s.ID.ToString(),
-                Text = s.Name + " -$" + s.CourseFee.Fee
-            }).ToListAsync().ConfigureAwait(false);
+                ViewBag.CourseCompletionStatusID = new SelectList(await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false), "ID", "Status", ccaVm.CourseCompletionStatusID);
 
-            ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
-            var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
-            ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
+                ViewBag.SessionID = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name", ccaVm.SessionID);
+                var categories = await db.CourseCategories.Where(s => s.IsActive == true).Select(s => new SelectListItem
+                {
+                    Value = s.ID.ToString(),
+                    Text = s.Name + " -$" + s.CourseFee.Fee
+                }).ToListAsync().ConfigureAwait(false);
 
-            ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
+                ViewBag.CourseCategoryID = new SelectList(categories, "Value", "Text", ccaVm.CourseCategoryID);
+                var providerCourses = await db.Courses.Where(m => m.ProviderID == ccaVm.ProviderID).ToListAsync().ConfigureAwait(false);
+                ViewBag.OnlineCourseID = new SelectList(providerCourses, "ID", "Name", ccaVm.OnlineCourseID);
+
+                ccaVm.CourseCreditList = await GetCourseCredit(ccaVm.OnlineCourse.Credit);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
 
@@ -1637,9 +1665,9 @@ namespace SEATS.Controllers
                     catch (Exception ex)
                     {
                         if (ex.InnerException != null)
-                            errorList.Add(String.Format("{0} {1} taking {2} Errors:{3},{4}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message, ex.InnerException.Message));
+                            errorList.Add(String.Format("{0} {1} taking {2} *Errors*:{3},{4}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message, ex.InnerException.Message));
                         else
-                            errorList.Add(String.Format("{0} {1} taking {2} Errors:{3}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message));
+                            errorList.Add(String.Format("{0} {1} taking {2}  *Errors*:{3}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message));
                         errorCount++;
                     }
                 }
@@ -1816,11 +1844,7 @@ namespace SEATS.Controllers
                     return creditLookup;
                 else
                     throw new NullReferenceException("Error reading Credit field");
-            }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
+            }        
             catch (Exception ex)
             {
                 throw new Exception("Error assigning Course Credits.", ex);
@@ -1850,11 +1874,7 @@ namespace SEATS.Controllers
                     return course;
                 else
                     throw new NullReferenceException("Unable to find Course.");
-            }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
+            }    
             catch (Exception ex)
             {
                 throw new Exception("Error looking up Course.", ex);
@@ -1882,11 +1902,7 @@ namespace SEATS.Controllers
                     return categoryLookup;
                 else
                     throw new NullReferenceException("Unable to find Category" + category);
-            }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
+            }        
             catch (Exception ex)
             {
                 throw new Exception("Error in assigning category", ex);
@@ -1919,10 +1935,6 @@ namespace SEATS.Controllers
                 else
                     throw new NullReferenceException("Unable to find Category");
             }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
                 throw new NullReferenceException("Error assigning category.", ex);
@@ -1951,7 +1963,7 @@ namespace SEATS.Controllers
                 if (provider != null)
                     return providerLookup;
                 else
-                    throw new NullReferenceException("");
+                    throw new NullReferenceException("Provider lookup from database failed.");
             }
             catch (Exception ex)
             {
@@ -1986,6 +1998,7 @@ namespace SEATS.Controllers
                         counselorLookup.CactusID = Convert.ToInt32(cactusId);
                     }
 
+                    // Counselor must belong to same School as student
                     counselorLookup.EnrollmentLocationID = student.EnrollmentLocationID;
                     counselorLookup.EnrollmentLocationSchoolNameID = student.EnrollmentLocationSchoolNamesID;
 
@@ -2024,7 +2037,7 @@ namespace SEATS.Controllers
                 student.SSID = row["SSID"].ToString();
 
                 // Look for existing ssid
-                var studentLookup = student.SSID != null ? await db.Students.Where(m => m.SSID.Trim() != "No Records Found" && m.SSID.Trim() == student.SSID.Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
+                var studentLookup = student.SSID != "" ? await db.Students.Where(m => m.SSID.Trim() != "No Records Found" && m.SSID.Trim() == student.SSID.Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
                 // if student not found by ssid create a table entry
                 if (studentLookup != null)
@@ -2039,24 +2052,7 @@ namespace SEATS.Controllers
                     //Lookup existing parent
                     await FindOrCreateParent(row, student);
 
-                    var gradDate = row["Graduation Date"].ToString();
-                    if (gradDate != "")
-                    {
-                        student.GraduationDate = Convert.ToDateTime(gradDate);
-                    }
-
-                    student.SSID = row["SSID"].ToString();
-                    var dob = row["Birth Date"].ToString();
-                    if (dob != "")
-                        student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
-
-                    student.StudentFirstName = row["Student First Name"].ToString();
-                    student.StudentLastName = row["Student Last Name"].ToString();
-                    student.StudentEmail = row["Email"].ToString();
-                    student.IsFeeWaived = row["Fee Waiver?"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
-                    student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
+                    GetStudentFieldsFromRow(row, student);
 
                     // Create ASP.Net User for this student
                     await CreateAspNetUser(student);
@@ -2074,19 +2070,59 @@ namespace SEATS.Controllers
             }
         }
 
+        private static void GetStudentFieldsFromRow(DataRow row, Student student)
+        {
+            var gradDate = row["Graduation Date"].ToString();
+            if (gradDate != "")
+            {
+                student.GraduationDate = Convert.ToDateTime(gradDate);
+            }
+
+            student.SSID = row["SSID"].ToString();
+            var dob = row["Birth Date"].ToString();
+            if (dob != "")
+                student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
+
+            student.StudentFirstName = row["Student First Name"].ToString();
+            student.StudentLastName = row["Student Last Name"].ToString();
+            student.StudentEmail = row["Email"].ToString();
+            student.IsFeeWaived = row["Fee Waiver?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsEarlyGraduate = row["SEOP for Early Graduation?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsIEP = row["IEP?"].ToString().ToLower().Equals("yes") ? true : false;
+            student.IsSection504 = row["504 Accommodation?"].ToString().ToLower().Equals("yes") ? true : false;
+        }
+
         private async Task CreateAspNetUser(Student student)
         {
-            RegisterViewModel user = new RegisterViewModel();
-            user.Username = student.StudentFirstName + student.StudentLastName;
-            if (student.StudentEmail != "")
-                user.Email = student.StudentEmail;
-            else if (student.Parent.GuardianEmail != "")
-                user.Email = student.Parent.GuardianEmail;
-            else
-                throw new NullReferenceException("Unable to find contact email");
+            try
+            {
+                RegisterViewModel user = new RegisterViewModel();
 
-            user.Password = "!Changeme1";
-            student.UserId = await AutoRegister(user);
+                var start = student.SSID.Length - 5;
+                if (start > 0)
+                {
+                    var last4OfSsid = student.SSID.Substring(start, 4);
+                    user.Username = student.StudentFirstName + student.StudentLastName + last4OfSsid;
+                }
+                else
+                {
+                    throw new NullReferenceException("Invalid SSID. Username requires SSID.");
+                }
+
+                if (student.StudentEmail != "")
+                    user.Email = student.StudentEmail;
+                else if (student.Parent.GuardianEmail != "")
+                    user.Email = student.Parent.GuardianEmail;
+                else
+                    throw new NullReferenceException("Unable to find contact email");
+
+                user.Password = "!Changeme1";
+                student.UserId = await RegisterAspNetUser(user);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -2095,7 +2131,7 @@ namespace SEATS.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
 
-        private async Task<String> AutoRegister(RegisterViewModel model)
+        private async Task<String> RegisterAspNetUser(RegisterViewModel model)
         {
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email, EmailConfirmed = true, IsSetup = true };
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -2330,6 +2366,7 @@ namespace SEATS.Controllers
                 return View("Error");
             }
         }
+
         // GET: CCAs/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
