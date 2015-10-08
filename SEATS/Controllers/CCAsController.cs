@@ -943,9 +943,7 @@ namespace SEATS.Controllers
                 else
                 {
                     await SetUpForDistrictSchool(ccaVm, leaId, schoolId);
-
                 }
-
             }
             catch
             {
