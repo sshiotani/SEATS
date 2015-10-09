@@ -28,7 +28,11 @@ namespace SEATS.Models
 
         public string Primary { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public Nullable<int> PrimaryRejectionReasonsID { get; set; }
+        //public PrimaryRejectionReasons PrimaryRejectionReasons { get; set; }
         public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
+        public Nullable<int> ProviderRejectionReasonsID { get; set; }
+        //public ProviderRejectionReasons ProviderRejectionReasons { get; set; }
         public int? EnrollmentLocationSchoolNamesID { get; set; }
 
         //Items to be input by USOE 

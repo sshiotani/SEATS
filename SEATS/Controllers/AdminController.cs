@@ -79,7 +79,6 @@ namespace SEATS.Controllers
 
             TempData["RowsToEdit"] = rowsToEdit;
 
-
             // Send updated rows to cca controller 
             return RedirectToAction("SaveBulkUpdateUsoe", "CCAs");
 
