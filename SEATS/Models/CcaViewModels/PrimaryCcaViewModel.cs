@@ -23,9 +23,10 @@ namespace SEATS.Models
 
         public string BusinessAdministratorSignature { get; set; }
         public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        //public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
         public string PrimaryLEAExplantionRejection { get; set; }
         public string PrimaryNotes { get; set; }
-        public int PrimaryRejectionReasonsID { get; set; }
+    
         
     }
 }

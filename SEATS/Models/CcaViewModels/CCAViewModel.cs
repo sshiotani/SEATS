@@ -81,7 +81,11 @@ namespace SEATS.Models
 		public IEnumerable<SelectListItem> SessionList { get; set; }
         public Nullable<decimal> CourseFee { get; set; }
 
-		//Misc
-		public string Comments { get; set; }
+        //Misc
+        public Nullable<int> PrimaryRejectionReasonsID { get; set; }
+        //public PrimaryRejectionReasons PrimaryRejectionReasons { get; set; }
+        public Nullable<int> ProviderRejectionReasonsID { get; set; }
+        //public ProviderRejectionReasons ProviderRejectionReasons { get; set; }
+        public string Comments { get; set; }
 	}
 }

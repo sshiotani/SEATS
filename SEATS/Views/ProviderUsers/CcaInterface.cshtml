@@ -82,13 +82,12 @@
                     @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
                 </td>
                 <td>
-
                     @if (item.IsProviderAcceptsRejectsCourseRequest == true)
-                    { <p>check</p> }
-
+                    { <p>Accept</p> }
+                    else if (item.ProviderRejectionReasonsID == null || item.ProviderRejectionReasonsID == 0)
+                    { <p></p> }
                     else
-                    { <p>not</p> }
-
+                    { <p>Reject</p>}               
                 </td>
                 <td>
                     @if (item.SubmitterTypeID == 0)
@@ -204,7 +203,6 @@
 
     <script>
 
-
         var rowIds = [];
         // This script uses Jquery Bootgrid to format the data into a grid.  It also creates buttons form the edit, delete, details actions.
         $(function () {
@@ -213,7 +211,8 @@
                 changeMonth: true,
                 changeYear: true
             });
-
+            // JQuery Bootgrid.  See documentation at http://www.jquery-bootgrid.com/.
+            // Added ability to grab row numbers and stash them for a bulk edit method.
             var grid = $("#grid-basic").bootgrid({
 
                 selection: true,
@@ -223,10 +222,13 @@
                 rowCount: [-1, 10, 25, 50, 100],
                 formatters: {
                     "ProviderAccepts": function (column, row) {
-                        var checkBox = "";
-                        if ($.trim(row.accepts) == "check") checkBox = "checked=\"checked\"";
 
-                        return "<input class=\"check-box\"" + checkBox + "disabled=\"disabled\" type=\"checkbox\" />";
+                        if ($.trim(row.accepts) == "Accept") {
+                            return "<span class=\"alert alert-success\" >Accept</span>";
+                        }
+                        else if ($.trim(row.accepts) == "Reject") {
+                            return "<span class=\"alert alert-danger\" >Reject</span>";
+                        }                    
 
                     },
 

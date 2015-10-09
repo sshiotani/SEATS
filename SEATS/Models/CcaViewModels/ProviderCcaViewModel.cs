@@ -43,12 +43,13 @@ namespace SEATS.Models
         public Nullable<System.DateTime> DateContinuationActiveParticipation { get; set; }
         public Nullable<System.DateTime> DateReportPassingGrade { get; set; }
         
-        public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
+      
         //public bool IsProviderEnrollmentVerified { get; set; }
         public string ProviderSignature { get; set; }
         public bool IsProviderSignature { get; set; }
         public string ProviderExplanationRejection { get; set; }
-        public Nullable<int> ProviderRejectionReasonsID { get; set; }
+        //public bool IsBusinessAdministratorAcceptRejectEnrollment { get; set; }
+        public bool IsProviderAcceptsRejectsCourseRequest { get; set; }
         public string ProviderNotes { get; set; }
 
         public bool IsInBulkEdit { get; set; }
