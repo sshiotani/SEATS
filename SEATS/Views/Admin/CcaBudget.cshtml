@@ -22,6 +22,15 @@
             <th data-column-id="status">
                 @Html.DisplayName("Status")
             </th>
+            <th data-column-id="fee">
+                @Html.DisplayName("Fee")
+            </th>
+            <th data-column-id="type">
+                @Html.DisplayName("Type")
+            </th>
+            <th data-column-id="credit">
+                @Html.DisplayName("Credit")
+            </th>
             <th data-column-id="primaryProviderBudget">
                 @Html.DisplayName("Budget")
             </th>
@@ -75,7 +84,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
                 </td>
-
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseFee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCategory.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseCredit.Value)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.BudgetPrimaryProvider)
 
