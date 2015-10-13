@@ -1527,12 +1527,16 @@ namespace SEATS.Controllers
                     if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
                     if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
                     if (rowsToEdit.BulkEdit.DateConfirmationActiveParticipation != null) row.DateConfirmationActiveParticipation = rowsToEdit.BulkEdit.DateConfirmationActiveParticipation;
+                    if (rowsToEdit.BulkEdit.DateReportPassingGrade != null) row.DateReportPassingGrade = rowsToEdit.BulkEdit.DateReportPassingGrade;
+                    if (rowsToEdit.BulkEdit.DateContinuationActiveParticipation != null) row.DateContinuationActiveParticipation = rowsToEdit.BulkEdit.DateContinuationActiveParticipation;
                     if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
                     if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
                     if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
                     if (rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest != null) row.IsProviderAcceptsRejectsCourseRequest = (bool)rowsToEdit.BulkEdit.IsProviderAcceptsRejectsCourseRequest;
                     if (rowsToEdit.BulkEdit.ProviderRejectionReasonsID != null) row.ProviderRejectionReasonsID = rowsToEdit.BulkEdit.ProviderRejectionReasonsID;
                     if (rowsToEdit.BulkEdit.ProviderExplanationRejection != null) row.ProviderExplanationRejection = rowsToEdit.BulkEdit.ProviderExplanationRejection;
+                    //Add to instead of replacing previous notes.
+                    if (rowsToEdit.BulkEdit.ProviderNotes != null) row.ProviderNotes = row.ProviderNotes + String.Format("\n{0:MM/dd/yyyy}-", DateTime.Now) + rowsToEdit.BulkEdit.ProviderNotes;
                 }
 
                 await db.SaveChangesAsync().ConfigureAwait(false);

@@ -18,6 +18,8 @@ namespace SEATS.Models
         public Nullable<System.DateTime> CourseStartDate { get; set; }
         public Nullable<System.DateTime> DateConfirmationActiveParticipation { get; set; }
         public Nullable<System.DateTime> CourseCompletionDate { get; set; }
+        public Nullable<System.DateTime> DateContinuationActiveParticipation { get; set; }
+        public Nullable<System.DateTime> DateReportPassingGrade { get; set; }
         public int[] RowIds { get; set; }
 
         //Added per SEATS-39

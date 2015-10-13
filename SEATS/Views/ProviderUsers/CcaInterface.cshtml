@@ -125,7 +125,7 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-horizontal hide" id="EditForm">
-        <div class="form-group" id="BulkEdit">
+        <div class="form-group" id="BulkEdit1">
             <div class="col-md-3">
                 @Html.DropDownListFor(model => model.BulkEdit.CourseCompletionStatusID, Model.BulkEdit.CourseCompletionStatusList, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Status" })
                 @Html.ValidationMessageFor(model => model.BulkEdit.CourseCompletionStatusID, "", new { @class = "text-danger" })
@@ -145,7 +145,20 @@
         </div>
 
         <hr />
-        <div class="form-group" id="BulkEdit">
+        <div class="form-group" id="BulkEdit2">           
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.DateReportPassingGrade, new { @class = "form-control datepicker", title = "Date must be in mm/dd/yyyy format.", placeholder = "Passed Date" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.DateReportPassingGrade, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.BulkEdit.DateContinuationActiveParticipation, new { @class = "form-control datepicker", title = "Date must be in mm/dd/yyyy format.", placeholder = "Continued Date" })
+                @Html.ValidationMessageFor(model => model.BulkEdit.DateContinuationActiveParticipation, "", new { @class = "text-danger" })
+            </div>
+           
+        </div>
+
+        <hr />
+        <div class="form-group" id="BulkEdit3">
             <div class="col-md-3">
                 @Html.TextBoxFor(model => model.BulkEdit.TeacherCactusID, new { @class = "form-control", id = "TeacherCactus", placeholder = "Teacher Cactus ID" })
                 @Html.ValidationMessageFor(model => model.BulkEdit.TeacherCactusID, "", new { @class = "text-danger" })
@@ -184,6 +197,15 @@
                 @Html.TextAreaFor(model => model.BulkEdit.ProviderExplanationRejection, new { cols = 40, rows = 4, @class = "form-control" })
                 
                 @Html.ValidationMessageFor(model => model.BulkEdit.ProviderExplanationRejection, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.Label("Provider Notes", htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.BulkEdit.ProviderNotes, new { cols = 40, rows = 4, @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.BulkEdit.ProviderNotes, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
