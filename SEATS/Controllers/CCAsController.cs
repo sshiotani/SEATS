@@ -1646,7 +1646,8 @@ namespace SEATS.Controllers
 
             int errorCount = 0;
             List<String> errorList = new List<String>();
-            try {
+            try
+            {
                 using (var dataTable = GetDataFromExcel(model))
                 {
                     // Foreach record
@@ -1679,11 +1680,9 @@ namespace SEATS.Controllers
                         }
                     }
 
-
-
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Message = "Unable to load file." + ex.Message;
                 return View("Error");
@@ -1911,13 +1910,18 @@ namespace SEATS.Controllers
             try
             {
                 var category = row["Category"].ToString();
-
-                var categoryId = Convert.ToInt16(category);
-                //var categoryBreakdown = category.Split();
-
-                //var categoryName = category.Remove(0, category.IndexOf(' ') + 1).Trim();
-
-                var categoryLookup = await db.CourseCategories.Where(m => m.ID == categoryId).FirstOrDefaultAsync();
+                CourseCategory categoryLookup;
+                if (Char.IsDigit(category[0]))
+                {
+                    var categoryId = Convert.ToInt16(category);
+                    categoryLookup = await db.CourseCategories.Where(m => m.ID == categoryId).FirstOrDefaultAsync();
+                }
+                else // In cases where category is specified by name not ID
+                {
+                    //var categoryBreakdown = category.Split();
+                    var categoryName = category.Remove(0, category.IndexOf(' ') + 1).Trim();
+                    categoryLookup = await db.CourseCategories.Where(m => m.Name == categoryName).FirstOrDefaultAsync();
+                }
 
                 if (categoryLookup != null)
                     return categoryLookup;
@@ -1939,7 +1943,8 @@ namespace SEATS.Controllers
         {
             try
             {
-                var semester = row["Session"].ToString().Trim();
+                var semester = row["Session"].ToString().Trim().Split();
+
                 var yearString = row["Fiscal Year"].ToString();
 
                 var year1 = yearString.Substring(0, 4);
@@ -1949,7 +1954,7 @@ namespace SEATS.Controllers
 
                 var year2 = yearEnd.ToString();
 
-                var sessionName = semester + " (" + year1 + "-" + year2 + ")";
+                var sessionName = semester[0] + " (" + year1 + "-" + year2 + ")";
 
                 var session = await db.Session.Where(m => m.Name == sessionName).FirstOrDefaultAsync();
 
@@ -2125,8 +2130,9 @@ namespace SEATS.Controllers
                 if (start > 0)
                 {
                     var last4OfSsid = student.SSID.Substring(start, 4);
-                    var firstName = student.StudentFirstName.Split();
-                    user.Username = firstName[0] + student.StudentLastName + last4OfSsid;
+                    var firstName = student.StudentFirstName.Split(); // Use only 1 first name.
+                    var lastName = student.StudentLastName.Replace(' ', '-'); //Replace spaces in lastname
+                    user.Username = firstName[0] + lastName + last4OfSsid;
                 }
                 else
                 {
@@ -2258,9 +2264,9 @@ namespace SEATS.Controllers
                         {
                             await FindSchool(student, primaryName, schoolName);
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            throw;
+                            throw new NullReferenceException("Unable to Find School. :" + ex.Message);
                         }
                     } // endif primaryName.Contains("PRIVATE")
                 } // endif school != null
