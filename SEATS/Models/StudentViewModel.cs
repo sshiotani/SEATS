@@ -78,5 +78,8 @@ namespace SEATS.Models
         [Display(Name = "Additional Information or Comments")]
         public string Comments { get; set; }
 
+        public Nullable<int> ParentID { get; set; }
+        public Parent Parent { get; set; }
+
     }
 }

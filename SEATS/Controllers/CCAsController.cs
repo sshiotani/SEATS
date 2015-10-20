@@ -30,6 +30,7 @@ namespace SEATS.Controllers
 
         // These are the notification emails used to let the responsible party know when a new application has been submitted.
         // Some will contain personal information such as name and email, (i.e. {0}) that will be set in the method.
+        // TODO: Put in a text file and use StreamReader to set emails.
 
         private string PROVIDEREMAIL = "<html><p>USOE has received a CCA for {0}.{1}, who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
 
@@ -1650,37 +1651,46 @@ namespace SEATS.Controllers
 
             int errorCount = 0;
             List<String> errorList = new List<String>();
-            using (var dataTable = GetDataFromExcel(model))
+            try
             {
-                // Foreach record
-                foreach (DataRow row in dataTable.Rows)
+                using (var dataTable = GetDataFromExcel(model))
                 {
-                    try
+                    // Foreach record
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        var status = row["Completion Status"].ToString().ToLower();
-
-                        //Do not import Withdrawn, rejected, or closed records.
-                        if (!(status.Contains("withdrawn") || status.Contains("rejected") || status.Contains("closed")))
+                        try
                         {
-                            // Populate fields that are imported directly to database
-                            var cca = BuildCca(row);
+                            var status = row["Completion Status"].ToString().ToLower();
 
-                            // Populate fields that are references to other tables.
-                            await CheckTables(row, status, cca);
+                            //Do not import Withdrawn, rejected, or closed records.
+                            if (!(status.Contains("withdrawn") || status.Contains("rejected") || status.Contains("closed")))
+                            {
+                                // Populate fields that are imported directly to database
+                                var cca = BuildCca(row);
 
-                            db.CCAs.Add(cca);
-                            await db.SaveChangesAsync().ConfigureAwait(false);
+                                // Populate fields that are references to other tables.
+                                await CheckTables(row, status, cca);
+
+                                db.CCAs.Add(cca);
+                                await db.SaveChangesAsync().ConfigureAwait(false);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.InnerException != null)
+                                errorList.Add(String.Format("{0} {1} taking {2} *Errors*:{3},{4}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message, ex.InnerException.Message));
+                            else
+                                errorList.Add(String.Format("{0} {1} taking {2}  *Errors*:{3}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message));
+                            errorCount++;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        if (ex.InnerException != null)
-                            errorList.Add(String.Format("{0} {1} taking {2} *Errors*:{3},{4}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message, ex.InnerException.Message));
-                        else
-                            errorList.Add(String.Format("{0} {1} taking {2}  *Errors*:{3}", row["Student First Name"].ToString(), row["Student Last Name"].ToString(), row["Course"].ToString(), ex.Message));
-                        errorCount++;
-                    }
+
                 }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Unable to load file." + ex.Message;
+                return View("Error");
             }
 
             ViewBag.Message = String.Format("Thanks for uploading the file.  There were {0} bad records that were not uploaded.", errorCount.ToString());
@@ -1754,21 +1764,24 @@ namespace SEATS.Controllers
                 cca.TeacherFirstName = row["Teacher of Record First Name"].ToString();
                 cca.TeacherLastName = row["Teacher of Record Last Name"].ToString();
 
-                if (row["Course_Fee"].ToString() != "")
-                    cca.CourseFee = Convert.ToDecimal(row["Course_Fee"]);
+                if (row["COURSE FEE"].ToString() != "")
+                    cca.CourseFee = Convert.ToDecimal(row["COURSE FEE"]);
 
                 // If fiscal year is missing we will not be able to look up Session.  Skip record. 
 
-                cca.FiscalYear = Convert.ToInt32(row["Fiscal Year"]);
+                var fiscalYearString = row["Fiscal Year"].ToString();
+                var fiscalYear1 = fiscalYearString.Substring(0, 4);
+
+                cca.FiscalYear = Convert.ToInt32(fiscalYear1) + 1;
 
                 if (row["Course Start Date"].ToString() != "")
                     cca.CourseStartDate = Convert.ToDateTime(row["Course Start Date"]);
 
-                if (row["Course Completion Date"].ToString() != "")
-                    cca.CourseCompletionDate = Convert.ToDateTime(row["Course Completion Date"]);
+                if (row["Date of Course Completion"].ToString() != "")
+                    cca.CourseCompletionDate = Convert.ToDateTime(row["Date of Course Completion"]);
 
-                if (row["Withdrawal Date"].ToString() != "")
-                    cca.WithdrawalDate = Convert.ToDateTime(row["Withdrawal Date"]);
+                if (row["WITHDRAWAL (Date)"].ToString() != "")
+                    cca.WithdrawalDate = Convert.ToDateTime(row["WITHDRAWAL (Date)"]);
 
                 if (row["Date of Confirmation of Active Participation"].ToString() != "")
                     cca.DateConfirmationActiveParticipation = Convert.ToDateTime(row["Date of Confirmation of Active Participation"]);
@@ -1776,12 +1789,22 @@ namespace SEATS.Controllers
                 if (row["Date of Continuation of Active Participation"].ToString() != "")
                     cca.DateContinuationActiveParticipation = Convert.ToDateTime(row["Date of Continuation of Active Participation"]);
 
-                if (row["BUDGET"].ToString() != "")
-                    cca.BudgetPrimaryProvider = Convert.ToDecimal(row["BUDGET"]);
+                if (row["BUDGET (PRIMARY/PROVIDER)"].ToString() != "")
+                    cca.BudgetPrimaryProvider = Convert.ToDecimal(row["BUDGET (PRIMARY/PROVIDER)"]);
 
                 cca.SubmitterTypeID = FindOrCreateSubmitterType(row);
                 if (row["Grade Level"].ToString() != "")
                     cca.StudentGradeLevel = Convert.ToInt32(row["Grade Level"]);
+
+                // Set all verification flags to true.
+                cca.IsBusinessAdministratorAcceptRejectEnrollment = true;
+                cca.IsCounselorSigned = true;
+                cca.IsProviderAcceptsRejectsCourseRequest = true;
+                cca.IsProviderEnrollmentVerified = true;
+                cca.IsProviderSignature = true;
+                cca.IsCourseConsistentWithStudentSEOP = true;
+                cca.IsEnrollmentNoticeSent = true;
+                
 
                 return cca;
             }
@@ -1854,7 +1877,7 @@ namespace SEATS.Controllers
                     return creditLookup;
                 else
                     throw new NullReferenceException("Error reading Credit field");
-            }        
+            }
             catch (Exception ex)
             {
                 throw new Exception("Error assigning Course Credits.", ex);
@@ -1884,7 +1907,7 @@ namespace SEATS.Controllers
                     return course;
                 else
                     throw new NullReferenceException("Unable to find Course.");
-            }    
+            }
             catch (Exception ex)
             {
                 throw new Exception("Error looking up Course.", ex);
@@ -1893,7 +1916,8 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Tries to match Category from row to category in table.
+        /// Tries to match Category from row to category in table. If the category ID precedes the name we use it to look it up in table.
+        /// Otherwise use the name.
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
@@ -1902,17 +1926,24 @@ namespace SEATS.Controllers
             try
             {
                 var category = row["Category"].ToString();
-                //var categoryBreakdown = category.Split();
-
-                var categoryName = category.Remove(0, category.IndexOf(' ') + 1).Trim();
-
-                var categoryLookup = await db.CourseCategories.Where(m => m.Name == categoryName).FirstOrDefaultAsync();
+                CourseCategory categoryLookup;
+                if (Char.IsDigit(category[0]))
+                {
+                    var categoryId = Convert.ToInt16(category[0].ToString());
+                    categoryLookup = await db.CourseCategories.Where(m => m.ID == categoryId).FirstOrDefaultAsync();
+                }
+                else // In cases where category is specified by name not ID
+                {
+                    //var categoryBreakdown = category.Split();
+                    var categoryName = category.Remove(0, category.IndexOf(' ') + 1).Trim();
+                    categoryLookup = await db.CourseCategories.Where(m => m.Name == categoryName).FirstOrDefaultAsync();
+                }
 
                 if (categoryLookup != null)
                     return categoryLookup;
                 else
                     throw new NullReferenceException("Unable to find Category" + category);
-            }        
+            }
             catch (Exception ex)
             {
                 throw new Exception("Error in assigning category", ex);
@@ -1928,26 +1959,29 @@ namespace SEATS.Controllers
         {
             try
             {
-                var semester = row["Session"].ToString().Trim();
-                var year2 = row["Fiscal Year"].ToString();
+                var semester = row["Session"].ToString().Trim().Split();
 
-                int yearEnd = Convert.ToInt32(year2);
-                int yearBegin = yearEnd - 1;
+                var yearString = row["Fiscal Year"].ToString();
 
-                var year1 = yearBegin.ToString();
+                var year1 = yearString.Substring(0, 4);
 
-                var sessionName = semester + " (" + year1 + "-" + year2 + ")";
+                int yearBegin = Convert.ToInt32(year1);
+                int yearEnd = yearBegin + 1;
+
+                var year2 = yearEnd.ToString();
+
+                var sessionName = semester[0] + " (" + year1 + "-" + year2 + ")";
 
                 var session = await db.Session.Where(m => m.Name == sessionName).FirstOrDefaultAsync();
 
                 if (session != null)
                     return session;
                 else
-                    throw new NullReferenceException("Unable to find Category");
+                    throw new NullReferenceException("Unable to find Session");
             }
             catch (Exception ex)
             {
-                throw new NullReferenceException("Error assigning category.", ex);
+                throw new NullReferenceException("Error assigning Session.", ex);
             }
         }
 
@@ -2043,7 +2077,7 @@ namespace SEATS.Controllers
                 {
                     student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
                 }
-                
+
                 student.SSID = row["SSID"].ToString();
 
                 // Look for existing ssid
@@ -2112,7 +2146,9 @@ namespace SEATS.Controllers
                 if (start > 0)
                 {
                     var last4OfSsid = student.SSID.Substring(start, 4);
-                    user.Username = student.StudentFirstName + student.StudentLastName + last4OfSsid;
+                    var firstName = student.StudentFirstName.Split(); // Use only 1 first name.
+                    var lastName = student.StudentLastName.Replace(' ', '-'); //Replace spaces in lastname
+                    user.Username = firstName[0] + lastName + last4OfSsid;
                 }
                 else
                 {
@@ -2244,9 +2280,9 @@ namespace SEATS.Controllers
                         {
                             await FindSchool(student, primaryName, schoolName);
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            throw;
+                            throw new NullReferenceException("Unable to Find School. :" + ex.Message);
                         }
                     } // endif primaryName.Contains("PRIVATE")
                 } // endif school != null
@@ -2259,11 +2295,11 @@ namespace SEATS.Controllers
             var leaCode = leaBreakdown[0];
             var leaName = leaBreakdown[1];
             var lea = await cactus.CactusInstitutions.Where(m => m.Code.Trim() == leaCode.Trim()).FirstOrDefaultAsync();
-            if(lea == null && leaName != null)
+            if (lea == null && leaName != null)
             {
                 lea = await cactus.CactusInstitutions.Where(m => m.Name.Trim() == leaName.Trim()).FirstOrDefaultAsync();
             }
-            
+
             // Try to find school in district. Use first 2 terms in name.  If not found by then give up.
             if (schoolName != null && lea != null)
             {
@@ -2313,28 +2349,35 @@ namespace SEATS.Controllers
 
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)
         {
-            using (var package = new ExcelPackage(model.File.InputStream))
+            try
             {
-                // get the first worksheet in the workbook
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
-                DataTable tbl = new DataTable();
-                bool hasHeader = true;
-                foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
+                using (var package = new ExcelPackage(model.File.InputStream))
                 {
-                    tbl.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
-                }
-                var startRow = hasHeader ? 2 : 1;
-                for (var rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
-                {
-                    var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
-                    var row = tbl.NewRow();
-                    foreach (var cell in wsRow)
+                    // get the first worksheet in the workbook
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                    DataTable tbl = new DataTable();
+                    bool hasHeader = true;
+                    foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
                     {
-                        row[cell.Start.Column - 1] = cell.Text;
+                        tbl.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
                     }
-                    tbl.Rows.Add(row);
+                    var startRow = hasHeader ? 2 : 1;
+                    for (var rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
+                    {
+                        var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
+                        var row = tbl.NewRow();
+                        foreach (var cell in wsRow)
+                        {
+                            row[cell.Start.Column - 1] = cell.Text;
+                        }
+                        tbl.Rows.Add(row);
+                    }
+                    return tbl;
                 }
-                return tbl;
+            }
+            catch
+            {
+                throw new FormatException();
             }
         }
 
