@@ -66,6 +66,35 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Parent.GuardianEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Parent.GuardianEmail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Parent.GuardianEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Parent.GuardianFirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Parent.GuardianFirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Parent.GuardianFirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Parent.GuardianLastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Parent.GuardianLastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Parent.GuardianLastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Parent.GuardianPhone1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Parent.GuardianPhone1, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Parent.GuardianPhone1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
             @Html.LabelFor(model => model.GraduationDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.GraduationDate,  new { @class = "form-control datepicker" } )

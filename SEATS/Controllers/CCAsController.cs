@@ -30,6 +30,7 @@ namespace SEATS.Controllers
 
         // These are the notification emails used to let the responsible party know when a new application has been submitted.
         // Some will contain personal information such as name and email, (i.e. {0}) that will be set in the method.
+        // TODO: Put in a text file and use StreamReader to set emails.
 
         private string PROVIDEREMAIL = "<html><p>USOE has received a CCA for {0}.{1}, who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
 
@@ -1791,6 +1792,16 @@ namespace SEATS.Controllers
                 if (row["Grade Level"].ToString() != "")
                     cca.StudentGradeLevel = Convert.ToInt32(row["Grade Level"]);
 
+                // Set all verification flags to true.
+                cca.IsBusinessAdministratorAcceptRejectEnrollment = true;
+                cca.IsCounselorSigned = true;
+                cca.IsProviderAcceptsRejectsCourseRequest = true;
+                cca.IsProviderEnrollmentVerified = true;
+                cca.IsProviderSignature = true;
+                cca.IsCourseConsistentWithStudentSEOP = true;
+                cca.IsEnrollmentNoticeSent = true;
+                
+
                 return cca;
             }
             catch
@@ -1901,7 +1912,8 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Tries to match Category from row to category in table.
+        /// Tries to match Category from row to category in table. If the category ID precedes the name we use it to look it up in table.
+        /// Otherwise use the name.
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
@@ -1913,7 +1925,7 @@ namespace SEATS.Controllers
                 CourseCategory categoryLookup;
                 if (Char.IsDigit(category[0]))
                 {
-                    var categoryId = Convert.ToInt16(category);
+                    var categoryId = Convert.ToInt16(category[0].ToString());
                     categoryLookup = await db.CourseCategories.Where(m => m.ID == categoryId).FirstOrDefaultAsync();
                 }
                 else // In cases where category is specified by name not ID
