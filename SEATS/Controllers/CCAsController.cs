@@ -311,7 +311,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Notifies specified counslor and parent of new CCA being received and processed.
+        /// Notifies responsible parties by email of new CCA being received.
         /// </summary>
         /// <param name="cca"></param>
         /// <returns></returns>
@@ -333,7 +333,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Methods to notify users using the EmailService.  The text of the emails are at the top of this file.
+        /// Methods to notify users using the EmailService.  The text of the emails are at the top of this file, but can be moved to an external text file and read by StreamReader.
         /// </summary>
         /// <param name="cca"></param>
         /// <returns></returns>
@@ -454,7 +454,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Gets all numeric chars out of string and tries to find Year
+        /// Gets all numeric chars out of string and tries to find the Fiscal year.
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
@@ -919,6 +919,11 @@ namespace SEATS.Controllers
             }
         }
 
+        /// <summary>
+        /// Sets up Lists or display strings for Usoe Edit View.
+        /// </summary>
+        /// <param name="ccaVm"></param>
+        /// <returns></returns>
         private async Task SetUpUsoeEditViewModel(UsoeCcaViewModel ccaVm)
         {
 
@@ -1633,13 +1638,30 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// This method 
+        /// This method is the get portion of the process to upload Excel files to import CCAs.  It will create records in lookup tables when appropriate.
+        /// It will fail on lines that have mandatory data that is missing or corrupt. It will not upload records that are withdrawn, rejected, or closed.
+        /// Mandatory fields are:
+        /// 1. SSID
+        /// 2. SchoolID
+        /// 3. Course Name
+        /// 4. CategoryID
+        /// 5. Provider
+        /// 6. Status
+        /// 7. Credit
+        /// 8. Session
+        /// 9. Provider
+        /// 10. Counselor
+        /// 11. Parent information
+        /// 12. Primary LEA and SchoolId
+        /// 
+        /// Other fields are set to null or specified in the spreadsheet.
         /// </summary>
         /// <returns></returns>
         public ActionResult BulkUpload()
         {
             return View(new BulkUploadViewModel());
         }
+
 
         [HttpPost]
         public async Task<ActionResult> BulkUpload(BulkUploadViewModel model)
@@ -2063,7 +2085,7 @@ namespace SEATS.Controllers
         }
 
         /// <summary>
-        /// Try to match student in cca upload to record in table.  cca record must contain either ssid or firstname, lastname and birthdate.
+        /// Try to match student in cca upload to record in table.  cca record must contain ssid.
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
@@ -2125,7 +2147,7 @@ namespace SEATS.Controllers
             student.SSID = row["SSID"].ToString();
             var dob = row["Birth Date"].ToString();
             if (dob != "")
-                student.StudentDOB = Convert.ToDateTime(row["Birth Date"]);
+                student.StudentDOB = Convert.ToDateTime(dob);
 
             student.StudentFirstName = row["Student First Name"].ToString();
             student.StudentLastName = row["Student Last Name"].ToString();
@@ -2242,8 +2264,15 @@ namespace SEATS.Controllers
             }
         }
 
+        /// <summary>
+        /// This method depends on the PRIMARY SCHOOL being set as the Cactus ID
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="student"></param>
+        /// <returns></returns>
         private async Task GetEnrollmentIDs(DataRow row, Student student)
         {
+            CactusSchool school;
             var primaryName = row["PRIMARY LEA"].ToString().ToUpper().Trim();
 
             if (primaryName.Contains("HOME"))
@@ -2254,38 +2283,49 @@ namespace SEATS.Controllers
             else
             {
                 // Try to look up School using name.
-                var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper().Trim();
-                var school = schoolName != null ? await cactus.CactusSchools.Where(m => m.Name == schoolName.ToUpper().Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
+                //var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper().Trim();
 
-                if (school != null)
+                if (row["PRIMARY SCHOOL"].ToString().Trim() != "")
                 {
-                    if (school.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE)
-                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
-                    else
-                        student.EnrollmentLocationID = school.District;
+                    var schoolId = Convert.ToInt16(row["PRIMARY SCHOOL"].ToString());
+                    school = schoolId != 0 ? await cactus.CactusSchools.Where(m => m.ID == schoolId).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
-                    student.EnrollmentLocationSchoolNamesID = school.ID;
-                }
-                else // school lookup failed plan b.
-                {
+                    //school = schoolName != null ? await cactus.CactusSchools.Where(m => m.Name == schoolName.ToUpper().Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
-                    if (primaryName.Contains("PRIVATE"))
+                    if (school != null)
                     {
-                        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
-                        student.SchoolOfRecord = schoolName != null ? schoolName : "UNKNOWN";
+                        if (school.SchoolType == GlobalVariables.PRIVATESCHOOLTYPE)
+                            student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                        else
+                            student.EnrollmentLocationID = school.District;
+
+                        student.EnrollmentLocationSchoolNamesID = school.ID;
                     }
                     else
                     {
-                        try
-                        {
-                            await FindSchool(student, primaryName, schoolName);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new NullReferenceException("Unable to Find School. :" + ex.Message);
-                        }
-                    } // endif primaryName.Contains("PRIVATE")
-                } // endif school != null
+                        throw new NullReferenceException("Unable to Find School.");
+                    }
+                    //else // school lookup failed plan b.
+                    //{
+
+                    //    if (primaryName.Contains("PRIVATE"))
+                    //    {
+                    //        student.EnrollmentLocationID = GlobalVariables.PRIVATESCHOOLID;
+                    //        student.SchoolOfRecord = schoolName != null ? schoolName : "UNKNOWN";
+                    //    }
+                    //    else
+                    //    {
+                    //        try
+                    //        {
+                    //            await FindSchool(student, primaryName, schoolName);
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            throw new NullReferenceException("Unable to Find School. :" + ex.Message);
+                    //        }
+                    //    } // endif primaryName.Contains("PRIVATE")
+                    //} // endif school != null
+                }
             }// endif primaryName.Contains("HOME")
         }
 
@@ -2347,6 +2387,11 @@ namespace SEATS.Controllers
             } // endif schoolName != null
         }
 
+        /// <summary>
+        /// 30 Mb file size limit by IIS upload.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static DataTable GetDataFromExcel(BulkUploadViewModel model)
         {
             try
@@ -2377,7 +2422,7 @@ namespace SEATS.Controllers
             }
             catch
             {
-                throw new FormatException();
+                throw new FormatException("Error reading Excel file.");
             }
         }
 
