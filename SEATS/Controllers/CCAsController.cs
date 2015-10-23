@@ -1641,18 +1641,25 @@ namespace SEATS.Controllers
         /// This method is the get portion of the process to upload Excel files to import CCAs.  It will create records in lookup tables when appropriate.
         /// It will fail on lines that have mandatory data that is missing or corrupt. It will not upload records that are withdrawn, rejected, or closed.
         /// Mandatory fields are:
-        /// 1. SSID
-        /// 2. SchoolID
-        /// 3. Course Name
-        /// 4. CategoryID
-        /// 5. Provider
-        /// 6. Status
-        /// 7. Credit
-        /// 8. Session
-        /// 9. Provider
-        /// 10. Counselor
-        /// 11. Parent information
-        /// 12. Primary LEA and SchoolId
+        /// -SSID
+        /// -SchoolID
+        /// -Course Name
+        /// -CategoryID
+        /// -Provider
+        /// -Status
+        /// -Credit
+        /// -Session
+        /// -Provider
+        /// -Counselor
+        /// -Parent information
+        /// -Primary LEA and SchoolId
+        /// -Fiscal Year
+        /// 
+        /// (Additional information if student does not already exist in our system.)
+        /// -Student Email 
+        /// -Birthdate
+        /// -Student First Name
+        /// -Student Last Name
         /// 
         /// Other fields are set to null or specified in the spreadsheet.
         /// </summary>
@@ -1755,7 +1762,7 @@ namespace SEATS.Controllers
                 var category = await FindCategory(row);
                 cca.CourseCategoryID = category.ID;
 
-                var course = await FindCourse(row, category, provider);
+                var course = await FindCourse(row, cca);
                 cca.OnlineCourseID = course.ID;
 
                 var credit = await FindCredit(row);
@@ -1826,8 +1833,6 @@ namespace SEATS.Controllers
                 cca.IsProviderSignature = true;
                 cca.IsCourseConsistentWithStudentSEOP = true;
                 cca.IsEnrollmentNoticeSent = true;
-                
-
                 return cca;
             }
             catch
@@ -1914,21 +1919,45 @@ namespace SEATS.Controllers
         /// <param name="category"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        private async Task<OnlineCourse> FindCourse(DataRow row, CourseCategory category, Provider provider)
+        private async Task<OnlineCourse> FindCourse(DataRow row, CCA cca)
         {
             try
             {
+                OnlineCourse course;
                 //var code = row["Code"].ToString(); && m.Code.Trim() == code.Trim()
-                var courseLookup = await db.Courses.Where(n => n.CourseCategoryID == category.ID && n.ProviderID == provider.ID).ToListAsync();
+                var courseLookup = await db.Courses.Where(n => n.CourseCategoryID == cca.CourseCategoryID && n.ProviderID == cca.ProviderID ).ToListAsync();
+                var code = row["Code"].ToString().Trim();
+                var courses = courseLookup.Where(m => m.Code == code);
+                if(courses.Count() == 1)
+                {
+                    course = courses.First();
+                }
+                else if(courses.Count() > 1)
+                {
+                    var courseName = row["Course"].ToString();
+                    var courseMatches = courses.Where(m => m.Name.Trim() == courseName.Trim());
+                    if (courseMatches == null )
+                    {
+                        var courseNameBreakdown = courseName.Split(':');
+                        var courseTitle = courseNameBreakdown.Count() > 1 ? courseNameBreakdown[1] : courseNameBreakdown[0];
+                        course = courses.Where(m => m.Name.Contains(courseTitle.Trim())).FirstOrDefault();
+                    }
+                    else // If courses not null match the first one.  (Code, course name, provider, and category, all match probably just Session)
+                    {
+                        course = courseMatches.First();
+                    }
+                   
+                }
+                else
+                {
+                    throw new NullReferenceException("Course code not found!");
+                }
 
-                var courseName = row["Course"].ToString();
-                var courseNameBreakdown = courseName.Split(':');
-                var courseTitle = courseNameBreakdown.Count() > 1 ? courseNameBreakdown[1] : courseNameBreakdown[0];
-                var course = courseLookup.Where(m => m.Name.Contains(courseTitle.Trim())).FirstOrDefault();
+               
                 if (course != null)
                     return course;
                 else
-                    throw new NullReferenceException("Unable to find Course.");
+                    throw new NullReferenceException("Course name not found!");
             }
             catch (Exception ex)
             {
