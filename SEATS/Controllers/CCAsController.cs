@@ -1786,44 +1786,56 @@ namespace SEATS.Controllers
             try
             {
                 var cca = new CCA();
-                if (row["Submission Date"].ToString() != "")
-                    cca.ApplicationSubmissionDate = Convert.ToDateTime(row["Submission Date"].ToString());
-                if (row["Teacher of Record CACTUS ID"].ToString() != "")
-                    cca.TeacherCactusID = Convert.ToInt32(row["Teacher of Record CACTUS ID"]);
+                var submissionDate = row["Submission Date"].ToString().Trim();
+                if (submissionDate != "")
+                    cca.ApplicationSubmissionDate = Convert.ToDateTime(submissionDate);
+
+                var cactusId = row["Teacher of Record CACTUS ID"].ToString().Trim();
+                if (cactusId != "")
+                    cca.TeacherCactusID = Convert.ToInt32(cactusId);
                 cca.TeacherFirstName = row["Teacher of Record First Name"].ToString();
                 cca.TeacherLastName = row["Teacher of Record Last Name"].ToString();
 
-                if (row["COURSE FEE"].ToString() != "")
-                    cca.CourseFee = Convert.ToDecimal(row["COURSE FEE"]);
+                var fee = row["COURSE FEE"].ToString().Trim();
+                if (fee != "")
+                    cca.CourseFee = Convert.ToDecimal(fee);
 
                 // If fiscal year is missing we will not be able to look up Session.  Skip record. 
 
-                var fiscalYearString = row["Fiscal Year"].ToString();
+                var fiscalYearString = row["Fiscal Year"].ToString().Trim();
                 var fiscalYear1 = fiscalYearString.Substring(0, 4);
 
                 cca.FiscalYear = Convert.ToInt32(fiscalYear1) + 1;
 
-                if (row["Course Start Date"].ToString() != "")
-                    cca.CourseStartDate = Convert.ToDateTime(row["Course Start Date"]);
+                var startDate = row["Course Start Date"].ToString().Trim();
+                if (startDate != "")
+                    cca.CourseStartDate = Convert.ToDateTime(startDate);
 
-                if (row["Date of Course Completion"].ToString() != "")
-                    cca.CourseCompletionDate = Convert.ToDateTime(row["Date of Course Completion"]);
+                var completeDate = row["Date of Course Completion"].ToString().Trim();
+                if (completeDate != "")
+                    cca.CourseCompletionDate = Convert.ToDateTime(completeDate);
 
-                if (row["WITHDRAWAL (Date)"].ToString() != "")
-                    cca.WithdrawalDate = Convert.ToDateTime(row["WITHDRAWAL (Date)"]);
+                var withdrawlDate = row["WITHDRAWAL (Date)"].ToString().Trim();
+                if (withdrawlDate != "")
+                    cca.WithdrawalDate = Convert.ToDateTime(withdrawlDate);
 
-                if (row["Date of Confirmation of Active Participation"].ToString() != "")
-                    cca.DateConfirmationActiveParticipation = Convert.ToDateTime(row["Date of Confirmation of Active Participation"]);
+                var confirmDate = row["Date of Confirmation of Active Participation"].ToString().Trim();
+                if (confirmDate != "")
+                    cca.DateConfirmationActiveParticipation = Convert.ToDateTime(confirmDate);
 
-                if (row["Date of Continuation of Active Participation"].ToString() != "")
-                    cca.DateContinuationActiveParticipation = Convert.ToDateTime(row["Date of Continuation of Active Participation"]);
+                var continueDate = row["Date of Continuation of Active Participation"].ToString().Trim();
+                if (continueDate != "")
+                    cca.DateContinuationActiveParticipation = Convert.ToDateTime(continueDate);
 
-                if (row["BUDGET (PRIMARY/PROVIDER)"].ToString() != "")
-                    cca.BudgetPrimaryProvider = Convert.ToDecimal(row["BUDGET (PRIMARY/PROVIDER)"]);
+                var budget = row["BUDGET (PRIMARY/PROVIDER)"].ToString().Trim();
+                if (budget != "")
+                    cca.BudgetPrimaryProvider = Convert.ToDecimal(budget);
 
                 cca.SubmitterTypeID = FindOrCreateSubmitterType(row);
-                if (row["Grade Level"].ToString() != "")
-                    cca.StudentGradeLevel = Convert.ToInt32(row["Grade Level"]);
+
+                var grade = row["Grade Level"].ToString().Trim();
+                if (grade != "")
+                    cca.StudentGradeLevel = Convert.ToInt32(grade);
 
                 // Set all verification flags to true.
                 cca.IsBusinessAdministratorAcceptRejectEnrollment = true;
@@ -1925,45 +1937,74 @@ namespace SEATS.Controllers
             {
                 OnlineCourse course;
                 //var code = row["Code"].ToString(); && m.Code.Trim() == code.Trim()
-                var courseLookup = await db.Courses.Where(n => n.CourseCategoryID == cca.CourseCategoryID && n.ProviderID == cca.ProviderID ).ToListAsync();
+                var courseLookup = await db.Courses.Where(n => n.CourseCategoryID == cca.CourseCategoryID && n.ProviderID == cca.ProviderID).ToListAsync();
                 var code = row["Code"].ToString().Trim();
                 var courses = courseLookup.Where(m => m.Code == code);
-                if(courses.Count() == 1)
+                if (courses.Count() == 0)
                 {
-                    course = courses.First();
+                    course = await CreateCourse(row, cca);
+
                 }
-                else if(courses.Count() > 1)
-                {
-                    var courseName = row["Course"].ToString();
-                    var courseMatches = courses.Where(m => m.Name.Trim() == courseName.Trim());
-                    if (courseMatches == null )
-                    {
-                        var courseNameBreakdown = courseName.Split(':');
-                        var courseTitle = courseNameBreakdown.Count() > 1 ? courseNameBreakdown[1] : courseNameBreakdown[0];
-                        course = courses.Where(m => m.Name.Contains(courseTitle.Trim())).FirstOrDefault();
-                    }
-                    else // If courses not null match the first one.  (Code, course name, provider, and category, all match probably just Session)
-                    {
-                        course = courseMatches.First();
-                    }
-                   
-                }
+                //This else tries to match name for multiple returns for same code.  Decided to just take first instance since it is the same code.
+                //else if(courses.Count() > 1)
+                //{
+
+                //    var courseName = row["Course"].ToString();
+                //    var courseMatches = courses.Where(m => m.Name.Trim() == courseName.Trim());
+                //    if (courseMatches == null)
+                //    {
+                //        var courseNameBreakdown = courseName.Split(':');
+                //        var courseTitle = courseNameBreakdown.Count() > 1 ? courseNameBreakdown[1] : courseNameBreakdown[0];
+                //        course = courses.Where(m => m.Name.Contains(courseTitle.Trim())).FirstOrDefault();
+                //    }
+                //    else // If courses not null match the first one.  (Code, course name, provider, and category, all match probably just Session)
+                //    {
+                //        course = courseMatches.First();
+                //    }
+
+                //}
                 else
                 {
-                    throw new NullReferenceException("Course code not found!");
+                    //Set course to first code match for that provider.
+                    course = courses.First();
                 }
 
-               
+
                 if (course != null)
                     return course;
                 else
-                    throw new NullReferenceException("Course name not found!");
+                    throw new NullReferenceException("Course not found or created!");
             }
             catch (Exception ex)
             {
-                throw new Exception("Error looking up Course.", ex);
+                throw new Exception("Error creating Course.", ex);
             }
 
+        }
+
+        private async Task<OnlineCourse> CreateCourse(DataRow row, CCA cca)
+        {
+            try
+            {
+                OnlineCourse newCourse = new OnlineCourse();
+                newCourse.Code = row["Code"].ToString().Trim();
+                newCourse.CourseCategoryID = cca.CourseCategoryID;
+                newCourse.ProviderID = cca.ProviderID;
+                newCourse.SessionID = 0;
+                newCourse.Name = row["Course"].ToString();
+                newCourse.IsActive = false;
+                newCourse.Credit = "1111";
+                newCourse.Notes = "Added during bulk CCA upload.";
+
+                db.Courses.Add(newCourse);
+                await db.SaveChangesAsync().ConfigureAwait(false);
+
+                return newCourse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unable to write new Course to table. Error:" + ex.Message);
+            }
         }
 
         /// <summary>
@@ -1980,7 +2021,7 @@ namespace SEATS.Controllers
                 CourseCategory categoryLookup;
                 if (Char.IsDigit(category[0]))
                 {
-                    var categoryId = Convert.ToInt16(category[0].ToString());
+                    var categoryId = Convert.ToInt64(category[0].ToString().Trim());
                     categoryLookup = await db.CourseCategories.Where(m => m.ID == categoryId).FirstOrDefaultAsync();
                 }
                 else // In cases where category is specified by name not ID
@@ -2012,7 +2053,7 @@ namespace SEATS.Controllers
             {
                 var semester = row["Session"].ToString().Trim().Split();
 
-                var yearString = row["Fiscal Year"].ToString();
+                var yearString = row["Fiscal Year"].ToString().Trim();
 
                 var year1 = yearString.Substring(0, 4);
 
@@ -2124,9 +2165,10 @@ namespace SEATS.Controllers
             {
                 Student student = new Student();
 
-                if (row["LEA Student Number"].ToString() != "")
+                var studentNumber = row["LEA Student Number"].ToString().Trim();
+                if (studentNumber != "")
                 {
-                    student.StudentNumber = Convert.ToInt32(row["LEA Student Number"]);
+                    student.StudentNumber = Convert.ToInt32(studentNumber);
                 }
 
                 student.SSID = row["SSID"].ToString();
@@ -2167,14 +2209,14 @@ namespace SEATS.Controllers
 
         private static void GetStudentFieldsFromRow(DataRow row, Student student)
         {
-            var gradDate = row["Graduation Date"].ToString();
+            var gradDate = row["Graduation Date"].ToString().Trim();
             if (gradDate != "")
             {
                 student.GraduationDate = Convert.ToDateTime(gradDate);
             }
 
             student.SSID = row["SSID"].ToString();
-            var dob = row["Birth Date"].ToString();
+            var dob = row["Birth Date"].ToString().Trim();
             if (dob != "")
                 student.StudentDOB = Convert.ToDateTime(dob);
 
@@ -2203,7 +2245,7 @@ namespace SEATS.Controllers
                 }
                 else
                 {
-                    throw new NullReferenceException("Invalid SSID. Username requires SSID.");
+                    throw new NullReferenceException("Invalid SSID Length. Please check SSID.");
                 }
 
                 if (student.StudentEmail != "")
@@ -2239,7 +2281,24 @@ namespace SEATS.Controllers
                 return user.Id;
             }
             else
-                throw new NullReferenceException("Username already exists.  Please Check record to make sure it matches student.");
+            {
+                try
+                {
+                    user.Email = model.Username + "@gmail.com";
+                    result = await userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return user.Id;
+                    }
+                    else
+                        throw new Exception("Unable to resolve with new email.");
+                }
+                catch (Exception ex)
+                {
+                    throw new NullReferenceException("Error in creating User Account. Error:" + ex.Message);
+                }
+            }
+
         }
 
         private async Task FindOrCreateParent(DataRow row, Student student)
@@ -2251,6 +2310,26 @@ namespace SEATS.Controllers
                 parent.GuardianLastName = row["Parent/Guardian Last Name"].ToString();
                 parent.GuardianPhone1 = row["Parent Telephone"].ToString();
                 parent.GuardianEmail = row["Parent/Guardian Email"].ToString();
+                var studentEmail = row["Email"].ToString().Trim();
+                // Deal with empty parent email field
+                if (parent.GuardianEmail == "") //No parent email
+                {
+                    if (studentEmail != "")
+                        parent.GuardianEmail = studentEmail;
+                    else if (row["Parent Telephone"].ToString().Trim() != "")
+                    {
+                        var phone = row["Parent Telephone"].ToString().Trim();
+                        var start = phone.Length - 5;
+                        var last4OfPhone = student.SSID.Substring(start, 4);
+                        var firstName = parent.GuardianFirstName.Replace(' ', '-');
+                        var lastName = parent.GuardianLastName.Replace(' ', '-');
+                        parent.GuardianEmail = firstName + lastName + last4OfPhone + "@gmail.com";
+                    }
+                    else
+                    {
+                        throw new NullReferenceException("No contact info for parent!");
+                    }
+                }
 
                 var parentLookup = parent.GuardianEmail != "" ? await db.Parents.Where(m => m.GuardianEmail.ToLower().Trim() == parent.GuardianEmail.ToLower().Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
@@ -2261,8 +2340,6 @@ namespace SEATS.Controllers
                 }
                 else
                 {
-                    if (parent.GuardianEmail == "")
-                        parent.GuardianEmail = parent.GuardianFirstName + parent.GuardianLastName + ".EmailNotFound@nowhere.edu";
                     db.Parents.Add(parent);
                     await db.SaveChangesAsync().ConfigureAwait(false);
                     student.Parent = parent;
@@ -2313,10 +2390,10 @@ namespace SEATS.Controllers
             {
                 // Try to look up School using name.
                 //var schoolName = row["PRIMARY SCHOOL"].ToString().ToUpper().Trim();
-
-                if (row["PRIMARY SCHOOL"].ToString().Trim() != "")
+                var schoolIdString = row["PRIMARY SCHOOL"].ToString().Trim();
+                if (schoolIdString != "")
                 {
-                    var schoolId = Convert.ToInt16(row["PRIMARY SCHOOL"].ToString());
+                    var schoolId = Convert.ToInt64(schoolIdString);
                     school = schoolId != 0 ? await cactus.CactusSchools.Where(m => m.ID == schoolId).FirstOrDefaultAsync().ConfigureAwait(false) : null;
 
                     //school = schoolName != null ? await cactus.CactusSchools.Where(m => m.Name == schoolName.ToUpper().Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
