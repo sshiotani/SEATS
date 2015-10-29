@@ -177,6 +177,7 @@ namespace SEATS.Controllers
                 counselor.Phone = JustDigits(counselor.Phone);
 
 
+
                 // If counselor not found in database need to add
                 if (counselor.ID == 0)
                     db.Counselors.Add(counselor);
@@ -331,6 +332,26 @@ namespace SEATS.Controllers
 
             await SetUpCounselorEdit(counselor);
             return View(counselor);
+        }
+
+        // This method sets the School Property from the Name field in the CactusSchools view.
+        // No user interface. Developer tool to populate counselor school name blank fields.
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> SetSchoolName()
+        {
+
+            var counselorList = await db.Counselors.Where(m => m.School == null).ToListAsync();
+
+            foreach(var counselor in counselorList)
+            {
+                var school = await cactus.CactusSchools.Where(m=>m.ID == counselor.EnrollmentLocationSchoolNameID).FirstOrDefaultAsync();
+                if (school != null)
+                    counselor.School = school.Name;
+            }
+
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+
         }
 
         // GET: Counselors/Delete/5

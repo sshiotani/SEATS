@@ -6,6 +6,9 @@ using System.Web.Mvc;
 
 namespace SEATS.Models
 {
+    /// <summary>
+    /// This model is used to hold information used to update multiple rows with one transaction.
+    /// </summary>
     public class BulkEditViewModel
     {
       

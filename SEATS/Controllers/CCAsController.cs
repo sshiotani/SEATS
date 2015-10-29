@@ -17,8 +17,8 @@ using System.Data;
 namespace SEATS.Controllers
 {
     /// <summary>
-    /// This controller handles all transactions concerning CCAs.  Creation, editing, updating, importing, etc. To separate the model from the 
-    /// controller we really move all class functionality to the class, which will require some major refactoring.  We can leverage dependency injection,
+    /// This controller handles all transactions concerning CCAs.  Creation, editing, updating, importing, etc. To make the controller more robust 
+    /// we really should move most class functionality to the class or a business layer, which will require some major refactoring.  We can leverage dependency injection,
     /// however a conflict with Unity and Identity 2.2 prevented that implementation.  ASP.Net 5 will have DI baked in so a migration to that framework will 
     /// enable a simplified transition to DI.
     /// </summary>
@@ -29,8 +29,8 @@ namespace SEATS.Controllers
         private const short YEARDIGITS = 4; // Number of digits in the fiscal year from Session.Name
 
         // These are the notification emails used to let the responsible party know when a new application has been submitted.
-        // Some will contain personal information such as name and email, (i.e. {0}) that will be set in the method.
-        // TODO: Put in a text file and use StreamReader to set emails.
+        // Some will contain information such as name and email, (i.e. {0}) that will be set in the method.
+        // TODO: Put in a text file and use StreamReader to load email templates.
 
         private string PROVIDEREMAIL = "<html><p>USOE has received a CCA for {0}.{1}, who wishes to enroll in a course under the Statewide Online Education Program.</p> <p> Please review this CCA within 72 Business Hours.  https://seats.schools.utah.gov/ </p><p>1. Login.</p><p>1. Click the edit button for that student.</p></html>";
 
