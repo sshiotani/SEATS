@@ -49,6 +49,7 @@ namespace SEATS.Models
         public DbSet<CourseCategory> CourseCategories { get; set; }
         public DbSet<CourseCredit> CourseCredits { get; set; }
         public DbSet<CCA> CCAs { get; set; }
+        public DbSet<CcaUpload> CcaUpload { get; set; }
         public DbSet<ExcessiveFEDReason> ExcessiveFEDReasons { get; set; }
         public DbSet<StudentBudget> StudentBudgets { get; set; }
         public DbSet<CourseFee> CourseFees { get; set; }

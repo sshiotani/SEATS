@@ -1,0 +1,25 @@
+﻿@model SEATS.Models.BulkUploadViewModel
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p class="alert-info">Only upload Excel files appropriately formatted to be imported to SEATS.</p>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(x => x.File, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(x => x.File, new { type = "file", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.File)
+            </div>
+        </div>
+        <br />
+        @*<button type="submit" class="intext-btn">Upload</button>*@
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="submit" value="Upload" class="btn btn-default" />
+            </div>
+        </div>
+        <br />
+    </div>
+}

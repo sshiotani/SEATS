@@ -1,0 +1,412 @@
+﻿@model IEnumerable<SEATS.Models.CcaUpload>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Counselor.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorRejectionReasons.Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseCategory.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseCompletionStatus.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseCredit.Value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OnlineCourse.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimaryRejectionReasons.Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Provider.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProviderRejectionReasons.Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Session.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubmitterTypeID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationSubmissionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FiscalYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentGradeLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HasExcessiveFED)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExcessiveFEDExplanation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExcessiveFEDReasonID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EnrollmentLocationSchoolNamesID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsCounselorSigned)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsCounselorRejecting)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounselorRejectionExplantion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EnrollmentLocationID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsBusinessAdministratorAcceptRejectEnrollment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimaryLEAExplantionRejection)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateBusinessAdministratorSignature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BusinessAdministratorSignature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimaryNotes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeacherCactusID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeacherFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeacherLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseBegin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseCompletionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditCompletedToDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateConfirmationActiveParticipation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateContinuationActiveParticipation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateReportPassingGrade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsEnrollmentNoticeSent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsProviderAcceptsRejectsCourseRequest)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsProviderEnrollmentVerified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProviderSignature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsProviderSignature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProviderExplanationRejection)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProviderNotes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseFee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName2ndSemesterID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsCourseConsistentWithStudentSEOP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BudgetPrimaryProvider)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsRemediation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NotificationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimaryNotificationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PriorDisbursementProvider)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordNotes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RemediationPeriodBegins)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalDisbursementsProvider)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TwentyDaysPastSemesterStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Offset)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Distribution)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WithdrawalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Grand_Total)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Counselor.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorRejectionReasons.Reason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCategory.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCompletionStatus.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCredit.Value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OnlineCourse.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrimaryRejectionReasons.Reason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProviderRejectionReasons.Reason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Session.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubmitterTypeID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationSubmissionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FiscalYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentGradeLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HasExcessiveFED)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExcessiveFEDExplanation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExcessiveFEDReasonID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnrollmentLocationSchoolNamesID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsCounselorSigned)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsCounselorRejecting)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounselorRejectionExplantion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnrollmentLocationID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsBusinessAdministratorAcceptRejectEnrollment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrimaryLEAExplantionRejection)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateBusinessAdministratorSignature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BusinessAdministratorSignature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrimaryNotes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeacherCactusID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeacherFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeacherLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseBegin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseStartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCompletionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditCompletedToDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateConfirmationActiveParticipation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateContinuationActiveParticipation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateReportPassingGrade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsEnrollmentNoticeSent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsProviderAcceptsRejectsCourseRequest)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsProviderEnrollmentVerified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProviderSignature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsProviderSignature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProviderExplanationRejection)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProviderNotes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseFee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseName2ndSemesterID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsCourseConsistentWithStudentSEOP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BudgetPrimaryProvider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRemediation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NotificationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrimaryNotificationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriorDisbursementProvider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordNotes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RemediationPeriodBegins)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalDisbursementsProvider)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TwentyDaysPastSemesterStartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Offset)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Distribution)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WithdrawalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Grand_Total)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
