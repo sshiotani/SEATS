@@ -1046,6 +1046,7 @@ namespace SEATS.Controllers
                     schoolName = "SCHOOL NOT LISTED";
                 }
 
+                ViewBag.School = schoolName;
 
                 ccaVm.SchoolOfRecord = schoolName;
                 if (!schoolName.Contains("SCHOOL NOT LISTED"))
