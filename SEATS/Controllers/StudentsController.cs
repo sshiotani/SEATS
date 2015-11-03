@@ -471,7 +471,7 @@ namespace SEATS.Controllers
         {
             if (ModelState.IsValid)
             {
-                Mapper.CreateMap<StudentViewModel, Student>();
+                Mapper.CreateMap<StudentViewModel, Student>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
                 Student student = await db.Students.FindAsync(model.ID).ConfigureAwait(false);
                 Mapper.Map<StudentViewModel, Student>(model, student);
 

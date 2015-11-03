@@ -1156,8 +1156,8 @@ namespace SEATS.Controllers
                     cca = Mapper.Map<UsoeCcaViewModel, CCA>(ccaVm, cca);
 
                     //Assign Counselor
-
-                    await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
+                    if (ccaVm.CounselorID == 0)
+                        await CounselorCreate(ccaVm, cca).ConfigureAwait(false);
 
                     // Pull out the Fiscal year from the session (i.e. Winter (2015-2016) we will put out 2016
 
