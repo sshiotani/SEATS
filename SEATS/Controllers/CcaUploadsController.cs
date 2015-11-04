@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using SEATS.Models;
 using OfficeOpenXml;
 using Microsoft.AspNet.Identity.Owin;
+using AutoMapper;
 
 namespace SEATS.Controllers
 {
@@ -25,6 +26,104 @@ namespace SEATS.Controllers
             return View(await cCAs.ToListAsync());
         }
 
+
+        // GET: CCAs for Admin
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CcaInterface()
+        {
+            try
+            {
+                // Look up all CCAs and map them to viewmodel
+                var ccaList = new List<UsoeCcaViewModel>();
+
+                Mapper.CreateMap<CCA, UsoeCcaViewModel>();
+
+                var ccas = await db.CCAs.Where(m=>m.IsUpload).ToListAsync();
+
+                UsoeCcaVmList vmList = new UsoeCcaVmList();
+
+                vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
+                vmList.BulkEdit = new BulkEditViewModelUsoe();
+
+                var statusList = await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false); ;
+
+                statusList.Insert(0, new CourseCompletionStatus { ID = 0, Status = "Select Status" });
+
+                vmList.BulkEdit.CourseCompletionStatusList = statusList.Select(f => new SelectListItem
+                {
+                    Value = f.ID.ToString(),
+                    Text = f.Status
+                });
+
+                // Send list of ccas to display
+                return View(vmList);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Unable to retrieve list of CCAs from database. Error:" + ex.Message;
+                return View("Error");
+            }
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CcaInterface(UsoeCcaVmList rowsToEdit)
+        {
+
+            TempData["RowsToEdit"] = rowsToEdit;
+
+            // Send updated rows to cca controller 
+            return RedirectToAction("SaveBulkUpdateUpload");
+
+        }
+
+        /// <summary>
+        /// Sets up ViewModel List for Bulk Edit
+        /// </summary>
+        /// <param name="ccas"></param>
+        /// <returns></returns>
+        private async Task<List<UsoeCcaViewModel>> GetCcaViewModelList(List<CCA> ccas)
+        {
+            Mapper.CreateMap<CCA, UsoeCcaViewModel>();
+
+            var ccaVmList = new List<UsoeCcaViewModel>();
+
+
+            foreach (var cca in ccas)
+            {
+                var ccaVm = Mapper.Map<CCA, UsoeCcaViewModel>(cca);
+                ccaVm.CcaID = cca.ID;
+
+                switch (cca.EnrollmentLocationID)
+                {
+                    case null:
+                        break;
+                    case GlobalVariables.HOMESCHOOLID:
+                        ccaVm.Primary = "HOMESCHOOL";
+                        break;
+                    case GlobalVariables.PRIVATESCHOOLID:
+                        ccaVm.Primary = "PRIVATESCHOOL";
+                        break;
+                    default:
+                        var primary = await cactus.CactusInstitutions.FirstOrDefaultAsync(c => c.ID == cca.EnrollmentLocationID).ConfigureAwait(false);
+
+                        if (primary != null)
+                            ccaVm.Primary = primary.Name;
+                        else
+                            ccaVm.Primary = "UNKNOWN";
+                        break;
+                }
+
+                ccaVmList.Add(ccaVm);
+            }
+
+            return ccaVmList;
+
+        }
+
         // GET: CcaUploads/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -32,12 +131,12 @@ namespace SEATS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CcaUpload ccaUpload = await db.CcaUpload.FindAsync(id);
-            if (ccaUpload == null)
+            CCA CCA = await db.CCAs.FindAsync(id);
+            if (CCA == null)
             {
                 return HttpNotFound();
             }
-            return View(ccaUpload);
+            return View(CCA);
         }
 
         // GET: CcaUploads/Create
@@ -62,7 +161,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,SubmitterTypeID,ApplicationSubmissionDate,FiscalYear,UserId,StudentID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,Comments,EnrollmentLocationSchoolNamesID,CounselorID,IsCounselorSigned,IsCounselorRejecting,CounselorRejectionReasonsID,CounselorRejectionExplantion,EnrollmentLocationID,IsBusinessAdministratorAcceptRejectEnrollment,PrimaryRejectionReasonsID,PrimaryLEAExplantionRejection,DateBusinessAdministratorSignature,BusinessAdministratorSignature,PrimaryNotes,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,CourseCompletionStatusID,CourseBegin,CourseStartDate,CourseCompletionDate,CreditCompletedToDate,DateConfirmationActiveParticipation,DateContinuationActiveParticipation,DateReportPassingGrade,IsEnrollmentNoticeSent,IsProviderAcceptsRejectsCourseRequest,IsProviderEnrollmentVerified,ProviderSignature,IsProviderSignature,ProviderExplanationRejection,ProviderRejectionReasonsID,ProviderNotes,OnlineCourseID,CourseCategoryID,CourseFee,CourseCreditID,CourseName2ndSemesterID,IsCourseConsistentWithStudentSEOP,SessionID,BudgetPrimaryProvider,IsRemediation,NotificationDate,PrimaryNotificationDate,PriorDisbursementProvider,RecordNotes,RemediationPeriodBegins,TotalDisbursementsProvider,TwentyDaysPastSemesterStartDate,Offset,Distribution,WithdrawalDate,Grand_Total,Notes")] CcaUpload ccaUpload)
+        public async Task<ActionResult> Create([Bind(Include = "ID,SubmitterTypeID,ApplicationSubmissionDate,FiscalYear,UserId,StudentID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,Comments,EnrollmentLocationSchoolNamesID,CounselorID,IsCounselorSigned,IsCounselorRejecting,CounselorRejectionReasonsID,CounselorRejectionExplantion,EnrollmentLocationID,IsBusinessAdministratorAcceptRejectEnrollment,PrimaryRejectionReasonsID,PrimaryLEAExplantionRejection,DateBusinessAdministratorSignature,BusinessAdministratorSignature,PrimaryNotes,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,CourseCompletionStatusID,CourseBegin,CourseStartDate,CourseCompletionDate,CreditCompletedToDate,DateConfirmationActiveParticipation,DateContinuationActiveParticipation,DateReportPassingGrade,IsEnrollmentNoticeSent,IsProviderAcceptsRejectsCourseRequest,IsProviderEnrollmentVerified,ProviderSignature,IsProviderSignature,ProviderExplanationRejection,ProviderRejectionReasonsID,ProviderNotes,OnlineCourseID,CourseCategoryID,CourseFee,CourseCreditID,CourseName2ndSemesterID,IsCourseConsistentWithStudentSEOP,SessionID,BudgetPrimaryProvider,IsRemediation,NotificationDate,PrimaryNotificationDate,PriorDisbursementProvider,RecordNotes,RemediationPeriodBegins,TotalDisbursementsProvider,TwentyDaysPastSemesterStartDate,Offset,Distribution,WithdrawalDate,Grand_Total,Notes")] CCA ccaUpload)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +191,7 @@ namespace SEATS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CcaUpload ccaUpload = await db.CcaUpload.FindAsync(id);
+            CCA ccaUpload = await db.CCAs.FindAsync(id);
             if (ccaUpload == null)
             {
                 return HttpNotFound();
@@ -116,7 +215,7 @@ namespace SEATS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,SubmitterTypeID,ApplicationSubmissionDate,FiscalYear,UserId,StudentID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,Comments,EnrollmentLocationSchoolNamesID,CounselorID,IsCounselorSigned,IsCounselorRejecting,CounselorRejectionReasonsID,CounselorRejectionExplantion,EnrollmentLocationID,IsBusinessAdministratorAcceptRejectEnrollment,PrimaryRejectionReasonsID,PrimaryLEAExplantionRejection,DateBusinessAdministratorSignature,BusinessAdministratorSignature,PrimaryNotes,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,CourseCompletionStatusID,CourseBegin,CourseStartDate,CourseCompletionDate,CreditCompletedToDate,DateConfirmationActiveParticipation,DateContinuationActiveParticipation,DateReportPassingGrade,IsEnrollmentNoticeSent,IsProviderAcceptsRejectsCourseRequest,IsProviderEnrollmentVerified,ProviderSignature,IsProviderSignature,ProviderExplanationRejection,ProviderRejectionReasonsID,ProviderNotes,OnlineCourseID,CourseCategoryID,CourseFee,CourseCreditID,CourseName2ndSemesterID,IsCourseConsistentWithStudentSEOP,SessionID,BudgetPrimaryProvider,IsRemediation,NotificationDate,PrimaryNotificationDate,PriorDisbursementProvider,RecordNotes,RemediationPeriodBegins,TotalDisbursementsProvider,TwentyDaysPastSemesterStartDate,Offset,Distribution,WithdrawalDate,Grand_Total,Notes")] CcaUpload ccaUpload)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,SubmitterTypeID,ApplicationSubmissionDate,FiscalYear,UserId,StudentID,StudentGradeLevel,HasExcessiveFED,ExcessiveFEDExplanation,ExcessiveFEDReasonID,Comments,EnrollmentLocationSchoolNamesID,CounselorID,IsCounselorSigned,IsCounselorRejecting,CounselorRejectionReasonsID,CounselorRejectionExplantion,EnrollmentLocationID,IsBusinessAdministratorAcceptRejectEnrollment,PrimaryRejectionReasonsID,PrimaryLEAExplantionRejection,DateBusinessAdministratorSignature,BusinessAdministratorSignature,PrimaryNotes,ProviderID,TeacherCactusID,TeacherFirstName,TeacherLastName,CourseCompletionStatusID,CourseBegin,CourseStartDate,CourseCompletionDate,CreditCompletedToDate,DateConfirmationActiveParticipation,DateContinuationActiveParticipation,DateReportPassingGrade,IsEnrollmentNoticeSent,IsProviderAcceptsRejectsCourseRequest,IsProviderEnrollmentVerified,ProviderSignature,IsProviderSignature,ProviderExplanationRejection,ProviderRejectionReasonsID,ProviderNotes,OnlineCourseID,CourseCategoryID,CourseFee,CourseCreditID,CourseName2ndSemesterID,IsCourseConsistentWithStudentSEOP,SessionID,BudgetPrimaryProvider,IsRemediation,NotificationDate,PrimaryNotificationDate,PriorDisbursementProvider,RecordNotes,RemediationPeriodBegins,TotalDisbursementsProvider,TwentyDaysPastSemesterStartDate,Offset,Distribution,WithdrawalDate,Grand_Total,Notes")] CCA ccaUpload)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +244,7 @@ namespace SEATS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CcaUpload ccaUpload = await db.CcaUpload.FindAsync(id);
+            CCA ccaUpload = await db.CCAs.FindAsync(id);
             if (ccaUpload == null)
             {
                 return HttpNotFound();
@@ -158,8 +257,8 @@ namespace SEATS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            CcaUpload ccaUpload = await db.CcaUpload.FindAsync(id);
-            db.CCAs.Remove(ccaUpload);
+            CCA CCA = await db.CCAs.FindAsync(id);
+            db.CCAs.Remove(CCA);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -236,9 +335,9 @@ namespace SEATS.Controllers
                                 // Populate fields that are references to other tables.
                                 await CheckTables(row, status, ccaLoad);
 
+                                ccaLoad.IsUpload = true;
 
-
-                                db.CcaUpload.Add(ccaLoad);
+                                db.CCAs.Add(ccaLoad);
                                 await db.SaveChangesAsync().ConfigureAwait(false);
                             }
                         }
@@ -273,7 +372,7 @@ namespace SEATS.Controllers
         /// <param name="status"></param>
         /// <param name="cca"></param>
         /// <returns></returns>
-        private async Task CheckTables(DataRow row, string status, CcaUpload cca)
+        private async Task CheckTables(DataRow row, string status, CCA cca)
         {
             try
             {
@@ -319,11 +418,11 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
-        private CcaUpload BuildCca(DataRow row)
+        private CCA BuildCca(DataRow row)
         {
             try
             {
-                var cca = new CcaUpload();
+                var cca = new CCA();
                 var submissionDate = row["Submission Date"].ToString().Trim();
                 if (submissionDate != "")
                     cca.ApplicationSubmissionDate = Convert.ToDateTime(submissionDate);
@@ -469,7 +568,7 @@ namespace SEATS.Controllers
         /// <param name="category"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        private async Task<OnlineCourse> FindCourse(DataRow row, CcaUpload cca)
+        private async Task<OnlineCourse> FindCourse(DataRow row, CCA cca)
         {
             try
             {
@@ -520,7 +619,7 @@ namespace SEATS.Controllers
 
         }
 
-        private async Task<OnlineCourse> CreateCourse(DataRow row, CcaUpload cca)
+        private async Task<OnlineCourse> CreateCourse(DataRow row, CCA cca)
         {
             try
             {
@@ -624,7 +723,7 @@ namespace SEATS.Controllers
         {
             try
             {
-                var provider = row["PROVIDER"].ToString().Split();
+                var provider = row["PROVIDER"].ToString().Trim().Split();
                 var providerDistrict = provider[0].Trim();
                 var providerLookup = providerDistrict != null ? await db.Providers.Where(m => m.DistrictNumber == providerDistrict).FirstOrDefaultAsync() : null;
 
@@ -844,21 +943,21 @@ namespace SEATS.Controllers
             try
             {
                 Parent parent = new Parent();
-                parent.GuardianFirstName = row["Parent/Guardian First Name"].ToString();
-                parent.GuardianLastName = row["Parent/Guardian Last Name"].ToString();
-                parent.GuardianPhone1 = row["Parent Telephone"].ToString();
-                parent.GuardianEmail = row["Parent/Guardian Email"].ToString();
+                parent.GuardianFirstName = row["Parent/Guardian First Name"].ToString().Trim();
+                parent.GuardianLastName = row["Parent/Guardian Last Name"].ToString().Trim();
+                parent.GuardianPhone1 = row["Parent/Guardian Telephone"].ToString().Trim();
+                parent.GuardianEmail = row["Parent/Guardian Email"].ToString().Trim();
                 var studentEmail = row["Email"].ToString().Trim();
                 // Deal with empty parent email field
                 if (parent.GuardianEmail == "") //No parent email
                 {
                     if (studentEmail != "")
                         parent.GuardianEmail = studentEmail;
-                    else if (row["Parent Telephone"].ToString().Trim() != "")
+                    else if (parent.GuardianPhone1 != "")
                     {
-                        var phone = row["Parent Telephone"].ToString().Trim();
-                        var start = phone.Length - 5;
-                        var last4OfPhone = student.SSID.Substring(start, 4);
+                        var phone = parent.GuardianPhone1;
+                        var start = phone.Length - 4;
+                        var last4OfPhone = parent.GuardianPhone1.Substring(start, 4);
                         var firstName = parent.GuardianFirstName.Replace(' ', '-');
                         var lastName = parent.GuardianLastName.Replace(' ', '-');
                         parent.GuardianEmail = firstName + lastName + last4OfPhone + "@gmail.com";
@@ -869,7 +968,14 @@ namespace SEATS.Controllers
                     }
                 }
 
-                var parentLookup = parent.GuardianEmail != "" ? await db.Parents.Where(m => m.GuardianEmail.ToLower().Trim() == parent.GuardianEmail.ToLower().Trim()).FirstOrDefaultAsync().ConfigureAwait(false) : null;
+                Parent parentLookup;
+                if (parent.GuardianEmail != "")
+                    parentLookup = await db.Parents.Where(m => m.GuardianEmail.ToLower().Trim() == parent.GuardianEmail.ToLower().Trim()).FirstOrDefaultAsync().ConfigureAwait(false);
+                else if (parent.GuardianPhone1 != "")
+                    parentLookup = await db.Parents.Where(m => m.GuardianPhone1.Trim() == parent.GuardianPhone1.Trim()).FirstOrDefaultAsync().ConfigureAwait(false);
+                else
+                    throw new NullReferenceException("No parent contact information");
+
 
                 if (parentLookup != null)
                 {
@@ -1071,5 +1177,46 @@ namespace SEATS.Controllers
         }
 
 
+        /// <summary>
+        /// This method is called from the Admin to bulk update CCAs.  All the selected items will be updated to the same value.
+        /// If an item is not set it will not be updated.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> SaveBulkUpdateUpload()
+        {
+            try
+            {
+                // rowIds are the select rows
+                var rowIds = TempData["RowIds"] as int[];
+
+                // rows to Edit contain the updated values for the bulk update
+                var rowsToEdit = TempData["RowsToEdit"] as UsoeCcaVmList;
+
+                var updatedRows = await db.CCAs.Where(m => rowIds.Contains(m.ID)).ToListAsync();
+
+                if (rowsToEdit.BulkEdit.CourseCompletionStatusID != 0)
+                    rowsToEdit.BulkEdit.CourseCompletionStatus = await db.CourseCompletionStatus.FindAsync(rowsToEdit.BulkEdit.CourseCompletionStatusID).ConfigureAwait(false);
+
+                foreach (var row in updatedRows)
+                {
+                    if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
+                    if (rowsToEdit.BulkEdit.NotificationDate != null) row.NotificationDate = rowsToEdit.BulkEdit.NotificationDate;
+                    if (rowsToEdit.BulkEdit.IsEnrollmentNoticeSent == true) row.IsEnrollmentNoticeSent = rowsToEdit.BulkEdit.IsEnrollmentNoticeSent;
+                    if (rowsToEdit.BulkEdit.TeacherCactusID != null) row.TeacherCactusID = rowsToEdit.BulkEdit.TeacherCactusID;
+                    if (rowsToEdit.BulkEdit.TeacherFirstName != null) row.TeacherFirstName = rowsToEdit.BulkEdit.TeacherFirstName;
+                    if (rowsToEdit.BulkEdit.TeacherLastName != null) row.TeacherLastName = rowsToEdit.BulkEdit.TeacherLastName;
+                    if (rowsToEdit.BulkEdit.Notes != null) row.Notes = rowsToEdit.BulkEdit.Notes;
+                    row.IsUpload = rowsToEdit.BulkEdit.IsUpload;
+                }
+
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return RedirectToAction("CcaInterface", "Admin");
+
+            }
+            catch
+            {
+                throw new HttpException(500, "Error processing course information request.");
+            }
+        }
     }
 }

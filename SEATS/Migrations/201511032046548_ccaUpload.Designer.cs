@@ -13,7 +13,7 @@ namespace SEATS.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201511031700584_ccaUpload"; }
+            get { return "201511032046548_ccaUpload"; }
         }
         
         string IMigrationMetadata.Source

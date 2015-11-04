@@ -52,16 +52,16 @@ namespace SEATS.Controllers
                     if (counselor.EnrollmentLocationSchoolNameID == null || counselor.EnrollmentLocationSchoolNameID == 0)
                     {
                         var studentIds = db.Students.Where(m => m.SchoolOfRecord.ToUpper() == counselor.School.ToUpper()).Select(m => m.UserId);
-                        ccas = await db.CCAs.Where(m => studentIds.Contains(m.UserId)).ToListAsync().ConfigureAwait(false);
+                        ccas = await db.CCAs.Where(m => studentIds.Contains(m.UserId) && !m.IsUpload).ToListAsync().ConfigureAwait(false);
                     }
                     else
                     {
-                        ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                        ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID && !m.IsUpload).ToListAsync().ConfigureAwait(false);
                     }
                 }
                 else
                 {
-                     ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID).ToListAsync().ConfigureAwait(false);
+                     ccas = await db.CCAs.Where(m => m.EnrollmentLocationSchoolNamesID == counselor.EnrollmentLocationSchoolNameID && !m.IsUpload).ToListAsync().ConfigureAwait(false);
                 }
 
                 // Create list of viewmodels populated from 

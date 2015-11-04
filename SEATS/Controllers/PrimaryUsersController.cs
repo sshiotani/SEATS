@@ -54,7 +54,7 @@ namespace SEATS.Controllers
             var userId = User.Identity.GetUserId();
             var lea = await db.PrimaryUsers.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
-            var ccas = await db.CCAs.Where(m => m.EnrollmentLocationID == lea.EnrollmentLocationID).ToListAsync().ConfigureAwait(false);
+            var ccas = await db.CCAs.Where(m => m.EnrollmentLocationID == lea.EnrollmentLocationID && !m.IsUpload).ToListAsync().ConfigureAwait(false);
 
             // Create list of viewmodels populated from 
             var ccaVmList = GetCcaViewModelList(ccas);

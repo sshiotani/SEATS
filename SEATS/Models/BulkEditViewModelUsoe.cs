@@ -28,5 +28,7 @@ namespace SEATS.Models
         public Nullable<decimal> Offset { get; set; }
         public Nullable<decimal> Distribution { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
+
+        public bool IsUpload { get; set; }
     }
 }

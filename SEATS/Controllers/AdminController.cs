@@ -42,7 +42,7 @@ namespace SEATS.Controllers
 
                 Mapper.CreateMap<CCA, UsoeCcaViewModel>();
 
-                var ccas = await db.CCAs.ToListAsync();
+                var ccas = await db.CCAs.Where(m=>!m.IsUpload).ToListAsync();
 
                 UsoeCcaVmList vmList = new UsoeCcaVmList();
 
@@ -95,7 +95,7 @@ namespace SEATS.Controllers
 
                 Mapper.CreateMap<CCA, UsoeCcaViewModel>();
 
-                var ccas = await db.CCAs.ToListAsync();
+                var ccas = await db.CCAs.Where(m=>!m.IsUpload).ToListAsync();
 
                 UsoeCcaVmList vmList = new UsoeCcaVmList();
 

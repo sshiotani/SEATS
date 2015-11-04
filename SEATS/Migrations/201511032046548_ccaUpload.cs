@@ -7,12 +7,12 @@ namespace SEATS.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.CCAs", "Discriminator", c => c.String(nullable: false, maxLength: 128));
+            AddColumn("dbo.CCAs", "IsUpload", c => c.Boolean(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.CCAs", "Discriminator");
+            DropColumn("dbo.CCAs", "IsUpload");
         }
     }
 }

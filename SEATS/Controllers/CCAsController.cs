@@ -101,7 +101,7 @@ namespace SEATS.Controllers
             var userId = GetUserId();
             try
             {
-                courses = await db.CCAs.Where(m => m.UserId == userId).Select(f => new CourseStatusViewModel
+                courses = await db.CCAs.Where(m => m.UserId == userId && !m.IsUpload).Select(f => new CourseStatusViewModel
                 {
                     ApplicationSubmissionDate = f.ApplicationSubmissionDate,
                     CompletionStatus = f.CourseCompletionStatus.Status,

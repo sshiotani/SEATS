@@ -40,7 +40,7 @@ namespace SEATS.Controllers
 
         private async Task<List<ReportViewModel>> DisplayReport()
         {
-            var ccas = await db.CCAs.ToListAsync().ConfigureAwait(false);
+            var ccas = await db.CCAs.Where(m=> !m.IsUpload).ToListAsync().ConfigureAwait(false);
 
             List<ReportViewModel> report = new List<ReportViewModel>();
 
@@ -118,7 +118,7 @@ namespace SEATS.Controllers
             table.Columns.Add("Counselor Email", typeof(string));
             table.Columns.Add("Start Date", typeof(string));
 
-            var ccas = db.CCAs.ToList();
+            var ccas = db.CCAs.Where(m=>!m.IsUpload).ToList();
 
             foreach (var cca in ccas)
             {

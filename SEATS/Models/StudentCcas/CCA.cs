@@ -104,5 +104,7 @@ namespace SEATS.Models
         public Nullable<System.DateTime> WithdrawalDate { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
         public string Notes { get; set; }
+
+        public bool IsUpload { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace SEATS.Controllers
             var userId = GetUserId();
             var providerUser = await db.ProviderUsers.FirstOrDefaultAsync(m => m.UserId == userId).ConfigureAwait(false);
 
-            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID).ToListAsync().ConfigureAwait(false);
+            var ccas = await db.CCAs.Where(m => m.ProviderID == providerUser.ProviderID && !m.IsUpload).ToListAsync().ConfigureAwait(false);
 
             ProviderCcaVmList vmList = new ProviderCcaVmList();
 

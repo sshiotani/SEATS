@@ -233,9 +233,9 @@
     <Compile Include="Migrations\201509031436403_SubmitterType.Designer.cs">
       <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511031700584_ccaUpload.cs" />
-    <Compile Include="Migrations\201511031700584_ccaUpload.Designer.cs">
-      <DependentUpon>201511031700584_ccaUpload.cs</DependentUpon>
+    <Compile Include="Migrations\201511032046548_ccaUpload.cs" />
+    <Compile Include="Migrations\201511032046548_ccaUpload.Designer.cs">
+      <DependentUpon>201511032046548_ccaUpload.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BulkEditViewModel.cs" />
     <Compile Include="Models\BulkEditViewModelUsoe.cs" />
@@ -280,7 +280,6 @@
     <Compile Include="Models\CounselorViewModel.cs" />
     <Compile Include="Models\Services\SsidFindingService.cs" />
     <Compile Include="Models\SsidRecord.cs" />
-    <Compile Include="Models\StudentCcas\CcaUpload.cs" />
     <Compile Include="Models\StudentCcas\CounselorRejectionReasons.cs" />
     <Compile Include="Models\StudentCcas\CourseCompletionStatus.cs" />
     <Compile Include="Models\StudentCcas\Location.cs" />
@@ -706,6 +705,7 @@
     <Content Include="Views\CcaUploads\Details.cshtml" />
     <Content Include="Views\CcaUploads\Edit.cshtml" />
     <Content Include="Views\CcaUploads\Index.cshtml" />
+    <Content Include="Views\CcaUploads\CcaInterface.cshtml" />
     <None Include="Web.Local.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -739,8 +739,8 @@
     <EmbeddedResource Include="Migrations\201509031436403_SubmitterType.resx">
       <DependentUpon>201509031436403_SubmitterType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511031700584_ccaUpload.resx">
-      <DependentUpon>201511031700584_ccaUpload.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511032046548_ccaUpload.resx">
+      <DependentUpon>201511032046548_ccaUpload.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
