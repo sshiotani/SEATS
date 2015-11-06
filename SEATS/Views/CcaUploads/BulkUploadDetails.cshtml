@@ -1,4 +1,12 @@
 ﻿<p>@ViewBag.Message</p>
+
+<p class="alert-warning">There were read errors in the following records.</p>
+@foreach (var item in ViewBag.ReadErrors)
+{
+    <p class="alert-danger">@item</p>
+}
+
+<p class="alert-warning">There were import errors in the following records.</p>
 @foreach (var item in ViewBag.ErrorList)
 {
     <p class="alert-danger">@item</p>

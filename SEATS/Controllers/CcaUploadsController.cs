@@ -38,7 +38,7 @@ namespace SEATS.Controllers
 
                 Mapper.CreateMap<CCA, UsoeCcaViewModel>();
 
-                var ccas = await db.CCAs.Where(m=>m.IsUpload).ToListAsync();
+                var ccas = await db.CCAs.Where(m => m.IsUpload).ToListAsync();
 
                 UsoeCcaVmList vmList = new UsoeCcaVmList();
 
@@ -317,11 +317,15 @@ namespace SEATS.Controllers
             List<String> errorList = new List<String>();
             try
             {
-                using (var dataTable = GetDataFromExcel(model))
+                var data = GetDataFromExcel(model);
+                ViewBag.ReadErrors = data.readErrors;
+                using (var dataTable = data.table)
                 {
                     // Foreach record
+                   
                     foreach (DataRow row in dataTable.Rows)
                     {
+                        
                         try
                         {
                             var status = row["Completion Status"].ToString().ToLower();
@@ -1142,7 +1146,7 @@ namespace SEATS.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static DataTable GetDataFromExcel(BulkUploadViewModel model)
+        public static Excel2Datatable GetDataFromExcel(BulkUploadViewModel model)
         {
             try
             {
@@ -1152,6 +1156,7 @@ namespace SEATS.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
                     DataTable tbl = new DataTable();
                     bool hasHeader = true;
+                    List<string> readErrors = new List<string>();
                     foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
                     {
                         tbl.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
@@ -1159,15 +1164,29 @@ namespace SEATS.Controllers
                     var startRow = hasHeader ? 2 : 1;
                     for (var rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
                     {
-                        var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
-                        var row = tbl.NewRow();
-                        foreach (var cell in wsRow)
+                        try
                         {
-                            row[cell.Start.Column - 1] = cell.Text;
+                            var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
+                            var row = tbl.NewRow();
+                            foreach (var cell in wsRow)
+                            {
+                                row[cell.Start.Column - 1] = cell.Text;
+                            }
+                            tbl.Rows.Add(row);
                         }
-                        tbl.Rows.Add(row);
+                        catch
+                        {
+                            readErrors.Add(rowNum.ToString());
+                        }
                     }
-                    return tbl;
+
+                    Excel2Datatable dataTable = new Excel2Datatable();
+
+                    dataTable.table = tbl;
+                    dataTable.readErrors = readErrors;
+                    
+                    
+                    return dataTable;
                 }
             }
             catch
