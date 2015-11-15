@@ -56,7 +56,11 @@ namespace SEATS.Controllers
             vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
 
             vmList.BulkEdit = new BulkEditViewModel();
-            
+            vmList.BulkEdit.SessionList = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name");
+            vmList.BulkEdit.CourseCategoryList = new List<SelectListItem>();
+            vmList.BulkEdit.OnlineCourseList = new List<SelectListItem>();
+            vmList.BulkEdit.CourseCreditList = new List<SelectListItem>();
+
             var provider = await db.Providers.FindAsync(providerUser.ProviderID).ConfigureAwait(false);
             ViewBag.SchoolName = provider.Name;
 

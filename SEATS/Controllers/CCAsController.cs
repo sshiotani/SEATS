@@ -1530,6 +1530,10 @@ namespace SEATS.Controllers
 
                 foreach (var row in updatedRows)
                 {
+                    if (rowsToEdit.BulkEdit.SessionID != 0) row.SessionID = rowsToEdit.BulkEdit.SessionID;
+                    if (rowsToEdit.BulkEdit.CourseCategoryID != 0) row.CourseCategoryID = rowsToEdit.BulkEdit.CourseCategoryID;
+                    if (rowsToEdit.BulkEdit.OnlineCourseID != 0) row.OnlineCourseID = rowsToEdit.BulkEdit.OnlineCourseID;
+                    if (rowsToEdit.BulkEdit.CourseCreditID != 0) row.CourseCreditID = rowsToEdit.BulkEdit.CourseCreditID;
                     if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
                     if (rowsToEdit.BulkEdit.CourseCompletionDate != null) row.CourseCompletionDate = rowsToEdit.BulkEdit.CourseCompletionDate;
                     if (rowsToEdit.BulkEdit.CourseStartDate != null) row.CourseStartDate = rowsToEdit.BulkEdit.CourseStartDate;
@@ -1578,6 +1582,10 @@ namespace SEATS.Controllers
 
                 foreach (var row in updatedRows)
                 {
+                    if (rowsToEdit.BulkEdit.SessionID != 0) row.SessionID = rowsToEdit.BulkEdit.SessionID;
+                    if (rowsToEdit.BulkEdit.CourseCategoryID != 0) row.CourseCategoryID = rowsToEdit.BulkEdit.CourseCategoryID;
+                    if (rowsToEdit.BulkEdit.OnlineCourseID != 0) row.OnlineCourseID = rowsToEdit.BulkEdit.OnlineCourseID;
+                    if (rowsToEdit.BulkEdit.CourseCreditID != 0) row.CourseCreditID = rowsToEdit.BulkEdit.CourseCreditID;
                     if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
                     if (rowsToEdit.BulkEdit.NotificationDate != null) row.NotificationDate = rowsToEdit.BulkEdit.NotificationDate;
                     if (rowsToEdit.BulkEdit.IsEnrollmentNoticeSent == true) row.IsEnrollmentNoticeSent = rowsToEdit.BulkEdit.IsEnrollmentNoticeSent;

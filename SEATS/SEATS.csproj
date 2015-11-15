@@ -702,7 +702,7 @@
     <Content Include="Views\Admin\CcaBudget.cshtml" />
     <Content Include="Views\CcaUploads\BulkUploadDetails.cshtml" />
     <Content Include="Views\CcaUploads\Create.cshtml" />
-    <Content Include="Views\CcaUploads\Delete.cshtml" />
+    <Content Include="Views\CCAs\Delete.cshtml" />
     <Content Include="Views\CcaUploads\Details.cshtml" />
     <Content Include="Views\CcaUploads\Edit.cshtml" />
     <Content Include="Views\CcaUploads\Index.cshtml" />

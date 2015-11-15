@@ -29,6 +29,19 @@ namespace SEATS.Models
         public Nullable<decimal> Distribution { get; set; }
         public Nullable<decimal> Grand_Total { get; set; }
 
+        //Course Added per SEATS-51
+        public int SessionID { get; set; }
+        public virtual Session Session { get; set; }
+        public int CourseCategoryID { get; set; }
+        public virtual CourseCategory CourseCategory { get; set; }
+        public int OnlineCourseID { get; set; }
+        public virtual OnlineCourse OnlineCourse { get; set; }
+        public int CourseCreditID { get; set; }
+        public virtual CourseCredit CourseCredit { get; set; }
+        public IEnumerable<SelectListItem> CourseCreditList { get; set; }
+        public IEnumerable<SelectListItem> SessionList { get; set; }
+        public IEnumerable<SelectListItem> CourseCategoryList { get; set; }
+        public IEnumerable<SelectListItem> OnlineCourseList{ get; set; }
         public bool IsUpload { get; set; }
     }
 }

@@ -208,6 +208,29 @@
                 @Html.ValidationMessageFor(model => model.BulkEdit.ProviderNotes, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.Label("Course", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                <div class="col-md-4" id="EditCourse">
+                    <p class="form-control-static text-danger">If category is changing, please make sure to update the CourseFee field.</p>
+                    <p class="form-control-static">Session</p>
+                    @Html.DropDownListFor(model => model.BulkEdit.SessionID, Model.BulkEdit.SessionList, "*Session", htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Session" })
+                    @Html.ValidationMessageFor(model => model.BulkEdit.SessionID, "", new { @class = "text-danger" })
+                    <p class="form-control-static">Category</p>
+                    @Html.DropDownListFor(model => model.BulkEdit.CourseCategoryID, Model.BulkEdit.CourseCategoryList, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Category" })
+                    @Html.ValidationMessageFor(model => model.BulkEdit.CourseCategoryID, "", new { @class = "text-danger" })
+                    <p class="form-control-static">Course</p>
+                    @Html.DropDownListFor(model => model.BulkEdit.OnlineCourseID, Model.BulkEdit.OnlineCourseList, htmlAttributes: new { @class = "form-control dropdown-wrapper", id = "Course" })
+                    @Html.ValidationMessageFor(model => model.BulkEdit.OnlineCourseID, "", new { @class = "text-danger" })
+                    <p class="form-control-static">Credit</p>
+                    @Html.DropDownListFor(model => model.BulkEdit.CourseCreditID, Model.BulkEdit.CourseCreditList, "Credit", new { @class = "form-control dropdown-wrapper", id = "CreditOptions", title = "To change credit: Unselect and reselect the course." })
+                    @Html.ValidationMessageFor(model => model.BulkEdit.CourseCreditID, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-1 col-md-11">
 
@@ -335,6 +358,159 @@
                 }
             });
 
+            // Category DropDownLists
+            //get Category list on changing of session dropdown list
+            $('#Session').change(function () {
+                $("#Category, #Course,#CreditOptions,#CreditFee").empty();
+                $("#CreditFee").html("<p class = \"text-danger\">Verify Course Fee matches new selection.</p>");
+
+                $('#Provider,#Credit,#Code,#CourseName,#Note').addClass('hide');
+
+
+                var items = '<option value="">Select Category</option>';
+                $('#Category').html(items);
+                var sessionId = $("#Session option:selected").val();
+                var sessionName = $("#Session option:selected").text();
+
+                if (sessionId != "") {
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCategoriesAndPrice", "CCAs")',
+                        data: { sessionId: sessionId },
+                        dataType: 'json',
+                        success: function (categoryList) {
+
+                            $.each(categoryList, function (i, category) {
+
+                                $('#Category').append("<option value='" + category.Value + "'>" + category.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select Session First</option>';
+                    $('#Category').html(items);
+
+                    var items1 = '<option value="">Select Category First</option>';
+                    $('#Course').html(items);
+                }
+            });
+
+            // Course DropDownLists
+            //get course list on changing of category dropdown list
+            $('#Category').change(function () {
+                $("#Course,#CreditOptions").empty();
+                $("#CreditFee").html("<p class = \"text-danger\">Verify Course Fee matches new selection.</p>");
+                $('#Provider,#Credit,#Code,#CourseName,#Note').addClass('hide');
+
+                var items = '<option value="">Select Course</option>';
+                $('#Course').html(items);
+                var category = $("#Category option:selected").val();
+                var categoryName = $("#Category option:selected").text();
+
+                var session = $("#Session option:selected").val();
+                var sessionName = $("#Session option:selected").text();
+
+                if (category != "" && session != "") {
+
+                    // Message for concurrent enrollment
+                    if (categoryName == "Concurrent Enrollment")
+                        $('#dialog-ConcurrentEnrollment').dialog({
+                            width: 'auto',
+                            dialogClass: "no-close",
+                            maxWidth: 500,
+                            fluid: true,
+                            buttons: [
+                              {
+                                  text: "OK",
+                                  click: function () {
+                                      $(this).dialog("close");
+                                  }
+                              }
+                            ]
+                        });
+                    //alert("Courses offered under provider contract with an institution of higher education, which are not considered Concurrent Enrollment per 53A-15-101 and 53A-17a-120.5");
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCourseNames", "CCAs")',
+                        data: { categoryId: category, sessionId: session },
+                        dataType: 'json',
+                        success: function (courseList) {
+
+                            $.each(courseList, function (i, course) {
+
+                                $('#Course').append("<option value='" + course.Value + "'>" + course.Text + "</option>");
+
+                            });
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+                else {
+                    var items = '<option value="">Select Category First</option>';
+                    $('#Course').html(items);
+                }
+            });
+
+            // Get course information from course selection (ie. Provider, credit available, code)
+
+            $('#Course').change(function () {
+                //$('#Code,#Note,#CourseName,#Credit').addClass('hide');
+
+
+                $("#CreditOptions").empty();
+                var items = '<option value="">Select Credit</option>';
+                $('#CreditOptions').html(items);
+
+                var courseName = $("#Course option:selected").text().split('-')[0];
+
+                if (courseName != "") {
+                    $("#CourseName").removeClass('hide');
+                    $('#CourseName').html("COURSE:" + courseName);
+
+                }
+
+                var course = $("#Course option:selected").val();
+                if (course != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCourseInformation", "CCAs")',
+                        data: { courseId: course },
+                        dataType: 'json',
+                        success: function (result) {
+
+
+                            $.each(result.CreditChoices, function (i, value) {
+                                if (value.Disabled != true) {
+                                    $('#CreditOptions').append("<option value='" + value.Value + "'>" + value.Text + "</option>");
+                                }
+                            });
+
+                            $('#ProviderID').val(result.OnlineProviderID);
+                            $("#Code").removeClass('hide');
+                            $('#Code').html("CODE: " + result.Code);
+
+                            if (result.Notes != null) {
+                                $('#Note').removeClass('hide');
+                                $('#Note').html("NOTES: " + result.Notes);
+                            }
+                        },
+                        error: function (result) {
+                            alert('Service call failed: ' + result.status + ' Type :' + result.statusText);
+                        }
+                    });
+                }
+
+            });
         });
 
 

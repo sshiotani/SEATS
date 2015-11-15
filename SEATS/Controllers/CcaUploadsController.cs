@@ -45,6 +45,10 @@ namespace SEATS.Controllers
                 vmList.CcaList = await GetCcaViewModelList(ccas).ConfigureAwait(false);
                 vmList.BulkEdit = new BulkEditViewModelUsoe();
 
+                vmList.BulkEdit.SessionList = new SelectList(await db.Session.Where(m => m.Name != "All").ToListAsync().ConfigureAwait(false), "ID", "Name");
+                vmList.BulkEdit.CourseCategoryList = new List<SelectListItem>();
+                vmList.BulkEdit.OnlineCourseList = new List<SelectListItem>();
+                vmList.BulkEdit.CourseCreditList = new List<SelectListItem>();
                 var statusList = await db.CourseCompletionStatus.ToListAsync().ConfigureAwait(false); ;
 
                 statusList.Insert(0, new CourseCompletionStatus { ID = 0, Status = "Select Status" });
@@ -1218,6 +1222,10 @@ namespace SEATS.Controllers
 
                 foreach (var row in updatedRows)
                 {
+                    if (rowsToEdit.BulkEdit.SessionID != 0) row.SessionID = rowsToEdit.BulkEdit.SessionID;
+                    if (rowsToEdit.BulkEdit.CourseCategoryID != 0) row.CourseCategoryID = rowsToEdit.BulkEdit.CourseCategoryID;
+                    if (rowsToEdit.BulkEdit.OnlineCourseID != 0) row.OnlineCourseID = rowsToEdit.BulkEdit.OnlineCourseID;
+                    if (rowsToEdit.BulkEdit.CourseCreditID != 0) row.CourseCreditID = rowsToEdit.BulkEdit.CourseCreditID;
                     if (rowsToEdit.BulkEdit.CourseCompletionStatus != null) row.CourseCompletionStatus = rowsToEdit.BulkEdit.CourseCompletionStatus;
                     if (rowsToEdit.BulkEdit.NotificationDate != null) row.NotificationDate = rowsToEdit.BulkEdit.NotificationDate;
                     if (rowsToEdit.BulkEdit.IsEnrollmentNoticeSent == true) row.IsEnrollmentNoticeSent = rowsToEdit.BulkEdit.IsEnrollmentNoticeSent;
